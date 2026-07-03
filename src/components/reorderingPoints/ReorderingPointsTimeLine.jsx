@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import moment, { min } from 'moment'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
@@ -333,13 +333,13 @@ const ReorderingPointsTimeLine = ({ productTimeLine, leadtime, daysRemaining, po
   return (
     <>
       <div className='px-6 m-0 flex flex-row justify-start items-center gap-2'>
-        <Button size='sm' color={grouping === 'daily' ? 'primary' : 'light'} onClick={() => setGrouping('daily')}>
+        <Button size='sm' variant={grouping === 'daily' ? 'default' : 'light'} onClick={() => setGrouping('daily')}>
           Daily
         </Button>
-        <Button size='sm' color={grouping === 'weekly' ? 'primary' : 'light'} onClick={() => setGrouping('weekly')}>
+        <Button size='sm' variant={grouping === 'weekly' ? 'default' : 'light'} onClick={() => setGrouping('weekly')}>
           Weekly
         </Button>
-        <Button size='sm' color={grouping === 'monthly' ? 'primary' : 'light'} onClick={() => setGrouping('monthly')}>
+        <Button size='sm' variant={grouping === 'monthly' ? 'default' : 'light'} onClick={() => setGrouping('monthly')}>
           Monthly
         </Button>
       </div>

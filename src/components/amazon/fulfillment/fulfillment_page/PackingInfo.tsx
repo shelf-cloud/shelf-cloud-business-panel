@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Card, CardBody, CardHeader, Col, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -32,7 +34,7 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
                     </span>
                   </p>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <div className='flex flex-row flex-nowrap justify-start items-center gap-2'>
                     {inboundPlan.packingGroups[packingGroupId].packingItems.map(
                       (item, itemIndex) =>
@@ -60,7 +62,7 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
                     )}
                     {inboundPlan.packingGroups[packingGroupId].packingItems.length > 5 && <p>+{inboundPlan.packingGroups[packingGroupId].packingItems.length - 5}</p>}
                   </div>
-                </CardBody>
+                </CardContent>
               </Card>
             ))}
           </div>
@@ -68,21 +70,21 @@ const PackingInfo = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => 
       </div>
 
       {handleNextStep && inboundPlan.fulfillmentType === 'Master Boxes' && (
-        <Col xs='12' className='flex justify-end'>
+        <div className='w-full flex justify-end'>
           <Button
             disabled={watingRepsonse.inventoryToSend || !inboundPlan.packingInformation || inboundPlan.steps[3].complete}
-            color='success'
+            variant='success'
             id='btn_handleNextStepPacking'
             onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>
             {watingRepsonse.inventoryToSend ? (
               <span>
-                <Spinner color='light' size={'sm'} className='me-2' /> Confirming...
+                <Spinner className='text-white me-2' /> Confirming...
               </span>
             ) : (
               'Confirm and Continue'
             )}
           </Button>
-        </Col>
+        </div>
       )}
     </div>
   )

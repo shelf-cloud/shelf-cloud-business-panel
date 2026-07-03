@@ -6,7 +6,10 @@ import InputNumberForm from '@components/ui/forms/InputNumberForm'
 import { AddSKUToMultiSKUBoxType, MultiSkuBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ShipmentOrderItem } from '@typings'
-import { Badge, Button, Col, Collapse, Label, Row } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
+import { Collapse } from '@/components/ui/Collapse'
 
 /* eslint-disable @next/next/no-img-element */
 type Props = {
@@ -86,11 +89,11 @@ const Edit_Receiving_Boxes_Multi = ({
   }
 
   return (
-    <Row key='mixed-skus'>
-      <Col md={4}>
+    <div className='flex flex-wrap -mx-3' key='mixed-skus'>
+      <div className='px-3 md:w-4/12'>
         <div className='flex flex-row justify-between items-center gap-4 mb-2'>
           <p className='m-0 font-bold text-[16.25px]'>Receiving SKUs</p>
-          <Button size='sm' color='primary' onClick={() => setMixedSkuBoxesUsingMasterBoxes()} className='text-[13px]'>
+          <Button size='sm' onClick={() => setMixedSkuBoxesUsingMasterBoxes()} className='text-[13px]'>
             Prefill Boxes
           </Button>
         </div>
@@ -131,23 +134,23 @@ const Edit_Receiving_Boxes_Multi = ({
                     </div>
                   </div>
                   <Badge
-                    color={pendingToBoxed > 0 ? 'light' : pendingToBoxed < 0 ? 'danger' : 'success'}
-                    className={'text-center text-[11.2px] ' + (pendingToBoxed > 0 ? 'text-[var(--bs-secondary-color)]' : pendingToBoxed < 0 ? 'text-white' : 'text-white')}>
+                    variant={pendingToBoxed > 0 ? 'light' : pendingToBoxed < 0 ? 'destructive' : 'success'}
+                    className={'rounded-sm text-center text-[11.2px] ' + (pendingToBoxed > 0 ? 'text-[var(--bs-secondary-color)]' : pendingToBoxed < 0 ? 'text-white' : 'text-white')}>
                     {pendingToBoxed}
                   </Badge>
                 </div>
               )
             })}
         </div>
-      </Col>
-      <Col md={8}>
+      </div>
+      <div className='px-3 md:w-8/12'>
         <div className='mb-2 border-b pb-1'>
-          <Row>
+          <div className='flex flex-wrap -mx-3'>
             <p className='m-0 font-bold text-[16.25px]'>Add SKU to Box</p>
-          </Row>
+          </div>
           {/* ADD SKU TO BOX */}
-          <Row className='flex flex-row justify-around items-end gap-0'>
-            <Col md={4}>
+          <div className='flex flex-wrap -mx-3 flex flex-row justify-around items-end gap-0'>
+            <div className='px-3 md:w-4/12'>
               <SelectSingleFilter
                 inputLabel='*Select SKU'
                 inputName='select-sku-add-multi-sku'
@@ -198,8 +201,8 @@ const Edit_Receiving_Boxes_Multi = ({
                   }))
                 }}
               />
-            </Col>
-            <Col md={4}>
+            </div>
+            <div className='px-3 md:w-4/12'>
               <SelectSingleFilter
                 inputLabel='*Select Box'
                 inputName='select-box-add-multi-sku'
@@ -224,8 +227,8 @@ const Edit_Receiving_Boxes_Multi = ({
                   }))
                 }}
               />
-            </Col>
-            <Col md={2} className='mb-2'>
+            </div>
+            <div className='px-3 md:w-2/12 mb-2'>
               <Label htmlFor={`add-sku-to-box-quantity`} className='form-label text-[11.2px]'>
                 *Quantity
               </Label>
@@ -238,13 +241,13 @@ const Edit_Receiving_Boxes_Multi = ({
                 handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setaddSkuToBox((prev) => ({ ...prev, quantity: Number(e.target.value) }))}
                 handleBlur={() => {}}
               />
-            </Col>
-            <Col md={2} className='mb-2 flex flex-row justify-end items-end'>
-              <Button size='sm' color='primary' onClick={() => handleAddSkuToBox()} className='text-[13px]'>
+            </div>
+            <div className='px-3 md:w-2/12 mb-2 flex flex-row justify-end items-end'>
+              <Button size='sm' onClick={() => handleAddSkuToBox()} className='text-[13px]'>
                 Add To Box
               </Button>
-            </Col>
-          </Row>
+            </div>
+          </div>
           {errorAddingSKU && <p className='m-0 text-danger text-[11.2px]'>{errorAddingSKU}</p>}
         </div>
 
@@ -253,13 +256,13 @@ const Edit_Receiving_Boxes_Multi = ({
           <p className='m-0 font-bold text-[16.25px]'>Boxes</p>
 
           <div className='flex flex-row justify-end items-center gap-2'>
-            <Button size='sm' color='light' onClick={() => toggleCollapse()} className='text-[13px]'>
+            <Button size='sm' variant='light' onClick={() => toggleCollapse()} className='text-[13px]'>
               {allCollapse ? '- Collapse All' : '+ Expand All'}
             </Button>
-            <Button size='sm' color='success' onClick={() => addNewMultiSkuBoxConfiguration()} className='text-[13px]'>
+            <Button size='sm' variant='success' onClick={() => addNewMultiSkuBoxConfiguration()} className='text-[13px]'>
               + Add New Box
             </Button>
-            <Button size='sm' color='light' onClick={() => clearMultiSkuBoxes()} className='text-[13px] flex flex-row justify-center items-center gap-1'>
+            <Button size='sm' variant='light' onClick={() => clearMultiSkuBoxes()} className='text-[13px] flex flex-row justify-center items-center gap-1'>
               <i className='mdi mdi-trash-can-outline text-danger' /> All Boxes
             </Button>
           </div>
@@ -269,7 +272,7 @@ const Edit_Receiving_Boxes_Multi = ({
 
         <div className='gap-2 flex flex-row flex-wrap justify-start items-start pb-2'>
           {multiSkuPackages.map((box, boxIndex) => (
-            <Col xs={12} md={5} key={`boxed-${boxIndex}`} className='border rounded p-2 text-[11.2px] shadow-sm bg-white'>
+            <div key={`boxed-${boxIndex}`} className='px-3 w-full md:w-5/12 border rounded p-2 text-[11.2px] shadow-sm bg-white'>
               <div className='flex flex-row justify-between items-center mb-1'>
                 <div style={{ cursor: 'pointer' }} onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
                   <p className='m-0 font-semibold text-[13px]'>Box {boxIndex + 1}</p>
@@ -278,10 +281,10 @@ const Edit_Receiving_Boxes_Multi = ({
                   </p>
                 </div>
                 <div className='flex flex-row justify-end items-center gap-2'>
-                  <Button size='sm' color='ghost' onClick={() => removeMultiSkuBoxConfiguration(boxIndex)} className='text-[11.2px] btn-icon'>
+                  <Button size='sm' variant='ghost' onClick={() => removeMultiSkuBoxConfiguration(boxIndex)} className='text-[11.2px] btn-icon'>
                     <i className='mdi mdi-trash-can-outline text-[16.25px]' />
                   </Button>
-                  <Button size='sm' color='ghost' className='text-[11.2px] btn-icon' onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
+                  <Button size='sm' variant='ghost' className='text-[11.2px] btn-icon' onClick={() => document.getElementById(`box-${boxIndex}-content`)?.classList.toggle('show')}>
                     <i className='mdi mdi-chevron-down text-[16.25px]' />
                   </Button>
                 </div>
@@ -294,18 +297,18 @@ const Edit_Receiving_Boxes_Multi = ({
                         <p className='text-nowrap m-0 font-semibold'>{sku}</p>
                         <p className='text-nowrap m-0 text-[var(--bs-secondary-color)]'>Qty: {item.quantity}</p>
                       </div>
-                      <Button size='sm' color='ghost' onClick={() => removeSkuFromMultiSkuBox(boxIndex, sku)} className='text-[11.2px] btn-icon'>
+                      <Button size='sm' variant='ghost' onClick={() => removeSkuFromMultiSkuBox(boxIndex, sku)} className='text-[11.2px] btn-icon'>
                         <i className='mdi mdi-trash-can-outline text-[16.25px]' />
                       </Button>
                     </div>
                   ))}
                 </div>
               </Collapse>
-            </Col>
+            </div>
           ))}
         </div>
-      </Col>
-    </Row>
+      </div>
+    </div>
   )
 }
 

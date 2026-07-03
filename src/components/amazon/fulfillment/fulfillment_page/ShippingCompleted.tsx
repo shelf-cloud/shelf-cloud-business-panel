@@ -12,7 +12,10 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, PlacementOption } from '@typesTs/amazon/fulfillments/fulfillment'
 import moment from 'moment'
 
-import { Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
 
 import { validateIfPlacementOptionHasSPD } from './shippingLTL/helperFunctions'
 
@@ -108,7 +111,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     ((placementOptionSelected.placementOptionId === placementOption.placementOptionId || inboundPlan.placementOptionId === placementOption.placementOptionId) &&
                       'border border-[3px] border-success')
                   }>
-                  <CardBody>
+                  <CardContent>
                     <p className='mt-2 mb-1 p-0 font-semibold text-[19.5px]'>
                       <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
                       {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
@@ -134,7 +137,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                       </p>
                     ))}
                     <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {placementOption.placementOptionId}</p>
-                  </CardBody>
+                  </CardContent>
                 </Card>
               )
           )}
@@ -145,14 +148,14 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
         <p className='text-[16.25px] font-bold'>Shipping mode</p>
         <div className='form-check form-switch form-switch-sm flex justify-start items-center gap-2 p-0 my-4'>
           <Switch id='showShippingMode' name='showShippingMode' disabled={true} checked={finalShippingCharges.sameShippingMode} />
-          <Label className='check-form-label m-0 font-normal' for='showShippingMode'>
+          <Label className='check-form-label m-0 font-normal' htmlFor='showShippingMode'>
             Shipping mode will be same for all shipments
           </Label>
         </div>
         {finalShippingCharges.sameShippingMode ? (
           <div className='flex justify-start items-start gap-4'>
             <Card className={'shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'SPD' && 'border border-[3px] border-success')}>
-              <CardBody className='flex justify-start items-center gap-1'>
+              <CardContent className='flex justify-start items-center gap-1'>
                 <div
                   className='my-2'
                   style={{
@@ -181,10 +184,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     )}
                   </p>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
             <Card className={'shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'LTL' && 'border border-[3px] border-success')}>
-              <CardBody className='flex justify-start items-center gap-1'>
+              <CardContent className='flex justify-start items-center gap-1'>
                 <div
                   className='my-2'
                   style={{
@@ -213,7 +216,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     )}
                   </p>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
           </div>
         ) : null}
@@ -222,10 +225,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
       {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'SPD' ? (
         <div>
           <p className='text-[16.25px] font-bold'>Select Shipping Carrier</p>
-          <Row className='my-4 flex gap-4'>
-            <Col xs='12' lg='3'>
+          <div className='flex flex-wrap -mx-3 my-4 flex gap-4'>
+            <div className='px-3 w-full lg:w-3/12'>
               <Card className={'m-0 shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.sameShippingCarrier === 'amazon' && 'border border-[3px] border-success')}>
-                <CardBody>
+                <CardContent>
                   <p className='m-0 p-0 text-[11.2px] font-semibold'>UPS (Amazon Partnered Carrier)*</p>
                   <p className='m-0 p-0 text-[11.2px]'>Pickup cost is NOT Included with the rate</p>
                   <p className='m-0 p-0 text-[16.25px] font-bold'>
@@ -250,10 +253,10 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                       <span className='text-danger font-semibold'>Not Available</span>
                     )}
                   </p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       ) : null}
       {/* SHIPMENTS */}
@@ -269,7 +272,7 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                 <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
                 <p className='m-0 p-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {shipmentId}</p>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <p className='m-0 text-[11.2px]'>
                   <span className='text-primary'>Ship From: </span>
                   {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.name}, {inboundPlan.confirmedShipments[shipmentId]?.shipment.source.address.addressLine1},{' '}
@@ -443,9 +446,9 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                       <div className='my-2 flex flex-col justify-start items-start gap-2'>
                         {/* SHIPPING MODE SPD */}
                         <div className='flex flex-row justify-start items-center gap-4'>
-                          <Input
-                            className='my-0'
+                          <input
                             type='radio'
+                            className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                             id={`shippingModeSPD-${shipmentId}`}
                             name={`shippingModeSPD-${shipmentId}`}
                             disabled={true}
@@ -484,9 +487,9 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                         {/* SHIPPING MODE LTL */}
                         <div className='flex flex-col justify-start items-center gap-2'>
                           <div className='flex flex-row justify-start items-center gap-4'>
-                            <Input
-                              className='my-0'
+                            <input
                               type='radio'
+                              className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                               disabled={true}
                               id={`shippingModeLTL-${shipmentId}`}
                               name={`shippingModeLTL-${shipmentId}`}
@@ -536,9 +539,9 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                           <div className='my-2 flex flex-col justify-start items-start gap-2'>
                             {/* CARRIER AMAZON PARTNERED */}
                             <div className='flex flex-row justify-start items-center gap-4'>
-                              <Input
-                                className='my-0'
+                              <input
                                 type='radio'
+                                className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                                 id={`shippingCarrierAmazon-${shipmentId}`}
                                 name={`shippingCarrierAmazon-${shipmentId}`}
                                 checked={finalShippingCharges.sameShippingCarrier === 'amazon'}
@@ -654,15 +657,15 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
                     </div>
                   )}
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
           ))}
         </div>
       </div>
       {/* TOTAL ESTIMATED FEES */}
-      <Row className='my-4'>
-        <Col xs='12' lg='8'></Col>
-        <Col xs='12' lg='4'>
+      <div className='flex flex-wrap -mx-3 my-4'>
+        <div className='px-3 w-full lg:w-8/12'></div>
+        <div className='px-3 w-full lg:w-4/12'>
           <table className='w-full align-middle mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
             <tbody>
               <tr>
@@ -691,13 +694,13 @@ const ShippingCompleted = ({ inboundPlan }: Props) => {
           </table>
           {inboundPlan.fulfillmentType === 'Master Boxes' && (
             <div className='flex justify-end items-center'>
-              <Button disabled={true} color='success' id='btn_handleNextShipping'>
+              <Button disabled={true} variant='success' id='btn_handleNextShipping'>
                 Charges Already Confirmed
               </Button>
             </div>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   )
 }

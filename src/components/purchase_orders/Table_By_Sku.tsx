@@ -8,7 +8,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
-import { Badge } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
 
 import Table_By_Skus_Orders from './Table_By_Skus_Orders'
 
@@ -245,7 +245,7 @@ const Table_By_Sku = ({ filterDataTable, pending }: Props) => {
 
         if (totalReceivingQty > 0) {
           return (
-            <Badge pill color='success' className='text-[11.2px]'>
+            <Badge variant='success' className='text-[11.2px]'>
               {FormatIntNumber(state.currentRegion, totalReceivingQty)}
             </Badge>
           )

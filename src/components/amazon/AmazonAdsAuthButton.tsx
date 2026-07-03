@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   env: string

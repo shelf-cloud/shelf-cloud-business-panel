@@ -8,7 +8,9 @@ import { ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import { CameraIcon } from 'lucide-react'
 import DataTable from '@components/Common/DataTableSC'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { ButtonGroup, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown, UncontrolledTooltip } from '@/components/migration-ui'
+import { Card } from '@shadcn/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import ReturnExpandedType from './ReturnExpandedType'
 
@@ -321,24 +323,26 @@ const ReturnsTable: React.FC<ExpanderComponentProps<ReturnType>> = ({ data, apiM
             break
         }
         return (
-          <ButtonGroup>
-            <UncontrolledButtonDropdown>
+          <div role='group' className='inline-flex'>
+            <DropdownMenu>
               {returnStateBtn}
-              <DropdownToggle tag='button' className='p-0 m-0' split></DropdownToggle>
-              <DropdownMenu end={true} className='shadow-md p-0 rounded'>
+              <DropdownMenuTrigger asChild>
+                <button type='button' className='p-0 m-0'></button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='shadow-md p-0 rounded'>
                 {row.returnState !== 'pending' && (
-                  <DropdownItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('pending', row.id)}>
+                  <DropdownMenuItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('pending', row.id)}>
                     <i className='mdi mdi-backup-restore text-[13px] text-warning align-middle m-0 p-0' /> pending
-                  </DropdownItem>
+                  </DropdownMenuItem>
                 )}
                 {row.returnState !== 'complete' && (
-                  <DropdownItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('complete', row.id)}>
+                  <DropdownMenuItem className='capitalize text-[11.2px]' onClick={() => handleReturnStateChange!('complete', row.id)}>
                     <i className='mdi mdi-check-circle-outline text-[13px] text-success align-middle m-0 p-0' /> complete
-                  </DropdownItem>
+                  </DropdownMenuItem>
                 )}
-              </DropdownMenu>
-            </UncontrolledButtonDropdown>
-          </ButtonGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         )
       },
       sortable: true,

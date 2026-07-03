@@ -5,7 +5,8 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ProductPO } from '@typesTs/products/productPOs'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@shadcn/ui/dialog'
 import useSWR from 'swr'
 
 type Props = {
@@ -85,35 +86,34 @@ const ProductOrderedModals = ({ showOrderedModal, setshowOrderedModal }: Props) 
   ]
 
   return (
-    <Modal
-      id='myModal'
-      isOpen={showOrderedModal.show}
-      size='lg'
-      toggle={() => {
-        setshowOrderedModal({ show: false, sku: '' })
+    <Dialog
+      open={!!showOrderedModal.show}
+      onOpenChange={(open) => {
+        if (!open) setshowOrderedModal({ show: false, sku: '' })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setshowOrderedModal({ show: false, sku: '' })
-        }}>
-        <p className='modal-title text-[22.75px]' id='myModalLabel'>
-          Open Purchase Orders
-        </p>
-        <p className='text-[16.25px]'>SKU: {showOrderedModal.sku}</p>
-      </ModalHeader>
-      <ModalBody>
-        <DataTable columns={columns} data={Pos ?? []} progressPending={loading} striped={true} highlightOnHover={true} dense />
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          color='light'
-          onClick={() => {
-            setshowOrderedModal({ show: false, sku: '' })
-          }}>
-          Close
-        </Button>
-      </ModalFooter>
-    </Modal>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>
+            <p className='modal-title text-[22.75px]' id='myModalLabel'>
+              Open Purchase Orders
+            </p>
+            <p className='text-[16.25px]'>SKU: {showOrderedModal.sku}</p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+          <DataTable columns={columns} data={Pos ?? []} progressPending={loading} striped={true} highlightOnHover={true} dense />
+        </div>
+        <DialogFooter className='items-center'>
+          <Button
+            variant='light'
+            onClick={() => {
+              setshowOrderedModal({ show: false, sku: '' })
+            }}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

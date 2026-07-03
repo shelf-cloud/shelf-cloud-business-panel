@@ -1,4 +1,4 @@
-import { Card, CardBody } from '@/components/migration-ui'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 type Props = {
   carrier: string
@@ -55,7 +55,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusIndex = UPS_STATUS_BAR.indexOf(statusLabel)
       return (
         <Card className='mt-0 mb-4'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+          <CardContent className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
@@ -64,7 +64,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
-          </CardBody>
+          </CardContent>
         </Card>
       )
     case 'fedex':
@@ -73,7 +73,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusIndex = FEDEX_STATUS_BAR.indexOf(statusLabel)
       return (
         <Card className='mt-0 mb-4'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+          <CardContent className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {FEDEX_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
@@ -82,7 +82,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
-          </CardBody>
+          </CardContent>
         </Card>
       )
     default:
@@ -91,7 +91,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
       statusIndex = UPS_STATUS_BAR.indexOf(statusLabel)
       return (
         <Card className='mt-0 mb-4'>
-          <CardBody className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
+          <CardContent className='p-0' style={{ display: 'grid', gridTemplateColumns }}>
             {UPS_STATUS_BAR.map((status, index) => (
               <div
                 key={index}
@@ -100,7 +100,7 @@ const ShipmentCarrierStatusBar = ({ carrier, currentStatus }: Props) => {
                 <p className={'m-0 p-0 text-[11.2px]' + (index <= statusIndex ? ' font-semibold text-white' : ' font-semibold text-[var(--bs-secondary-color)]')}>{status}</p>
               </div>
             ))}
-          </CardBody>
+          </CardContent>
         </Card>
       )
   }

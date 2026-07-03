@@ -4,7 +4,7 @@ import { memo, useContext, useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
-import { Input } from '@/components/migration-ui'
+import { NativeSelect } from '@shadcn/ui/native-select'
 
 type Props = {
   searchStatus: string
@@ -38,11 +38,11 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
           <div className='flex flex-col justify-start gap-2'>
             {/* <span className='fw-semibold'>Type:</span>
             <div
-              className='d-flex flex-row align-items-center justify-content-between gap-2 w-auto px-3 py-0 rounded-3'
+              className='flex flex-row items-center justify-between gap-2 w-auto px-3 py-0 rounded-[4.8px]'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
               <Input
                 type='select'
-                className='border-0 fs-6 w-100'
+                className='border-0 text-[13px] w-full'
                 id='type'
                 name='type'
                 value={searchType}
@@ -60,8 +60,7 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
                 className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
@@ -73,14 +72,13 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
                 <option value=''>All Status</option>
                 <option value='Processed'>Processed</option>
                 <option value='received'>Received</option>
-              </Input>
+              </NativeSelect>
             </div>
             <span className='font-semibold text-[11.2px]'>Reason:</span>
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
                 className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
@@ -96,14 +94,13 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
                 <option value='Return'>Return</option>
                 <option value='Undeliverable'>Undeliverable</option>
                 <option value='Other'>Other</option>
-              </Input>
+              </NativeSelect>
             </div>
             <span className='font-semibold text-[11.2px]'>Marketplace:</span>
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
                 className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
@@ -118,7 +115,7 @@ const FilterReturns = ({ searchStatus, setSearchStatus, searchReason, setSearchR
                     {market}
                   </option>
                 ))}
-              </Input>
+              </NativeSelect>
             </div>
             <button
               type='button'

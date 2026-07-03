@@ -5,7 +5,8 @@ import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import { WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Col, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   shipmentDetails: FBAShipment
@@ -17,24 +18,24 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
   const { state }: any = useContext(AppContext)
   return (
     <div className='my-4 px-4'>
-      <Col sm='12' lg='8'>
+      <div className='px-3 w-full lg:w-2/3'>
         <p className='text-[16.25px] font-bold'>Bill of Lading (BOL)</p>
         <p>
           Print Bill of Lading (BOL) document: <span className='font-semibold'>{shipmentDetails.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber}</span>
         </p>
-        <Button disabled={watingRepsonse.printingLabel} color='primary' onClick={() => handlePrintShipmentBillOfLading(shipmentDetails.shipment.shipmentConfirmationId)}>
+        <Button disabled={watingRepsonse.printingLabel} onClick={() => handlePrintShipmentBillOfLading(shipmentDetails.shipment.shipmentConfirmationId)}>
           {watingRepsonse.printingLabel ? (
             <span>
-              <Spinner color='light' size={'sm'} className='me-1' /> Downloading BOL...
+              <Spinner className='text-white me-1' /> Downloading BOL...
             </span>
           ) : (
             'Print BOL Document'
           )}
         </Button>
         <p className='mt-1 text-[11.2px] text-[var(--bs-secondary-color)]'>The BOL will be generated no later than 8 a.m. the morning of pickup.</p>
-      </Col>
+      </div>
 
-      <Col sm='12' lg='9'>
+      <div className='px-3 w-full lg:w-3/4'>
         <div className='overflow-x-auto'>
         <table className='w-full align-middle mb-0 border border-[color:var(--border)] [&_td]:border-t [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
           <thead className='bg-[color:var(--vz-light)]'>
@@ -59,7 +60,7 @@ const Pallets = ({ shipmentDetails, handlePrintShipmentBillOfLading, watingRepso
           </tbody>
         </table>
         </div>
-      </Col>
+      </div>
     </div>
   )
 }

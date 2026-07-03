@@ -1,6 +1,6 @@
 import { ManageUser } from '@typesTs/settings/team_members'
 
-import { Switch } from '@/components/migration-ui'
+import { Switch } from '@/components/ui/Switch'
 
 type Props = {
   title: string

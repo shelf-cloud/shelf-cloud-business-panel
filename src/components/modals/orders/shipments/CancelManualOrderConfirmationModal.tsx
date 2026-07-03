@@ -5,7 +5,11 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Label } from '@shadcn/ui/label'
+import { NativeSelect } from '@shadcn/ui/native-select'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 type Props = {
@@ -64,92 +68,82 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='confirmDelete'
-      isOpen={showDeleteModal.show}
-      toggle={() => {
-        setshowDeleteModal({
-          show: false,
-          orderId: 0,
-          orderNumber: '',
-          goFlowOrderId: 0,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!showDeleteModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setshowDeleteModal({
             show: false,
             orderId: 0,
             orderNumber: '',
             goFlowOrderId: 0,
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Confirm Order Cancelation
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      }}>
+      <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Confirm Order Cancelation
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+        <div className='flex flex-wrap -mx-3'>
           <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>
             Order Number: <span className='text-[19.5px] font-bold text-black'>{showDeleteModal.orderNumber}</span>
           </h5>
-          <Row md={12} className='mt-6'>
-            <Form onSubmit={handleCancelOrder}>
-              <Col md={12}>
+          <div className='flex flex-wrap -mx-3 mt-6'>
+            <form onSubmit={handleCancelOrder}>
+              <div className='px-3 md:w-full'>
                 <div className='mb-4 flex gap-2'>
-                  <Label className='form-check-label' for='notify'>
+                  <Label className='form-check-label' htmlFor='notify'>
                     Notify Marketplace
                   </Label>
-                  <Input
-                    className='form-check-input'
+                  <input
+                    className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'
                     type='checkbox'
                     id='notify'
                     defaultChecked
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    invalid={validation.touched.notify && validation.errors.notify ? true : false}
+                    aria-invalid={(validation.touched.notify && validation.errors.notify ? true : false) || undefined}
                   />
-                  {validation.touched.notify && validation.errors.notify ? <FormFeedback type='invalid'>{validation.errors.notify}</FormFeedback> : null}
+                  {validation.touched.notify && validation.errors.notify ? <div className='text-sm text-destructive'>{validation.errors.notify}</div> : null}
                 </div>
                 <div>
-                  <FormGroup className='mb-4'>
+                  <div className='mb-4'>
                     <Label htmlFor='reason' className='form-label'>
                       Reason
                     </Label>
-                    <Input
-                      type='select'
+                    <NativeSelect
                       className='text-[13px]'
-                      placeholder='reason...'
                       id='reason'
                       name='reason'
-                      bsSize='sm'
+                      size='sm'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.reason ?? ''}
-                      invalid={validation.touched.reason && validation.errors.reason ? true : false}>
+                      aria-invalid={(validation.touched.reason && validation.errors.reason ? true : false) || undefined}>
                       <option value=''>Select Reason</option>
                       <option value='customer_requested'>Customer Requested</option>
                       <option value='no_stock'>No Stock</option>
                       <option value='fraud'>Fraud</option>
                       <option value='payment_declined'>Payment Declined</option>
                       <option value='other'>Other</option>
-                    </Input>
-                    {validation.touched.reason && validation.errors.reason ? <FormFeedback type='invalid'>{validation.errors.reason}</FormFeedback> : null}
-                  </FormGroup>
+                    </NativeSelect>
+                    {validation.touched.reason && validation.errors.reason ? <div className='text-sm text-destructive'>{validation.errors.reason}</div> : null}
+                  </div>
                 </div>
-              </Col>
+              </div>
               <div className='text-right mt-2'>
-                <Button disabled={loading} type='submit' color='danger' className='btn'>
-                  {loading ? <Spinner color='#fff' /> : 'Cancel'}
+                <Button disabled={loading} type='submit' variant='destructive' className='btn'>
+                  {loading ? <Spinner className='text-white' /> : 'Cancel'}
                 </Button>
               </div>
-            </Form>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+            </form>
+          </div>
+        </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

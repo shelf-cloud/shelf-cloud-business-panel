@@ -4,7 +4,9 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type EditComment = {
   show: boolean
@@ -67,51 +69,39 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      centered
-      id='editInvoiceCommentModal'
-      isOpen={editCommentModal.show}
-      toggle={() => {
-        setEditCommentModal({
-          show: false,
-          orderId: 0,
-          comment: '',
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!editCommentModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setEditCommentModal({
             show: false,
             orderId: 0,
             comment: '',
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Invoice Note
-      </ModalHeader>
-      <ModalBody>
-        <Row>
-          <Col md={12} className='mt-2'>
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='editInvoiceCommentModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Invoice Note</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 md:w-full mt-2'>
             <DebounceInput
               element='textarea'
               minLength={3}
               debounceTimeout={700}
-              className='form-control text-[11.2px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px]'
               placeholder='Comment ...'
               id='search-options'
               value={editCommentModal.comment}
               onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
               onChange={(e) => setnewComment(e.target.value)}
             />
-          </Col>
+          </div>
           <div className='mt-6 flex flex-row gap-4 justify-end'>
             <Button
               disabled={isLoading}
               type='button'
-              color='light'
+              variant='light'
               className='btn'
               onClick={() => {
                 setEditCommentModal({
@@ -122,13 +112,13 @@ const EditInvoiceCommerceHubCommentModal = ({ editCommentModal, setEditCommentMo
               }}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='success' className='btn' onClick={hanldeEditFBAShipmentName}>
-              {isLoading ? <Spinner color='light' size={'sm'} /> : 'Save'}
+            <Button disabled={isLoading} type='button' variant='success' className='btn' onClick={hanldeEditFBAShipmentName}>
+              {isLoading ? <Spinner className='text-white' /> : 'Save'}
             </Button>
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

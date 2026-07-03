@@ -6,7 +6,10 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Textarea } from '@shadcn/ui/textarea'
+import { Label } from '@shadcn/ui/label'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -155,49 +158,47 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
           <div>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
-        <Form onSubmit={handleAddProduct}>
-          <Row>
-            <Col md={6}>
-              <FormGroup>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 md:w-6/12'>
+              <div className='mb-3'>
                 <Label htmlFor='title'>
                   *Title
                 </Label>
                 <Input
                   type='text'
-                  className='text-[13px]'
+                  className='text-[13px] h-8 text-xs'
                   placeholder='Title...'
                   id='title'
                   name='title'
-                  bsSize='sm'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.title || ''}
-                  invalid={validation.touched.title && validation.errors.title ? true : false}
+                  aria-invalid={validation.touched.title && validation.errors.title ? true : undefined}
                 />
-                {validation.touched.title && validation.errors.title ? <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={12}>
-              <FormGroup>
+                {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+              </div>
+            </div>
+            <div className='px-3 md:w-full'>
+              <div className='mb-3'>
                 <Label htmlFor='description'>
                   Product Description
                 </Label>
                 <Input
                   type='text'
-                  className='text-[13px]'
+                  className='text-[13px] h-8 text-xs'
                   placeholder='Description...'
                   id='description'
                   name='description'
-                  bsSize='sm'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.description ?? ''}
-                  invalid={validation.touched.description && validation.errors.description ? true : false}
+                  aria-invalid={validation.touched.description && validation.errors.description ? true : undefined}
                 />
-                {validation.touched.description && validation.errors.description ? <FormFeedback type='invalid'>{validation.errors.description}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={6}>
+                {validation.touched.description && validation.errors.description ? <div className='text-sm text-destructive'>{validation.errors.description}</div> : null}
+              </div>
+            </div>
+            <div className='px-3 md:w-6/12'>
               <Label htmlFor='brand'>
                 *Brand
               </Label>
@@ -210,8 +211,8 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 handleSelection={handleSelection}
                 errorMessage={validation.errors.brand}
               />
-            </Col>
-            <Col md={6}>
+            </div>
+            <div className='px-3 md:w-6/12'>
               <Label htmlFor='supplier'>
                 *Supplier
               </Label>
@@ -224,8 +225,8 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 handleSelection={handleSelection}
                 errorMessage={validation.errors.supplier}
               />
-            </Col>
-            <Col md={6}>
+            </div>
+            <div className='px-3 md:w-6/12'>
               <Label htmlFor='category'>
                 Category
               </Label>
@@ -238,8 +239,8 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 handleSelection={handleSelection}
                 errorMessage={validation.errors.category}
               />
-            </Col>
-            <Col md={6}>
+            </div>
+            <div className='px-3 md:w-6/12'>
               <Label htmlFor='itemCondition'>
                 *Condition
               </Label>
@@ -248,59 +249,56 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 handleSelection={handleConditionSelection}
                 errorMessage={validation.errors.itemCondition}
               />
-            </Col>
-            <Col md={12}>
-              <FormGroup>
+            </div>
+            <div className='px-3 md:w-full'>
+              <div className='mb-3'>
                 <Label htmlFor='lastNameinput'>
                   Product Image
                 </Label>
                 <Input
                   type='text'
-                  className='text-[13px]'
+                  className='text-[13px] h-8 text-xs'
                   placeholder='Image URL...'
                   id='image'
                   name='image'
-                  bsSize='sm'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.image || ''}
-                  invalid={validation.touched.image && validation.errors.image ? true : false}
+                  aria-invalid={validation.touched.image && validation.errors.image ? true : undefined}
                 />
-                {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={12}>
-              <FormGroup>
+                {validation.touched.image && validation.errors.image ? <div className='text-sm text-destructive'>{validation.errors.image}</div> : null}
+              </div>
+            </div>
+            <div className='px-3 md:w-full'>
+              <div className='mb-3'>
                 <Label htmlFor='note'>
                   Product Note
                 </Label>
-                <Input
-                  type='textarea'
-                  className='text-[13px]'
+                <Textarea
+                  className='text-[13px] h-8 text-xs'
                   placeholder=''
                   id='note'
                   name='note'
-                  bsSize='sm'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.note || ''}
-                  invalid={validation.touched.note && validation.errors.note ? true : false}
+                  aria-invalid={validation.touched.note && validation.errors.note ? true : undefined}
                 />
-                {validation.touched.note && validation.errors.note ? <FormFeedback type='invalid'>{validation.errors.note}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={12}>
+                {validation.touched.note && validation.errors.note ? <div className='text-sm text-destructive'>{validation.errors.note}</div> : null}
+              </div>
+            </div>
+            <div className='px-3 md:w-full'>
               <div className='flex flex-row justify-end items-center gap-3'>
-                <Button type='button' color='light' onClick={() => setShowEditFields(false)}>
+                <Button type='button' variant='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary'>
+                <Button type='submit'>
                   Save Changes
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
+            </div>
+          </div>
+        </form>
       )}
     </div>
   )

@@ -10,7 +10,11 @@ import { OrderRowType } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-import { Alert, Button, Col, Modal, ModalBody, ModalHeader, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
+import { Alert } from '@/components/ui/Alert'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
+import { Spinner } from '@shadcn/ui/spinner'
 
 import Edit_Receiving_Packages_Tab from './Edit_Receiving_Packages_Tab'
 import Edit_Receiving_Summary_Tab from './Edit_Receiving_Summary_Tab'
@@ -138,39 +142,29 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
   const { downloadPDF } = useGenerateLabels()
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='editReceivingModal'
-      isOpen={show}
-      toggle={() => {
-        seteditReceiving({
-          show: false,
-          order: {} as OrderRowType,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!show}
+      onOpenChange={(open) => {
+        if (!open)
           seteditReceiving({
             show: false,
             order: {} as OrderRowType,
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Edit Receiving
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='editReceivingModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Edit Receiving</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <p className='m-0 text-[16.25px] font-semibold'>
             Receiving: <span className='text-primary'>{orderNumber}</span>
           </p>
-        </Row>
-        <Row className='mb-4'>
+        </div>
+        <div className='flex flex-wrap -mx-3 mb-4'>
           <p className='m-0 text-[13px] font-semibold'>
             Destination: <span className='text-primary'>{warehouseName}</span>
           </p>
-        </Row>
+        </div>
 
         <Nav className='nav-tabs border-b' role='tablist'>
           <NavItem style={{ cursor: 'pointer' }}>
@@ -224,37 +218,37 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
             )}
           </TabPane>
         </TabContent>
-        <Row className='mb-2'>
+        <div className='flex flex-wrap -mx-3 mb-2'>
           {needsNewBoxConfiguration && (
-            <Col xs={12} className='m-0'>
+            <div className='px-3 w-full m-0'>
               <Alert color='warning' className='text-[11.2px] py-1 mb-2' fade={false}>
                 <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 You need to create a new box configuration for this receiving.
               </Alert>
-            </Col>
+            </div>
           )}
           {!needsNewBoxConfiguration && packingConfiguration !== 'current' && (
-            <Col xs={12} className='m-0'>
+            <div className='px-3 w-full m-0'>
               <Alert color='warning' className='text-[11.2px] py-1 mb-2' fade={false}>
                 <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 You are editing the current box configuration. Please make sure to update the current box configuration if needed.
               </Alert>
-            </Col>
+            </div>
           )}
           {hasBoxedErrors.error && (
-            <Col xs={12} className='m-0'>
+            <div className='px-3 w-full m-0'>
               <Alert color='danger' className='text-[11.2px] py-1 mb-2' fade={false}>
                 <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                 {hasBoxedErrors.message}
               </Alert>
-            </Col>
+            </div>
           )}
-        </Row>
-        <Row md={12}>
+        </div>
+        <div className='flex flex-wrap -mx-3'>
           <div className='flex justify-end items-center gap-4'>
             <Button
               type='button'
-              color='light'
+              variant='light'
               className='text-[11.2px]'
               onClick={() =>
                 seteditReceiving({
@@ -270,10 +264,10 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
               </Button>
             )}
             {activeTab == 'packages' && (
-              <Button disabled={loading || hasBoxedErrors.error} type='button' color='success' className='text-[11.2px]' onClick={() => handleUpdateReceiving()}>
+              <Button disabled={loading || hasBoxedErrors.error} type='button' variant='success' className='text-[11.2px]' onClick={() => handleUpdateReceiving()}>
                 {loading ? (
                   <span>
-                    <Spinner color='light' size={'sm'} /> Updating...
+                    <Spinner className='text-white' /> Updating...
                   </span>
                 ) : (
                   'Update Receiving'
@@ -281,9 +275,9 @@ const EditReceivingModal = ({ editReceiving, seteditReceiving, mutateReceivings 
               </Button>
             )}
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

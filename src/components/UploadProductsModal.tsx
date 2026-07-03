@@ -8,7 +8,10 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {}
 
@@ -155,23 +158,18 @@ const UploadProductsModal = ({}: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={state.showUploadProductsModal}
-      toggle={() => {
-        setUploadProductsModal(!state.showUploadProductsModal)
+    <Dialog
+      open={!!state.showUploadProductsModal}
+      onOpenChange={(open) => {
+        if (!open) setUploadProductsModal(!state.showUploadProductsModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setUploadProductsModal(!state.showUploadProductsModal)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        <p className='text-[22.75px]'>Import Products</p>
-      </ModalHeader>
-      <ModalBody>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
+        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+          <DialogTitle>
+            <p className='text-[22.75px]'>Import Products</p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         <p className='text-[16.25px] font-normal'>
           You can import products in bulk by uploading a CSV file using the{' '}
           <a className='!text-primary' href={'https://docs.google.com/spreadsheets/d/19H7hs8kS6D5cysi3QmJTH0Hfpmjw7VuG/template/preview'} target='blank' rel='noopener noreferrer'>
@@ -179,8 +177,8 @@ const UploadProductsModal = ({}: Props) => {
           </a>{' '}
           file.
         </p>
-        <Row>
-          <Col md={6}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 md:w-6/12'>
             {/* <Dropzone
               accept={{ 'text/csv': ['.csv'] }}
               multiple={false}
@@ -206,15 +204,15 @@ const UploadProductsModal = ({}: Props) => {
               handleAcceptedFiles={handleAcceptedFiles}
               description={`Upload Products Info. Drop Only CSV files here or click to upload.`}
             />
-          </Col>
-          <Col md={6}>
+          </div>
+          <div className='px-3 md:w-6/12'>
             <div className='list-unstyled mb-0' id='file-previews'>
               {selectedFiles.map((f: any, i) => {
                 return (
                   <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                     <div className='p-2'>
-                      <Row className='items-center'>
-                        <Col className='flex justify-between items-center'>
+                      <div className='flex flex-wrap -mx-3 items-center'>
+                        <div className='px-3 flex justify-between items-center'>
                           <div>
                             <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                             <p className='mb-0'>
@@ -222,34 +220,35 @@ const UploadProductsModal = ({}: Props) => {
                             </p>
                           </div>
                           <div>
-                            <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                            <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
                               <i className=' ri-close-line' />
                             </Button>
                           </div>
-                        </Col>
-                      </Row>
+                        </div>
+                      </div>
                     </div>
                   </Card>
                 )
               })}
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
         {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
         {showErrorLines &&
           errorLines.map((error: any, index: number) => (
             <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
           ))}
         {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
-        <Col md={12}>
+        <div className='px-3 w-full'>
           <div className='text-right'>
-            <Button type='button' color='success' className='btn' onClick={handleUploadProducts}>
+            <Button type='button' variant='success' className='btn' onClick={handleUploadProducts}>
               {loading ? <Spinner /> : 'Upload File'}
             </Button>
           </div>
-        </Col>
-      </ModalBody>
-    </Modal>
+        </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

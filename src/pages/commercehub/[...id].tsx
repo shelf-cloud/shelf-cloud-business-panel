@@ -16,7 +16,7 @@ import { getSession } from 'next-auth/react'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Card, CardBody, CardHeader, Container } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -351,7 +351,7 @@ const CheckNumberDetails = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Check Number' pageTitle='Commerce HUB' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <div className='flex flex-col justify-center items-end gap-2 mb-1 lg:flex-row md:justify-between md:items-center px-1'>
               <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <FilterCheckNumber type={invoiceType} setInvoiceType={setInvoiceType} />
@@ -371,7 +371,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                       type='text'
                       minLength={1}
                       debounceTimeout={500}
-                      className='form-control input_background_white'
+                      className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -411,7 +411,7 @@ const CheckNumberDetails = ({ session }: Props) => {
                   </div>
                 </div>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <DataTable
                   columns={columns}
                   data={filterInvoices}
@@ -423,9 +423,9 @@ const CheckNumberDetails = ({ session }: Props) => {
                   selectableRowDisabled={rowDisabledCriteria}
                   clearSelectedRows={toggledClearRows}
                 />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

@@ -6,7 +6,8 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { FBAProductsWidgetResponse, ProductsWidgetsResponse } from '@typesTs/products/productsWidgets'
 import axios from 'axios'
 import CountUp from 'react-countup'
-import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR from 'swr'
 
 type Props = {}
@@ -41,10 +42,10 @@ const ProductsWidgets = ({}: Props) => {
   )
 
   return (
-    <Row className='mb-2 gap-y-2'>
-      <Col xs={12} md={state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected ? 2 : 3}>
+    <div className='flex flex-wrap -mx-3 mb-2 gap-y-2'>
+      <div className={'px-3 w-full ' + (state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected ? 'md:w-2/12' : 'md:w-3/12')}>
         <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
+          <CardContent className='py-2'>
             <div className='flex items-center justify-between mb-1'>
               <p className='capitalize font-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <span className='text-primary font-bold'>Total</span> Inventory Qty
@@ -57,16 +58,16 @@ const ProductsWidgets = ({}: Props) => {
                   <CountUp start={0} separator={','} end={productsWidgets?.totalQty ?? 0} decimals={0} duration={1} />
                 </span>
               </h4>
-              <Button color='primary' size='sm' className='m-0 p-0 h-full' onClick={() => setproductsQtyTimelineModal({ show: true })}>
+              <Button size='sm' className='m-0 p-0 h-full' onClick={() => setproductsQtyTimelineModal({ show: true })}>
                 <i className='ri-line-chart-fill text-[16.25px] align-middle m-0 p-0' />
               </Button>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col xs={12} md={3}>
+      </div>
+      <div className='px-3 w-full md:w-3/12'>
         <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
+          <CardContent className='py-2'>
             <div className='flex items-center justify-between mb-2'>
               <p className='capitalize font-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <span className='text-primary font-bold'>Seller Cost</span> Inventory Value
@@ -87,12 +88,12 @@ const ProductsWidgets = ({}: Props) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col xs={12} md={3}>
+      </div>
+      <div className='px-3 w-full md:w-3/12'>
         <Card className='card-animate mb-0'>
-          <CardBody className='py-2'>
+          <CardContent className='py-2'>
             <div className='flex items-center justify-between mb-2'>
               <p className='capitalize font-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <span className='text-primary font-bold'>Landed Cost</span> Inventory Value
@@ -113,9 +114,9 @@ const ProductsWidgets = ({}: Props) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
       {productsQtyTimelineModal.show && (
         <ProductsInventoryTimelineModal
           dates={productsWidgets?.inventoryTimeline.dates ?? []}
@@ -127,9 +128,9 @@ const ProductsWidgets = ({}: Props) => {
         />
       )}
       {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
-        <Col xs={12} md={4}>
+        <div className='px-3 w-full md:w-4/12'>
           <Card className='card-animate mb-0'>
-            <CardBody className='py-2 overflow-hidden'>
+            <CardContent className='py-2 overflow-hidden'>
               <div
                 className='flex flex-col items-start justify-between mb-1 lg:flex-row lg:items-center'
                 style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -174,11 +175,11 @@ const ProductsWidgets = ({}: Props) => {
                   <span className='text-[11.2px] font-light text-[color:var(--bs-secondary-color)]'> Landed C.</span>
                 </p>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
+        </div>
       )}
-    </Row>
+    </div>
   )
 }
 

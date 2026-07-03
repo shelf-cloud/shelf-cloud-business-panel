@@ -7,7 +7,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   filteredItems: InvoiceList[]

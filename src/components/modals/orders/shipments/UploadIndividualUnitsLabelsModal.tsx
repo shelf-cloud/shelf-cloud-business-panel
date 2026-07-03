@@ -9,7 +9,10 @@ import { ref, uploadBytes } from 'firebase/storage'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   data: Shipment
@@ -106,26 +109,18 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={state.showUploadIndividualUnitsLabelsModal}
-      toggle={() => {
-        setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)
+    <Dialog
+      open={!!state.showUploadIndividualUnitsLabelsModal}
+      onOpenChange={(open) => {
+        if (!open) setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Upload Labels for Individual Units Wholesale Order
-      </ModalHeader>
-      <ModalBody>
-        <Col>
-          <Row>
-            <Col>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Upload Labels for Individual Units Wholesale Order</DialogTitle>
+        </DialogHeader>
+        <div className='px-3 flex-1 basis-0'>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 flex-1 basis-0'>
               {/* <Dropzone
                 multiple={false}
                 onDrop={(acceptedFiles) => {
@@ -152,8 +147,8 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   return (
                     <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='p-2'>
-                        <Row className='items-center'>
-                          <Col className='flex justify-between items-center'>
+                        <div className='flex flex-wrap -mx-3 items-center'>
+                          <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
                             <div>
                               <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                               <p className='mb-0'>
@@ -161,20 +156,20 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                               </p>
                             </div>
                             <div>
-                              <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                              <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
                                 <i className=' ri-close-line' />
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
                       </div>
                     </Card>
                   )
                 })}
               </div>
               {errorFile && <p className='text-danger m-0'>You must Upload Labels to ship order.</p>}
-            </Col>
-            <Col>
+            </div>
+            <div className='px-3 flex-1 basis-0'>
               {data.numberPallets > 0 && (
                 // <Dropzone
                 //   multiple={false}
@@ -203,8 +198,8 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                   return (
                     <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='p-2'>
-                        <Row className='items-center'>
-                          <Col className='flex justify-between items-center'>
+                        <div className='flex flex-wrap -mx-3 items-center'>
+                          <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
                             <div>
                               <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                               <p className='mb-0'>
@@ -212,39 +207,39 @@ const UploadIndividualUnitsLabelsModal = ({ data, mutateShipment }: Props) => {
                               </p>
                             </div>
                             <div>
-                              <Button color='light' className='btn-icon' onClick={() => setPalletSelectedFiles([])}>
+                              <Button variant='light' className='btn-icon' onClick={() => setPalletSelectedFiles([])}>
                                 <i className=' ri-close-line' />
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
                       </div>
                     </Card>
                   )
                 })}
               </div>
               {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
-            </Col>
-          </Row>
-        </Col>
-        <Col md={12}>
+            </div>
+          </div>
+        </div>
+        <div className='px-3 md:w-full'>
           <div className='text-right'>
             <Button
               type='submit'
-              color='light'
+              variant='light'
               className='btn mr-4'
               onClick={() => {
                 setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)
               }}>
               Close
             </Button>
-            <Button type='submit' color='success' className='btn' onClick={hanldeUploadFiles}>
-              {loading ? <Spinner color='#fff' /> : 'Upload Labels'}
+            <Button type='submit' variant='success' className='btn' onClick={hanldeUploadFiles}>
+              {loading ? <Spinner className='text-white' /> : 'Upload Labels'}
             </Button>
           </div>
-        </Col>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

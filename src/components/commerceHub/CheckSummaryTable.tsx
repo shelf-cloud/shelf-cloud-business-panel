@@ -9,7 +9,7 @@ import { CheckSummaryType } from '@typesTs/commercehub/checkSummary'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
-import { UncontrolledTooltip } from '@/components/migration-ui'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import { getTotalPaid } from './helperFunctions'
 

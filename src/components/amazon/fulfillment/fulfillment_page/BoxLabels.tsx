@@ -1,5 +1,5 @@
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Spinner } from '@/components/migration-ui'
+import { Spinner } from '@shadcn/ui/spinner'
 
 import BoxLabelsCard from './BoxLabelsCard'
 
@@ -33,7 +33,7 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
       ) : (
         <div className='w-full px-4'>
           <div className='my-4 flex justify-start items-center gap-4'>
-            <Spinner color='primary' />
+            <Spinner className='size-6 text-primary' />
             <p className='m-0 p-0 font-normal text-[16.25px]'>Confirm charges and fees first for Box labels to be available.</p>
           </div>
         </div>

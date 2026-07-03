@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { NoImageAdress } from '@lib/assetsConstants'
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Col, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -12,7 +13,7 @@ type Props = {
 const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
   return (
     <div className='w-full p-0'>
-      <Col xs='12' className='overflow-auto'>
+      <div className='px-3 w-full overflow-auto'>
         <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr>
@@ -139,17 +140,17 @@ const InventoryToSend = ({ inboundPlan, handleNextStep, watingRepsonse }: Props)
             ))}
           </tbody>
         </table>
-      </Col>
+      </div>
       {handleNextStep && inboundPlan.fulfillmentType === 'Master Boxes' && (
-        <Col xs='12' className='flex justify-end'>
+        <div className='px-3 w-full flex justify-end'>
           <Button
             disabled={watingRepsonse.inventoryToSend || inboundPlan.steps[1].complete}
-            color='success'
+            variant='success'
             id='btn_handleNextStepPacking'
             onClick={() => handleNextStep(inboundPlan.inboundPlanId)}>
-            {watingRepsonse.inventoryToSend ? <Spinner color='light' size={'sm'} /> : 'Confirm and Continue'}
+            {watingRepsonse.inventoryToSend ? <Spinner className='text-white' /> : 'Confirm and Continue'}
           </Button>
-        </Col>
+        </div>
       )}
     </div>
   )

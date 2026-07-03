@@ -3,7 +3,7 @@ import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import moment from 'moment'
 import DataTable from 'react-data-table-component'
 
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   reportList: ShelfCloudReportList[]
@@ -71,7 +71,7 @@ const ReportsTable = ({ reportList, pending, handleDownloadReport }: Props) => {
       selector: (row: ShelfCloudReportList) => {
         if (row.reportStatus === 'ready') {
           return (
-            <Button color='primary' className='text-[13px] py-1' onClick={() => handleDownloadReport(row.reportFileName)}>
+            <Button className='text-[13px] py-1' onClick={() => handleDownloadReport(row.reportFileName)}>
               Download
             </Button>
           )

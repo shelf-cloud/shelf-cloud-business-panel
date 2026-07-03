@@ -6,7 +6,8 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import Integrations from '@components/integrations/integrations'
 import MarketplacesFees from '@components/marketplaceManager/MarketplaceFees'
 import { getSession } from 'next-auth/react'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -49,9 +50,9 @@ const MarketplaceManager = ({ session, env }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Settings' pageTitle='Marketpalce Manager' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
                 <Card>
                   <CardHeader>
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
@@ -83,7 +84,7 @@ const MarketplaceManager = ({ session, env }: Props) => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='p-6'>
+                  <CardContent className='p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <MarketplacesFees />
@@ -92,11 +93,11 @@ const MarketplaceManager = ({ session, env }: Props) => {
                         <Integrations env={env} />
                       </TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

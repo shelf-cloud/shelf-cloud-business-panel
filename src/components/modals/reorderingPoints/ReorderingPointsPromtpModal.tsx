@@ -3,7 +3,9 @@ import { useContext, useTransition } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Textarea } from '@shadcn/ui/textarea'
 import snarkdown from 'snarkdown'
 import useSWR from 'swr'
 
@@ -63,25 +65,20 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='businessPromptModal'
-      isOpen={promptModal.show}
-      toggle={() => {
-        setPromptModal({
-          show: false,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!promptModal.show}
+      onOpenChange={(open) => {
+        if (!open) {
           setPromptModal({
             show: false,
           })
-        }}>
-        Business Prompt
-      </ModalHeader>
-      <ModalBody className='px-6 py-4' style={{ overflowX: 'hidden', overflowY: 'auto', minWidth: 0 }}>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>Business Prompt</DialogTitle>
+        </DialogHeader>
+        <div className='px-6 py-4' style={{ overflowX: 'hidden', overflowY: 'auto', minWidth: 0 }}>
         <p className='text-[13px]'>To forecast using different AI models, you can add custom instructions/rules additionally.</p>
         {isValidating ? (
           <div className='flex items-center gap-2 text-[var(--bs-secondary-color)] py-4'>
@@ -120,8 +117,7 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
               <p className='font-semibold text-[var(--bs-secondary-color)] uppercase mb-4' style={{ fontSize: '0.7rem', letterSpacing: '0.06em' }}>
                 Business Rules
               </p>
-              <Input
-                type='textarea'
+              <Textarea
                 rows={4}
                 placeholder={placeholderBusinessRules}
                 id='businessRules'
@@ -133,22 +129,23 @@ function ReorderingPointsPromptModal({ promptModal, setPromptModal }: Props) {
         ) : (
           <p className='text-[var(--bs-secondary-color)] mb-0'>No prompt available.</p>
         )}
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          color='light'
-          onClick={() => {
-            setPromptModal({
-              show: false,
-            })
-          }}>
-          Close
-        </Button>
-        <Button onClick={handleSaveBusinessRules} disabled={isPending}>
-          {isPending ? 'Saving...' : 'Save Rules'}
-        </Button>
-      </ModalFooter>
-    </Modal>
+        </div>
+        <DialogFooter className='items-center'>
+          <Button
+            variant='light'
+            onClick={() => {
+              setPromptModal({
+                show: false,
+              })
+            }}>
+            Close
+          </Button>
+          <Button onClick={handleSaveBusinessRules} disabled={isPending}>
+            {isPending ? 'Saving...' : 'Save Rules'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

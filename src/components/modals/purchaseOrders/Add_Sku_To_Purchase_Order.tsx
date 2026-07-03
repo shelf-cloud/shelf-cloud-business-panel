@@ -12,7 +12,9 @@ import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 const customStyles = {
@@ -157,7 +159,10 @@ const Add_Sku_To_Purchase_Order = ({}) => {
               onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
-              className={'form-control form-control-sm text-[13px] m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')}
+              className={
+                'h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px] m-0 ' +
+                (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-danger' : '')
+              }
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
               id='qtyToAdd'
@@ -241,77 +246,79 @@ const Add_Sku_To_Purchase_Order = ({}) => {
   }
 
   return (
-    <Modal fade={false} scrollable={true} size='xl' id='addSkuToPoModal' isOpen={show} toggle={handleCloseModal}>
-      <ModalHeader toggle={handleCloseModal} className='modal-title pb-0' id='addSkuToPoModalLabel'>
-        Add Products to PO
-      </ModalHeader>
-      <ModalBody>
-        <p className='m-0 text-[16.25px] font-semibold'>
-          Purchase Order: <span className='text-primary'>{orderNumber}</span>
-        </p>
-        <p className='m-0 text-[16.25px] font-semibold'>
-          Supplier: <span className='text-primary'>{suppliersName}</span>
-        </p>
-        {hasSplitting && (
-          <p className='text-[16.25px] font-semibold'>
-            To Split: <span className='text-primary'>{split?.splitName}</span>
+    <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleCloseModal() }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='addSkuToPoModal'>
+        <DialogHeader className='pr-6 modal-title pb-0' id='addSkuToPoModalLabel'>
+          <DialogTitle>Add Products to PO</DialogTitle>
+        </DialogHeader>
+        <div>
+          <p className='m-0 text-[16.25px] font-semibold'>
+            Purchase Order: <span className='text-primary'>{orderNumber}</span>
           </p>
-        )}
-        <Row>
-          <Col xs={12} md={6} className='overflow-auto h-full'>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
-              <span className='text-[19.5px] font-semibold flex-1'>SKU List</span>
-              <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
-            </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable
-                columns={columnsSkuListToAdd}
-                data={filterDataTable || []}
-                progressPending={isLoading}
-                striped={true}
-                dense={true}
-                fixedHeader={true}
-                fixedHeaderScrollHeight='60vh'
-                className='pb-4'
-                customStyles={customStyles}
-              />
-            </Col>
-          </Col>
-          <Col xs={12} md={6}>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
-              <span className='text-[19.5px] font-semibold'>Selected SKUs to Add to Purchase Order</span>
-            </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
-              <DataTable
-                columns={columnsSkuListAdded}
-                data={skuToAddToPo || []}
-                striped={true}
-                dense={true}
-                fixedHeader={true}
-                fixedHeaderScrollHeight='60vh'
-                customStyles={customStyles}
-              />
-            </Col>
-          </Col>
-        </Row>
-        <Row md={12}>
-          <div className='mt-4 flex justify-end items-center gap-2'>
-            <Button type='button' color='light' className='text-[11.2px]' onClick={handleCloseModal}>
-              Cancel
-            </Button>
-            <Button disabled={loading || hasErrors} type='button' color='success' className='text-[11.2px]' onClick={handleSubmitProductsToPo}>
-              {loading ? (
-                <span>
-                  <Spinner color='light' size={'sm'} /> Adding...
-                </span>
-              ) : (
-                'Add Products'
-              )}
-            </Button>
+          <p className='m-0 text-[16.25px] font-semibold'>
+            Supplier: <span className='text-primary'>{suppliersName}</span>
+          </p>
+          {hasSplitting && (
+            <p className='text-[16.25px] font-semibold'>
+              To Split: <span className='text-primary'>{split?.splitName}</span>
+            </p>
+          )}
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full md:w-6/12 overflow-auto h-full'>
+              <div className='flex flex-wrap -mx-3 flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+                <span className='text-[19.5px] font-semibold flex-1'>SKU List</span>
+                <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' widths='col-12 col-md-7' />
+              </div>
+              <div className='px-3 w-full' style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+                <DataTable
+                  columns={columnsSkuListToAdd}
+                  data={filterDataTable || []}
+                  progressPending={isLoading}
+                  striped={true}
+                  dense={true}
+                  fixedHeader={true}
+                  fixedHeaderScrollHeight='60vh'
+                  className='pb-4'
+                  customStyles={customStyles}
+                />
+              </div>
+            </div>
+            <div className='px-3 w-full md:w-6/12'>
+              <div className='flex flex-wrap -mx-3 flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
+                <span className='text-[19.5px] font-semibold'>Selected SKUs to Add to Purchase Order</span>
+              </div>
+              <div className='px-3 w-full' style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+                <DataTable
+                  columns={columnsSkuListAdded}
+                  data={skuToAddToPo || []}
+                  striped={true}
+                  dense={true}
+                  fixedHeader={true}
+                  fixedHeaderScrollHeight='60vh'
+                  customStyles={customStyles}
+                />
+              </div>
+            </div>
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='mt-4 flex justify-end items-center gap-2'>
+              <Button type='button' variant='light' className='text-[11.2px]' onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button disabled={loading || hasErrors} type='button' variant='success' className='text-[11.2px]' onClick={handleSubmitProductsToPo}>
+                {loading ? (
+                  <span>
+                    <Spinner className='text-white' /> Adding...
+                  </span>
+                ) : (
+                  'Add Products'
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

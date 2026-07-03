@@ -17,7 +17,9 @@ import axios from 'axios'
 import moment from 'moment'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
 import useSWRInfinite from 'swr/infinite'
 
@@ -249,10 +251,10 @@ const Deductions = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Deductions' pageTitle='Commerce HUB' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <div className='flex flex-col justify-center items-end gap-2 mb-1 lg:flex-row md:justify-between md:items-center px-1'>
               <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
-                <Button color='primary' className='btn-label text-[11.2px]' onClick={downloadInfoToExcel}>
+                <Button className='btn-label text-[11.2px]' onClick={downloadInfoToExcel}>
                   <i className='las la-cloud-download-alt label-icon align-middle text-[19.5px] me-2' />
                   Download To Excel
                 </Button>
@@ -272,7 +274,7 @@ const Deductions = ({ session, sessionToken }: Props) => {
                       type='text'
                       minLength={1}
                       debounceTimeout={500}
-                      className='form-control input_background_white text-[13px]'
+                      className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white text-[13px]'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -298,13 +300,13 @@ const Deductions = ({ session, sessionToken }: Props) => {
                   handleChangeDatesFromPicker={handleChangeDatesFromPicker}
                 />
                 <FilterCommerceHubInvoices filters={filters} setfilters={setfilters} stores={stores?.stores ?? []} statusOptions={STATUS_OPTIONS} />
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-[11.2px] text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} variant={hasActiveFilters ? 'default' : 'light'} className='text-[11.2px] text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
             </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 <DeductionsTable
                   filteredItems={invoices}
                   pending={isValidating && size === 1}
@@ -317,13 +319,13 @@ const Deductions = ({ session, sessionToken }: Props) => {
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
-                      <Spinner size='sm' color='primary' /> Loading more invoices...
+                      <Spinner className='text-primary' /> Loading more invoices...
                     </p>
                   )}
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {editCommentModal.show && <EditCommerceHubCommentModal editCommentModal={editCommentModal} setEditCommentModal={setEditCommentModal} mutate={mutate} />}
       </React.Fragment>

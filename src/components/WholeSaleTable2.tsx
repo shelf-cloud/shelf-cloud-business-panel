@@ -9,7 +9,8 @@ import { sortBooleans, sortNumbers, sortStringsLocaleCompare } from '@lib/helper
 import { wholesaleProductRow } from '@typings'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, FormFeedback, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type Props = {
   allData: wholesaleProductRow[]
@@ -243,7 +244,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
           return (
             <>
               <Button
-                color='info'
+                variant='info'
                 outline
                 className='btn btn-ghost-info'
                 id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
@@ -285,7 +286,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
               minLength={1}
               debounceTimeout={300}
               disabled={row?.maxOrderQty! <= 0 ? true : false}
-              className='form-control form-control-sm text-[13px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px]'
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onChange={async (e) => {
@@ -305,9 +306,7 @@ const WholeSaleTable = ({ allData, filteredItems, setAllData, pending, setError,
               invalid={Number(row.orderQty) > row.maxOrderQty! ? true : false}
             />
             {Number(row.orderQty) > row.maxOrderQty! ? (
-              <FormFeedback className='text-left' type='invalid'>
-                Not enough Master Boxes!
-              </FormFeedback>
+              <div className='text-sm text-destructive text-left'>Not enough Master Boxes!</div>
             ) : null}
             <span className='text-[13px] font-normal text-danger' id={`Error-${row.sku}`} style={{ display: 'none' }}>
               Quantity Error

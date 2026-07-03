@@ -6,7 +6,8 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Form, Input } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -94,19 +95,18 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
           <hr className='my-2 border-[color:var(--border)]' />
           <div className='flex flex-col justify-start'>
             <div>
-              <Form className='flex flex-row justify-between items-center w-full gap-3 pb-2'>
+              <form className='flex flex-row justify-between items-center w-full gap-3 pb-2'>
                 <div className='w-full'>
                   <Input
                     type='text'
-                    className='text-[13px]'
+                    className='text-[13px] h-8 text-xs'
                     placeholder='Name...'
                     id='name'
                     name='name'
-                    bsSize='sm'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.name || ''}
-                    invalid={validation.touched.name && validation.errors.name ? true : false}
+                    aria-invalid={(validation.touched.name && validation.errors.name ? true : false) || undefined}
                   />
                 </div>
                 <div className='flex flex-row justify-end items-end gap-2'>
@@ -116,13 +116,12 @@ const Select_Product_Details = ({ inventoryId, type, addEndpoint, selectionInfo,
                       event.stopPropagation()
                       validation.handleSubmit()
                     }}
-                    color='primary'
                     size='sm'
                     className='m-0 text-nowrap'>
                     Add New
                   </Button>
                 </div>
-              </Form>
+              </form>
               {validation.touched.name && validation.errors.name ? (
                 <span className='text-destructive m-0 p-0' style={{ fontSize: '12px' }}>
                   {validation.errors.name}

@@ -4,7 +4,8 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   selected: SelectSingleValueType
@@ -19,11 +20,14 @@ const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) =>
   useClickOutside(AssignCommerceHubFileTypeContainer, () => setIsDialogOpen(false))
 
   return (
-    <Dropdown isOpen={isDialogOpen} toggle={() => setIsDialogOpen(!isDialogOpen)} direction='end'>
-      <DropdownToggle caret className='text-[11.2px]' size='sm' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
-        File
-      </DropdownToggle>
-      <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+    <DropdownMenu open={isDialogOpen} onOpenChange={(open) => { if (open !== isDialogOpen) setIsDialogOpen(!isDialogOpen) }}>
+      <DropdownMenuTrigger asChild>
+        <button type='button' className='text-[11.2px] btn btn-sm btn-light' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+          File
+          <ChevronDownIcon className='ml-1 size-4' />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
         <div className='px-4 py-1'>
           <div className='flex flex-col justify-start gap-2'>
             <SimpleSelect
@@ -36,8 +40,8 @@ const AssignCommerceHubFileType = ({ selected, setSelected, options }: Props) =>
             />
           </div>
         </div>
-      </DropdownMenu>
-    </Dropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

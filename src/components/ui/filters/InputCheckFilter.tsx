@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Label, Switch } from '@/components/migration-ui'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
 
 type Props = {
   inputLabel: string

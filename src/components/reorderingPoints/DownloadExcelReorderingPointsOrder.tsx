@@ -4,7 +4,7 @@ import { buildSplitTemplate, buildTemplate } from '@components/purchase_orders/h
 import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   reorderingPointsOrder: {
@@ -76,10 +76,10 @@ const DownloadExcelReorderingPointsOrder = ({ reorderingPointsOrder, orderDetail
   }
 
   return (
-    <DropdownItem className='text-nowrap text-primary text-[13px] py-0' onClick={() => (splits.isSplitting ? exportSplitExcelFile() : exportExcelFile())}>
+    <DropdownMenuItem className='text-nowrap text-primary text-[13px] py-0' onClick={() => (splits.isSplitting ? exportSplitExcelFile() : exportExcelFile())}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       Download Excel
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

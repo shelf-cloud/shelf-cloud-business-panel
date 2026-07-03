@@ -27,7 +27,8 @@ import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuS
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { ChevronDownIcon } from 'lucide-react'
 import moment from 'moment'
-import { Card, CardBody, Collapse, Container, Row } from '@/components/migration-ui'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Collapse } from '@/components/ui/Collapse'
 
 import RPAIForecastDrawer from '@/features/reordering-points/RPAIForecastDrawer'
 
@@ -287,7 +288,7 @@ const ReorderingPoints = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Reordering Points' pageTitle='Inbound' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <ReorderingPointsSummary
               reorderingPointsOrder={reorderingPointsOrder}
               selectedSupplier={selectedSupplier}
@@ -297,7 +298,7 @@ const ReorderingPoints = ({ session }: Props) => {
               splits={splits}
               splitNames={splitNames}
             />
-            <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+            <div className='flex flex-wrap -mx-3 flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
               <div className='flex flex-col justify-between items-start p-0 md:flex-row md:items-center gap-2'>
                 <div className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                   <ShadcnButton variant={filters === 'true' ? 'default' : 'light'} onClick={() => setFilterOpen(!filterOpen)}>
@@ -341,7 +342,7 @@ const ReorderingPoints = ({ session }: Props) => {
                       <DropdownMenuContent align='start'>
                         <DropdownMenuGroup>
                           {/* <DropdownMenuItem onClick={() => setIsBulkTrendTagDialogOpen(true)}>
-                            <i className='las la-chart-line fs-5 text-info' />
+                            <i className='las la-chart-line text-[16.25px] text-info' />
                             Set Product Trend Tag
                           </DropdownMenuItem> */}
                           <DropdownMenuItem onClick={() => changeSelectedProductsState(false)}>
@@ -387,9 +388,9 @@ const ReorderingPoints = ({ session }: Props) => {
                   setFilterOpen={setFilterOpen}
                 />
               </Collapse>
-            </Row>
+            </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 <ReorderingPointsTable
                   filterDataTable={productsData}
                   pending={isLoadingProductsData}
@@ -413,9 +414,9 @@ const ReorderingPoints = ({ session }: Props) => {
                   setAIForecastProduct={setAIForecastProduct}
                   expandedRowProps={{ session, startDate, endDate }}
                 />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {salesModal.showSalesModal && <ReorderingPointsSalesModal salesModal={salesModal} setSalesModal={setSalesModal} />}
         {showPOModal && (

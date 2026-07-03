@@ -5,7 +5,6 @@ import AppContext from '@context/AppContext'
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderProducts: ReceivingInventory[]
@@ -15,7 +14,7 @@ const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
   const { state } = useContext(AppContext)
   return (
     <div className='overflow-auto'>
-      <Col md={12}>
+      <div className='px-3 w-full'>
         <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr key='manualReceivingSummaryTab-header'>
@@ -69,7 +68,7 @@ const Create_Manual_Receiving_Summary_Tab = ({ orderProducts }: Props) => {
             </tr>
           </tbody>
         </table>
-      </Col>
+      </div>
     </div>
   )
 }

@@ -22,7 +22,11 @@ import CopyTextToClipboard from '@components/ui/CopyTextToClipboard'
 import AppContext from '@context/AppContext'
 import { ProductDetails } from '@typings'
 import axios from 'axios'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
+
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -81,7 +85,7 @@ const Product_Page_Layout = ({}: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
             <Card className='text-[13px]'>
               {!isLoading ? (
@@ -89,7 +93,7 @@ const Product_Page_Layout = ({}: Props) => {
                   <CardHeader className='flex flex-col justify-between items-start lg:flex-row'>
                     <div>
                       <Link href={'/Products?brand=All&supplier=All&category=All&condition=All&status=All'}>
-                        <Button color='primary' outline style={{ cursor: 'pointer' }}>
+                        <Button outline style={{ cursor: 'pointer' }}>
                           <span className='icon-on text-[11.2px]'>
                             <i className='ri-arrow-left-line align-bottom me-1' />
                             Products
@@ -109,9 +113,9 @@ const Product_Page_Layout = ({}: Props) => {
                       inventoryValue={productDetails?.inventoryValue ?? 0}
                     />
                   </CardHeader>
-                  <CardBody>
-                    <Row>
-                      <Col xs='12' md='12' lg='9' className='gap-2 flex flex-col overflow-auto'>
+                  <CardContent>
+                    <div className='flex flex-wrap -mx-3'>
+                      <div className='px-3 w-full lg:w-3/4 gap-2 flex flex-col overflow-auto'>
                         <General_Product_Details
                           inventoryId={productDetails?.inventoryId}
                           sku={productDetails?.sku}
@@ -264,8 +268,8 @@ const Product_Page_Layout = ({}: Props) => {
                           ordered={productDetails?.ordered ?? 0}
                           amazonFBA={productDetails?.amazonFBA ?? []}
                         />
-                      </Col>
-                      <Col xs='12' md='12' lg='3' className='gap-4 flex flex-col'>
+                      </div>
+                      <div className='px-3 w-full lg:w-1/4 gap-4 flex flex-col'>
                         <Status_Product_Details
                           active={productDetails?.activeState ?? true}
                           isKit={productDetails?.isKit ? true : false}
@@ -273,19 +277,19 @@ const Product_Page_Layout = ({}: Props) => {
                         />
                         <Activity_Product_Details latestOrders={productDetails?.latestOrders ?? []} />
                         <Bins_Product_Details bins={productDetails?.bins ?? []} />
-                      </Col>
-                    </Row>
-                  </CardBody>
+                      </div>
+                    </div>
+                  </CardContent>
                 </>
               ) : (
                 <div className='w-full h-full px-4 py-4 flex justify-center items-center'>
                   <div className='text-[19.5px] font-normal my-4 flex justify-center items-center gap-3'>
-                    <Spinner color='primary' size={'md'} /> Loading product details...
+                    <Spinner className='size-6 text-primary' /> Loading product details...
                   </div>
                 </div>
               )}
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
       {shipmentDetailModal.show && <ShipmentDetailsModal />}

@@ -6,7 +6,8 @@ import { SalesOverTimeMarketplace, SalesOverTimeResponse } from '@typesTs/dashbo
 import moment from 'moment'
 import CountUp from 'react-countup'
 // import Link from 'next/link'
-import { Card, CardBody, CardHeader, Col, UncontrolledTooltip } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import SalesOverTimeTimeline from './SalesOverTimeTimeline'
 
@@ -51,7 +52,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
   }
   return (
     <React.Fragment>
-      <Col>
+      <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='flex items-center justify-between'>
             <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Sales Over Time</h4>
@@ -61,7 +62,7 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
             </span>
           </CardHeader>
 
-          <CardBody className='pb-0'>
+          <CardContent className='pb-0'>
             <div className='flex flex-row justify-start gap-6'>
               <div id={'SalesOverTimePrevious'}>
                 <p className='m-0 p-0 font-medium'>Yesterday</p>
@@ -153,9 +154,9 @@ const SalesOverTime = ({ salesOverTime }: Props) => {
               </UncontrolledTooltip>
             </div>
             <SalesOverTimeTimeline salesOverTime={salesOverTime?.orders} />
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

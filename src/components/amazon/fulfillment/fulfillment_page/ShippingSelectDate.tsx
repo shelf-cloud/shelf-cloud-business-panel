@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   id: string
@@ -39,7 +39,7 @@ const ShippingSelectDate = ({ id, selectedDate, minDate, maxDate, setnewDate, cl
         </div>
       </div>
       {clearDate && (
-        <Button size='sm' color='light' className='btn-icon' onClick={() => datePicker.current.flatpickr.clear()}>
+        <Button size='sm' variant='light' className='btn-icon' onClick={() => datePicker.current.flatpickr.clear()}>
           <i className='ri-close-fill text-[16.25px]' />
         </Button>
       )}

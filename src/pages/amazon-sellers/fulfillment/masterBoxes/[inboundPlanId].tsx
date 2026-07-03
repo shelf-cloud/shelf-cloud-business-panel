@@ -17,7 +17,11 @@ import AppContext from '@context/AppContext'
 import { GetLabelsResponse, InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -445,7 +449,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Fulfillment Workdflow' pageTitle='Send to Amazon' />
             <Card className='text-[13px]'>
               {!loading && inboundPlanDetails ? (
@@ -460,7 +464,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                           </span>
                         </Button>
                       </Link>
-                      <Button color='info' className='flex items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                      <Button variant='info' className='flex items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                         <i className='ri-question-line fs-14 p-0 m-0 lg:me-1' />
                         <span className='hidden lg:block'>Need help</span>
                       </Button>
@@ -469,7 +473,7 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                       <p className='font-semibold text-[19.5px] m-0 p-0'>
                         <span className='text-[var(--bs-secondary-color)] font-normal'>Name: </span>
                         {inboundPlanDetails.name}
-                        <Badge color='info' className='ms-2 text-[13px]'>
+                        <Badge variant='info' className='rounded-sm ms-2 text-[13px]'>
                           {inboundPlanDetails.fulfillmentType}
                         </Badge>
                       </p>
@@ -487,9 +491,9 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                       </p>
                     </div>
                   </CardHeader>
-                  <CardBody>
-                    <Row>
-                      <Col xs='12' className='gap-2 flex flex-col'>
+                  <CardContent>
+                    <div className='flex flex-wrap -mx-3'>
+                      <div className='px-3 w-full gap-2 flex flex-col'>
                         <Nav className='pt-0 nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink
@@ -621,18 +625,18 @@ const InboundPlanDetails = ({ session, sessionToken }: Props) => {
                             )}
                           </TabPane>
                         </TabContent>
-                      </Col>
-                    </Row>
-                  </CardBody>
+                      </div>
+                    </div>
+                  </CardContent>
                 </>
               ) : (
                 <div className='w-full px-6 py-6 flex gap-6'>
-                  <Spinner color='primary' className='text-[22.75px]' />
+                  <Spinner className='text-primary text-[22.75px]' />
                   <p className='text-[22.75px] font-semibold'>Loading...</p>
                 </div>
               )}
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
       <MasterBoxHelp isOpen={helpOffCanvasIsOpen} setHelpOffCanvasIsOpen={setHelpOffCanvasIsOpen} />

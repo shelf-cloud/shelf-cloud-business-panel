@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {}
 
@@ -15,7 +15,7 @@ const AmazonAuthButton = ({}: Props) => {
         <Link
           href={`https://sellercentral.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.9ab6cdba-3a1d-4aaf-8e00-0d3c012bd7de&version=beta&state=ShelcloudNewAmazonSeller`}
           target='blank'>
-          <Button outline color='info'>
+          <Button outline variant='info'>
             Connect
           </Button>
         </Link>
@@ -23,7 +23,7 @@ const AmazonAuthButton = ({}: Props) => {
         <Link
           href={`https://sellercentral-europe.amazon.com/apps/authorize/consent?application_id=amzn1.sp.solution.9ab6cdba-3a1d-4aaf-8e00-0d3c012bd7de&version=beta&state=ShelcloudNewAmazonSeller`}
           target='blank'>
-          <Button outline color='info'>
+          <Button outline variant='info'>
             Connect
           </Button>
         </Link>

@@ -5,7 +5,8 @@ import BreadCrumb from '@components/Common/BreadCrumb'
 import Brands from '@components/settings/Brands'
 import Categories from '@components/settings/Categories'
 import Suppliers from '@components/settings/Suppliers'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 
 type Props = {}
 
@@ -23,9 +24,9 @@ const Settings = ({}: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Settings' pageTitle='Account Settings' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 lg:w-full'>
                 <Card>
                   <CardHeader>
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
@@ -71,7 +72,7 @@ const Settings = ({}: Props) => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='p-6'>
+                  <CardContent className='p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <Suppliers />
@@ -83,11 +84,11 @@ const Settings = ({}: Props) => {
                         <Categories />
                       </TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

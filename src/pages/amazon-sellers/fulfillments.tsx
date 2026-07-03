@@ -15,7 +15,8 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -159,19 +160,19 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Fulfillments' pageTitle='Amazon' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             {/* <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 flex-md-row justify-content-md-end align-items-md-center px-4'> */}
-            <Row className='justify-between gap-2 mb-2 px-1'>
-              <Col xs='12' lg='6' className='flex justify-start items-center gap-2'>
+            <div className='flex flex-wrap -mx-3 justify-between gap-2 mb-2 px-1'>
+              <div className='px-3 w-full lg:w-1/2 flex justify-start items-center gap-2'>
                 <Link href={'/amazon-sellers/fulfillment/sendToAmazon'}>
                   <Button>Start New</Button>
                 </Link>
-                <Button color='info' className='flex items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
+                <Button variant='info' className='flex items-center' onClick={() => setHelpOffCanvasIsOpen(true)}>
                   <i className='ri-question-line fs-14 p-0 m-0 lg:me-1' />
                   <span className='hidden lg:block'>Need help</span>
                 </Button>
-              </Col>
-              <Col xs='12' lg='4' className='flex justify-end items-center'>
+              </div>
+              <div className='px-3 w-full lg:w-1/3 flex justify-end items-center'>
                 <div className='flex-1'>
                   <div className='app-search flex flex-row justify-between items-center p-0'>
                     <div className='relative flex rounded-lg w-full overflow-hidden' style={{ border: '1px solid #E1E3E5' }}>
@@ -179,7 +180,7 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                         type='text'
                         minLength={3}
                         debounceTimeout={300}
-                        className='form-control input_background_white'
+                        className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white"
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
@@ -198,10 +199,10 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                     </div>
                   </div>
                 </div>
-              </Col>
-            </Row>
+              </div>
+            </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 <FulfillmentsTable
                   filteredItems={filteredItems}
                   pending={pending}
@@ -210,9 +211,9 @@ const Fulfillments = ({ session, sessionToken }: Props) => {
                   setassignFinishedWorkflowIdModal={setassignFinishedWorkflowIdModal}
                   handleRepairFBAWorkflow={handleRepairFBAWorkflow}
                 />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
       {cancelInboundPlanModal.show && <ConfirmCancelInboundPlan cancelInboundPlanModal={cancelInboundPlanModal} setcancelInboundPlanModal={setcancelInboundPlanModal} />}

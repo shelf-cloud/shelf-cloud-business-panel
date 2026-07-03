@@ -7,7 +7,10 @@ import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { Accept } from 'react-dropzone/.'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 export type UploadResponse = { error: boolean; message: string; url: string }
 
@@ -87,12 +90,13 @@ const UploadFileModal = ({
   }
 
   return (
-    <Modal fade={false} size='md' id='confirmDeleteReceiving' isOpen={isOpen} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
+    <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) handleClose() }}>
+      <DialogContent id='confirmDeleteReceiving' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         {headerText}
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      </DialogHeader>
+      <div>
+        <div className='flex flex-wrap -mx-3'>
           <p className='mb-2 text-[13px] font-semibold'>
             {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
           </p>
@@ -112,8 +116,8 @@ const UploadFileModal = ({
               return (
                 <Card className='mt-1 mb-0 py-2 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                   <div className='p-2'>
-                    <Row className='items-center'>
-                      <Col className='flex justify-evenly items-center gap-4'>
+                    <div className='flex flex-wrap -mx-3 items-center'>
+                      <div className='px-3 flex justify-evenly items-center gap-4'>
                         <div
                           style={{
                             width: '60px',
@@ -139,35 +143,35 @@ const UploadFileModal = ({
                           </p>
                         </div>
                         <div>
-                          <Button color='light' className='btn-icon' onClick={() => handleClearFiles()}>
+                          <Button variant='light' className='btn-icon' onClick={() => handleClearFiles()}>
                             <i className=' ri-close-line' />
                           </Button>
                         </div>
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
                   </div>
                 </Card>
               )
             })}
           </div>
-        </Row>
-      </ModalBody>
-      <ModalFooter>
+        </div>
+      </div>
+      <DialogFooter className='items-center'>
         <div className='w-full flex flex-row gap-2 justify-between items-center'>
           <div></div>
           <div className='flex flex-row gap-2 justify-end'>
-            <Button disabled={isLoading} type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
+            <Button disabled={isLoading} type='button' variant='light' className='text-[11.2px]' onClick={handleClose}>
               Cancel
             </Button>
             <Button
               disabled={isLoading || selectedFiles.length === 0 || (showSelect && select ? !select.value : false)}
               type='button'
-              color={isDeleteAction ? 'danger' : 'success'}
+              variant={isDeleteAction ? 'destructive' : 'success'}
               className='text-[11.2px]'
               onClick={handleConfirmAction}>
               {isLoading ? (
                 <span>
-                  <Spinner color='light' size={'sm'} /> {loadingText}
+                  <Spinner className='text-white' /> {loadingText}
                 </span>
               ) : (
                 confirmText
@@ -175,8 +179,9 @@ const UploadFileModal = ({
             </Button>
           </div>
         </div>
-      </ModalFooter>
-    </Modal>
+      </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

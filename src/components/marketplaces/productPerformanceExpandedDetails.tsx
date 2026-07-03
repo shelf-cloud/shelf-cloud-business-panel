@@ -6,7 +6,8 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketplace, ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import { ExpanderComponentProps } from 'react-data-table-component'
 
-import { Card, CardBody, CardHeader, Col, Collapse, Row } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Collapse } from '@/components/ui/Collapse'
 import { cn } from '@/lib/shadcn/utils'
 
 import { getProductNetExpenses, isAllMarketplacesStore } from './productPerformanceMetrics'
@@ -32,14 +33,14 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col xs={12} lg={4}>
-          <Col sm={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full lg:w-4/12'>
+          <div className='px-3 sm:w-full'>
             <Card>
               <CardHeader className='py-3'>
                 <h5 className='font-semibold m-0'>Performance Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full text-nowrap mb-0 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     {/* GROOSS REVENUE */}
@@ -272,21 +273,21 @@ const ProductPerformanceExpandedDetails: React.FC<ExpanderComponentProps<Product
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-        </Col>
-        <Col xs={12} lg={8}>
+          </div>
+        </div>
+        <div className='px-3 w-full lg:w-8/12'>
           <Card>
             <CardHeader className='py-3'>
               <h5 className='font-semibold m-0'>Performance Timeline</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <ProductPerformanceTimeline productTimeLine={data.datesArray} />
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   )
 }

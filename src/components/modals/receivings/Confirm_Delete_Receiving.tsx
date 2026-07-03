@@ -5,7 +5,9 @@ import AppContext from '@context/AppContext'
 import { DeleteReceivingModalType } from '@pages/receivings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   showDeleteModal: DeleteReceivingModalType
@@ -43,32 +45,34 @@ const Confirm_Delete_Receiving = ({ showDeleteModal, setshowDeleteModal, mutateR
   }
 
   return (
-    <Modal fade={false} size='md' id='confirmDeleteReceiving' isOpen={show} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
-        Confirm Delete Receiving
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+    <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleClose() }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='confirmDeleteReceiving'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Confirm Delete Receiving
+          </DialogTitle>
+        </DialogHeader>
+        <div>
           <p className='m-0 text-[16.25px] font-semibold'>
             Receiving: <span className='text-primary'>{orderNumber}</span>
           </p>
           <div className='mt-4 flex justify-end items-center gap-2'>
-            <Button type='button' color='light' onClick={handleClose}>
+            <Button type='button' variant='light' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='danger' onClick={handleDeleteReceiving}>
+            <Button disabled={isLoading} type='button' variant='destructive' onClick={handleDeleteReceiving}>
               {isLoading ? (
                 <span>
-                  <Spinner color='light' size={'sm'} /> Deleting...
+                  <Spinner className='text-white' /> Deleting...
                 </span>
               ) : (
                 'Delete'
               )}
             </Button>
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

@@ -18,7 +18,12 @@ import { GetLabelsResponse, WaitingReponses } from '@typesTs/amazon/fulfillments
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Badge, Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, Spinner, TabContent, TabPane } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
+
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -152,7 +157,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Product Details' pageTitle='Inventory' />
             <Card className='text-[13px]'>
               {!loading && shipmentDetails ? (
@@ -187,7 +192,7 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           </p>
                           <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
                             Status:{' '}
-                            <Badge color='success' className='text-[13px]'>
+                            <Badge variant='success' className='text-[13px]'>
                               {CleanStatus(shipmentDetails.shipment.status)}
                             </Badge>
                           </p>
@@ -198,9 +203,9 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardBody style={{ minHeight: '60dvh' }}>
-                    <Row xs='5' className='mb-4'>
-                      <Col xs='12' lg='2'>
+                  <CardContent style={{ minHeight: '60dvh' }}>
+                    <div className='flex flex-wrap -mx-3 mb-4'>
+                      <div className='px-3 w-full lg:w-1/6'>
                         <p className='m-0 mb-1 font-bold'>Shipment</p>
                         <p className='m-0 p-0 text-[11.2px] font-semibold'>
                           Created: <span className='font-normal'>{moment(shipmentDetails.createdAt).format('LL')}</span>
@@ -208,21 +213,21 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                         <p className='m-0 p-0 text-[11.2px] font-semibold'>
                           ID: <span className='font-normal'>{shipmentDetails.shipment.shipmentConfirmationId}</span>
                         </p>
-                      </Col>
-                      <Col xs='12' lg='2'>
+                      </div>
+                      <div className='px-3 w-full lg:w-1/6'>
                         <p className='m-0 mb-1 font-bold'>Ship From</p>
                         <p className='m-0 p-0 text-[11.2px]'>{`${shipmentDetails.shipment.source.address.name} ${shipmentDetails.shipment.source.address.addressLine1} ${shipmentDetails.shipment.source.address.city} ${shipmentDetails.shipment.source.address.stateOrProvinceCode} ${shipmentDetails.shipment.source.address.postalCode} ${shipmentDetails.shipment.source.address.countryCode} ${shipmentDetails.shipment.source.address.phoneNumber}`}</p>
-                      </Col>
-                      <Col xs='12' lg='2'>
+                      </div>
+                      <div className='px-3 w-full lg:w-1/6'>
                         <p className='m-0 mb-1 font-bold'>Ship To</p>
                         <p className='m-0 p-0 text-[11.2px]'>{`${shipmentDetails.shipment.destination.warehouseId} - ${shipmentDetails.shipment.destination.address.name} ${shipmentDetails.shipment.destination.address.addressLine1} ${shipmentDetails.shipment.destination.address.city} ${shipmentDetails.shipment.destination.address.stateOrProvinceCode} ${shipmentDetails.shipment.destination.address.postalCode} ${shipmentDetails.shipment.destination.address.countryCode}`}</p>
-                      </Col>
-                      <Col xs='12' lg='1'>
+                      </div>
+                      <div className='px-3 w-full lg:w-1/12'>
                         <p className='m-0 mb-1 font-bold'>Contents</p>
                         <p className='m-0 p-0'>{shipmentDetails.shipmentItems.items.length} MSKUs</p>
                         <p className='m-0 p-0'>{shipmentDetails.shipmentItems.items.reduce((total, item) => total + item.quantity, 0)} Units</p>
-                      </Col>
-                      <Col xs='12' lg='3'>
+                      </div>
+                      <div className='px-3 w-full lg:w-1/4'>
                         <p className='m-0 mb-1 font-bold'>Fees (estimated)</p>
                         <p className='m-0 p-0 text-[11.2px] font-semibold'>
                           FBA manual processing fee: <span className='font-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalPrepFees)}</span>
@@ -234,10 +239,10 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           Amazon partnered carrier cost:{' '}
                           <span className='font-normal'>{FormatCurrency(state.currentRegion, shipmentDetails.totalSpdFees + shipmentDetails.totalLtlFees)}</span>
                         </p>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col xs='12' className='gap-2 flex flex-col'>
+                      </div>
+                    </div>
+                    <div className='flex flex-wrap -mx-3'>
+                      <div className='px-3 w-full gap-2 flex flex-col'>
                         <Nav className='pt-0 rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
                           <NavItem style={{ cursor: 'pointer' }}>
                             <NavLink to='#' className={'text-[16.25px] font-semibold ' + (activeTab == '1' ? 'text-primary' : 'text-[var(--bs-secondary-color)]')} onClick={() => tabChange('1')} type='button'>
@@ -292,18 +297,18 @@ const FBAShipmentDetails = ({ session, sessionToken }: Props) => {
                           </TabPane>
                           <TabPane tabId='4'></TabPane>
                         </TabContent>
-                      </Col>
-                    </Row>
-                  </CardBody>
+                      </div>
+                    </div>
+                  </CardContent>
                 </>
               ) : (
                 <div className='w-full px-6 py-6 flex gap-6'>
-                  <Spinner color='primary' className='text-[19.5px]' />
+                  <Spinner className='size-6 text-primary text-[19.5px]' />
                   <p className='text-[22.75px] font-semibold'>Loading...</p>
                 </div>
               )}
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

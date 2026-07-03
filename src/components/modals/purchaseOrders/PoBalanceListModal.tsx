@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { PoBalance } from '@typesTs/purchaseOrders'
 import moment from 'moment'
-import { Col, Modal, ModalBody, ModalHeader, Row } from '@/components/migration-ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 
 type Props = {
   poBalanceListModal: {
@@ -24,29 +24,21 @@ const PoBalanceListModal = ({ poBalanceListModal, poBalanceList, setpoBalanceLis
   const balance = poBalanceList.reduce((total, po) => total + po.balance, 0)
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='InboundFBAHistoryModal'
-      isOpen={poBalanceListModal.show}
-      toggle={() => {
-        setpoBalanceListModal({
-          show: false,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!poBalanceListModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setpoBalanceListModal({
             show: false,
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        PO Balance List
-      </ModalHeader>
-      <ModalBody style={{ maxHeight: '80svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
-        <Row>
-          <Col md={12} className='mt-2'>
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>PO Balance List</DialogTitle>
+        </DialogHeader>
+        <div style={{ maxHeight: '80svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 md:w-full mt-2'>
             <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 text-nowrap border [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                 <thead className='bg-[color:var(--vz-light)]'>
@@ -84,10 +76,11 @@ const PoBalanceListModal = ({ poBalanceListModal, poBalanceList, setpoBalanceLis
                 </tbody>
               </table>
             </div>
-          </Col>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+        </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

@@ -1,7 +1,7 @@
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import ExcelJS from 'exceljs'
 import { toast } from 'react-toastify'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 import { shelf_cloud_blue_h, shelf_cloud_signature } from '@/lib/assetsConstants'
 
@@ -386,10 +386,10 @@ const FBAShipmentPackingSlip = ({ order }: Props) => {
   }
 
   return (
-    <DropdownItem className='edit-item-btn' onClick={downloadPackingSlip}>
+    <DropdownMenuItem className='edit-item-btn' onClick={downloadPackingSlip}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       <span className='text-[13px] font-normal text-black'>Packing Slip</span>
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

@@ -22,7 +22,8 @@ import { OrderRowType } from '@typings'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -199,7 +200,7 @@ const Receiving = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Receivings' pageTitle='Inbound' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <div className='flex flex-col justify-center items-end gap-2 mb-1 lg:flex-row md:justify-between md:items-center px-1'>
               <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <FilterByDates
@@ -212,12 +213,12 @@ const Receiving = ({ session }: Props) => {
                 <FilterReceivings searchStatus={searchStatus} setSearchStatus={setSearchStatus} searchWarehouse={searchWarehouse} setSearchWarehouse={setSearchWarehouse} />
               </div>
               <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
-              <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
+              <Button disabled={!hasActiveFilters} variant={hasActiveFilters ? 'default' : 'light'} className='text-nowrap' onClick={clearFilters}>
                 Clear Filters
               </Button>
             </div>
             <Card>
-              <CardBody className='text-[11.2px]'>
+              <CardContent className='text-[11.2px]'>
                 <ReceivingTable
                   tableData={receivings}
                   pending={isLoading}
@@ -228,9 +229,9 @@ const Receiving = ({ session }: Props) => {
                   setmarkReceivedModal={setmarkReceivedModal}
                   seteditReceiving={seteditReceiving}
                 />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {showDeleteModal.show && <Confirm_Delete_Receiving showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} mutateReceivings={mutateReceivings} />}
         {markReceivedModal.show && (

@@ -13,7 +13,8 @@ import { FBAShipment, FBAShipmentsRepsonse } from '@typesTs/amazon/fbaShipments.
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR, { mutate } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -222,8 +223,8 @@ const Shipments = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Amazon FBA Shipments' pageTitle='Amazon' />
-          <Container fluid>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
               <div className='app-search flex flex-row justify-between items-center p-0'>
                 <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                   <FilterFBAShipments filters={filters} setfilters={setFilters} />
@@ -236,7 +237,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
                     </Button>
                   </Link>
                   <Link href={'/amazon-sellers/shipmentsCompleted'}>
-                    <Button color='info' className='text-[11.2px] text-nowrap'>
+                    <Button variant='info' className='text-[11.2px] text-nowrap'>
                       <span className='icon-on'>
                         <i className='ri-external-link-fill align-bottom me-1' />
                         Completed
@@ -251,7 +252,7 @@ const Shipments = ({ session, sessionToken }: Props) => {
                         type='text'
                         minLength={3}
                         debounceTimeout={300}
-                        className='form-control input_background_white text-[13px]'
+                        className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white text-[13px]'
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
@@ -271,9 +272,9 @@ const Shipments = ({ session, sessionToken }: Props) => {
                   </div>
                 </div>
               </div>
-            </Row>
+            </div>
             <Card>
-              <CardBody className='text-[11.2px]'>
+              <CardContent className='text-[11.2px]'>
                 <FBAShipmentsTable
                   filteredItems={filteredItems}
                   pending={pending}
@@ -282,9 +283,9 @@ const Shipments = ({ session, sessionToken }: Props) => {
                   setFBAShipmentCompleteStatus={setFBAShipmentCompleteStatus}
                   setFBAShipmentReviewingStatus={setFBAShipmentReviewingStatus}
                 />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {editShipmentName.show && <ChangeFBAShipmentName editShipmentName={editShipmentName} seteditShipmentName={seteditShipmentName} />}
       </React.Fragment>

@@ -5,7 +5,10 @@ import AppContext from '@context/AppContext'
 import { ManageUser, Modules } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogFooter } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import useSWR from 'swr'
 
@@ -136,27 +139,10 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='unitsSoldDetailsModal'
-      isOpen={showModal}
-      toggle={() => {
-        setShowModal(false)
-        setManageUser({
-          userId: 0,
-          businessId: '',
-          role: '',
-          name: '',
-          username: '',
-          email: '',
-          dateAdded: '',
-          lastActive: '',
-          permissions: {},
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!showModal}
+      onOpenChange={(open) => {
+        if (!open) {
           setShowModal(false)
           setManageUser({
             userId: 0,
@@ -169,83 +155,87 @@ function ManageTeamMemberModal({ manageUser, setManageUser, showModal, setShowMo
             lastActive: '',
             permissions: {},
           })
-        }}>
-        <p className='m-0 p-0 mb-1 font-bold text-[16.25px]'>{manageUser.name}</p>
-        <p className='m-0 p-0 font-normal text-[13px]'>{manageUser.email}</p>
-      </ModalHeader>
-      <ModalBody className='pb-0'>
-        {!loadingModules ? (
-          Object.entries(modules!).map(([module, moduleInfo]) => (
-            <Row className='mb-4' key={module}>
-              <CategoryTeamMembersHeader
-                title={module}
-                icon={moduleInfo.icon}
-                checked={manageUser.permissions[module].view ?? false}
-                manageUser={manageUser}
-                setManageUser={setManageUser}
-              />
-              <Row className='px-6 py-4 gap-4'>
-                {moduleInfo.modules?.map((subModule) => (
-                  <Col key={subModule}>
-                    <div className='flex flex-row justify-start items-end w-fit gap-2'>
-                      <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
-                      <div className='form-check-info'>
-                        <Input
-                          className='form-check-input'
-                          type='checkbox'
-                          checked={manageUser.permissions[module].modules[subModule].view ?? false}
-                          onChange={() => handleChangePermissions(module, subModule)}
-                        />
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='unitsSoldDetailsModal'>
+        <DialogHeader className='pr-6'>
+          <p className='m-0 p-0 mb-1 font-bold text-[16.25px]'>{manageUser.name}</p>
+          <p className='m-0 p-0 font-normal text-[13px]'>{manageUser.email}</p>
+        </DialogHeader>
+        <div className='pb-0'>
+          {!loadingModules ? (
+            Object.entries(modules!).map(([module, moduleInfo]) => (
+              <div className='flex flex-wrap -mx-3 mb-4' key={module}>
+                <CategoryTeamMembersHeader
+                  title={module}
+                  icon={moduleInfo.icon}
+                  checked={manageUser.permissions[module].view ?? false}
+                  manageUser={manageUser}
+                  setManageUser={setManageUser}
+                />
+                <div className='flex flex-wrap -mx-3 px-6 py-4 gap-4'>
+                  {moduleInfo.modules?.map((subModule) => (
+                    <div className='px-3 flex-1 basis-0' key={subModule}>
+                      <div className='flex flex-row justify-start items-end w-fit gap-2'>
+                        <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
+                        <div className='form-check-info'>
+                          <input
+                            className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'
+                            type='checkbox'
+                            checked={manageUser.permissions[module].modules[subModule].view ?? false}
+                            onChange={() => handleChangePermissions(module, subModule)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </Col>
-                ))}
-              </Row>
-            </Row>
-          ))
-        ) : (
-          <>
-            <span className='font-normal text-[16.25px] me-4'>Loading Modules...</span>
-            <Spinner color='primary' size='sm' />
-          </>
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <>
+              <span className='font-normal text-[16.25px] me-4'>Loading Modules...</span>
+              <Spinner className='text-primary' />
+            </>
+          )}
+        </div>
+        {!loadingModules && (
+          <DialogFooter className='items-center flex flex-row justify-between items-center gap-2'>
+            <div className='flex flex-row gap-4'>
+              <Button variant='destructive' disabled={loading} onClick={handleDeleteTeamMember}>
+                Delete User
+              </Button>
+              <Button variant='info' disabled={loading} onClick={handleResetPasswordTeamMember}>
+                Reset Password
+              </Button>
+            </div>
+            <div className='flex flex-row gap-4'>
+              <Button
+                variant='light'
+                onClick={() => {
+                  setShowModal(false)
+                  setManageUser({
+                    userId: 0,
+                    businessId: '',
+                    role: '',
+                    name: '',
+                    username: '',
+                    email: '',
+                    dateAdded: '',
+                    lastActive: '',
+                    permissions: {},
+                  })
+                }}>
+                Close
+              </Button>
+              <Button disabled={loading} type='submit' variant='success' onClick={saveManageUserChanges}>
+                {loading ? <Spinner className='text-white' /> : 'Save Changes'}
+              </Button>
+            </div>
+          </DialogFooter>
         )}
-      </ModalBody>
-      {!loadingModules && (
-        <ModalFooter className='flex flex-row justify-between items-center gap-2'>
-          <div className='flex flex-row gap-4'>
-            <Button color='danger' disabled={loading} onClick={handleDeleteTeamMember}>
-              Delete User
-            </Button>
-            <Button color='info' disabled={loading} onClick={handleResetPasswordTeamMember}>
-              Reset Password
-            </Button>
-          </div>
-          <div className='flex flex-row gap-4'>
-            <Button
-              color='light'
-              onClick={() => {
-                setShowModal(false)
-                setManageUser({
-                  userId: 0,
-                  businessId: '',
-                  role: '',
-                  name: '',
-                  username: '',
-                  email: '',
-                  dateAdded: '',
-                  lastActive: '',
-                  permissions: {},
-                })
-              }}>
-              Close
-            </Button>
-            <Button disabled={loading} type='submit' color='success' onClick={saveManageUserChanges}>
-              {loading ? <Spinner color='light' size={'sm'} /> : 'Save Changes'}
-            </Button>
-          </div>
-        </ModalFooter>
-      )}
-    </Modal>
+      </DialogContent>
+    </Dialog>
   )
 }
 

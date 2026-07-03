@@ -3,7 +3,9 @@ import { useMemo } from 'react'
 import { PRODUCTS_REPORT_TYPE } from '@features/reports/reportHelpers'
 import { useSkus } from '@hooks/products/useSkus'
 import moment from 'moment'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 import MultiSelectSearchInput, { MultiSelectItem } from '../shared/multi-select-search-input'
 import SelectRangeDates from './SelectRangeDates'
@@ -61,41 +63,29 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
     })
   }
 
+  const closeModal = () => {
+    setshowMappedCreateReport((prev: any) => {
+      return {
+        ...prev,
+        show: false,
+        loading: false,
+        reportType: '',
+        productsSelected: '[]',
+      }
+    })
+  }
+
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='createreportmodal'
-      isOpen={showMappedCreateReport.show}
-      toggle={() => {
-        setshowMappedCreateReport((prev: any) => {
-          return {
-            ...prev,
-            show: false,
-            loading: false,
-            reportType: '',
-            productsSelected: '[]',
-          }
-        })
+    <Dialog
+      open={!!showMappedCreateReport.show}
+      onOpenChange={(open) => {
+        if (!open) closeModal()
       }}>
-      <ModalHeader
-        toggle={() => {
-          setshowMappedCreateReport((prev: any) => {
-            return {
-              ...prev,
-              show: false,
-              loading: false,
-              reportType: '',
-              productsSelected: '[]',
-            }
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Request New Report
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>Request New Report</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <div className='space-y-3'>
             <div>
               <p className='font-light text-[var(--bs-secondary-color)] text-[11.2px] mb-1'>Select Report Type:</p>
@@ -114,7 +104,7 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
                 <p className='font-light text-[var(--bs-secondary-color)] text-[11.2px] mb-1'>Select SKUs:</p>
                 {isLoading ? (
                   <div className='flex items-center gap-2 text-[var(--bs-secondary-color)] text-[13px]'>
-                    <Spinner color='primary' size={'sm'} />
+                    <Spinner className='text-primary' />
                     Loading SKUs...
                   </div>
                 ) : (
@@ -139,39 +129,29 @@ const CreateReportModal = ({ showMappedCreateReport, setshowMappedCreateReport, 
               </div>
             )}
           </div>
-          <Row md={12} className='mt-4'>
+          <div className='flex flex-wrap -mx-3 mt-4'>
             <div className='flex flex-row gap-4 justify-end'>
               <Button
                 disabled={showMappedCreateReport.loading}
                 type='button'
-                color='light'
+                variant='light'
                 className='btn'
-                onClick={() => {
-                  setshowMappedCreateReport((prev: any) => {
-                    return {
-                      ...prev,
-                      show: false,
-                      loading: false,
-                      reportType: '',
-                      productsSelected: '[]',
-                    }
-                  })
-                }}>
+                onClick={closeModal}>
                 Cancel
               </Button>
               <Button
                 disabled={showMappedCreateReport.loading || showMappedCreateReport.reportType === ''}
                 type='button'
-                color='success'
+                variant='success'
                 className='btn'
                 onClick={handleCreateReport}>
-                {showMappedCreateReport.loading ? <Spinner color='light' size={'sm'} /> : 'Request'}
+                {showMappedCreateReport.loading ? <Spinner className='text-white' /> : 'Request'}
               </Button>
             </div>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

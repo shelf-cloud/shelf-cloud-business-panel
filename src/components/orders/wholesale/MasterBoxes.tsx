@@ -6,7 +6,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { wholesaleProductRow } from '@typings'
-import { Button, Col } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   completeData: wholesaleProductRow[]
@@ -59,14 +59,14 @@ const MasterBoxes = ({ completeData, pending, orderNumberStart }: Props) => {
           </p>
         </div>
         <div>
-          <Button disabled={error.length > 0 || hasQtyError} className='text-[13px]' color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+          <Button disabled={error.length > 0 || hasQtyError} className='text-[13px]' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
             Create Order
           </Button>
         </div>
       </div>
-      <Col xs='12' className='flex justify-end items-center mb-2'>
+      <div className='px-3 w-full flex justify-end items-center mb-2'>
         <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12 col-md-4' />
-      </Col>
+      </div>
       <WholeSaleTable2 allData={allData} filteredItems={filteredItems} setAllData={setAllData} pending={pending} setError={setError} setHasQtyError={setHasQtyError} />
       {state.showWholeSaleOrderModal && <WholeSaleOrderModal orderNumberStart={orderNumberStart} orderProducts={orderProducts} />}
     </>

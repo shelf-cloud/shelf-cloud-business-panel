@@ -6,7 +6,11 @@ import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -118,44 +122,30 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
     validation.handleSubmit()
   }
 
+  const closeModal = () => {
+    setdimensionsModal({
+      show: false,
+      inventoryId: 0,
+      isKit: false,
+      msku: '',
+      asin: '',
+      scSKU: '',
+      boxQty: 0,
+      shelfCloudDimensions: {},
+      amazonDimensions: {},
+    })
+  }
+
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='confirmDelete'
-      isOpen={dimensionsModal.show}
-      toggle={() => {
-        setdimensionsModal({
-          show: false,
-          inventoryId: 0,
-          isKit: false,
-          msku: '',
-          asin: '',
-          scSKU: '',
-          boxQty: 0,
-          shelfCloudDimensions: {},
-          amazonDimensions: {},
-        })
+    <Dialog
+      open={!!dimensionsModal.show}
+      onOpenChange={(open) => {
+        if (!open) closeModal()
       }}>
-      <ModalHeader
-        toggle={() => {
-          setdimensionsModal({
-            show: false,
-            inventoryId: 0,
-            isKit: false,
-            msku: '',
-            asin: '',
-            scSKU: '',
-            boxQty: 0,
-            shelfCloudDimensions: {},
-            amazonDimensions: {},
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Listing Box Dimensions
-      </ModalHeader>
-      <ModalBody>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>Listing Box Dimensions</DialogTitle>
+        </DialogHeader>
         <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Amazon Listing:</h5>
         <p className='m-0 p-0 text-[var(--bs-secondary-color)]'>
           MSKU: <span className='text-black font-semibold'>{dimensionsModal.msku}</span>
@@ -167,90 +157,90 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           ShelfCloud SKU: <span className='text-black font-semibold'>{dimensionsModal.scSKU}</span>
         </p>
 
-        <Form onSubmit={handleAddProduct}>
-          <Row className='my-4'>
-            <Col md={3}>
-              <FormGroup className='mb-4'>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3 my-4'>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-4'>
                 <Label htmlFor='boxLength' className='form-label'>
                   *Box Length (inch)
                 </Label>
                 <div className='input-group'>
                   <Input
                     type='number'
-                    bsSize='sm'
+                    className='h-8 text-xs'
                     id='boxLength'
                     name='boxLength'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.boxLength || ''}
-                    invalid={validation.touched.boxLength && validation.errors.boxLength ? true : false}
+                    aria-invalid={(validation.touched.boxLength && validation.errors.boxLength ? true : false) || undefined}
                   />
-                  {validation.touched.boxLength && validation.errors.boxLength ? <FormFeedback type='invalid'>{validation.errors.boxLength}</FormFeedback> : null}
+                  {validation.touched.boxLength && validation.errors.boxLength ? <div className='text-sm text-destructive'>{validation.errors.boxLength}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup className='mb-4'>
+              </div>
+            </div>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-4'>
                 <Label htmlFor='boxWidth' className='form-label'>
                   *Box Width (inch)
                 </Label>
                 <div className='input-group'>
                   <Input
                     type='number'
-                    bsSize='sm'
+                    className='h-8 text-xs'
                     id='boxWidth'
                     name='boxWidth'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.boxWidth || ''}
-                    invalid={validation.touched.boxWidth && validation.errors.boxWidth ? true : false}
+                    aria-invalid={(validation.touched.boxWidth && validation.errors.boxWidth ? true : false) || undefined}
                   />
-                  {validation.touched.boxWidth && validation.errors.boxWidth ? <FormFeedback type='invalid'>{validation.errors.boxWidth}</FormFeedback> : null}
+                  {validation.touched.boxWidth && validation.errors.boxWidth ? <div className='text-sm text-destructive'>{validation.errors.boxWidth}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup className='mb-4'>
+              </div>
+            </div>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-4'>
                 <Label htmlFor='boxHeight' className='form-label'>
                   *Box Height (inch)
                 </Label>
                 <div className='input-group'>
                   <Input
                     type='number'
-                    bsSize='sm'
+                    className='h-8 text-xs'
                     id='boxHeight'
                     name='boxHeight'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.boxHeight || ''}
-                    invalid={validation.touched.boxHeight && validation.errors.boxHeight ? true : false}
+                    aria-invalid={(validation.touched.boxHeight && validation.errors.boxHeight ? true : false) || undefined}
                   />
-                  {validation.touched.boxHeight && validation.errors.boxHeight ? <FormFeedback type='invalid'>{validation.errors.boxHeight}</FormFeedback> : null}
+                  {validation.touched.boxHeight && validation.errors.boxHeight ? <div className='text-sm text-destructive'>{validation.errors.boxHeight}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup className='mb-4'>
+              </div>
+            </div>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-4'>
                 <Label htmlFor='boxWeight' className='form-label'>
                   *Box Weight (lb)
                 </Label>
                 <div className='input-group'>
                   <Input
                     type='number'
-                    bsSize='sm'
+                    className='h-8 text-xs'
                     id='boxWeight'
                     name='boxWeight'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.boxWeight || ''}
-                    invalid={validation.touched.boxWeight && validation.errors.boxWeight ? true : false}
+                    aria-invalid={(validation.touched.boxWeight && validation.errors.boxWeight ? true : false) || undefined}
                   />
-                  {validation.touched.boxWeight && validation.errors.boxWeight ? <FormFeedback type='invalid'>{validation.errors.boxWeight}</FormFeedback> : null}
+                  {validation.touched.boxWeight && validation.errors.boxWeight ? <div className='text-sm text-destructive'>{validation.errors.boxWeight}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row className='mb-2 mt-0'>
+              </div>
+            </div>
+          </div>
+          <div className='flex flex-wrap -mx-3 mb-2 mt-0'>
             <p className='m-0 text-[16.25px] font-semibold'>Expected Dimensions</p>
             <p className='m-0 text-[var(--bs-secondary-color)] text-nowrap'>
               Amazon Minimum Expected Box Volume: <span className='text-black font-semibold'>{FormatIntPercentage(state.currentRegion, amzBoxVolume - amzBoxTenPercent)} inch3</span>
@@ -266,38 +256,26 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                 ShelfCloud Box dimensions do not meet the expected minimum volume for Amazon. Please adjust the Box Dimensions to meet the minimum volume requirements.
               </span>
             )}
-          </Row>
-          <Row md={12} className='mt-4'>
+          </div>
+          <div className='flex flex-wrap -mx-3 mt-4'>
             <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
               <div className='flex flex-row gap-4'>
                 <Button
                   type='button'
-                  color='light'
+                  variant='light'
                   className='btn'
-                  onClick={() => {
-                    setdimensionsModal({
-                      show: false,
-                      inventoryId: 0,
-                      isKit: false,
-                      msku: '',
-                      asin: '',
-                      scSKU: '',
-                      boxQty: 0,
-                      shelfCloudDimensions: {},
-                      amazonDimensions: {},
-                    })
-                  }}>
+                  onClick={closeModal}>
                   Cancel
                 </Button>
-                <Button disabled={loading} type='submit' color='success' className='btn'>
-                  {loading ? <Spinner color='light' size={'sm'} /> : 'Save Box Dimensions'}
+                <Button disabled={loading} type='submit' variant='success' className='btn'>
+                  {loading ? <Spinner className='text-white' /> : 'Save Box Dimensions'}
                 </Button>
               </div>
             </div>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

@@ -6,7 +6,8 @@ import OneBoxAllSkus from '@assets/images/one-box-all-skus.png'
 import SingleSkuPerBox from '@assets/images/single-sku-per-box.png'
 import { AddSKUToMultiSKUBoxType, FinalBoxConfiguration, MultiSkuBoxes, SingleSkuBoxes } from '@hooks/receivings/useEditReceivingsBoxes'
 import { ShipmentOrderItem } from '@typings'
-import { Button, Col, Label, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
 
 import Current_Box_Configuration from './Current_Box_Configuration'
 import Edit_Receiving_Boxes_Box from './Edit_Receiving_Boxes_Box'
@@ -56,17 +57,16 @@ const Edit_Receiving_Packages_Tab = ({
 }: Props) => {
   return (
     <div>
-      <Row className='mb-4'>
+      <div className='flex flex-wrap -mx-3 mb-4'>
         <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
           *Select Box Distribution
         </Label>
-        <Col xs={12} className='flex flex-row flex-wrap justify-start items-center gap-2'>
+        <div className='px-3 w-full flex flex-row flex-wrap justify-start items-center gap-2'>
           <Button
             disabled={needsNewBoxConfiguration}
             className='text-[11.2px]'
             size='sm'
             type='button'
-            color='primary'
             outline={packingConfiguration !== 'current'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'current')}>
             <Image src={MultiSkusPerBox} alt='Multi SKUs Per Box' width={30} height={30} className='me-2' />
@@ -76,7 +76,6 @@ const Edit_Receiving_Packages_Tab = ({
             className='text-[11.2px]'
             size='sm'
             type='button'
-            color='primary'
             outline={packingConfiguration !== 'single'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'single')}>
             <Image src={SingleSkuPerBox} alt='Single SKU Per Box' width={30} height={30} className='me-2' />
@@ -86,7 +85,6 @@ const Edit_Receiving_Packages_Tab = ({
             className='text-[11.2px]'
             size='sm'
             type='button'
-            color='primary'
             outline={packingConfiguration !== 'multi'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'multi')}>
             <Image src={MultiSkusPerBox} alt='Multi SKUs Per Box' width={30} height={30} className='me-2' />
@@ -96,14 +94,13 @@ const Edit_Receiving_Packages_Tab = ({
             className='text-[11.2px]'
             size='sm'
             type='button'
-            color='primary'
             outline={packingConfiguration !== 'box'}
             onClick={() => setPackingConfiguration('packingConfiguration', 'box')}>
             <Image src={OneBoxAllSkus} alt='One Box All SKUs' width={30} height={30} className='me-2' />
             Everything in One Box
           </Button>
-        </Col>
-      </Row>
+        </div>
+      </div>
       {packingConfiguration === 'current' && <Current_Box_Configuration boxes={boxes || []} isReceivingFromPo={isReceivingFromPo} />}
       {packingConfiguration === 'single' && (
         <Edit_Receiving_Boxes_Single

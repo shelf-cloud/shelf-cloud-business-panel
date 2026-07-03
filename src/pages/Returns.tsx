@@ -15,7 +15,9 @@ import { ReturnList, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -186,9 +188,9 @@ const Returns = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Returns' pageTitle='Orders' />
-          <Container fluid>
-            <Col xs={12}>
-              <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+          <div className='mx-auto w-full px-3'>
+            <div className='px-3 w-full'>
+              <div className='flex flex-wrap -mx-3 flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                   <FilterByDates
                     shipmentsStartDate={shipmentsStartDate}
@@ -206,35 +208,39 @@ const Returns = ({ session }: Props) => {
                     setSearchMarketplace={setSearchMarketplace}
                   />
                   <Link href='/returns/Unsellables'>
-                    <Button color='primary' className='text-[11.2px]'>
+                    <Button className='text-[11.2px]'>
                       Unsellables
                     </Button>
                   </Link>
                   <ExportReturns returns={filterDataTable || []} />
                   {selectedRows.length > 0 && (
-                    <UncontrolledButtonDropdown>
-                      <DropdownToggle className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90' caret>
-                        <span className='font-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem header>Actions</DropdownItem>
-                        <DropdownItem className='whitespace-nowrap capitalize text-[11.2px]' onClick={() => changeSelectedProductsState('complete')}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type='button'
+                          className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
+                          <span className='font-bold'>{`${selectedRows.length} Order${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='start'>
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem className='whitespace-nowrap capitalize text-[11.2px]' onClick={() => changeSelectedProductsState('complete')}>
                           <i className='mdi mdi-check-circle-outline text-[16.25px] text-success align-middle m-0 p-0' /> set complete
-                        </DropdownItem>
-                        <DropdownItem className='whitespace-nowrap capitalize text-[11.2px]' onClick={() => changeSelectedProductsState('pending')}>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='whitespace-nowrap capitalize text-[11.2px]' onClick={() => changeSelectedProductsState('pending')}>
                           <i className='mdi mdi-backup-restore text-[16.25px] text-warning align-middle m-0 p-0' /> set pending
-                        </DropdownItem>
-                        <DropdownItem className='whitespace-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='whitespace-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                           Clear All
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   )}
                 </div>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
-              </Row>
+              </div>
               <Card>
-                <CardBody>
+                <CardContent>
                   <ReturnRMATable
                     filterDataTable={filterDataTable || []}
                     pending={pending}
@@ -243,10 +249,10 @@ const Returns = ({ session }: Props) => {
                     setSelectedRows={setSelectedRows}
                     toggledClearRows={toggledClearRows}
                   />
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Container>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

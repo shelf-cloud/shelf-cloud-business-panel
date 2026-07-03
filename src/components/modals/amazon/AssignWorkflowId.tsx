@@ -10,7 +10,9 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 
 type Props = {
@@ -153,24 +155,10 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='confirmDelete'
-      isOpen={assignWorkflowIdModal.show}
-      toggle={() => {
-        setassignWorkflowIdModal({
-          show: false,
-          id: 0,
-          inboundPlanName: '',
-          marketplace: '',
-          dateCreated: '',
-          skus: 0,
-          units: 0,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!assignWorkflowIdModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setassignWorkflowIdModal({
             show: false,
             id: 0,
@@ -180,13 +168,15 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
             skus: 0,
             units: 0,
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Assign Amazon Workflow ID to ShelfCloud
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      }}>
+      <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Assign Amazon Workflow ID to ShelfCloud
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+        <div className='flex flex-wrap -mx-3'>
           <div className='mb-4'>
             <p className='text-[16.25px] m-0 font-semibold text-primary'>ShelfCloud Fulfillment</p>
             <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
@@ -208,7 +198,7 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
             fulfillment process.
           </p>
           {!loadingWorflows ? (
-            <Col xs={12}>
+            <div className='px-3 w-full'>
               <p className='text-[16.25px] font-semibold'>Amazon Active Workflows List</p>
               <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 border border-[color:var(--border)] [&_td]:border-t [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
@@ -241,9 +231,9 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                                 disabled={loadingWorflows || loadingAssignment}
                                 size='sm'
                                 type='button'
-                                color='success'
+                                variant='success'
                                 onClick={() => handleAssignWorkflowId(workflow.inboundPlanId)}>
-                                {loadingWorflows ? <Spinner color='light' size={'sm'} /> : 'Assing'}
+                                {loadingWorflows ? <Spinner className='text-white' /> : 'Assing'}
                               </Button>
                             </td>
                           </tr>
@@ -252,13 +242,13 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                 </tbody>
               </table>
               </div>
-              <Row md={12} className=''>
+              <div className='flex flex-wrap -mx-3'>
                 <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
                   <div className='flex flex-row gap-4'>
                     <Button
                       disabled={loadingWorflows || loadingAssignment}
                       type='button'
-                      color='light'
+                      variant='light'
                       onClick={() => {
                         setassignWorkflowIdModal({
                           show: false,
@@ -274,16 +264,17 @@ const AssignWorkflowId = ({ assignWorkflowIdModal, setassignWorkflowIdModal, ses
                     </Button>
                   </div>
                 </div>
-              </Row>
-            </Col>
+              </div>
+            </div>
           ) : (
-            <Col xs={12}>
-              <Spinner color='primary' size={'sm'} /> <span>Retrieving active workflows...</span>
-            </Col>
+            <div className='px-3 w-full'>
+              <Spinner className='text-primary' /> <span>Retrieving active workflows...</span>
+            </div>
           )}
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

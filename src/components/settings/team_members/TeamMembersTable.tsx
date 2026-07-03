@@ -1,7 +1,7 @@
 import { TeamMember } from '@typesTs/settings/team_members'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   teamMembers: TeamMember[]
@@ -56,7 +56,7 @@ const TeamMembersTable = ({ teamMembers, handleManageUser, pending }: Props) => 
       name: <span className='font-bold text-[13px]'></span>,
       selector: (row: TeamMember) => {
         return (
-          <Button color='light' className='text-[11.2px]' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
+          <Button variant='light' className='text-[11.2px]' onClick={() => handleManageUser(JSON.parse(JSON.stringify(row)))}>
             Manage
           </Button>
         )

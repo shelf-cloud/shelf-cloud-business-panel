@@ -9,7 +9,11 @@ import { useCreateKit } from '@hooks/kits/useCreateKit'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
 import * as Yup from 'yup'
 
@@ -155,28 +159,26 @@ function EditKitModal({ mutateKits }: Props) {
   }
 
   return (
-    <Modal
-      size='xl'
-      id='EditKitModal'
-      isOpen={state.showEditKitModal}
-      toggle={() => {
-        setShowEditKitModal(!state.showEditKitModal)
+    <Dialog
+      open={!!state.showEditKitModal}
+      onOpenChange={(open) => {
+        if (!open) setShowEditKitModal(!state.showEditKitModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setShowEditKitModal(!state.showEditKitModal)
-        }}>
-        Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
-      </ModalHeader>
-      <ModalBody>
+      <DialogContent id='EditKitModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>
+            Edit Kit: <span className='text-primary'>{state.modalKitDetails.sku}</span>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         {!isLoading && !isValidating ? (
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
               <Form>
-                <Row>
+                <div className='flex flex-wrap -mx-3'>
                   <h4 className='text-[16.25px] mb-4 font-extrabold'>Kit Details</h4>
-                  <Col md={6} className='hidden'>
-                    <FormGroup>
+                  <div className='px-3 md:w-6/12 hidden'>
+                    <div className='mb-3'>
                       <Label htmlFor='kitId' className='mb-1'>
                         *kitId
                       </Label>
@@ -189,13 +191,13 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.kitId || ''}
-                        invalid={touched.kitId && errors.kitId ? true : false}
+                        aria-invalid={touched.kitId && errors.kitId ? true : false || undefined}
                       />
-                      {touched.kitId && errors.kitId ? <FormFeedback type='invalid'>{errors.kitId}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Col md={6}>
-                    <FormGroup>
+                      {touched.kitId && errors.kitId ? <div className='text-sm text-destructive'>{errors.kitId}</div> : null}
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-6/12'>
+                    <div className='mb-3'>
                       <Label htmlFor='title' className='mb-1'>
                         *Title
                       </Label>
@@ -208,13 +210,13 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.title || ''}
-                        invalid={touched.title && errors.title ? true : false}
+                        aria-invalid={touched.title && errors.title ? true : false || undefined}
                       />
-                      {touched.title && errors.title ? <FormFeedback type='invalid'>{errors.title}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Col md={6}>
-                    <FormGroup>
+                      {touched.title && errors.title ? <div className='text-sm text-destructive'>{errors.title}</div> : null}
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-6/12'>
+                    <div className='mb-3'>
                       <Label htmlFor='sku' className='mb-1'>
                         *SKU
                       </Label>
@@ -227,13 +229,13 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.sku || ''}
-                        invalid={touched.sku && errors.sku ? true : false}
+                        aria-invalid={touched.sku && errors.sku ? true : false || undefined}
                       />
-                      {touched.sku && errors.sku ? <FormFeedback type='invalid'>{errors.sku}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
+                      {touched.sku && errors.sku ? <div className='text-sm text-destructive'>{errors.sku}</div> : null}
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-4/12'>
+                    <div className='mb-3'>
                       <Label htmlFor='asin' className='mb-1'>
                         ASIN
                       </Label>
@@ -246,13 +248,13 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.asin || ''}
-                        invalid={touched.asin && errors.asin ? true : false}
+                        aria-invalid={touched.asin && errors.asin ? true : false || undefined}
                       />
-                      {touched.asin && errors.asin ? <FormFeedback type='invalid'>{errors.asin}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
+                      {touched.asin && errors.asin ? <div className='text-sm text-destructive'>{errors.asin}</div> : null}
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-4/12'>
+                    <div className='mb-3'>
                       <Label htmlFor='fnsku' className='mb-1'>
                         FNSKU
                       </Label>
@@ -265,13 +267,13 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.fnsku || ''}
-                        invalid={touched.fnsku && errors.fnsku ? true : false}
+                        aria-invalid={touched.fnsku && errors.fnsku ? true : false || undefined}
                       />
-                      {touched.fnsku && errors.fnsku ? <FormFeedback type='invalid'>{errors.fnsku}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <FormGroup>
+                      {touched.fnsku && errors.fnsku ? <div className='text-sm text-destructive'>{errors.fnsku}</div> : null}
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-4/12'>
+                    <div className='mb-3'>
                       <Label htmlFor='barcode' className='mb-1'>
                         UPC / Barcode
                       </Label>
@@ -284,14 +286,14 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.barcode || ''}
-                        invalid={touched.barcode && errors.barcode ? true : false}
+                        aria-invalid={touched.barcode && errors.barcode ? true : false || undefined}
                       />
-                      {touched.barcode && errors.barcode ? <FormFeedback type='invalid'>{errors.barcode}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Row>
-                    <Col md={9}>
-                      <FormGroup>
+                      {touched.barcode && errors.barcode ? <div className='text-sm text-destructive'>{errors.barcode}</div> : null}
+                    </div>
+                  </div>
+                  <div className='flex flex-wrap -mx-3'>
+                    <div className='px-3 md:w-9/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='image' className='mb-1'>
                           Product Image
                         </Label>
@@ -304,13 +306,13 @@ function EditKitModal({ mutateKits }: Props) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.image || ''}
-                          invalid={touched.image && errors.image ? true : false}
+                          aria-invalid={touched.image && errors.image ? true : false || undefined}
                         />
-                        {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {touched.image && errors.image ? <div className='text-sm text-destructive'>{errors.image}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='boxqty' className='mb-1'>
                           *Master Box Quantity
                         </Label>
@@ -323,14 +325,14 @@ function EditKitModal({ mutateKits }: Props) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.boxqty || ''}
-                          invalid={touched.boxqty && errors.boxqty ? true : false}
+                          aria-invalid={touched.boxqty && errors.boxqty ? true : false || undefined}
                         />
-                        {touched.boxqty && errors.boxqty ? <FormFeedback type='invalid'>{errors.boxqty}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Col md={12}>
-                    <FormGroup>
+                        {touched.boxqty && errors.boxqty ? <div className='text-sm text-destructive'>{errors.boxqty}</div> : null}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='px-3 md:w-full'>
+                    <div className='mb-3'>
                       <Label htmlFor='note' className='mb-1'>
                         Kit Note
                       </Label>
@@ -343,14 +345,14 @@ function EditKitModal({ mutateKits }: Props) {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.note || ''}
-                        invalid={touched.note && errors.note ? true : false}
+                        aria-invalid={touched.note && errors.note ? true : false || undefined}
                       />
-                      {touched.image && errors.image ? <FormFeedback type='invalid'>{errors.image}</FormFeedback> : null}
-                    </FormGroup>
-                  </Col>
-                  <Row>
+                      {touched.image && errors.image ? <div className='text-sm text-destructive'>{errors.image}</div> : null}
+                    </div>
+                  </div>
+                  <div className='flex flex-wrap -mx-3'>
                     <h5 className='text-[16.25px] mb-1 font-extrabold'>Kit Children</h5>
-                    <Col xl={12} className='p-0 mt-1'>
+                    <div className='px-3 xl:w-full p-0 mt-1'>
                       <table className='table table-hover align-middle table-nowrap'>
                         <thead>
                           <tr>
@@ -374,7 +376,7 @@ function EditKitModal({ mutateKits }: Props) {
                                   <tr key={index}>
                                     <td style={{ minWidth: '50px' }}>
                                       {index > 0 ? (
-                                        <Row className='w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
+                                        <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
                                           <i
                                             className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                             style={{ cursor: 'pointer' }}
@@ -388,9 +390,9 @@ function EditKitModal({ mutateKits }: Props) {
                                             }
                                           />
                                           <i className='text-danger text-[22.75px] las la-minus-circle m-0 p-0 w-auto' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
-                                        </Row>
+                                        </div>
                                       ) : (
-                                        <Row className='w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
+                                        <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
                                           <i
                                             className='text-[22.75px] text-success las la-plus-circle m-0 p-0 w-auto'
                                             style={{ cursor: 'pointer' }}
@@ -403,13 +405,13 @@ function EditKitModal({ mutateKits }: Props) {
                                               })
                                             }
                                           />
-                                        </Row>
+                                        </div>
                                       )}
                                     </td>
                                     <td style={{ minWidth: '200px' }}>
                                       <Field name={`children.${index}.sku`}>
                                         {({ meta }: any) => (
-                                          <FormGroup className='createOrder_inputs'>
+                                          <div className='mb-3 createOrder_inputs'>
                                             <SimpleSelect
                                               selected={{ label: values.children[index].sku, value: values.children[index].sku }}
                                               options={skus.map((sku) => ({ label: sku.sku, value: sku.sku, description: sku.title }))}
@@ -430,14 +432,14 @@ function EditKitModal({ mutateKits }: Props) {
                                               isClearable
                                             />
                                             {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
-                                          </FormGroup>
+                                          </div>
                                         )}
                                       </Field>
                                     </td>
                                     <td style={{ minWidth: '200px' }}>
                                       <Field name={`children.${index}.title`}>
                                         {({ meta }: any) => (
-                                          <FormGroup className='createOrder_inputs'>
+                                          <div className='mb-3 createOrder_inputs'>
                                             <Input
                                               type='text'
                                               className='text-[13px]'
@@ -447,17 +449,17 @@ function EditKitModal({ mutateKits }: Props) {
                                               onChange={handleChange}
                                               onBlur={handleBlur}
                                               value={values.children[index].title || ''}
-                                              invalid={meta.touched && meta.error ? true : false}
+                                              aria-invalid={meta.touched && meta.error ? true : false || undefined}
                                             />
-                                            {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
-                                          </FormGroup>
+                                            {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
+                                          </div>
                                         )}
                                       </Field>
                                     </td>
                                     <td style={{ minWidth: '80px' }}>
                                       <Field name={`children.${index}.qty`}>
                                         {({ meta }: any) => (
-                                          <FormGroup className='createOrder_inputs'>
+                                          <div className='mb-3 createOrder_inputs'>
                                             <Input
                                               type='text'
                                               className='text-center text-[13px]'
@@ -466,10 +468,10 @@ function EditKitModal({ mutateKits }: Props) {
                                               onChange={handleChange}
                                               onBlur={handleBlur}
                                               value={values.children[index].qty || ''}
-                                              invalid={meta.touched && meta.error ? true : false}
+                                              aria-invalid={meta.touched && meta.error ? true : false || undefined}
                                             />
-                                            {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
-                                          </FormGroup>
+                                            {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
+                                          </div>
                                         )}
                                       </Field>
                                     </td>
@@ -480,36 +482,37 @@ function EditKitModal({ mutateKits }: Props) {
                           </FieldArray>
                         </tbody>
                       </table>
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                   <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
-                  <Col md={12}>
+                  <div className='px-3 md:w-full'>
                     <div className='text-right flex gap-4 justify-end items-center'>
-                      <Button color='light' onClick={() => setShowEditKitModal(!state.showEditKitModal)}>
+                      <Button variant='light' onClick={() => setShowEditKitModal(!state.showEditKitModal)}>
                         Cancel
                       </Button>
-                      <Button type='submit' disabled={updatingKit} color='primary' className='text-[11.2px]'>
+                      <Button type='submit' disabled={updatingKit} className='text-[11.2px]'>
                         {updatingKit ? (
                           <span className='flex items-center gap-2'>
-                            <Spinner color='light' size={'sm'} /> Updating...
+                            <Spinner className='text-white' /> Updating...
                           </span>
                         ) : (
                           'Save Changes'
                         )}
                       </Button>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Form>
             )}
           </Formik>
         ) : (
           <p className='w-full text-center flex items-center justify-center gap-4 text-[13px]'>
-            <Spinner color='primary' /> <span className='text-[16.25px] font-normal'>Loading kit details...</span>
+            <Spinner className='size-6 text-primary' /> <span className='text-[16.25px] font-normal'>Loading kit details...</span>
           </p>
         )}
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

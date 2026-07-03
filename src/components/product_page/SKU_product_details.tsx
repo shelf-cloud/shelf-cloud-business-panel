@@ -5,7 +5,9 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -143,8 +145,8 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
           </table>
         </div>
       ) : (
-        <Form onSubmit={handleAddProduct}>
-          <Row>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
               <thead>
                 <tr className='text-center'>
@@ -173,166 +175,158 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
               <tbody>
                 <tr className='text-center'>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         disabled
                         type='text'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         style={{ minWidth: '80px' }}
                         placeholder='sku...'
                         id='sku'
                         name='sku'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.sku || ''}
-                        invalid={validation.touched.sku && validation.errors.sku ? true : false}
+                        aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
                       />
-                      {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         disabled
                         type='text'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         style={{ minWidth: '80px' }}
                         placeholder='upc...'
                         id='upc'
                         name='upc'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.upc || ''}
-                        invalid={validation.touched.upc && validation.errors.upc ? true : false}
+                        aria-invalid={Boolean(validation.touched.upc && validation.errors.upc) || undefined}
                       />
-                      {validation.touched.upc && validation.errors.upc ? <FormFeedback type='invalid'>{validation.errors.upc}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.upc && validation.errors.upc ? <div className='text-sm text-destructive'>{validation.errors.upc}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='text'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         style={{ minWidth: '80px' }}
                         placeholder='HTS Code...'
                         id='htsCode'
                         name='htsCode'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.htsCode || ''}
-                        invalid={validation.touched.htsCode && validation.errors.htsCode ? true : false}
+                        aria-invalid={Boolean(validation.touched.htsCode && validation.errors.htsCode) || undefined}
                       />
-                      {validation.touched.htsCode && validation.errors.htsCode ? <FormFeedback type='invalid'>{validation.errors.htsCode}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.htsCode && validation.errors.htsCode ? <div className='text-sm text-destructive'>{validation.errors.htsCode}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         placeholder='defaultPrice...'
                         id='defaultPrice'
                         name='defaultPrice'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.defaultPrice || 0}
-                        invalid={validation.touched.defaultPrice && validation.errors.defaultPrice ? true : false}
+                        aria-invalid={Boolean(validation.touched.defaultPrice && validation.errors.defaultPrice) || undefined}
                       />
-                      {validation.touched.defaultPrice && validation.errors.defaultPrice ? <FormFeedback type='invalid'>{validation.errors.defaultPrice}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.defaultPrice && validation.errors.defaultPrice ? <div className='text-sm text-destructive'>{validation.errors.defaultPrice}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         placeholder='msrp...'
                         id='msrp'
                         name='msrp'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.msrp || 0}
-                        invalid={validation.touched.msrp && validation.errors.msrp ? true : false}
+                        aria-invalid={Boolean(validation.touched.msrp && validation.errors.msrp) || undefined}
                       />
-                      {validation.touched.msrp && validation.errors.msrp ? <FormFeedback type='invalid'>{validation.errors.msrp}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.msrp && validation.errors.msrp ? <div className='text-sm text-destructive'>{validation.errors.msrp}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         placeholder='map...'
                         id='map'
                         name='map'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.map || 0}
-                        invalid={validation.touched.map && validation.errors.map ? true : false}
+                        aria-invalid={Boolean(validation.touched.map && validation.errors.map) || undefined}
                       />
-                      {validation.touched.map && validation.errors.map ? <FormFeedback type='invalid'>{validation.errors.map}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.map && validation.errors.map ? <div className='text-sm text-destructive'>{validation.errors.map}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         placeholder='floor...'
                         id='floor'
                         name='floor'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.floor || 0}
-                        invalid={validation.touched.floor && validation.errors.floor ? true : false}
+                        aria-invalid={Boolean(validation.touched.floor && validation.errors.floor) || undefined}
                       />
-                      {validation.touched.floor && validation.errors.floor ? <FormFeedback type='invalid'>{validation.errors.floor}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.floor && validation.errors.floor ? <div className='text-sm text-destructive'>{validation.errors.floor}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
-                        className='text-[13px]'
+                        className='h-8 text-xs'
                         placeholder='ceilling...'
                         id='ceilling'
                         name='ceilling'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.ceilling || 0}
-                        invalid={validation.touched.ceilling && validation.errors.ceilling ? true : false}
+                        aria-invalid={Boolean(validation.touched.ceilling && validation.errors.ceilling) || undefined}
                       />
-                      {validation.touched.ceilling && validation.errors.ceilling ? <FormFeedback type='invalid'>{validation.errors.ceilling}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.ceilling && validation.errors.ceilling ? <div className='text-sm text-destructive'>{validation.errors.ceilling}</div> : null}
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <Col md={12}>
+            <div className='px-3 w-full'>
               <div className='flex flex-row justify-end items-center gap-3'>
-                <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
+                <Button disabled={isLoading} type='button' variant='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button disabled={isLoading} type='submit' color='primary'>
+                <Button disabled={isLoading} type='submit'>
                   {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
+            </div>
+          </div>
+        </form>
       )}
     </div>
   )

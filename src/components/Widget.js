@@ -4,15 +4,15 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import FeatherIcon from 'feather-icons-react'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col } from '@/components/migration-ui'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 const Widget = ({ summary }) => {
   const { state } = useContext(AppContext)
   return (
     <React.Fragment>
-      <Col xl={3} md={6}>
+      <div className='px-3 xl:w-3/12 md:w-6/12'>
         <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -45,18 +45,18 @@ const Widget = ({ summary }) => {
                       Storage
                     </a>
                   </Link> */}
-              {/* <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-success'}>
+              {/* <div className="h-12 w-12 shrink-0">
+                  <span className={'avatar-title rounded text-[22.75px] bg-soft-success'}>
                     <i className="text-success bx bxs-box"></i>
                   </span>
                 </div> */}
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col xl={3} md={6}>
+      </div>
+      <div className='px-3 xl:w-3/12 md:w-6/12'>
         <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -77,19 +77,19 @@ const Widget = ({ summary }) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
-          {/* <CardBody>
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 overflow-hidden">
-                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+          </CardContent>
+          {/* <CardContent>
+              <div className="flex items-center">
+                <div className="grow overflow-hidden">
+                  <p className="uppercase fw-medium text-muted truncate mb-0">
                     Total Inventory
                   </p>
                 </div>
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <h5 className={'text-[14px] mb-0 font-bold'}>{summary?.skus} SKUs</h5>
                 </div>
               </div>
-              <div className="d-flex align-items-end justify-content-between mt-4">
+              <div className="flex items-end justify-between mt-4">
                 <div>
                   <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                     <span className="counter-value" data-target="559.25">
@@ -110,18 +110,18 @@ const Widget = ({ summary }) => {
                     </a>
                   </Link>
                 </div>
-                <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-primary'}>
+                <div className="h-12 w-12 shrink-0">
+                  <span className={'avatar-title rounded text-[22.75px] bg-soft-primary'}>
                     <i className="text-primary las la-clipboard-list"></i>
                   </span>
                 </div>
               </div>
-            </CardBody> */}
+            </CardContent> */}
         </Card>
-      </Col>
-      <Col xl={3} md={6}>
+      </div>
+      <div className='px-3 xl:w-3/12 md:w-6/12'>
         <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -166,17 +166,17 @@ const Widget = ({ summary }) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
-          {/* <CardBody>
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 overflow-hidden">
-                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+          </CardContent>
+          {/* <CardContent>
+              <div className="flex items-center">
+                <div className="grow overflow-hidden">
+                  <p className="uppercase fw-medium text-muted truncate mb-0">
                     Total Shipments
                   </p>
                 </div>
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <h5 className={'text-[14px] mb-0 font-bold'}>
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {summary?.shipmentsDiff >= 0 ? (
                         <h5 className={'fs-14 mb-0 text-success'}>
                           <i
@@ -202,7 +202,7 @@ const Widget = ({ summary }) => {
                   </h5>
                 </div>
               </div>
-              <div className="d-flex align-items-end justify-content-between mt-4">
+              <div className="flex items-end justify-between mt-4">
                 <div>
                   <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                     <span className="counter-value" data-target="559.25">
@@ -223,18 +223,18 @@ const Widget = ({ summary }) => {
                     </a>
                   </Link>
                 </div>
-                <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
+                <div className="h-12 w-12 shrink-0">
+                  <span className={'avatar-title rounded text-[22.75px] bg-soft-info'}>
                     <i className="text-info ri-list-unordered"></i>
                   </span>
                 </div>
               </div>
-            </CardBody> */}
+            </CardContent> */}
         </Card>
-      </Col>
-      <Col xl={3} md={6}>
+      </div>
+      <div className='px-3 xl:w-3/12 md:w-6/12'>
         <Card className='transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_5px_10px_rgba(30,32,37,0.12)]'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -279,17 +279,17 @@ const Widget = ({ summary }) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
-          {/* <CardBody>
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 overflow-hidden">
-                  <p className="text-uppercase fw-medium text-muted text-truncate mb-0">
+          </CardContent>
+          {/* <CardContent>
+              <div className="flex items-center">
+                <div className="grow overflow-hidden">
+                  <p className="uppercase fw-medium text-muted truncate mb-0">
                     Pick and Pack Charges
                   </p>
                 </div>
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <h5 className={'text-[14px] mb-0 font-bold'}>
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {summary?.pickPackDiff >= 0 ? (
                         <h5 className={'fs-14 mb-0 text-success'}>
                           <i
@@ -315,7 +315,7 @@ const Widget = ({ summary }) => {
                   </h5>
                 </div>
               </div>
-              <div className="d-flex align-items-end justify-content-between mt-4">
+              <div className="flex items-end justify-between mt-4">
                 <div>
                   <h4 className="fs-22 fw-semibold ff-secondary mb-4">
                     <span className="counter-value" data-target="559.25">
@@ -336,15 +336,15 @@ const Widget = ({ summary }) => {
                     </a>
                   </Link>
                 </div>
-                <div className="avatar-sm flex-shrink-0">
-                  <span className={'avatar-title rounded fs-3 bg-soft-info'}>
+                <div className="h-12 w-12 shrink-0">
+                  <span className={'avatar-title rounded text-[22.75px] bg-soft-info'}>
                     <i className="text-info las la-boxes"></i>
                   </span>
                 </div>
               </div>
-            </CardBody> */}
+            </CardContent> */}
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

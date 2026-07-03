@@ -8,7 +8,9 @@ import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ConfirmedShipments, InboundPlan } from '@typesTs/amazon/fulfillments/fulfillment'
-import { Button, Card, CardBody, CardFooter, CardHeader, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   inboundPlan: InboundPlan
@@ -28,7 +30,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
       <CardHeader>
         <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
       </CardHeader>
-      <CardBody>
+      <CardContent>
         <p className='m-0 text-[11.2px]'>
           <span className='text-primary'>Shipment Name: </span>
           {shipment.shipment.name}
@@ -152,7 +154,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
             </div>
           )}
         </div>
-      </CardBody>
+      </CardContent>
       <CardFooter>
         {shipment.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
           <div className='flex justify-between items-center'>
@@ -160,7 +162,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
             <Button
               disabled={isLoading}
               size='sm'
-              color='success'
+              variant='success'
               id='btn_handleNextShipping'
               onClick={async () => {
                 setisLoading(true)
@@ -171,7 +173,7 @@ const CarrierPalletCard = ({ inboundPlan, handleNextStep, shipment, shipmentInde
               }}>
               {isLoading ? (
                 <span>
-                  <Spinner color='light' size={'sm'} className='me-1' /> Downloading...
+                  <Spinner className='text-white me-1' /> Downloading...
                 </span>
               ) : (
                 'Print Pallet Lables'

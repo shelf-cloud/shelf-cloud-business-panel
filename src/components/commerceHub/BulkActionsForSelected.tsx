@@ -3,7 +3,9 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { Button } from '@shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   selectedRows: any[]
@@ -24,12 +26,15 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
   }
 
   return (
-    <ButtonGroup>
-      <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='text-[11.2px]'>
-          <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
-        </DropdownToggle>
-        <DropdownMenu style={{ backgroundColor: 'white', minWidth: '260px', border: '1px solid #E1E3E5' }}>
+    <div role='group' className='inline-flex'>
+      <DropdownMenu open={openDatesMenu} onOpenChange={(open) => { if (open !== openDatesMenu) setOpenDatesMenu(!openDatesMenu) }}>
+        <DropdownMenuTrigger asChild>
+          <button type='button' className='text-[11.2px]'>
+            <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+            <ChevronDownIcon className='ml-1 size-4' />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '260px', border: '1px solid #E1E3E5' }}>
           <div className={'px-6 py-4'}>
             <div className='flex flex-col justify-start gap-2'>
               <span className='text-[11.2px] font-normal'>Set Status:</span>
@@ -60,9 +65,9 @@ const BulkActionsForSelected = ({ selectedRows, clearSelected, statusOptions, ch
               </button>
             </div>
           </div>
-        </DropdownMenu>
-      </Dropdown>
-    </ButtonGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 

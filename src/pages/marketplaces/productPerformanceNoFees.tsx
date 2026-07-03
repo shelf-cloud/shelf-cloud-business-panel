@@ -18,7 +18,10 @@ import moment from 'moment'
 import { useQueryState } from 'nuqs'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Collapse, Container, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Collapse } from '@/components/ui/Collapse'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -240,8 +243,8 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Product Performance NO SC Fees' pageTitle='Marketplaces' />
-          <Container fluid>
-            <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-3'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3 flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-3'>
               <div className='flex flex-col gap-2 justify-between items-center p-0 lg:flex-row'>
                 <div className='flex flex-wrap justify-start items-center gap-2 w-full'>
                   <button
@@ -273,7 +276,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     endDate={filterDates.endDate}
                     selectedMarketplaceStoreId={selectedMarketplace.storeId}
                   />
-                  <Button color='info' onClick={() => setsummaryModal({ show: true })}>
+                  <Button variant='info' onClick={() => setsummaryModal({ show: true })}>
                     PP Summary
                   </Button>
                 </div>
@@ -304,7 +307,7 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
               </div>
               <Collapse className='px-0' isOpen={filterOpen}>
                 <Card className='mb-0' style={{ zIndex: '999' }}>
-                  <CardBody className='w-full'>
+                  <CardContent className='w-full'>
                     <FilterProfits
                       grossmin={grossmin !== undefined ? grossmin : ''}
                       grossmax={grossmax !== undefined ? grossmax : ''}
@@ -323,19 +326,19 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                       setFilterOpen={setFilterOpen}
                       destination='productPerformanceNoFees'
                     />
-                  </CardBody>
+                  </CardContent>
                 </Card>
               </Collapse>
-            </Row>
+            </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 {loadingData ? (
                   <div>
                     <p className='font-bold text-[26px]'>Product Performance No SC Fees</p>
                     <div className='text-[16.25px] text-[color:var(--bs-secondary-color)] flex flex-row gap-3'>
                       {`Loading Profit Report from ${selectedMarketplace.name} please wait...`}
                       <>
-                        <Spinner color='primary' size={'sm'} />
+                        <Spinner className='text-primary' />
                       </>
                     </div>
                   </div>
@@ -346,9 +349,9 @@ const ProductPerformanceNoFees = ({ session, sessionToken }: Props) => {
                     </div>
                   </div>
                 )}
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {summaryModal.show && <SummaryPP productsData={filterDataTable || []} summaryModal={summaryModal} setsummaryModal={setsummaryModal} />}
       </React.Fragment>

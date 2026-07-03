@@ -7,7 +7,9 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipmentHisotry } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import moment from 'moment'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWRInfinite from 'swr/infinite'
 
 type ModalInfo = {
@@ -70,41 +72,32 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
   )
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='InboundFBAHistoryModal'
-      isOpen={inboundFBAHistoryModal.show}
-      toggle={() => {
-        setinboundFBAHistoryModal(() => ({
-          show: false,
-          sku: '',
-          msku: '',
-          shipments: [],
-        }))
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!inboundFBAHistoryModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setinboundFBAHistoryModal(() => ({
             show: false,
             sku: '',
             msku: '',
             shipments: [],
           }))
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        FBA Shipment History
-        <p className='text-[16.25px] mb-0 font-semibold text-[var(--bs-secondary-color)]'>
-          SKU: <span className='text-black'>{inboundFBAHistoryModal.sku}</span>
-        </p>
-        <p className='text-[13px] m-0 font-semibold text-[var(--bs-secondary-color)]'>
-          FBA SKU: <span className='text-black'>{inboundFBAHistoryModal.msku}</span>
-        </p>
-      </ModalHeader>
-      <ModalBody style={{ maxHeight: '70svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
-        <Row>
-          <Col md={12} className='mt-2'>
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='InboundFBAHistoryModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>
+            FBA Shipment History
+            <p className='text-[16.25px] mb-0 font-semibold text-[var(--bs-secondary-color)]'>
+              SKU: <span className='text-black'>{inboundFBAHistoryModal.sku}</span>
+            </p>
+            <p className='text-[13px] m-0 font-semibold text-[var(--bs-secondary-color)]'>
+              FBA SKU: <span className='text-black'>{inboundFBAHistoryModal.msku}</span>
+            </p>
+          </DialogTitle>
+        </DialogHeader>
+        <div style={{ maxHeight: '70svh', scrollbarWidth: 'thin', overflowY: 'scroll' }}>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 md:w-full mt-2'>
             <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 border border-[color:var(--border)] [&_td]:border-t [&_td]:border-[color:var(--border)] [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)] text-nowrap'>
                 <thead className='bg-[color:var(--vz-light)]'>
@@ -137,7 +130,7 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
                       <td colSpan={5}>
                         {isValidating && (
                           <p className='text-center text-[11.2px] m-0'>
-                            <Spinner size='sm' color='primary' /> Loading more shipments...
+                            <Spinner className='text-primary' /> Loading more shipments...
                           </p>
                         )}
                       </td>
@@ -148,15 +141,16 @@ const InboundFBAHistoryModal = ({ inboundFBAHistoryModal, setinboundFBAHistoryMo
             </div>
             <div className='flex justify-end items-center'>
               {!showMore && (
-                <Button color='info' outline size='sm' className='btn-ghost-info' onClick={() => setshowMore(true)}>
+                <Button variant='info' outline size='sm' className='btn-ghost-info' onClick={() => setshowMore(true)}>
                   Show More
                 </Button>
               )}
             </div>
-          </Col>
-        </Row>
-      </ModalBody>
-    </Modal>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

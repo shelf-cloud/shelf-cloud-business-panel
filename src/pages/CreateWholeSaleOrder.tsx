@@ -13,7 +13,8 @@ import AppContext from '@context/AppContext'
 import { UserType } from '@hooks/useInitialState'
 import { WholesaleProduct, wholesaleProductRow } from '@typings'
 import axios from 'axios'
-import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -106,9 +107,9 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Create WholeSale Order' pageTitle='Shipments' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
                 <Card>
                   <CardHeader>
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
@@ -140,7 +141,7 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <MasterBoxes completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} />
@@ -150,11 +151,11 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                         <SingleItems completeData={completeData} pending={pending} orderNumberStart={orderNumberStart} />
                       </TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}

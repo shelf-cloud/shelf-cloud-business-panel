@@ -16,27 +16,14 @@ import { useFormik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
 
-import {
-  Alert,
-  Button,
-  Card,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Spinner,
-  TabContent,
-  TabPane,
-} from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Alert } from '@/components/ui/Alert'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import * as Yup from 'yup'
 
 import ExportBlankReceivingTemplate from './ExportBlankReceivingTemplate'
@@ -301,32 +288,25 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
   } = useCreateManualReceivingsBoxes(receivingProducts, validation.values.packingConfiguration, `${orderNumberStart}${validation.values.orderNumber}`)
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='createReceivingOrderByUploading'
-      isOpen={receivingUploadingModal.show}
-      toggle={() => {
-        setreceivingUploadingModal({ show: false })
+    <Dialog
+      open={!!receivingUploadingModal.show}
+      onOpenChange={(open) => {
+        if (!open) setreceivingUploadingModal({ show: false })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setreceivingUploadingModal({ show: false })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Create Receiving by Uploading File
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createReceivingOrderByUploading'>
+        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+          <DialogTitle>Create Receiving by Uploading File</DialogTitle>
+        </DialogHeader>
+        <div>
+          <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] font-extrabold'>Order Details</h5>
             <p className='m-0 mb-2 text-[11.2px]'>
               You can download a template to help you create your receiving file. <ExportBlankReceivingTemplate />
             </p>
-            <Col md={6}>
-              <Col xs={12}>
-                <FormGroup>
+            <div className='px-3 w-full md:w-6/12'>
+              <div className='px-3 w-full'>
+                <div className='mb-3'>
                   <Label htmlFor='orderNumber' className='mb-2 inline-block text-[11.2px]'>
                     *Transaction Number
                   </Label>
@@ -336,20 +316,19 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                     </span>
                     <Input
                       type='text'
-                      className='text-[13px]'
+                      className='h-8 text-xs'
                       id='orderNumber'
                       name='orderNumber'
-                      bsSize='sm'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.orderNumber || ''}
-                      invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
+                      aria-invalid={Boolean(validation.touched.orderNumber && validation.errors.orderNumber) || undefined}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
+                    {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
                   </div>
-                </FormGroup>
-              </Col>
-              <Col xs={12}>
+                </div>
+              </div>
+              <div className='px-3 w-full'>
                 <Label className='mb-2 inline-block text-[11.2px]'>*Select Destination</Label>
                 <SimpleSelect
                   options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
@@ -363,8 +342,8 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                 {validation.errors.destinationSC && validation.touched.destinationSC ? (
                   <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
                 ) : null}
-              </Col>
-              <Col xs={12}>
+              </div>
+              <div className='px-3 w-full'>
                 <Label htmlFor='orderNumber' className='mb-1 inline-block text-[11.2px] mt-4'>
                   *Uploaded File
                 </Label>
@@ -374,8 +353,8 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                     return (
                       <Card className='mt-1 mb-0 shadow border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                         <div className='px-4 py-1'>
-                          <Row className='items-center'>
-                            <Col className='flex justify-between items-center'>
+                          <div className='flex flex-wrap -mx-3 items-center'>
+                            <div className='px-3 flex justify-between items-center'>
                               <div>
                                 <p className='text-[var(--bs-secondary-color)] font-bold m-0 text-[11.2px]'>{f.name}</p>
                                 <p className='mb-0 text-[11.2px]'>
@@ -384,7 +363,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                               </div>
                               <div>
                                 <Button
-                                  color='light'
+                                  variant='light'
                                   onClick={() => {
                                     setuploadedSkuList([])
                                     setselectedFiles([])
@@ -395,24 +374,24 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                                   <i className='ri-close-line text-[16.25px]' />
                                 </Button>
                               </div>
-                            </Col>
-                          </Row>
+                            </div>
+                          </div>
                         </div>
                       </Card>
                     )
                   })}
                 </div>
-              </Col>
-            </Col>
+              </div>
+            </div>
 
             {/* File Upload */}
-            <Col md={6}>
+            <div className='px-3 w-full md:w-6/12'>
               <UploadFileDropzone
                 accptedFiles={{ 'text/csv': ['.csv'] }}
                 handleAcceptedFiles={handleAcceptedFiles}
                 description={`Upload Invoices File. Drop Only CSV files here or click to upload.`}
               />
-            </Col>
+            </div>
             {errorFile && <p className='text-destructive m-0 text-[11.2px]'>You must Upload a CSV file to upload products.</p>}
             {showErrorLines && (
               <div style={{ overflowY: 'scroll', height: '40vh' }} className='my-4'>
@@ -488,29 +467,29 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
               </TabPane>
             </TabContent>
 
-            <Row className='mb-2'>
+            <div className='flex flex-wrap -mx-3 mb-2'>
               {hasBoxedErrors.error && (
-                <Col xs={12} className='m-0'>
+                <div className='px-3 w-full m-0'>
                   <Alert color='danger' className='text-[11.2px] py-1 mb-2'>
                     <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                     {hasBoxedErrors.message}
                   </Alert>
-                </Col>
+                </div>
               )}
-            </Row>
+            </div>
 
-            <Row md={12}>
+            <div className='flex flex-wrap -mx-3'>
               <div className='flex justify-end items-center gap-2'>
                 {activeTab == 'summary' && (
-                  <Button disabled={loading || receivingProducts.length <= 0} type='button' color='primary' onClick={() => setactiveTab('packages')}>
+                  <Button disabled={loading || receivingProducts.length <= 0} type='button' onClick={() => setactiveTab('packages')}>
                     Next Step
                   </Button>
                 )}
                 {activeTab == 'packages' && (
-                  <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success'>
+                  <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' variant='success'>
                     {loading ? (
                       <span>
-                        <Spinner color='light' size={'sm'} /> Creating...
+                        <Spinner className='text-white' /> Creating...
                       </span>
                     ) : (
                       'Create Receiving'
@@ -518,11 +497,12 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                   </Button>
                 )}
               </div>
-            </Row>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+            </div>
+          </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

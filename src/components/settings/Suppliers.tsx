@@ -5,7 +5,9 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
@@ -211,103 +213,98 @@ const Suppliers = ({}: Props) => {
     <>
       {!showAddNewFields ? (
         <div className='flex flex-row justify-end items-end'>
-          <Button type='submit' color='primary' size='sm' className='m-0' onClick={handleShowAddSupplier}>
+          <Button type='submit' size='sm' className='m-0' onClick={handleShowAddSupplier}>
             Add New
           </Button>
         </div>
       ) : (
         <div>
-          <Form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
-            <FormGroup>
+          <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Supplier Name
               </Label>
               <Input
                 type='text'
-                className='text-[13px]'
+                className='text-[13px] h-8 text-xs'
                 placeholder='Name...'
                 id='name'
                 name='name'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.name || ''}
-                invalid={validation.touched.name && validation.errors.name ? true : false}
+                aria-invalid={(validation.touched.name && validation.errors.name ? true : false) || undefined}
               />
-              {validation.touched.name && validation.errors.name ? <FormFeedback type='invalid'>{validation.errors.name}</FormFeedback> : null}
-            </FormGroup>
-            <FormGroup>
+              {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+            </div>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Email
               </Label>
               <Input
                 type='text'
-                className='text-[13px]'
+                className='text-[13px] h-8 text-xs'
                 placeholder='Email...'
                 id='email'
                 name='email'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.email || ''}
-                invalid={validation.touched.email && validation.errors.email ? true : false}
+                aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
               />
-              {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
-            </FormGroup>
-            <FormGroup>
+              {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+            </div>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Phone
               </Label>
               <Input
                 type='text'
-                className='text-[13px]'
+                className='text-[13px] h-8 text-xs'
                 placeholder='Phone...'
                 id='phone'
                 name='phone'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.phone || ''}
-                invalid={validation.touched.phone && validation.errors.phone ? true : false}
+                aria-invalid={(validation.touched.phone && validation.errors.phone ? true : false) || undefined}
               />
-              {validation.touched.phone && validation.errors.phone ? <FormFeedback type='invalid'>{validation.errors.phone}</FormFeedback> : null}
-            </FormGroup>
-            <FormGroup>
+              {validation.touched.phone && validation.errors.phone ? <div className='text-sm text-destructive'>{validation.errors.phone}</div> : null}
+            </div>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Address
               </Label>
               <Input
                 type='text'
-                className='text-[13px]'
+                className='text-[13px] h-8 text-xs'
                 placeholder='Address...'
                 id='address'
                 name='address'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.address || ''}
-                invalid={validation.touched.address && validation.errors.address ? true : false}
+                aria-invalid={(validation.touched.address && validation.errors.address ? true : false) || undefined}
               />
-              {validation.touched.address && validation.errors.address ? <FormFeedback type='invalid'>{validation.errors.address}</FormFeedback> : null}
-            </FormGroup>
-            <FormGroup>
+              {validation.touched.address && validation.errors.address ? <div className='text-sm text-destructive'>{validation.errors.address}</div> : null}
+            </div>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Country
               </Label>
               <Input
                 type='text'
-                className='text-[13px]'
+                className='text-[13px] h-8 text-xs'
                 placeholder='Address...'
                 id='country'
                 name='country'
                 list='countries'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.country || ''}
-                invalid={validation.touched.country && validation.errors.country ? true : false}
+                aria-invalid={(validation.touched.country && validation.errors.country ? true : false) || undefined}
               />
-              {validation.touched.country && validation.errors.country ? <FormFeedback type='invalid'>{validation.errors.country}</FormFeedback> : null}
+              {validation.touched.country && validation.errors.country ? <div className='text-sm text-destructive'>{validation.errors.country}</div> : null}
               <datalist id='countries'>
                 {countries.map(
                   (
@@ -323,111 +320,106 @@ const Suppliers = ({}: Props) => {
                   )
                 )}
               </datalist>
-            </FormGroup>
+            </div>
             <div className='flex flex-row justify-end items-end gap-4'>
-              <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
+              <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
                 Cancel
               </Button>
-              <Button type='submit' color='primary' size='sm' className='m-0'>
+              <Button type='submit' size='sm' className='m-0'>
                 Add New
               </Button>
             </div>
-          </Form>
+          </form>
         </div>
       )}
 
       {showEditFields && (
-        <Form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
-          <FormGroup>
+        <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Supplier Name
             </Label>
             <Input
               type='text'
-              className='text-[13px]'
+              className='text-[13px] h-8 text-xs'
               placeholder='Name...'
               id='name'
               name='name'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.name || ''}
-              invalid={validationEdit.touched.name && validationEdit.errors.name ? true : false}
+              aria-invalid={(validationEdit.touched.name && validationEdit.errors.name ? true : false) || undefined}
             />
-            {validationEdit.touched.name && validationEdit.errors.name ? <FormFeedback type='invalid'>{validationEdit.errors.name}</FormFeedback> : null}
-          </FormGroup>
-          <FormGroup>
+            {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
+          </div>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Email
             </Label>
             <Input
               type='text'
-              className='text-[13px]'
+              className='text-[13px] h-8 text-xs'
               placeholder='Email...'
               id='email'
               name='email'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.email || ''}
-              invalid={validationEdit.touched.email && validationEdit.errors.email ? true : false}
+              aria-invalid={(validationEdit.touched.email && validationEdit.errors.email ? true : false) || undefined}
             />
-            {validationEdit.touched.email && validationEdit.errors.email ? <FormFeedback type='invalid'>{validationEdit.errors.email}</FormFeedback> : null}
-          </FormGroup>
-          <FormGroup>
+            {validationEdit.touched.email && validationEdit.errors.email ? <div className='text-sm text-destructive'>{validationEdit.errors.email}</div> : null}
+          </div>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Phone
             </Label>
             <Input
               type='text'
-              className='text-[13px]'
+              className='text-[13px] h-8 text-xs'
               placeholder='Phone...'
               id='phone'
               name='phone'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.phone || ''}
-              invalid={validationEdit.touched.phone && validationEdit.errors.phone ? true : false}
+              aria-invalid={(validationEdit.touched.phone && validationEdit.errors.phone ? true : false) || undefined}
             />
-            {validationEdit.touched.phone && validationEdit.errors.phone ? <FormFeedback type='invalid'>{validationEdit.errors.phone}</FormFeedback> : null}
-          </FormGroup>
-          <FormGroup>
+            {validationEdit.touched.phone && validationEdit.errors.phone ? <div className='text-sm text-destructive'>{validationEdit.errors.phone}</div> : null}
+          </div>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Address
             </Label>
             <Input
               type='text'
-              className='text-[13px]'
+              className='text-[13px] h-8 text-xs'
               placeholder='Address...'
               id='address'
               name='address'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.address || ''}
-              invalid={validationEdit.touched.address && validationEdit.errors.address ? true : false}
+              aria-invalid={(validationEdit.touched.address && validationEdit.errors.address ? true : false) || undefined}
             />
-            {validationEdit.touched.address && validationEdit.errors.address ? <FormFeedback type='invalid'>{validationEdit.errors.address}</FormFeedback> : null}
-          </FormGroup>
-          <FormGroup>
+            {validationEdit.touched.address && validationEdit.errors.address ? <div className='text-sm text-destructive'>{validationEdit.errors.address}</div> : null}
+          </div>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Country
             </Label>
             <Input
               type='text'
-              className='text-[13px]'
+              className='text-[13px] h-8 text-xs'
               placeholder='Address...'
               id='country'
               name='country'
               list='countries'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.country || ''}
-              invalid={validationEdit.touched.country && validationEdit.errors.country ? true : false}
+              aria-invalid={(validationEdit.touched.country && validationEdit.errors.country ? true : false) || undefined}
             />
-            {validationEdit.touched.country && validationEdit.errors.country ? <FormFeedback type='invalid'>{validationEdit.errors.country}</FormFeedback> : null}
+            {validationEdit.touched.country && validationEdit.errors.country ? <div className='text-sm text-destructive'>{validationEdit.errors.country}</div> : null}
             <datalist id='countries'>
               {countries.map(
                 (
@@ -443,16 +435,16 @@ const Suppliers = ({}: Props) => {
                 )
               )}
             </datalist>
-          </FormGroup>
+          </div>
           <div className='flex flex-row justify-end items-end gap-4'>
-            <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelEdit}>
+            <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelEdit}>
               Cancel
             </Button>
-            <Button type='submit' color='primary' size='sm' className='m-0'>
+            <Button type='submit' size='sm' className='m-0'>
               Update
             </Button>
           </div>
-        </Form>
+        </form>
       )}
 
       <DataTable columns={columns} data={suppliers} progressPending={loading} striped={true} defaultSortFieldId={1} />

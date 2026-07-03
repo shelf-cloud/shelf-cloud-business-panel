@@ -8,7 +8,9 @@ import axios from 'axios'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
 
 interface SkuInListToAddToPo extends SkuToAddPo {
@@ -167,7 +169,7 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
               onWheel={(e: any) => e.currentTarget.blur()}
               minLength={1}
               debounceTimeout={300}
-              className={'form-control text-[11.2px] m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-destructive' : '')}
+              className={'h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 ' + (Number(row.addQty) <= 0 || row.addQty == '' ? 'border-destructive' : '')}
               style={{ maxWidth: '80px' }}
               placeholder='Qty...'
               id='qtyToAdd'
@@ -250,42 +252,33 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
     setloading(false)
   }
 
+  const closeModal = () => {
+    setshowAddSkuToManualReceiving({
+      show: false,
+      receivingId: 0,
+      orderNumber: '',
+      receivingItems: [],
+    })
+  }
+
   return (
-    <Modal
-      fade={false}
-      scrollable={true}
-      size='xl'
-      id='addSkuToPoModal'
-      isOpen={addSkuToReceiving.show}
-      toggle={() => {
-        setshowAddSkuToManualReceiving({
-          show: false,
-          receivingId: 0,
-          orderNumber: '',
-          receivingItems: [],
-        })
+    <Dialog
+      open={!!addSkuToReceiving.show}
+      onOpenChange={(open) => {
+        if (!open) closeModal()
       }}>
-      <ModalHeader
-        toggle={() => {
-          setshowAddSkuToManualReceiving({
-            show: false,
-            receivingId: 0,
-            orderNumber: '',
-            receivingItems: [],
-          })
-        }}
-        className='modal-title pb-0'
-        id='myModalLabel'>
-        <p>Add Products to Receiving</p>
-        <span className='text-[16.25px] mb-0 font-normal text-primary'>
-          Order Number: <span className='text-[16.25px] font-bold text-black'>{addSkuToReceiving.orderNumber}</span>
-        </span>
-        <br />
-      </ModalHeader>
-      <ModalBody>
-        <Row>
-          <Col sm={6} className='overflow-auto h-full'>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl'>
+        <DialogHeader className='pr-6 pb-0'>
+          <DialogTitle id='myModalLabel'>
+            <p>Add Products to Receiving</p>
+            <span className='text-[16.25px] mb-0 font-normal text-primary'>
+              Order Number: <span className='text-[16.25px] font-bold text-black'>{addSkuToReceiving.orderNumber}</span>
+            </span>
+          </DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 w-full sm:w-6/12 overflow-auto h-full'>
+            <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
               <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)] flex-1'>SKU List</span>
               <div className='w-full md:w-7/12'>
                 <div className='flex flex-row justify-end items-center p-0'>
@@ -314,8 +307,8 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
                   </div>
                 </div>
               </div>
-            </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+            </div>
+            <div className='px-3 w-full' style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
               <DataTable
                 columns={columnsSkuListToAdd}
                 data={filterDataTable || []}
@@ -326,32 +319,32 @@ const AddSkuToManualReceivingLog = ({ addSkuToReceiving, setshowAddSkuToManualRe
                 fixedHeaderScrollHeight='60vh'
                 className='pb-6'
               />
-            </Col>
-          </Col>
-          <Col sm={6}>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
+            </div>
+          </div>
+          <div className='px-3 w-full sm:w-6/12'>
+            <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center'>
               <span className='text-[19.5px] font-semibold text-[var(--bs-secondary-color)]'>SKU List to Add to PO</span>
-            </Row>
-            <Col sm={12} style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
+            </div>
+            <div className='px-3 w-full' style={{ height: '60vh', overflowX: 'hidden', overflowY: 'auto' }}>
               <DataTable columns={columnsSkuListAdded} data={skuToAddToPo || []} striped={true} dense={true} fixedHeader={true} fixedHeaderScrollHeight='60vh' />
-            </Col>
-          </Col>
-          <Row md={12}>
+            </div>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
             <div className='text-end'>
-              <Button disabled={hasErrors} type='button' color='success' onClick={handleSubmitProductsToManualReceiving}>
+              <Button disabled={hasErrors} type='button' variant='success' onClick={handleSubmitProductsToManualReceiving}>
                 {loading ? (
                   <span>
-                    <Spinner color='#fff' size={'sm'} /> Adding...
+                    <Spinner className='text-white' /> Adding...
                   </span>
                 ) : (
                   'Add Products'
                 )}
               </Button>
             </div>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

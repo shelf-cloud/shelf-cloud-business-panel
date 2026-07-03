@@ -5,7 +5,10 @@ import AppContext from '@context/AppContext'
 import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
+import { NativeSelect } from '@shadcn/ui/native-select'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   data: Shipment
@@ -67,22 +70,18 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
   }
 
   return (
-    <Modal
-      size='xl'
-      id='myModal'
-      isOpen={state.showCreateReturnModal}
-      toggle={() => {
-        setShowCreateReturnModal(!state.showCreateReturnModal)
+    <Dialog
+      open={!!state.showCreateReturnModal}
+      onOpenChange={(open) => {
+        if (!open) setShowCreateReturnModal(!state.showCreateReturnModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setShowCreateReturnModal(!state.showCreateReturnModal)
-        }}>
+      <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl'>
+      <DialogHeader className='pr-6'>
         <h3 className='modal-title' id='myModalLabel'>
           Create Return
         </h3>
-      </ModalHeader>
-      <ModalBody>
+      </DialogHeader>
+      <div>
         <h4 className='font-normal text-[16.25px] text-[var(--bs-secondary-color)]'>
           Order: <span className='font-bold text-black'>{data?.orderNumber}</span>
         </h4>
@@ -128,7 +127,7 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
                   </td>
                   <td className='font-bold text-center'>
                     <div className='flex justify-center items-center flex-nowrap gap-4 text-[13px]'>
-                      <select className='form-select text-[13px]' value={returnItemsList[index].quantity} style={{ width: '80px' }} onChange={(e) => handleOnChangeQty(e, item.sku)}>
+                      <NativeSelect className='text-[13px]' value={returnItemsList[index].quantity} style={{ width: '80px' }} onChange={(e) => handleOnChangeQty(e, item.sku)}>
                         <option key={0} value={0}>
                           {0}
                         </option>
@@ -139,7 +138,7 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
                               {index + 1}
                             </option>
                           ))}
-                      </select>
+                      </NativeSelect>
                       <p className='m-0'>of</p>
                       {item.quantity}
                     </div>
@@ -155,12 +154,13 @@ function CreateReturnModal({ data, mutateShipments }: Props) {
           </div>
         )}
         <div className='flex justify-end items-center'>
-          <Button disabled={loadingConfirmation} color='success' onClick={() => handleConfirmReturn()}>
-            {loadingConfirmation ? <Spinner color='light' /> : 'Confirm Return'}
+          <Button disabled={loadingConfirmation} variant='success' onClick={() => handleConfirmReturn()}>
+            {loadingConfirmation ? <Spinner className='size-6 text-white' /> : 'Confirm Return'}
           </Button>
         </div>
-      </ModalBody>
-    </Modal>
+      </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

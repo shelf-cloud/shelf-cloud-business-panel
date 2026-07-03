@@ -12,7 +12,9 @@ import PuntosImage from '@assets/images/signin-puntos.png'
 import { getSession, signIn } from '@auth/client'
 import ForgotPasswordModal from '@components/ForgotPasswordModal'
 
-import { Button, Label } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -85,16 +87,16 @@ function SignIn({}: Props) {
                   <Label htmlFor='username' className='form-label'>
                     Username
                   </Label>
-                  <input type='text' className='form-control' id='username' name='username' placeholder='Enter username' required ref={usernameRef} />
+                  <Input type='text' id='username' name='username' placeholder='Enter username' required ref={usernameRef} />
                 </div>
                 <div className='mb-1 w-full'>
                   <Label className='form-label' htmlFor='password-input'>
                     Password
                   </Label>
                   <div className='relative auth-pass-inputgroup mb-4'>
-                    <input
+                    <Input
                       type={show ? 'text' : 'password'}
-                      className='form-control pe-12'
+                      className='pe-12'
                       placeholder='Enter password'
                       id='password'
                       required
@@ -118,7 +120,7 @@ function SignIn({}: Props) {
                   </a>
                 </div>
                 <div className='mt-6 w-full'>
-                  <Button color='primary' className='btn btn-primary w-full font-semibold text-[16.25px]' type='submit'>
+                  <Button className='btn btn-primary w-full font-semibold text-[16.25px]' type='submit'>
                     Sign In
                   </Button>
                 </div>

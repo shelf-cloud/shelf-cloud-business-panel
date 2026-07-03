@@ -1,6 +1,6 @@
 import { Shipment } from '@typesTs/shipments/shipments'
 import ExcelJS from 'exceljs'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 import { shelf_cloud_blue_h, shelf_cloud_signature } from '@/lib/assetsConstants'
 
@@ -351,10 +351,10 @@ const DownloadPackingSlip = ({ order }: Props) => {
   }
 
   return (
-    <DropdownItem className='edit-item-btn' onClick={downloadPackingSlip}>
+    <DropdownMenuItem className='edit-item-btn' onClick={downloadPackingSlip}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       Packing Slip
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

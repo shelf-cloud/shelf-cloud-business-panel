@@ -10,7 +10,13 @@ import { useFormik } from 'formik'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Textarea } from '@shadcn/ui/textarea'
 import * as Yup from 'yup'
 
 import { FormatBytes } from '@/lib/FormatNumbers'
@@ -354,29 +360,20 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='myModal'
-      isOpen={state.showWholeSaleOrderModal}
-      toggle={() => {
-        setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        WholeSale Order with Master Boxes
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row>
+    <Dialog open={!!state.showWholeSaleOrderModal} onOpenChange={(open) => { if (!open) setWholeSaleOrderModal(!state.showWholeSaleOrderModal) }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='myModal'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            WholeSale Order with Master Boxes
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <p className='text-[19.5px] font-bold text-primary'>Order Details</p>
-            <Col md={6}>
-              <Col md={12}>
-                <FormGroup className='mb-4'>
+            <div className='px-3 md:w-1/2'>
+              <div className='px-3 w-full'>
+                <div className='mb-4'>
                   <Label htmlFor='orderNumber' className='form-label text-[11.2px]'>
                     *Order Number
                   </Label>
@@ -386,21 +383,20 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     </span>
                     <Input
                       type='text'
-                      bsSize='sm'
-                      className='text-[13px]'
+                      className='text-[13px] h-8 text-xs'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.orderNumber || ''}
-                      invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
+                      aria-invalid={(validation.touched.orderNumber && validation.errors.orderNumber ? true : false) || undefined}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
+                    {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
                   </div>
-                </FormGroup>
-              </Col>
-              <Col md={12}>
+                </div>
+              </div>
+              <div className='px-3 w-full'>
                 <Label htmlFor='type' className='form-label text-[11.2px]'>
                   *Type of Shipment
                 </Label>
@@ -408,22 +404,22 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <Button
                     type='button'
                     className={validation.values.type == 'Parcel Boxes' ? '' : 'text-[var(--bs-secondary-color)]'}
-                    color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
+                    variant={validation.values.type == 'Parcel Boxes' ? undefined : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
                     className={validation.values.type == 'LTL' ? '' : 'text-[var(--bs-secondary-color)]'}
-                    color={validation.values.type == 'LTL' ? 'primary' : 'light'}
+                    variant={validation.values.type == 'LTL' ? undefined : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
                   </Button>
                 </div>
-              </Col>
+              </div>
               {validation.values.type == 'LTL' && (
-                <Col md={6}>
-                  <FormGroup className='mb-4'>
+                <div className='px-3 md:w-1/2'>
+                  <div className='mb-4'>
                     <Label htmlFor='numberOfPallets' className='form-label text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
@@ -435,15 +431,15 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.numberOfPallets || ''}
-                      invalid={validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false}
+                      aria-invalid={(validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false) || undefined}
                     />
                     {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
-                      <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback>
+                      <div className='text-sm text-destructive'>{validation.errors.numberOfPallets}</div>
                     ) : null}
-                  </FormGroup>
-                </Col>
+                  </div>
+                </div>
               )}
-              <Col md={6}>
+              <div className='px-3 md:w-1/2'>
                 <SelectSingleFilter
                   inputLabel={'*Select Shipment Type'}
                   inputName={'isThird'}
@@ -455,11 +451,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   }}
                   error={validation.errors.isThird}
                 />
-              </Col>
-            </Col>
-            <Col md={6}>
-              <Row>
-                <Col>
+              </div>
+            </div>
+            <div className='px-3 md:w-1/2'>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 flex-1 basis-0'>
                   <UploadFileDropzone
                     accptedFiles={orderLabel.acceptedFiles}
                     handleAcceptedFiles={orderLabel.handleAcceptedFiles}
@@ -470,8 +466,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       return (
                         <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
-                            <Row className='items-center'>
-                              <Col className='flex justify-between items-center gap-2'>
+                            <div className='flex flex-wrap -mx-3 items-center'>
+                              <div className='px-3 flex-1 basis-0 flex justify-between items-center gap-2'>
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
@@ -515,20 +511,20 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </p>
                                 </div>
                                 <div>
-                                  <Button color='light' className='btn-icon' onClick={orderLabel.handleClearFiles}>
+                                  <Button variant='light' className='btn-icon' onClick={orderLabel.handleClearFiles}>
                                     <i className=' ri-close-line' />
                                   </Button>
                                 </div>
-                              </Col>
-                            </Row>
+                              </div>
+                            </div>
                           </div>
                         </Card>
                       )
                     })}
                   </div>
                   {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
-                </Col>
-                <Col>
+                </div>
+                <div className='px-3 flex-1 basis-0'>
                   {validation.values.type == 'LTL' && (
                     <UploadFileDropzone
                       accptedFiles={orderPalletLabel.acceptedFiles}
@@ -541,8 +537,8 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       return (
                         <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                           <div className='p-2'>
-                            <Row className='items-center'>
-                              <Col className='flex justify-between items-center gap-2'>
+                            <div className='flex flex-wrap -mx-3 items-center'>
+                              <div className='px-3 flex-1 basis-0 flex justify-between items-center gap-2'>
                                 {file.type === 'application/pdf' ? (
                                   <div className='relative overflow-hidden rounded border' style={{ width: '60px', height: '60px' }}>
                                     <iframe
@@ -586,40 +582,39 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                                   </p>
                                 </div>
                                 <div>
-                                  <Button color='light' className='btn-icon' onClick={orderPalletLabel.handleClearFiles}>
+                                  <Button variant='light' className='btn-icon' onClick={orderPalletLabel.handleClearFiles}>
                                     <i className=' ri-close-line' />
                                   </Button>
                                 </div>
-                              </Col>
-                            </Row>
+                              </div>
+                            </div>
                           </div>
                         </Card>
                       )
                     })}
                   </div>
                   {errorPalletFile && <p className='text-danger m-0'>You must Upload the Pallet Labels to create order.</p>}
-                </Col>
-              </Row>
-            </Col>
-            <Col md={12}>
+                </div>
+              </div>
+            </div>
+            <div className='px-3 w-full'>
               {validation.values.isThird == 'true' && (
                 <>
-                  <Input
-                    type='textarea'
+                  <Textarea
                     id='thirdInfo'
                     name='thirdInfo'
                     placeholder='Please enter the Third Party Shipping Information: Recepient, Company, Address, City, State, Zipcode, Country.'
                     value={validation.values.thirdInfo}
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
+                    aria-invalid={(validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false) || undefined}
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
+                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <div className='text-sm text-destructive'>{validation.errors.thirdInfo}</div> : null}
                   <h5 className='text-[11.2px] mb-4 text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
-            </Col>
-            <Col md={12}>
+            </div>
+            <div className='px-3 w-full'>
               <p className='text-[13px] m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
               <div className='overflow-x-auto'>
@@ -652,18 +647,19 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </tfoot>
               </table>
               </div>
-            </Col>
-            <Col md={12}>
+            </div>
+            <div className='px-3 w-full'>
               <div className='text-right'>
-                <Button disabled={loading} type='submit' color='success'>
-                  {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
+                <Button disabled={loading} type='submit' variant='success'>
+                  {loading ? <Spinner className='text-white' /> : 'Confirm Order'}
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+            </div>
+          </div>
+        </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

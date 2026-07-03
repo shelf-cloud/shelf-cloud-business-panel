@@ -5,7 +5,8 @@ import AppContext from '@context/AppContext'
 import { SplitNames } from '@hooks/reorderingPoints/useRPSplits'
 import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/FormatNumbers'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 type Props = {
   reorderingPointsOrder: {
@@ -25,10 +26,10 @@ type Props = {
 const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, error, orderHasSplitswithZeroQty, setshowPOModal, splits, splitNames }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
-    <Row className='mb-2 gap-y-2 gap-x-1'>
-      <Col xs={12}>
+    <div className='flex flex-wrap -mx-3 mb-2 gap-y-2 gap-x-1'>
+      <div className='px-3 w-full'>
         <Card className='mb-0'>
-          <CardBody className='flex flex-col items-center justify-between gap-1 md:flex-row py-2'>
+          <CardContent className='flex flex-col items-center justify-between gap-1 md:flex-row py-2'>
             <div>
               <p className='capitalize font-semibold mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Order Summary
@@ -87,17 +88,16 @@ const ReorderingPointsSummary = ({ reorderingPointsOrder, selectedSupplier, erro
                 type='button'
                 disabled={error.length > 0 || Object.keys(reorderingPointsOrder.products).length === 0 || orderHasSplitswithZeroQty}
                 className='text-[11.2px]'
-                color='primary'
                 onClick={() => setshowPOModal(true)}>
                 Create Order
               </Button>
               {error.length > 0 && <p className='text-[11.2px] text-danger m-0 p-0'>Error in some Products</p>}
               {orderHasSplitswithZeroQty && <p className='text-[11.2px] text-danger m-0 p-0'>Products missing splits Qty</p>}
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-    </Row>
+      </div>
+    </div>
   )
 }
 

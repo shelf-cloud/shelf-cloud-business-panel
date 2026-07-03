@@ -1,4 +1,4 @@
-import { Input } from '@/components/migration-ui'
+import { Input } from '@shadcn/ui/input'
 
 type Props = {
   inputName: string
@@ -20,8 +20,7 @@ const InputNumberFilter = ({ inputName, value, isInvalid, placeholder, handleCha
   return (
     <Input
       type='number'
-      className='text-[13px] m-0'
-      bsSize='sm'
+      className='text-[13px] m-0 h-8 text-xs'
       style={{ padding: '0.2rem 0.9rem' }}
       placeholder={placeholder}
       id={inputName}
@@ -30,7 +29,7 @@ const InputNumberFilter = ({ inputName, value, isInvalid, placeholder, handleCha
       onChange={handleChange}
       onBlur={handleBlur}
       value={value}
-      invalid={isInvalid}
+      aria-invalid={isInvalid || undefined}
     />
   )
 }

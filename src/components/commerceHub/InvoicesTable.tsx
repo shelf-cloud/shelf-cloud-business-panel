@@ -9,7 +9,8 @@ import { Invoice } from '@typesTs/commercehub/invoices'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
-import { Button, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import { getTotalPaid, getTotalPending } from './helperFunctions'
 
@@ -301,7 +302,7 @@ const InvoicesTable = ({ filteredItems, pending, setSelectedRows, toggledClearRo
                 </UncontrolledTooltip>
               </>
             )}
-            <Button id='Popover1' type='button' color='ghost' size='sm'>
+            <Button id='Popover1' type='button' variant='ghost' size='sm'>
               <i
                 className='las la-edit text-[16.25px] text-[color:var(--bs-secondary-color)] m-0 p-0 '
                 style={{ cursor: 'pointer' }}

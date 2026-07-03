@@ -1,7 +1,7 @@
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import ExcelJS from 'exceljs'
 
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   unsellables: UnsellablesType[]
@@ -50,7 +50,7 @@ const ExportUnsellables = ({ unsellables }: Props) => {
   }
 
   return (
-    <Button color='primary' onClick={exportExcelFile}>
+    <Button onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle me-2' />
       Export List
     </Button>

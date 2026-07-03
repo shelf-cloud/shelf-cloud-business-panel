@@ -6,7 +6,7 @@ const NoShipmentsFound = ({}: Props) => {
       <div className='text-center py-5'>
         <div className='flex justify-center mb-4'>
           <div className='bg-[color:var(--vz-light)] rounded-full px-4 py-2 text-center'>
-            <i className='ri-inbox-line text-primary fs-1' />
+            <i className='ri-inbox-line text-primary text-[32.5px]' />
           </div>
         </div>
         <h3 className='card-title'>No shipments found</h3>

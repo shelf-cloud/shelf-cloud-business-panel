@@ -5,7 +5,8 @@ import AppContext from '@context/AppContext'
 import { InvoiceList } from '@typings'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Button, Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shadcn/ui/table'
 
 type Props = {
@@ -18,13 +19,13 @@ const InvoicesList = ({ invoices }: Props) => {
 
   return (
     <React.Fragment>
-      <Col>
+      <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='flex items-center'>
             <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Invoices</h4>
           </CardHeader>
 
-          <CardBody>
+          <CardContent>
             <Table className='mb-0'>
               <TableHeader>
                 <TableRow>
@@ -86,7 +87,7 @@ const InvoicesList = ({ invoices }: Props) => {
                     {state.currentRegion == 'us' && (
                       <TableCell className='text-center'>
                         <a href={`${invoice.payLink}`} target='blank' rel='noopener noreferrer'>
-                          <Button color={invoice.paid ? 'success' : 'primary'} size='sm'>
+                          <Button variant={invoice.paid ? 'success' : 'default'} size='sm'>
                             {invoice.paid ? 'View Receipt' : 'Pay Now'}
                           </Button>
                         </a>
@@ -96,9 +97,9 @@ const InvoicesList = ({ invoices }: Props) => {
                 ))}
               </TableBody>
             </Table>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

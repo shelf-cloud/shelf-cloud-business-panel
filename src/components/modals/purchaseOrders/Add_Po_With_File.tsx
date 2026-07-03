@@ -12,7 +12,12 @@ import axios from 'axios'
 import { Form, Formik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -176,29 +181,20 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='addPoFromFile'
-      isOpen={state.showCreatePoFromFile}
-      toggle={() => {
-        setShowCreatePoFromFile(!state.showCreatePoFromFile)
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setShowCreatePoFromFile(!state.showCreatePoFromFile)
-        }}
-        className='modal-title'
-        id='addPoFromFileModalLabel'>
-        Create New Purchase Order
-      </ModalHeader>
-      <ModalBody>
+    <Dialog open={!!state.showCreatePoFromFile} onOpenChange={(open) => { if (!open) setShowCreatePoFromFile(!state.showCreatePoFromFile) }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='addPoFromFile'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='addPoFromFileModalLabel'>
+            Create New Purchase Order
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleChange, handleBlur }) => (
             <Form>
-              <Row>
-                <Col md={6}>
-                  <FormGroup className='mb-1'>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 md:w-1/2'>
+                  <div className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Purchase Order Number
                     </Label>
@@ -208,18 +204,17 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                       </span>
                       <Input
                         type='text'
-                        className='text-[13px]'
+                        className='text-[13px] h-8 text-xs'
                         id='orderNumber'
                         name='orderNumber'
-                        bsSize='sm'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.orderNumber || ''}
-                        invalid={touched.orderNumber && errors.orderNumber ? true : false}
+                        aria-invalid={(touched.orderNumber && errors.orderNumber ? true : false) || undefined}
                       />
-                      {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
+                      {touched.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber}</div> : null}
                     </div>
-                  </FormGroup>
+                  </div>
 
                   <div className='mb-2'>
                     <Label className='form-label mb-1 text-[11.2px]'>*Destination</Label>
@@ -246,30 +241,29 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     }}
                     error={errors.supplier}
                   />
-                  <FormGroup className='mb-1'>
+                  <div className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label mb-1 text-[11.2px]'>
                       *Date
                     </Label>
                     <Input
                       type='date'
-                      className='text-[13px]'
+                      className='text-[13px] h-8 text-xs'
                       id='date'
                       name='date'
-                      bsSize='sm'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.date || ''}
-                      invalid={touched.date && errors.date ? true : false}
+                      aria-invalid={(touched.date && errors.date ? true : false) || undefined}
                     />
-                    {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
-                  </FormGroup>
+                    {touched.date && errors.date ? <div className='text-sm text-destructive'>{errors.date}</div> : null}
+                  </div>
                   {showErrorLines &&
                     errorLines.map((error: any, index: number) => (
                       <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
                     ))}
                   {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
-                </Col>
-                <Col md={6}>
+                </div>
+                <div className='px-3 md:w-1/2'>
                   <p className='text-[13px] font-normal'>
                     You can import a Purchase Order by uploading a CSV file using the{' '}
                     <a
@@ -293,7 +287,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                           <div className='mb-3'>
                             <i className='display-5 text-muted ri-upload-cloud-2-fill' />
                           </div>
-                          <h4 className='fs-6 px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
+                          <h4 className='text-[13px] px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
                         </div>
                       </div>
                     )}
@@ -303,14 +297,14 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                     handleAcceptedFiles={handleAcceptedFiles}
                     description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`}
                   />
-                  <Col md={12}>
+                  <div className='px-3 w-full'>
                     <div className='list-unstyled mb-0' id='file-previews'>
                       {selectedFiles.map((f: any, i) => {
                         return (
                           <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                             <div className='p-2'>
-                              <Row className='items-center'>
-                                <Col className='flex justify-between items-center'>
+                              <div className='flex flex-wrap -mx-3 items-center'>
+                                <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
                                   <div>
                                     <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                                     <p className='mb-0'>
@@ -318,40 +312,41 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
                                     </p>
                                   </div>
                                   <div>
-                                    <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                                    <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
                                       <i className=' ri-close-line' />
                                     </Button>
                                   </div>
-                                </Col>
-                              </Row>
+                                </div>
+                              </div>
                             </div>
                           </Card>
                         )
                       })}
                     </div>
                     {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload purchase order.</p>}
-                  </Col>
-                </Col>
-              </Row>
+                  </div>
+                </div>
+              </div>
 
-              <Col md={12} className='mt-6'>
+              <div className='px-3 w-full mt-6'>
                 <div className='text-right'>
-                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' color='success' className='text-[11.2px]'>
+                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' variant='success' className='text-[11.2px]'>
                     {loading ? (
                       <span>
-                        <Spinner color='light' size={'sm'} /> Creating...
+                        <Spinner className='text-white' /> Creating...
                       </span>
                     ) : (
                       'Create PO'
                     )}
                   </Button>
                 </div>
-              </Col>
+              </div>
             </Form>
           )}
         </Formik>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

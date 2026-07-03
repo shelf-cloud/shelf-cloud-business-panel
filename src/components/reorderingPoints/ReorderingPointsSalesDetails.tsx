@@ -5,7 +5,10 @@ import { ExpandedRowProps, useRPProductSales } from '@hooks/reorderingPoints/use
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Card, CardBody, CardHeader, Col, Spinner, UncontrolledTooltip } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
+
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type Props = {
   data: ReorderingPointsProduct
@@ -17,7 +20,7 @@ const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
   const { session, startDate, endDate } = expandedRowProps!
   const { productSales, isLoadingProductsSales } = useRPProductSales({ session, state, startDate, endDate, sku: data.sku })
   return (
-    <Col xs={4}>
+    <div className='px-3 w-1/3'>
       <Card>
         <CardHeader className='py-3'>
           <h5 className='font-semibold m-0'>Product Details</h5>
@@ -32,7 +35,7 @@ const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
             </span>
           </div>
         </CardHeader>
-        <CardBody style={{ overflowX: 'scroll', scrollbarWidth: 'none' }}>
+        <CardContent style={{ overflowX: 'scroll', scrollbarWidth: 'none' }}>
           <p className='m-0 p-0 font-bold'>Sales By Marketplaces</p>
           <table className='table table-sm table-border table-nowrap mb-0 text-[11.2px]'>
             <thead>
@@ -82,16 +85,16 @@ const ReorderingPointsSalesDetails = ({ data, expandedRowProps }: Props) => {
               <tbody>
                 <tr>
                   <td colSpan={4} className='text-center flex justify-center items-center gap-2'>
-                    <Spinner color='primary' size={'sm'} />
+                    <Spinner className='text-primary' />
                     Loading Sales...
                   </td>
                 </tr>
               </tbody>
             )}
           </table>
-        </CardBody>
+        </CardContent>
       </Card>
-    </Col>
+    </div>
   )
 }
 

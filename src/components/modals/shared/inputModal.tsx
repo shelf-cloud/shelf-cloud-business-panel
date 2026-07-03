@@ -5,7 +5,9 @@ import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
 import * as Yup from 'yup'
 
-import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type InputModalProps = {
   isOpen: boolean
@@ -55,52 +57,54 @@ const InputModal = ({
     validation.handleSubmit()
   }
   return (
-    <Modal fade={false} size='md' id='InputModal' isOpen={isOpen} toggle={onClose}>
-      <ModalHeader toggle={onClose} className='modal-title' id='myModalLabel'>
+    <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent id='InputModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         {headerText}
-      </ModalHeader>
-      <Form onSubmit={handleAddProduct}>
-        <ModalBody>
-          <Row>
+      </DialogHeader>
+      <form onSubmit={handleAddProduct}>
+        <div>
+          <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] mb-0 font-semibold text-primary'>{primaryText}</h5>
-            <Col md={12} className='mt-2'>
+            <div className='px-3 w-full mt-2'>
               <DebounceInput
                 type='text'
                 minLength={minLength}
                 debounceTimeout={300}
-                className={`form-control ${error ? 'is-invalid' : ''}`}
+                className={`h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${error ? 'border-destructive' : ''}`}
                 placeholder={placeholder}
                 id='inputText'
                 name='inputText'
                 value={validation.values.inputText || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                invalid={validation.touched.inputText && validation.errors.inputText ? true : false}
+                aria-invalid={(validation.touched.inputText && validation.errors.inputText ? true : false) || undefined}
               />
               {validation.touched.inputText && validation.errors.inputText ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputText}</p> : null}
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Row md={12}>
+            </div>
+          </div>
+        </div>
+        <DialogFooter className='items-center'>
+          <div className='flex flex-wrap -mx-3'>
             <div className='text-right mt-2 flex flex-row gap-4 justify-end'>
-              <Button disabled={isLoading} type='button' color='light' className='btn' onClick={onClose}>
+              <Button disabled={isLoading} type='button' variant='light' className='btn' onClick={onClose}>
                 Cancel
               </Button>
-              <Button disabled={isLoading || !!error} type='submit' color='success' className='btn'>
+              <Button disabled={isLoading || !!error} type='submit' variant='success' className='btn'>
                 {isLoading ? (
                   <span>
-                    <Spinner color='light' size={'sm'} /> {loadingText}
+                    <Spinner className='text-white' /> {loadingText}
                   </span>
                 ) : (
                   confirmText
                 )}
               </Button>
             </div>
-          </Row>
-        </ModalFooter>
-      </Form>
-    </Modal>
+          </div>
+        </DialogFooter>
+      </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

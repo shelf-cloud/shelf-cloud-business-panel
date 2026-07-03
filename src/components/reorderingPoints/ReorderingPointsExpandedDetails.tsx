@@ -3,8 +3,6 @@ import React from 'react'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Row } from '@/components/migration-ui'
-
 import ReorderingPointsSalesDetails from './ReorderingPointsSalesDetails'
 import ReorderingPointsTimelineDetails from './ReorderingPointsTimelineDetails'
 
@@ -16,10 +14,10 @@ type Props = {
 const ReorderingPointsExpandedDetails: React.FC<ExpanderComponentProps<ReorderingPointsProduct>> = ({ data, expandedRowProps }: Props) => {
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
+      <div className='flex flex-wrap -mx-3'>
         <ReorderingPointsSalesDetails data={data} expandedRowProps={expandedRowProps} />
         <ReorderingPointsTimelineDetails data={data} expandedRowProps={expandedRowProps} />
-      </Row>
+      </div>
     </div>
   )
 }

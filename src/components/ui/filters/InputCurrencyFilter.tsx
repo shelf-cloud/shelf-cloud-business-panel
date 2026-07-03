@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
 
-import { Input, InputGroup, InputGroupText } from '@/components/migration-ui'
+import { Input } from '@shadcn/ui/input'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 
 type Props = {
   inputName: string
@@ -26,8 +27,7 @@ const InputCurrencyFilter = ({ inputName, value, isInvalid, handleChange, handle
       <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
       <Input
         type='number'
-        className='text-[13px] m-0'
-        bsSize='sm'
+        className='text-[13px] m-0 h-8 text-xs'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'
         id={inputName}
@@ -36,7 +36,7 @@ const InputCurrencyFilter = ({ inputName, value, isInvalid, handleChange, handle
         onChange={handleChange}
         onBlur={handleBlur}
         value={value}
-        invalid={isInvalid}
+        aria-invalid={isInvalid || undefined}
       />
     </InputGroup>
   )

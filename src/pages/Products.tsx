@@ -25,7 +25,11 @@ import type { Product } from '@typings'
 import axios from 'axios'
 import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -170,10 +174,10 @@ const Products = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Products' pageTitle='Warehouse' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <ProductsWidgets />
-            <Row>
-              <Col lg={12}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
                 <div className='flex flex-col-reverse justify-center items-start gap-2 mb-2 md:flex-row md:justify-between md:items-center'>
                   <div className='w-auto flex flex-row items-center justify-between gap-2'>
                     <FilterProducts
@@ -188,19 +192,21 @@ const Products = ({ session }: Props) => {
                       setProductFilters={setProductFilters}
                     />
                     <Link href={'/AddProduct'}>
-                      <Button color='primary' className='text-nowrap'>
+                      <Button className='text-nowrap'>
                         <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
                         Basic Product
                       </Button>
                     </Link>
-                    <UncontrolledButtonDropdown>
-                      <DropdownToggle
-                        caret
-                        color='light'
-                        className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'>
-                        Bulk Actions
-                      </DropdownToggle>
-                      <DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type='button'
+                          className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'>
+                          Bulk Actions
+                          <ChevronDownIcon className='ml-1 size-4' />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='start'>
                         {products.length > 0 && (
                           <ExportProductsTemplate
                             products={selectedRows.length == 0 ? products : selectedRows}
@@ -211,7 +217,7 @@ const Products = ({ session }: Props) => {
                           />
                         )}
                         <ExportBlankTemplate brands={brands || []} suppliers={suppliers || []} categories={categories || []} />
-                        <DropdownItem
+                        <DropdownMenuItem
                           className='text-nowrap text-primary'
                           onClick={() =>
                             setimportModalDetails((prev) => {
@@ -220,41 +226,44 @@ const Products = ({ session }: Props) => {
                           }>
                           <i className='mdi mdi-arrow-up-bold label-icon align-middle text-[13px] me-2' />
                           Import Add/Update
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                     {selectedRows.length > 0 && (
-                      <UncontrolledButtonDropdown>
-                        <DropdownToggle
-                          caret
-                          className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
-                          <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
-                        </DropdownToggle>
-                        <DropdownMenu>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type='button'
+                            className='inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
+                            <span className='font-bold'>{`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''}`}</span> Selected
+                            <ChevronDownIcon className='ml-1 size-4' />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align='start'>
                           <ExportProductsFile products={selectedRows} />
                           {selectedRowsToSetActive.length > 0 && (
-                            <DropdownItem className='text-nowrap text-success' onClick={() => changeSelectedProductsState(1)}>
+                            <DropdownMenuItem className='text-nowrap text-success' onClick={() => changeSelectedProductsState(1)}>
                               <i className='mdi mdi-eye label-icon align-middle text-[13px] me-2' />
                               Set Active
-                            </DropdownItem>
+                            </DropdownMenuItem>
                           )}
                           {selectedRowsToSetInactive.length > 0 && (
-                            <DropdownItem className='text-nowrap text-destructive' onClick={() => changeSelectedProductsState(0)}>
+                            <DropdownMenuItem className='text-nowrap text-destructive' onClick={() => changeSelectedProductsState(0)}>
                               <i className='mdi mdi-eye-off label-icon align-middle text-[13px] me-2' />
                               Set Inactive
-                            </DropdownItem>
+                            </DropdownMenuItem>
                           )}
-                          <DropdownItem className='text-nowrap text-right text-[13px] text-[color:var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+                          <DropdownMenuItem className='text-nowrap text-right text-[13px] text-[color:var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                             Clear All
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledButtonDropdown>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     )}
                   </div>
                   <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={2} />
                 </div>
                 <Card>
-                  <CardBody>
+                  <CardContent>
                     <ProductsTable
                       tableData={products || []}
                       pending={isLoading}
@@ -263,11 +272,11 @@ const Products = ({ session }: Props) => {
                       toggledClearRows={toggledClearRows}
                       setcloneProductModal={setcloneProductModal}
                     />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}

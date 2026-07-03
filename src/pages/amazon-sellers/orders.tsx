@@ -14,7 +14,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const sessionToken = context.req.cookies['next-auth.session-token'] ? context.req.cookies['next-auth.session-token'] : context.req.cookies['__Secure-next-auth.session-token']
@@ -128,10 +128,10 @@ const Orders = ({ session, sessionToken }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='FBA Orders' pageTitle='Amazon' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
-                <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-end md:items-center px-6'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
+                <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-end md:items-center px-6'>
                   <div className='app-search flex flex-row justify-between items-center p-0'>
                     <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                       <FilterByDates
@@ -149,7 +149,7 @@ const Orders = ({ session, sessionToken }: Props) => {
                           type='text'
                           minLength={3}
                           debounceTimeout={300}
-                          className='form-control input_background_white'
+                          className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white'
                           placeholder='Search...'
                           id='search-options'
                           value={searchValue}
@@ -168,15 +168,15 @@ const Orders = ({ session, sessionToken }: Props) => {
                       </div>
                     </div>
                   </div>
-                </Row>
+                </div>
                 <Card>
-                  <CardBody>
+                  <CardContent>
                     <SellerFbaOrdersTable tableData={filterDataTable || []} pending={loadingData} />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

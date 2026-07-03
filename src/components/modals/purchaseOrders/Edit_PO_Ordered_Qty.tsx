@@ -9,7 +9,10 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { PurchaseOrderItem, Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 export type EditPurchaseOrderQtyType = {
@@ -81,11 +84,14 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
   }
 
   return (
-    <Modal fade={false} size='lg' id='confirmDelete' isOpen={show} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
-        Edit PO Quantities
-      </ModalHeader>
-      <ModalBody>
+    <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleClose() }}>
+      <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Edit PO Quantities
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         <p className='m-0 text-[16.25px] font-semibold'>
           Purchase Order: <span className='text-primary'>{orderNumber}</span>
         </p>
@@ -162,12 +168,11 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                     <Input
                       type='number'
                       onWheel={(e) => e.currentTarget.blur()}
-                      className='text-[13px] m-0 mx-auto'
+                      className='text-[13px] m-0 mx-auto h-8 text-xs'
                       style={{ maxWidth: '60px' }}
                       placeholder='Qty'
                       id='newOrderQty'
                       name='newOrderQty'
-                      bsSize='sm'
                       min={0}
                       value={product.orderQty || 0}
                       onChange={(e) => {
@@ -183,7 +188,7 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
                         newOrderedQty[key].orderQty = parseInt(e.target.value)
                         setnewOrderedQtyItems(newOrderedQty)
                       }}
-                      invalid={product.orderQty <= 0 || product.orderQty < product.receivedQty + product.inboundQty ? true : false}
+                      aria-invalid={(product.orderQty <= 0 || product.orderQty < product.receivedQty + product.inboundQty ? true : false) || undefined}
                     />
                   </td>
                   <td className='text-[13px] text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.inboundQty)}</td>
@@ -195,21 +200,22 @@ const Edit_PO_Ordered_Qty = ({ showEditOrderQty, setshowEditOrderQty, loading, s
         </div>
 
         <div className='mt-4 flex justify-end items-center gap-2'>
-          <Button type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
+          <Button type='button' variant='light' className='text-[11.2px]' onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={loading || error ? true : false} type='button' color='success' className='text-[11.2px]' onClick={handleEditOrderedQtyFromPO}>
+          <Button disabled={loading || error ? true : false} type='button' variant='success' className='text-[11.2px]' onClick={handleEditOrderedQtyFromPO}>
             {loading ? (
               <span>
-                <Spinner color='light' size={'sm'} /> Saving...
+                <Spinner className='text-white' /> Saving...
               </span>
             ) : (
               'Save Changes'
             )}
           </Button>
         </div>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

@@ -13,7 +13,12 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { NativeSelect } from '@shadcn/ui/native-select'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
 import * as Yup from 'yup'
 
@@ -367,62 +372,52 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
   }
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='createInboundPlanModal'
-      isOpen={showCreateInboundPlanModal}
-      toggle={() => {
-        setShowCreateInboundPlanModal(false)
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setShowCreateInboundPlanModal(false)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        <p className='text-[19.5px] m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleCreateInboundPlan}>
-          <Row>
+    <Dialog open={!!showCreateInboundPlanModal} onOpenChange={(open) => { if (!open) setShowCreateInboundPlanModal(false) }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createInboundPlanModal'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            <p className='text-[19.5px] m-0'>Create Individual Units Fulfillment - Send To Amazon</p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+        <form onSubmit={handleCreateInboundPlan}>
+          <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] font-extrabold text-primary'>Fulfillment Details</h5>
-            <Row xs={12} className='my-0'>
-              <Col md={6}>
-                <FormGroup className='mb-4'>
+            <div className='flex flex-wrap -mx-3 my-0'>
+              <div className='px-3 md:w-1/2'>
+                <div className='mb-4'>
                   <Label htmlFor='orderNumber' className='form-label'>
                     *Fulfillment Name
                   </Label>
                   <div className='input-group'>
                     <Input
                       type='text'
-                      bsSize='sm'
+                      className='h-8 text-xs'
                       id='orderNumber'
                       name='inboundPlanName'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.inboundPlanName || ''}
-                      invalid={validation.touched.inboundPlanName && validation.errors.inboundPlanName ? true : false}
+                      aria-invalid={(validation.touched.inboundPlanName && validation.errors.inboundPlanName ? true : false) || undefined}
                     />
                     {validation.touched.inboundPlanName && validation.errors.inboundPlanName ? (
-                      <FormFeedback type='invalid'>{validation.errors.inboundPlanName}</FormFeedback>
+                      <div className='text-sm text-destructive'>{validation.errors.inboundPlanName}</div>
                     ) : null}
                   </div>
-                </FormGroup>
-              </Col>
-              <Col md={6}>
-                <FormGroup className='mb-4'>
+                </div>
+              </div>
+              <div className='px-3 md:w-1/2'>
+                <div className='mb-4'>
                   <Label htmlFor='marketplace' className='form-label'>
                     *Marketplace destination
                   </Label>
-                  <Input
-                    type='select'
-                    bsSize='sm'
+                  <NativeSelect
+                    size='sm'
                     id='marketplace'
                     name='marketplace'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    invalid={validation.touched.marketplace && validation.errors.marketplace ? true : false}>
+                    aria-invalid={(validation.touched.marketplace && validation.errors.marketplace ? true : false) || undefined}>
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
@@ -432,33 +427,32 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                           </option>
                         )
                     )}
-                  </Input>
-                  {validation.touched.marketplace && validation.errors.marketplace ? <FormFeedback type='invalid'>{validation.errors.marketplace}</FormFeedback> : null}
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row xs={12} className='my-0'>
-              <Col md={6}>
-                <FormGroup className='mb-4'>
+                  </NativeSelect>
+                  {validation.touched.marketplace && validation.errors.marketplace ? <div className='text-sm text-destructive'>{validation.errors.marketplace}</div> : null}
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3 my-0'>
+              <div className='px-3 md:w-1/2'>
+                <div className='mb-4'>
                   <Label htmlFor='shipFrom' className='form-label'>
                     *Ship From
                   </Label>
-                  <Input
-                    type='select'
-                    bsSize='sm'
+                  <NativeSelect
+                    size='sm'
                     id='shipFrom'
                     name='shipFrom'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    invalid={validation.touched.shipFrom && validation.errors.shipFrom ? true : false}>
+                    aria-invalid={(validation.touched.shipFrom && validation.errors.shipFrom ? true : false) || undefined}>
                     <option value=''>Ship From...</option>
                     <option value='shelfcloud'>Shelf Cloud Warehouse</option>
-                  </Input>
-                  {validation.touched.shipFrom && validation.errors.shipFrom ? <FormFeedback type='invalid'>{validation.errors.shipFrom}</FormFeedback> : null}
-                </FormGroup>
-              </Col>
-            </Row>
-            <Col md={12} style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
+                  </NativeSelect>
+                  {validation.touched.shipFrom && validation.errors.shipFrom ? <div className='text-sm text-destructive'>{validation.errors.shipFrom}</div> : null}
+                </div>
+              </div>
+            </div>
+            <div className='px-3 w-full' style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
               <p className='font-semibold mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
               <table className='w-full align-middle mb-0 whitespace-nowrap text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
@@ -526,9 +520,9 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   </tr>
                 </tbody>
               </table>
-            </Col>
-            <Row xs={12}>
-              <Col>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 flex-1 basis-0'>
                 <ul>
                   {creatingErros.map((error, index: number) => (
                     <li key={index} className='text-danger'>
@@ -536,25 +530,26 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                     </li>
                   ))}
                 </ul>
-              </Col>
-            </Row>
-            <Col md={12}>
+              </div>
+            </div>
+            <div className='px-3 w-full'>
               <div className='text-right'>
-                <Button disabled={loading} type='submit' color='success'>
+                <Button disabled={loading} type='submit' variant='success'>
                   {loading ? (
                     <span>
-                      <Spinner color='light' size={'sm'} /> Loading...
+                      <Spinner className='text-white' /> Loading...
                     </span>
                   ) : (
                     'Confirm Plan'
                   )}
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+            </div>
+          </div>
+        </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

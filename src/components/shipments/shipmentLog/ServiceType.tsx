@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Shipment } from '@typesTs/shipments/shipments'
-import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 type Props = {
   data: Shipment
@@ -13,28 +13,28 @@ const ServiceType = ({ data }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col xs={12} lg={8}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full lg:w-8/12'>
           {data.extraComment != '' && (
-            <Col xl={12}>
+            <div className='px-3 xl:w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Service Comment</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <p>{data.extraComment}</p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
+            </div>
           )}
-        </Col>
-        <Col xs={12} lg={4}>
-          <Col xl={12}>
+        </div>
+        <div className='px-3 w-full lg:w-4/12'>
+          <div className='px-3 xl:w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
@@ -47,11 +47,11 @@ const ServiceType = ({ data }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-        </Col>
-      </Row>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

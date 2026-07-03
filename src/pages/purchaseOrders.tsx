@@ -17,24 +17,12 @@ import By_Suppliers from '@components/purchase_orders/By_Suppliers'
 import PurchaseOrdersWidgets from '@components/purchase_orders/ProductsWidgets'
 import AppContext from '@context/AppContext'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-  UncontrolledButtonDropdown,
-} from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+
+import { Button } from '@shadcn/ui/button'
+import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -90,10 +78,10 @@ const PurchaseOrders = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Purchase Orders' pageTitle='Inbound' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <PurchaseOrdersWidgets />
-            <Row>
-              <Col lg={12}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
                 <Card>
                   <CardHeader>
                     <div className='flex flex-col justify-between items-end mt-0 mb-0 gap-3 lg:flex-row'>
@@ -135,7 +123,7 @@ const PurchaseOrders = ({ session }: Props) => {
                         {status == 'pending' ? (
                           <Button
                             className='text-[11.2px] py-1 px-3 text-nowrap'
-                            color='info'
+                            variant='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=all&organizeBy=${organizeBy}`)
                             }}>
@@ -145,7 +133,7 @@ const PurchaseOrders = ({ session }: Props) => {
                         ) : (
                           <Button
                             className='text-[11.2px] py-1 px-3 text-nowrap'
-                            color='info'
+                            variant='info'
                             onClick={() => {
                               router.replace(`/purchaseOrders?status=pending&organizeBy=${organizeBy}`)
                             }}>
@@ -153,20 +141,22 @@ const PurchaseOrders = ({ session }: Props) => {
                             Hide Completed
                           </Button>
                         )}
-                        <UncontrolledButtonDropdown>
-                          <DropdownToggle
-                            caret
-                            className='inline-flex items-center gap-1 rounded-md bg-primary py-1 px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
-                            <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
-                            Add Purchase Order
-                          </DropdownToggle>
-                          <DropdownMenu>
-                            <DropdownItem onClick={() => setShowCreatePoFromFile(true)}>From File</DropdownItem>
-                            <DropdownItem onClick={() => setShowCreatePoManually(true)}>Manually</DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledButtonDropdown>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button
+                              type='button'
+                              className='inline-flex items-center gap-1 rounded-md bg-primary py-1 px-3 text-[11.2px] font-medium text-primary-foreground whitespace-nowrap shadow-xs hover:bg-primary/90'>
+                              <i className='mdi mdi-plus-circle label-icon align-middle text-[16.25px] me-2' />
+                              Add Purchase Order
+                              <ChevronDownIcon className='ml-1 size-4' />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align='start'>
+                            <DropdownMenuItem onClick={() => setShowCreatePoFromFile(true)}>From File</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setShowCreatePoManually(true)}>Manually</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                         <Button
-                          color='primary'
                           className='text-[11.2px] py-1 px-3 text-nowrap'
                           onClick={() => {
                             setShowCreateReceivingFromPo(true)
@@ -177,17 +167,17 @@ const PurchaseOrders = ({ session }: Props) => {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <TabContent activeTab={organizeBy}>
                       <TabPane tabId='suppliers'>{organizeBy == 'suppliers' && <By_Suppliers />}</TabPane>
                       <TabPane tabId='orders'>{organizeBy == 'orders' && <By_Purchase_Orders />}</TabPane>
                       <TabPane tabId='sku'>{organizeBy == 'sku' && <By_Sku />}</TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {state.modalAddSkuToPurchaseOrder.show && <Add_Sku_To_Purchase_Order />}

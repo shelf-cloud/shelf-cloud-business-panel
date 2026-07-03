@@ -17,7 +17,9 @@ import { Shipment } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWRInfinite from 'swr/infinite'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -294,7 +296,7 @@ const Shipments = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Shipments' pageTitle='Orders' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <div className='flex flex-col justify-center items-end gap-2 mb-2 lg:flex-row md:justify-between md:items-center px-1'>
               <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <FilterByDates
@@ -320,13 +322,13 @@ const Shipments = ({ session }: Props) => {
               <div className='w-full flex flex-col-reverse justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-end lg:items-center px-0'>
                 <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' minLength={3} widths='w-full md:w-1/2' />
 
-                <Button disabled={!hasActiveFilters} color={hasActiveFilters ? 'primary' : 'light'} className='text-nowrap' onClick={clearFilters}>
+                <Button disabled={!hasActiveFilters} variant={hasActiveFilters ? 'default' : 'light'} className='text-nowrap' onClick={clearFilters}>
                   Clear Filters
                 </Button>
               </div>
             </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 <ShipmentsTable
                   tableData={shipments}
                   pending={isValidating && size === 1 && shipments.length === 0}
@@ -338,13 +340,13 @@ const Shipments = ({ session }: Props) => {
                 <div ref={lastInvoiceElementRef} style={{ height: '20px', marginTop: '10px' }}>
                   {isValidating && size > 1 && (
                     <p className='text-center'>
-                      <Spinner size='sm' color='primary' /> Loading more shipments...
+                      <Spinner className='text-primary' /> Loading more shipments...
                     </p>
                   )}
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {addNoteToShipmentModal.show && (
           <InputTextAreaModal

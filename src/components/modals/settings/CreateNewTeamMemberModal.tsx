@@ -6,7 +6,11 @@ import { NewTeamMember } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -101,17 +105,18 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
   }
 
   return (
-    <Modal fade={false} size='lg' id='unitsSoldDetailsModal' isOpen={showModal} toggle={() => setShowModal(false)}>
-      <ModalHeader toggle={() => setShowModal(false)}>
+    <Dialog open={!!showModal} onOpenChange={(open) => { if (!open) setShowModal(false) }}>
+      <DialogContent id='unitsSoldDetailsModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+      <DialogHeader className='pr-6'>
         <p className='m-0 p-0 mb-1 font-bold text-[22.75px]'>Create New Team Member</p>
-      </ModalHeader>
-      <Form onSubmit={handleCreateNewTeamMember}>
-        <ModalBody className='pb-0'>
+      </DialogHeader>
+      <form onSubmit={handleCreateNewTeamMember}>
+        <div className='pb-0'>
           {!loadingModules ? (
             <>
-              <Row>
-                <Col lg={6}>
-                  <FormGroup className='mb-4'>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 lg:w-6/12'>
+                  <div className='mb-4'>
                     <Label htmlFor='name' className='form-label'>
                       *Name
                     </Label>
@@ -120,17 +125,17 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                       placeholder='Name'
                       id='name'
                       name='name'
-                      bsSize='sm'
+                      className='h-8 text-xs'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.name || ''}
-                      invalid={validation.touched.name && validation.errors.name ? true : false}
+                      aria-invalid={(validation.touched.name && validation.errors.name ? true : false) || undefined}
                     />
-                    {validation.touched.name && validation.errors.name ? <FormFeedback type='invalid'>{validation.errors.name}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-                <Col lg={6}>
-                  <FormGroup className='mb-4'>
+                    {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+                  </div>
+                </div>
+                <div className='px-3 lg:w-6/12'>
+                  <div className='mb-4'>
                     <Label htmlFor='email' className='form-label'>
                       *Email Address
                     </Label>
@@ -139,52 +144,53 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                       placeholder='Email Address'
                       id='email'
                       name='email'
-                      bsSize='sm'
+                      className='h-8 text-xs'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.email || ''}
-                      invalid={validation.touched.email && validation.errors.email ? true : false}
+                      aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
                     />
-                    {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-              </Row>
+                    {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                  </div>
+                </div>
+              </div>
               {Object.entries(manageUser.permissions!).map(([module, moduleInfo]) => (
-                <Row className='mb-4' key={module}>
+                <div className='flex flex-wrap -mx-3 mb-4' key={module}>
                   <CategoryTeamMembersHeader title={module} icon={moduleInfo.icon!} checked={moduleInfo.view} manageUser={manageUser} setManageUser={setManageUser} />
-                  <Row className='px-6 py-2 gap-4'>
+                  <div className='flex flex-wrap -mx-3 px-6 py-2 gap-4'>
                     {Object.entries(moduleInfo.modules).map(([subModule, subModuleInfo]) => (
-                      <Col key={subModule}>
+                      <div className='px-3 flex-1 basis-0' key={subModule}>
                         <div className='flex flex-row justify-start items-end w-fit gap-2'>
                           <Label className='form-check-label text-nowrap font-normal'>{subModule}</Label>
                           <div className='form-check-info'>
-                            <Input className='form-check-input' type='checkbox' checked={subModuleInfo.view} onChange={() => handleChangePermissions(module, subModule)} />
+                            <input className='form-check-input size-4 shrink-0 border border-input-border accent-primary rounded-sm' type='checkbox' checked={subModuleInfo.view} onChange={() => handleChangePermissions(module, subModule)} />
                           </div>
                         </div>
-                      </Col>
+                      </div>
                     ))}
-                  </Row>
-                </Row>
+                  </div>
+                </div>
               ))}
               {formError && <p className='text-danger mb-0 pb-0 text-[11.2px]'>{formError}</p>}
             </>
           ) : (
             <>
               <span className='font-normal text-[16.25px] me-4'>Loading Modules...</span>
-              <Spinner color='primary' size='sm' />
+              <Spinner className='text-primary' />
             </>
           )}
-        </ModalBody>
-        <ModalFooter className='flex flex-row justify-end items-center gap-2'>
-          <Button color='light' onClick={() => setShowModal(false)}>
+        </div>
+        <DialogFooter className='items-center flex flex-row justify-end items-center gap-2'>
+          <Button variant='light' onClick={() => setShowModal(false)}>
             Close
           </Button>
-          <Button disabled={loading} type='submit' color='success'>
-            {loading ? <Spinner color='light' size='sm' /> : 'Send Invite'}
+          <Button disabled={loading} type='submit' variant='success'>
+            {loading ? <Spinner className='text-white' /> : 'Send Invite'}
           </Button>
-        </ModalFooter>
-      </Form>
-    </Modal>
+        </DialogFooter>
+      </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

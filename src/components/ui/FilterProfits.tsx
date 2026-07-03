@@ -5,7 +5,11 @@ import AppContext from '@context/AppContext'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
-import { Button, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
+import { Switch } from '@/components/ui/Switch'
 
 import SelectDropDown from './SelectDropDown'
 
@@ -115,9 +119,9 @@ const FilterProfits = ({
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
         {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
           <Form>
-            <Row>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Gross Revenue
                   </Label>
@@ -126,8 +130,7 @@ const FilterProfits = ({
                       <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-[13px] m-0 h-8 text-xs'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='grossRevenueMin'
@@ -136,15 +139,14 @@ const FilterProfits = ({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.grossRevenueMin || ''}
-                        invalid={touched.grossRevenueMin && errors.grossRevenueMin ? true : false}
+                        aria-invalid={(touched.grossRevenueMin && errors.grossRevenueMin ? true : false) || undefined}
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
                       <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-[13px] m-0 h-8 text-xs'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='grossRevenueMax'
@@ -153,14 +155,14 @@ const FilterProfits = ({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.grossRevenueMax || ''}
-                        invalid={touched.grossRevenueMax && errors.grossRevenueMax ? true : false}
+                        aria-invalid={(touched.grossRevenueMax && errors.grossRevenueMax ? true : false) || undefined}
                       />
                     </InputGroup>
                   </div>
-                </FormGroup>
-              </Col>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+                </div>
+              </div>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Net Profit
                   </Label>
@@ -169,8 +171,7 @@ const FilterProfits = ({
                       <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-[13px] m-0 h-8 text-xs'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='netProfitMin'
@@ -179,15 +180,14 @@ const FilterProfits = ({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.netProfitMin || ''}
-                        invalid={touched.netProfitMin && errors.netProfitMin ? true : false}
+                        aria-invalid={(touched.netProfitMin && errors.netProfitMin ? true : false) || undefined}
                       />
                     </InputGroup>
                     <InputGroup size='sm'>
                       <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
                       <Input
                         type='number'
-                        className='text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-[13px] m-0 h-8 text-xs'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='netProfitMax'
@@ -196,22 +196,21 @@ const FilterProfits = ({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.netProfitMax || ''}
-                        invalid={touched.netProfitMax && errors.netProfitMax ? true : false}
+                        aria-invalid={(touched.netProfitMax && errors.netProfitMax ? true : false) || undefined}
                       />
                     </InputGroup>
                   </div>
-                </FormGroup>
-              </Col>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+                </div>
+              </div>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Units Sold
                   </Label>
                   <div className='flex flex-row justify-between items-center gap-2'>
                     <Input
                       type='number'
-                      className='text-[13px] m-0'
-                      bsSize='sm'
+                      className='text-[13px] m-0 h-8 text-xs'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Min'
                       id='unitsSoldMin'
@@ -220,12 +219,11 @@ const FilterProfits = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.unitsSoldMin || ''}
-                      invalid={touched.unitsSoldMin && errors.unitsSoldMin ? true : false}
+                      aria-invalid={(touched.unitsSoldMin && errors.unitsSoldMin ? true : false) || undefined}
                     />
                     <Input
                       type='number'
-                      className='text-[13px] m-0'
-                      bsSize='sm'
+                      className='text-[13px] m-0 h-8 text-xs'
                       style={{ padding: '0.2rem 0.9rem' }}
                       placeholder='Max'
                       id='unitsSoldMax'
@@ -234,40 +232,40 @@ const FilterProfits = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.unitsSoldMax || ''}
-                      invalid={touched.unitsSoldMax && errors.unitsSoldMax ? true : false}
+                      aria-invalid={(touched.unitsSoldMax && errors.unitsSoldMax ? true : false) || undefined}
                     />
                   </div>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row className='mt-2'>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mt-2'>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Suppliers
                   </Label>
                   <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
-                </FormGroup>
-              </Col>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+                </div>
+              </div>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Brands
                   </Label>
                   <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
-                </FormGroup>
-              </Col>
-              <Col md={3}>
-                <FormGroup className='createOrder_inputs'>
+                </div>
+              </div>
+              <div className='px-3 md:w-3/12'>
+                <div className='mb-3 createOrder_inputs'>
                   <Label htmlFor='lastNameinput'>
                     Categories
                   </Label>
                   <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Col md={12} className='flex flex-row justify-between items-center'>
-              <Col md={3}>
+                </div>
+              </div>
+            </div>
+            <div className='px-3 md:w-full flex flex-row justify-between items-center'>
+              <div className='px-3 md:w-3/12'>
                 <div className='flex flex-row justify-start items-center'>
                   <Label>Show products with NO Sales</Label>
                   <Switch
@@ -280,16 +278,16 @@ const FilterProfits = ({
                     onBlur={handleBlur}
                   />
                 </div>
-              </Col>
+              </div>
               <div className='flex flex-row justify-end items-center gap-3'>
-                <Button type='button' color='light' className='text-[13px]' onClick={() => handleClearFilters(setValues)}>
+                <Button type='button' variant='light' className='text-[13px]' onClick={() => handleClearFilters(setValues)}>
                   Clear
                 </Button>
                 <Button type='submit' className='text-[13px]'>
                   Apply Filters
                 </Button>
               </div>
-            </Col>
+            </div>
           </Form>
         )}
       </Formik>

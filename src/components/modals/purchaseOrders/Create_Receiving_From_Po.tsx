@@ -12,26 +12,13 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Spinner,
-  TabContent,
-  TabPane,
-} from '@/components/migration-ui'
+import { Alert } from '@/components/ui/Alert'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -245,32 +232,24 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { downloadPDF } = useGenerateLabels()
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='addPaymentToPoModal'
-      isOpen={state.showCreateReceivingFromPo}
-      toggle={() => {
-        setShowCreateReceivingFromPo(!state.showCreateReceivingFromPo)
+    <Dialog
+      open={!!state.showCreateReceivingFromPo}
+      onOpenChange={(open) => {
+        if (!open) setShowCreateReceivingFromPo(!state.showCreateReceivingFromPo)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setShowCreateReceivingFromPo(!state.showCreateReceivingFromPo)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Create Receiving From Purchase Orders
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='addPaymentToPoModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Create Receiving From Purchase Orders</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <p className='m-0 text-[16.25px] font-semibold'>
             Destination: <span className='text-primary'>{state.receivingFromPo.warehouse.name}</span>
           </p>
-        </Row>
-        <Form onSubmit={handleCreateReceiving}>
-          <Row>
-            <Col xs={12} md={5}>
-              <FormGroup>
+        </div>
+        <form onSubmit={handleCreateReceiving}>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full md:w-5/12'>
+              <div className='mb-3'>
                 <Label htmlFor='firstNameinput' className='mb-2 inline-block text-[11.2px]'>
                   *Transaction Number
                 </Label>
@@ -281,20 +260,19 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   <Input
                     disabled={validation.values.isNewReceiving === 'false'}
                     type='text'
-                    className='text-[13px]'
+                    className='text-[13px] h-8 text-xs'
                     id='orderNumber'
                     name='orderNumber'
-                    bsSize='sm'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.orderNumber || ''}
-                    invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
+                    aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
+                  {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={5}>
+              </div>
+            </div>
+            <div className='px-3 w-full md:w-5/12'>
               <SelectSingleFilter
                 inputLabel='*Select Receiving Type'
                 inputName='isNewReceiving'
@@ -325,8 +303,8 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                   error={validation.errors.receivingIdToAdd}
                 />
               )}
-            </Col>
-          </Row>
+            </div>
+          </div>
 
           <Nav className='nav-tabs border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
@@ -374,17 +352,17 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
               )}
             </TabPane>
           </TabContent>
-          <Row className='mb-2'>
+          <div className='flex flex-wrap -mx-3 mb-2'>
             {hasBoxedErrors.error && (
-              <Col xs={12} className='m-0'>
+              <div className='px-3 w-full m-0'>
                 <Alert color='danger' className='text-[11.2px] py-1 mb-2'>
                   <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                   {hasBoxedErrors.message}
                 </Alert>
-              </Col>
+              </div>
             )}
-          </Row>
-          <Row md={12}>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
             <div className='flex justify-end items-center gap-2'>
               {activeTab == 'summary' && (
                 <Button
@@ -396,10 +374,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 </Button>
               )}
               {activeTab == 'packages' && (
-                <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0 || hasBoxedErrors.error} type='submit' color='success' className='text-[11.2px]'>
+                <Button disabled={loading || Object.keys(state.receivingFromPo.items).length <= 0 || hasBoxedErrors.error} type='submit' variant='success' className='text-[11.2px]'>
                   {loading ? (
                     <span>
-                      <Spinner color='light' size={'sm'} /> Creating...
+                      <Spinner className='text-white' /> Creating...
                     </span>
                   ) : (
                     'Create Receiving'
@@ -407,10 +385,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 </Button>
               )}
             </div>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

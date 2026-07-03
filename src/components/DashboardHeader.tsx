@@ -3,7 +3,6 @@ import React from 'react'
 
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
-import { Col, Row } from '@/components/migration-ui'
 
 type Props = {
   user: string
@@ -15,8 +14,8 @@ type Props = {
 const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props) => {
   return (
     <React.Fragment>
-      <Row className='mb-4 pb-1'>
-        <Col xs={12}>
+      <div className='flex flex-wrap -mx-3 mb-4 pb-1'>
+        <div className='px-3 w-full'>
           <div className='flex flex-col justify-between lg:flex-row lg:items-center'>
             <div>
               <h4 className='text-[13px] mb-1'>
@@ -46,8 +45,8 @@ const DashboardHeader = ({ user, startDate, endDate, handleChangeDates }: Props)
               </form>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </React.Fragment>
   )
 }

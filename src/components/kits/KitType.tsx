@@ -1,5 +1,5 @@
 import { Children, KitRow } from '@typings'
-import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 type Props = {
   data: KitRow
@@ -8,13 +8,13 @@ type Props = {
 const KitType = ({ data }: Props) => {
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col xl={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 xl:w-full'>
           <Card className='m-0'>
             <CardHeader className='py-2'>
               <h5 className='font-semibold m-0'>Kit Children</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)]'>
@@ -47,10 +47,10 @@ const KitType = ({ data }: Props) => {
                   </tbody>
                 </table>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   )
 }

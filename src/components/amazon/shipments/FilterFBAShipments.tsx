@@ -2,8 +2,11 @@ import { useRef, useState } from 'react'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import { useClickOutside } from '@hooks/useClickOutside'
+import { ChevronDownIcon } from 'lucide-react'
 
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label, Switch } from '@/components/migration-ui'
+import { Label } from '@shadcn/ui/label'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@shadcn/ui/dropdown-menu'
+import { Switch } from '@/components/ui/Switch'
 
 export type FBAFiltersType = {
   status: SelectSingleValueType
@@ -38,12 +41,15 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
   useClickOutside(FilterFBAShipmentsContainer, () => setOpenDatesMenu(false))
 
   return (
-    <ButtonGroup>
-      <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
-          Filters
-        </DropdownToggle>
-        <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+    <div role='group' className='inline-flex'>
+      <DropdownMenu open={openDatesMenu} onOpenChange={(open) => { if (open !== openDatesMenu) setOpenDatesMenu(!openDatesMenu) }}>
+        <DropdownMenuTrigger asChild>
+          <button type='button' className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+            Filters
+            <ChevronDownIcon className='ml-1 size-4' />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
           <div className={'px-6 py-4'}>
             <div className='flex flex-col justify-start gap-2'>
               <span className='text-[11.2px] font-normal'>Filter By Status:</span>
@@ -79,9 +85,9 @@ const FilterFBAShipments = ({ filters, setfilters }: Props) => {
               </button>
             </div>
           </div>
-        </DropdownMenu>
-      </Dropdown>
-    </ButtonGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 

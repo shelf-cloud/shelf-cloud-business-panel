@@ -3,7 +3,11 @@ import { FormEventHandler, useRef, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-import { Button, Label, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
+import { Input } from '@shadcn/ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   OpenForgotPassword: boolean
@@ -37,39 +41,43 @@ const ForgotPasswordModal = ({ OpenForgotPassword, setOpenForgotPassword }: Prop
   }
 
   return (
-    <Modal id='forgotPasswordModal' isOpen={OpenForgotPassword} toggle={() => setOpenForgotPassword(false)} centered>
-      <ModalHeader toggle={() => setOpenForgotPassword(false)}>
-        <p className='modal-title text-[22.75px]' id='myModalLabel'>
-          Forgot you password?
-        </p>
-      </ModalHeader>
-      <ModalBody>
-        <form onSubmit={handleSubmitForgotPassword} className='w-full'>
-          <div className='mb-1 w-full'>
-            <Label htmlFor='email' className='form-label'>
-              Email Address
-            </Label>
-            <input type='email' className='form-control' id='email' name='email' placeholder='Enter your email' required ref={emailRef} />
-          </div>
-          {showMessage && <p className='text-[13px] text-danger'>{message}</p>}
-          <div className='mt-6 flex flex-row justify-end items-start gap-4'>
-            <Button color='light' className='btn btn-light text-[16.25px]' onClick={() => setOpenForgotPassword(false)}>
-              Close
-            </Button>
-            <Button color='primary' disabled={loading} className='btn btn-primary text-[16.25px]' type='submit'>
-              {loading ? (
-                <>
-                  <Spinner size='sm' color='light' role='status' aria-hidden='true' animation='border' />
-                  <span className='ms-2'>Loading...</span>
-                </>
-              ) : (
-                'Send Reset Code'
-              )}
-            </Button>
-          </div>
-        </form>
-      </ModalBody>
-    </Modal>
+    <Dialog open={!!OpenForgotPassword} onOpenChange={(open) => { if (!open) setOpenForgotPassword(false) }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>
+            <p className='modal-title text-[22.75px]' id='myModalLabel'>
+              Forgot you password?
+            </p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+          <form onSubmit={handleSubmitForgotPassword} className='w-full'>
+            <div className='mb-1 w-full'>
+              <Label htmlFor='email' className='form-label'>
+                Email Address
+              </Label>
+              <Input type='email' id='email' name='email' placeholder='Enter your email' required ref={emailRef} />
+            </div>
+            {showMessage && <p className='text-[13px] text-danger'>{message}</p>}
+            <div className='mt-6 flex flex-row justify-end items-start gap-4'>
+              <Button variant='light' className='btn btn-light text-[16.25px]' onClick={() => setOpenForgotPassword(false)}>
+                Close
+              </Button>
+              <Button disabled={loading} className='btn btn-primary text-[16.25px]' type='submit'>
+                {loading ? (
+                  <>
+                    <Spinner className='text-white' role='status' aria-hidden='true' />
+                    <span className='ms-2'>Loading...</span>
+                  </>
+                ) : (
+                  'Send Reset Code'
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

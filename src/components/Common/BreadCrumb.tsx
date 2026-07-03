@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
 
-import { Col, Row } from '@/components/migration-ui'
-
 type Props = {
   title: string
   pageTitle: string
@@ -11,8 +9,8 @@ type Props = {
 const BreadCrumb = ({ title, pageTitle }: Props) => {
   return (
     <React.Fragment>
-      <Row>
-        <Col xs={12} className='px-0 mx-0'>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full mx-0'>
           <div className='w-full page-title-box sm:flex items-center justify-between'>
             <h4 className='sm:mb-0 font-semibold' style={{ textTransform: 'capitalize' }}>
               {title}
@@ -26,8 +24,8 @@ const BreadCrumb = ({ title, pageTitle }: Props) => {
               </ol>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </React.Fragment>
   )
 }

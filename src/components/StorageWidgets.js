@@ -4,15 +4,14 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col, Row } from '@/components/migration-ui'
 
 const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, binsUSed }) => {
   const { state } = useContext(AppContext)
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='w-full md:w-1/2 xl:w-2/3 gap-2'>
-        <Col>
+      <div className='flex flex-wrap -mx-3 w-full md:w-1/2 xl:w-2/3 gap-2'>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -40,8 +39,8 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
               </div>
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -69,8 +68,8 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
               </div>
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -97,8 +96,8 @@ const StorageWidgets = ({ previousCharge, previousChargeDate, currentBalance, bi
               </div>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </React.Fragment>
   )
 }

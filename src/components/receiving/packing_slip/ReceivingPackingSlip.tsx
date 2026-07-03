@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { OrderRowType } from '@typings'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   receiving: OrderRowType
@@ -66,10 +66,10 @@ const ReceivingPackingSlip = ({ receiving }: Props) => {
   }, [receiving])
 
   return (
-    <DropdownItem className='edit-item-btn' onClick={exportExcelFile}>
+    <DropdownMenuItem className='edit-item-btn' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       <span className='text-[13px] font-normal text-dark'>Packing Slip</span>
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

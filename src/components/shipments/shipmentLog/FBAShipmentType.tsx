@@ -8,7 +8,7 @@ import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { KitChildren, Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
@@ -41,19 +41,19 @@ const FBAShipmentType = ({ data }: Props) => {
   return (
     <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
       {data.carrierStatus && (
-        <Row>
-          <Col xs={12}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 w-full'>
             <ShipmentCarrierStatusBar carrier={data.carrierUsed} currentStatus={data.carrierStatus} />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
-      <Row>
-        <Col xs={12} lg={8}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full lg:w-8/12'>
           <Card>
             <CardHeader className='py-4'>
               <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)]'>
@@ -90,18 +90,18 @@ const FBAShipmentType = ({ data }: Props) => {
                   </tbody>
                 </table>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
-        <Col xs={12} lg={4}>
-          <Col xs={12}>
+        </div>
+        <div className='px-3 w-full lg:w-4/12'>
+          <div className='px-3 w-full'>
             <Card className='h-full'>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Order Summary</h5>
               </CardHeader>
-              <CardBody>
-                <Row className='m-0 p-0 flex flex-row justify-between items-start'>
-                  <Col xs={6} className='m-0 p-0'>
+              <CardContent>
+                <div className='flex flex-wrap -mx-3 m-0 p-0 flex flex-row justify-between items-start'>
+                  <div className='px-3 w-6/12 m-0 p-0'>
                     <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Store:</span>
                     <div className='flex flex-col justify-start items-start gap-2'>
                       <img
@@ -121,10 +121,10 @@ const FBAShipmentType = ({ data }: Props) => {
                     <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.orderDate).format('LL')}</p>
                     <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Closed Date:</span>
                     {data.closedDate && <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
-                  </Col>
+                  </div>
                   {/* <Col xs={6} className='m-0 p-0'>
                     <table className='table table-sm table-borderless table-nowrap m-0'>
-                      <tbody className='fs-7'>
+                      <tbody className='text-[11.2px]'>
                         <tr className='border-bottom pb-2'>
                           <td className='text-muted'>Subtotal</td>
                           <td className='fw-semibold text-end'>{FormatCurrency(state.currentRegion, data.subtotal)}</td>
@@ -152,16 +152,16 @@ const FBAShipmentType = ({ data }: Props) => {
                       </tbody>
                     </table>
                   </Col> */}
-                </Row>
-              </CardBody>
+                </div>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xs={12}>
+          </div>
+          <div className='px-3 w-full'>
             <Card className='h-full'>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Shipping</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap m-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
@@ -186,11 +186,11 @@ const FBAShipmentType = ({ data }: Props) => {
                     </tr>
                     {/* <tr>
                       <td className='text-muted text-nowrap'>Customer Name:</td>
-                      <td className='fw-semibold w-100 capitalize'>{data.shipName}</td>
+                      <td className='fw-semibold w-full capitalize'>{data.shipName}</td>
                     </tr>
                     <tr>
                       <td className='text-muted text-nowrap'>Address:</td>
-                      <td className='fw-semibold w-100 text-wrap'>
+                      <td className='fw-semibold w-full text-wrap'>
                         <p className='m-0 p-0'>{data.shipStreet}</p>
                         <p className='m-0 p-0'>
                           {data.shipCity}, {data.shipState}, {data.shipZipcode}, {data.shipCountry}
@@ -210,15 +210,15 @@ const FBAShipmentType = ({ data }: Props) => {
                     carrierService={data.carrierService}
                   />
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xs={12}>
+          </div>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b pb-2'>
@@ -247,23 +247,23 @@ const FBAShipmentType = ({ data }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
+          </div>
           {data.extraComment != '' && (
-            <Col xl={12}>
+            <div className='px-3 xl:w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <p>{data.extraComment}</p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
+            </div>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   )
 }

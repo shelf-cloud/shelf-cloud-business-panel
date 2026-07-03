@@ -7,7 +7,7 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { OrderItem, ReturnOrder, ReturnType } from '@typesTs/returns/returns'
 import { CameraIcon } from 'lucide-react'
 import DataTable from '@components/Common/DataTableSC'
-import { UncontrolledTooltip } from '@/components/migration-ui'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import ReturnsTable from './ReturnsTable'
 

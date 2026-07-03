@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   products: any[]
@@ -68,7 +68,7 @@ const ExportMarketplacePricing = ({ products, activeTab }: Props) => {
   }, [products, activeTab])
 
   return (
-    <Button color='primary' size='sm' className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
+    <Button size='sm' className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold align-middle text-[16.25px] me-2' />
       Export Products
     </Button>

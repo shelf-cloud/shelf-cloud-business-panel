@@ -6,7 +6,12 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Textarea } from '@shadcn/ui/textarea'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -117,13 +122,10 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='addPaymentToPoModal'
-      isOpen={editPaymentModal.show}
-      toggle={() => {
-        setEditPaymentModal({
+    <Dialog
+      open={!!editPaymentModal.show}
+      onOpenChange={(open) => {
+        if (!open) setEditPaymentModal({
           show: false,
           poId: 0,
           orderNumber: '',
@@ -133,32 +135,20 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
           paymentIndex: 0,
         })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setEditPaymentModal({
-            show: false,
-            poId: 0,
-            orderNumber: '',
-            paymentDate: '',
-            amount: 0,
-            comment: '',
-            paymentIndex: 0,
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
+      <DialogContent id='addPaymentToPoModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         Edit Payment
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row md={12}>
+      </DialogHeader>
+      <div>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] mb-4 font-semibold text-primary'>
               PO: <span className='font-semibold text-black'>{editPaymentModal.orderNumber}</span>
             </h5>
-          </Row>
-          <Row md={12}>
-            <Col md={6}>
-              <FormGroup className='mb-4'>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 md:w-6/12'>
+              <div className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Date
                 </Label>
@@ -170,13 +160,13 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.paymentDate}
-                  invalid={validation.touched.paymentDate && validation.errors.paymentDate ? true : false}
+                  aria-invalid={(validation.touched.paymentDate && validation.errors.paymentDate ? true : false) || undefined}
                 />
-                {validation.touched.paymentDate && validation.errors.paymentDate ? <FormFeedback type='invalid'>{validation.errors.paymentDate}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup className='mb-4'>
+                {validation.touched.paymentDate && validation.errors.paymentDate ? <div className='text-sm text-destructive'>{validation.errors.paymentDate}</div> : null}
+              </div>
+            </div>
+            <div className='px-3 md:w-6/12'>
+              <div className='mb-4'>
                 <Label htmlFor='firstNameinput' className='form-label'>
                   *Payment Amount
                 </Label>
@@ -190,46 +180,46 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   value={validation.values.amount}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  invalid={validation.touched.amount && validation.errors.amount ? true : false}
+                  aria-invalid={(validation.touched.amount && validation.errors.amount ? true : false) || undefined}
                 />
                 <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
-                {validation.touched.amount && validation.errors.amount ? <FormFeedback type='invalid'>{validation.errors.amount}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row md={12}>
-            <Col md={12}>
-              <FormGroup className='mb-4'>
+                {validation.touched.amount && validation.errors.amount ? <div className='text-sm text-destructive'>{validation.errors.amount}</div> : null}
+              </div>
+            </div>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 md:w-full'>
+              <div className='mb-4'>
                 <Label htmlFor='comment' className='form-label'>
                   Comments
                 </Label>
-                <Input
-                  type='textarea'
+                <Textarea
                   className='text-[13px]'
                   id='comment'
                   name='comment'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.comment || ''}
-                  invalid={validation.touched.comment && validation.errors.comment ? true : false}
+                  aria-invalid={(validation.touched.comment && validation.errors.comment ? true : false) || undefined}
                 />
-                {validation.touched.comment && validation.errors.comment ? <FormFeedback type='invalid'>{validation.errors.comment}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row md={12}>
+                {validation.touched.comment && validation.errors.comment ? <div className='text-sm text-destructive'>{validation.errors.comment}</div> : null}
+              </div>
+            </div>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
             <div className='flex justify-between items-center'>
-              <Button disabled={loading} type='button' color='danger' className='btn text-[11.2px]' onClick={handleDeletePayment}>
-                {loading ? <Spinner color='light' /> : 'Delete'}
+              <Button disabled={loading} type='button' variant='destructive' className='btn text-[11.2px]' onClick={handleDeletePayment}>
+                {loading ? <Spinner className='size-6 text-white' /> : 'Delete'}
               </Button>
-              <Button disabled={loading} type='submit' color='success' className='btn text-[11.2px]'>
-                {loading ? <Spinner color='light' /> : 'Edit Payment'}
+              <Button disabled={loading} type='submit' variant='success' className='btn text-[11.2px]'>
+                {loading ? <Spinner className='size-6 text-white' /> : 'Edit Payment'}
               </Button>
             </div>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </div>
+        </form>
+      </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

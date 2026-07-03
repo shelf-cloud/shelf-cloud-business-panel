@@ -7,7 +7,8 @@ import { AmazonFBA } from '@typings'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, Input } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -103,32 +104,31 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                   </div>
                 </div>
               ) : (
-                <Form onSubmit={handleAddProduct}>
+                <form onSubmit={handleAddProduct}>
                   <div className='flex flex-row justify-center items-center gap-1 align-middle'>
                     <div>
                       <Input
                         type='number'
-                        className='text-[13px] m-0'
+                        className='text-[13px] m-0 h-8 text-xs'
                         style={{ maxWidth: '60px' }}
                         placeholder='Buffer...'
                         id='buffer'
                         name='buffer'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.buffer || 0}
-                        invalid={validation.touched.buffer && validation.errors.buffer ? true : false}
+                        aria-invalid={(validation.touched.buffer && validation.errors.buffer ? true : false) || undefined}
                       />
-                      {validation.touched.buffer && validation.errors.buffer ? <FormFeedback type='invalid'>{validation.errors.buffer}</FormFeedback> : null}
+                      {validation.touched.buffer && validation.errors.buffer ? <div className='text-sm text-destructive'>{validation.errors.buffer}</div> : null}
                     </div>
                     <button type='button' aria-label='Cancel editing buffer inventory' className='m-0 p-0 border-0 bg-transparent text-[color:var(--bs-secondary-color)]' onClick={() => setShowEditFields(false)}>
                       <i className='text-[22.75px] mdi mdi-close-circle' />
                     </button>
-                    <Button type='submit' color='muted' size='sm' className='m-0 p-0'>
+                    <Button type='submit' variant='muted' size='sm' className='m-0 p-0'>
                       <i className='text-[22.75px] text-success ri-checkbox-circle-fill' />
                     </Button>
                   </div>
-                </Form>
+                </form>
               )}
             </td>
             <td className='text-success'>{FormatIntNumber(state.currentRegion, available)}</td>

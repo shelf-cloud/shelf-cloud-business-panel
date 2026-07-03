@@ -5,7 +5,9 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 type Props = {
@@ -66,52 +68,43 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      centered
-      id='ChangeFBAShipmentName'
-      isOpen={editShipmentName.show}
-      toggle={() => {
-        seteditShipmentName({
-          show: false,
-          shipmentId: '',
-          shipmentName: '',
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!editShipmentName.show}
+      onOpenChange={(open) => {
+        if (!open) {
           seteditShipmentName({
             show: false,
             shipmentId: '',
             shipmentName: '',
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Rename Shipment
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='ChangeFBAShipmentName'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Rename Shipment
+          </DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Shipment:</h5>
-          <Col md={12} className='mt-2'>
+          <div className='px-3 w-full mt-2'>
             <DebounceInput
               type='text'
               minLength={3}
               debounceTimeout={300}
-              className='form-control input_background_white'
+              className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white"
               placeholder='Search...'
               id='search-options'
               value={shipmentName}
               onKeyDown={(e) => (e.key == 'Enter' ? e.preventDefault() : null)}
               onChange={(e) => setshipmentName(e.target.value)}
             />
-          </Col>
+          </div>
           <div className='mt-6 flex flex-row gap-4 justify-end'>
             <Button
               disabled={isLoading}
               type='button'
-              color='light'
+              variant='light'
               onClick={() => {
                 seteditShipmentName({
                   show: false,
@@ -121,13 +114,13 @@ const ChangeFBAShipmentName = ({ editShipmentName, seteditShipmentName }: Props)
               }}>
               Cancel
             </Button>
-            <Button disabled={isLoading} type='button' color='success' onClick={hanldeEditFBAShipmentName}>
-              {isLoading ? <Spinner color='light' size={'sm'} /> : 'Confirm'}
+            <Button disabled={isLoading} type='button' variant='success' onClick={hanldeEditFBAShipmentName}>
+              {isLoading ? <Spinner className='text-white' /> : 'Confirm'}
             </Button>
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

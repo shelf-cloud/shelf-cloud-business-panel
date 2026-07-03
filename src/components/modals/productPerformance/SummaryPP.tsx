@@ -5,7 +5,11 @@ import AppContext from '@context/AppContext'
 import { AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Marketplace, ProductPerformance, SummaryProductPerformance } from '@typesTs/marketplaces/productPerformance'
-import { Button, Card, CardBody, CardHeader, Col, Collapse, Modal, ModalBody, ModalFooter, ModalHeader, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+
+import { Collapse } from '@/components/ui/Collapse'
 
 import { datesArraySummary, marketplacesSummary } from './helperFunctions'
 
@@ -105,33 +109,30 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
   }, [productsData])
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='summaryPP'
-      isOpen={summaryModal.show}
-      toggle={() => {
-        setsummaryModal({
-          show: false,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!summaryModal.show}
+      onOpenChange={(open) => {
+        if (!open) {
           setsummaryModal({
             show: false,
           })
-        }}>
-        <p className='m-0 p-0 font-bold text-[16.25px]'>SUMMARY</p>
-      </ModalHeader>
-      <ModalBody>
-        <Row>
-          <Col xs={12} lg={4}>
-            <Col sm={12}>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='summaryPP'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>
+            <p className='m-0 p-0 font-bold text-[16.25px]'>SUMMARY</p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 w-full lg:w-1/3'>
+            <div className='px-3 w-full'>
               <Card>
                 <CardHeader className='py-3'>
                   <h5 className='font-semibold m-0'>Performance Details</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <table className='w-full text-nowrap mb-0 [&_td]:px-2 [&_td]:py-1'>
                     <tbody>
                       {/* GROOSS REVENUE */}
@@ -372,34 +373,35 @@ function SummaryPP({ productsData, summaryModal, setsummaryModal }: Props) {
                       </tr>
                     </tbody>
                   </table>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Col>
-          <Col xs={12} lg={8}>
+            </div>
+          </div>
+          <div className='px-3 w-full lg:w-2/3'>
             <Card>
               <CardHeader className='py-3'>
                 <h5 className='font-semibold m-0'>Performance Timeline</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <ProductPerformanceTimeline productTimeLine={data.datesArray} />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-        </Row>
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          color='light'
-          onClick={() => {
-            setsummaryModal({
-              show: false,
-            })
-          }}>
-          Close
-        </Button>
-      </ModalFooter>
-    </Modal>
+          </div>
+        </div>
+        </div>
+        <DialogFooter className='items-center'>
+          <Button
+            variant='light'
+            onClick={() => {
+              setsummaryModal({
+                show: false,
+              })
+            }}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

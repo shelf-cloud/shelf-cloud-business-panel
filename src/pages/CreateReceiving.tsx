@@ -13,7 +13,8 @@ import AppContext from '@context/AppContext'
 import { useReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -65,9 +66,9 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Create Receiving Order' pageTitle='Inbound' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 lg:w-full'>
                 <Card>
                   <CardHeader>
                     <div className='flex justify-between items-start'>
@@ -78,10 +79,10 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                         </h5>
                       </div>
                       <div className='flex justify-end items-start gap-2'>
-                        <Button color='info' onClick={() => setreceivingUploadingModal({ show: true })}>
+                        <Button variant='info' onClick={() => setreceivingUploadingModal({ show: true })}>
                           Create Uploading File
                         </Button>
-                        <Button color='primary' onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
+                        <Button onClick={() => setWholeSaleOrderModal(!state.showWholeSaleOrderModal)}>
                           Create Receiving
                         </Button>
                       </div>
@@ -112,13 +113,13 @@ const CreateWholeSaleOrder = ({ session }: Props) => {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <ReceivingOrderTable data={filterReceivingInventory} pending={isLoading} handleOrderQty={handleOrderQty} />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}

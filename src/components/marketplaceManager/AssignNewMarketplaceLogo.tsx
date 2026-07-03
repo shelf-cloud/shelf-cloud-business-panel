@@ -6,7 +6,8 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import SimpleSelectWithImage, { SelectSingleValueType } from '@components/Common/SimpleSelectWithImage'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
-import { Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 import useSWR from 'swr'
 
 type Channels = {
@@ -41,11 +42,14 @@ const AssignNewMarketplaceLogo = ({ selected, defaultLogo, setLogo }: Props) => 
   useClickOutside(AssignNewMarketplaceLogoContainer, () => setOpenDatesMenu(false))
 
   return (
-    <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)} direction='end'>
-      <DropdownToggle size='sm' caret className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
-        Logo
-      </DropdownToggle>
-      <DropdownMenu container={'body'} style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+    <DropdownMenu open={openDatesMenu} onOpenChange={(open) => { if (open !== openDatesMenu) setOpenDatesMenu(!openDatesMenu) }}>
+      <DropdownMenuTrigger asChild>
+        <button type='button' className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+          Logo
+          <ChevronDownIcon className='ml-1 size-4' />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
         <div className='px-4 py-1'>
           <div className='flex flex-col justify-start gap-2'>
             <span className='text-[11.2px] font-normal'>Set custom Logo:</span>
@@ -63,8 +67,8 @@ const AssignNewMarketplaceLogo = ({ selected, defaultLogo, setLogo }: Props) => 
             )}
           </div>
         </div>
-      </DropdownMenu>
-    </Dropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

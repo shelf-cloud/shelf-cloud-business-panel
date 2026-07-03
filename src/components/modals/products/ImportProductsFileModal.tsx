@@ -7,7 +7,10 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 type Props = {
@@ -482,35 +485,26 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={importModalDetails.show}
-      toggle={() => {
-        setimportModalDetails((prev: any) => {
+    <Dialog
+      open={!!importModalDetails.show}
+      onOpenChange={(open) => {
+        if (!open) setimportModalDetails((prev: any) => {
           return { ...prev, show: false }
         })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setimportModalDetails((prev: any) => {
-            return { ...prev, show: false }
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
+      <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         <p className='text-[19.5px]'>Import File Bulk Add/Update Products Details</p>
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      </DialogHeader>
+      <div>
+        <div className='flex flex-wrap -mx-3'>
           <p className='text-[13px] font-normal m-0 mb-1'>
             You can <span className='font-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='font-bold'>Products Template</span> file.
           </p>
           <p className='text-[13px] font-normal m-0 mb-4'>
             You can <span className='font-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='font-bold'>Empty Template</span> file.
           </p>
-          <Col md={6}>
+          <div className='px-3 md:w-6/12'>
             {/* <Dropzone
               accept={{ 'text/csv': ['.csv'] }}
               multiple={false}
@@ -527,7 +521,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                     <div className='mb-3'>
                       <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                     </div>
-                    <p className='fs-6'>Upload Products Details. Drop Only CSV files here or click to upload.</p>
+                    <p className='text-[13px]'>Upload Products Details. Drop Only CSV files here or click to upload.</p>
                   </div>
                 </div>
               )}
@@ -537,8 +531,8 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               handleAcceptedFiles={handleAcceptedFiles}
               description={`Upload Products Details. Drop Only CSV files here or click to upload.`}
             />
-          </Col>
-          <Col md={6}>
+          </div>
+          <div className='px-3 md:w-6/12'>
             <span className='text-danger font-semibold'>Warning:</span>
             <ul>
               <li>Review file before uploading!</li>
@@ -550,8 +544,8 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                 return (
                   <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                     <div className='p-2'>
-                      <Row className='items-center'>
-                        <Col className='flex justify-between items-center'>
+                      <div className='flex flex-wrap -mx-3 items-center'>
+                        <div className='px-3 flex justify-between items-center'>
                           <div>
                             <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                             <p className='mb-0'>
@@ -559,19 +553,19 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
                             </p>
                           </div>
                           <div>
-                            <Button color='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                            <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
                               <i className=' ri-close-line' />
                             </Button>
                           </div>
-                        </Col>
-                      </Row>
+                        </div>
+                      </div>
                     </div>
                   </Card>
                 )
               })}
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
         {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
         {showErrorLines && (
           <div style={{ overflowY: 'scroll', height: '40vh' }} className='my-4'>
@@ -601,15 +595,16 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
           </div>
         )}
         {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
-        <Col md={12}>
+        <div className='px-3 w-full'>
           <div className='text-right'>
-            <Button type='button' color='success' className='btn' onClick={handleUploadProducts}>
-              {loading ? <Spinner /> : 'Upload File'}
+            <Button type='button' variant='success' className='btn' onClick={handleUploadProducts}>
+              {loading ? <Spinner className='size-6' /> : 'Upload File'}
             </Button>
           </div>
-        </Col>
-      </ModalBody>
-    </Modal>
+        </div>
+      </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

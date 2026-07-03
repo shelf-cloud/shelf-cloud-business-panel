@@ -10,7 +10,10 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { loadBarcode, sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import type { Product } from '@typings'
 import DataTable from 'react-data-table-component'
-import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
+import { Button } from '@shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import CopyTextToClipboard from './ui/CopyTextToClipboard'
 import SCTooltip from './ui/SCTooltip'
@@ -156,7 +159,11 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       sortable: true,
       compact: true,
       width: '90px',
-      cell: (row: Product) => <Badge color={row.activeState ? 'success' : 'secondary'}>{row.activeState ? 'Active' : 'Inactive'}</Badge>,
+      cell: (row: Product) => (
+        <Badge variant={row.activeState ? 'success' : 'secondary'} className='rounded-sm'>
+          {row.activeState ? 'Active' : 'Inactive'}
+        </Badge>
+      ),
       sortFunction: (rowA: Product, rowB: Product) => sortNumbers(Number(rowA.activeState), Number(rowB.activeState)),
     },
     {
@@ -188,7 +195,7 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
         return (
           <div className='text-[11.2px] flex flex-col justify-center items-center'>
             <Button
-              color='ghost'
+              variant='ghost'
               className='text-[11.2px] !text-primary hover:bg-[color-mix(in_srgb,var(--primary)_10%,transparent)]'
               onClick={() => {
                 setModalProductInfo(row.inventoryId, row.sku)
@@ -294,46 +301,50 @@ const ProductsTable = ({ tableData, pending, changeProductState, setSelectedRows
       compact: true,
       cell: (row: Product) => {
         return (
-          <UncontrolledDropdown className='inline-block' direction='start'>
-            <DropdownToggle className='m-0 p-0 bg-transparent border border-[rgba(68,129,253,0.06)] rounded-md' tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
-            </DropdownToggle>
-            <DropdownMenu end container={'body'}>
-              <DropdownItem className='edit-item-btn'>
-                <Link href={`/product/${row.inventoryId}/${row.sku}`}>
-                  <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]'></i>
-                  <span className='text-[11.2px] font-normal text-dark'>View Details</span>
-                </Link>
-              </DropdownItem>
-              <DropdownItem header>Actions</DropdownItem>
-              {setcloneProductModal && (
-                <DropdownItem
-                  onClick={() =>
-                    setcloneProductModal({
-                      isOpen: true,
-                      originalId: row.inventoryId,
-                      originalName: row.title,
-                      originalSku: row.sku,
-                    })
-                  }>
-                  <div>
-                    <i className='las la-copy label-icon align-middle text-[16.25px] me-2' />
-                    <span className='text-[11.2px] font-normal text-dark'>Clone</span>
-                  </div>
-                </DropdownItem>
-              )}
-              {row.activeState && Number(row.quantity) === 0 && (
-                <DropdownItem className='text-[11.2px] text-destructive' onClick={() => changeProductState(0, row.inventoryId, row.sku)}>
-                  <i className='text-[16.25px] las la-eye-slash align-middle me-2'></i> Set Inactive
-                </DropdownItem>
-              )}
-              {!row.activeState && (
-                <DropdownItem className='text-[11.2px] text-success' onClick={() => changeProductState(1, row.inventoryId, row.sku)}>
-                  <i className='text-[16.25px] las la-eye align-bottom me-2'></i> Set Active
-                </DropdownItem>
-              )}
-            </DropdownMenu>
-          </UncontrolledDropdown>
+          <DropdownMenu>
+            <div className='inline-block'>
+              <DropdownMenuTrigger asChild>
+                <button type='button' className='m-0 p-0 bg-transparent border border-[rgba(68,129,253,0.06)] rounded-md'>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }}></i>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end'>
+                <DropdownMenuItem className='edit-item-btn'>
+                  <Link href={`/product/${row.inventoryId}/${row.sku}`}>
+                    <i className='ri-file-list-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]'></i>
+                    <span className='text-[11.2px] font-normal text-dark'>View Details</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                {setcloneProductModal && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      setcloneProductModal({
+                        isOpen: true,
+                        originalId: row.inventoryId,
+                        originalName: row.title,
+                        originalSku: row.sku,
+                      })
+                    }>
+                    <div>
+                      <i className='las la-copy label-icon align-middle text-[16.25px] me-2' />
+                      <span className='text-[11.2px] font-normal text-dark'>Clone</span>
+                    </div>
+                  </DropdownMenuItem>
+                )}
+                {row.activeState && Number(row.quantity) === 0 && (
+                  <DropdownMenuItem className='text-[11.2px] text-destructive' onClick={() => changeProductState(0, row.inventoryId, row.sku)}>
+                    <i className='text-[16.25px] las la-eye-slash align-middle me-2'></i> Set Inactive
+                  </DropdownMenuItem>
+                )}
+                {!row.activeState && (
+                  <DropdownMenuItem className='text-[11.2px] text-success' onClick={() => changeProductState(1, row.inventoryId, row.sku)}>
+                    <i className='text-[16.25px] las la-eye align-bottom me-2'></i> Set Active
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </div>
+          </DropdownMenu>
         )
       },
     },

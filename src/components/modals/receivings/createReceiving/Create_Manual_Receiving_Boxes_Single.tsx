@@ -2,7 +2,7 @@
 import InputNumberForm from '@components/ui/forms/InputNumberForm'
 import { ManualSingleSkuBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   singleSkuPackages: ManualSingleSkuBoxes
@@ -100,7 +100,7 @@ const Create_Manual_Receiving_Boxes_Single = ({
                   <td className='text-center'>
                     <div className='text-center flex flex-row justify-center items-center gap-2'>
                       {item.boxes.length === 1 && (
-                        <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
+                        <Button type='button' size='sm' variant='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
                           <i className='text-[19.5px] text-success las la-plus-circle m-0 p-0 w-auto' />
                         </Button>
                       )}
@@ -136,12 +136,12 @@ const Create_Manual_Receiving_Boxes_Single = ({
                       <td className='text-center'>
                         <div className='text-center flex flex-row justify-center items-center gap-0'>
                           {index + 1 === item.boxes.length && (
-                            <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
+                            <Button type='button' size='sm' variant='ghost' className='btn-icon' onClick={() => addNewSingleSkuBoxConfiguration(sku)}>
                               <i className='text-[19.5px] text-success las la-plus-circle m-0 p-0 w-auto' />
                             </Button>
                           )}
 
-                          <Button type='button' size='sm' color='ghost' className='btn-icon' onClick={() => removeSingleSkuBoxConfiguration(sku, index)}>
+                          <Button type='button' size='sm' variant='ghost' className='btn-icon' onClick={() => removeSingleSkuBoxConfiguration(sku, index)}>
                             <i className='text-danger text-[19.5px] las la-minus-circle m-0 p-0 w-auto' />
                           </Button>
                         </div>

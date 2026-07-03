@@ -1,6 +1,6 @@
 import SimpleSelect, { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 
-import { Label } from '@/components/migration-ui'
+import { Label } from '@shadcn/ui/label'
 
 import ErrorInputLabel from '../forms/ErrorInputLabel'
 

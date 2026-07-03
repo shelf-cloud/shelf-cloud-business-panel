@@ -13,7 +13,8 @@ import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, FormFeedback, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type Props = {
   allData: AmazonFulfillmentSku[]
@@ -270,9 +271,9 @@ const MasterBoxesTable = ({
         return (
           <div className='text-center'>
             <p className='m-0 p-0 text-[11.2px]'>{row.shelfcloud_sku}</p>
-            {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center align-items-center gap-1'>
+            {/* <p className='m-0 p-0 d-inline-flex flex-row justify-content-center items-center gap-1'>
               <span
-                className='text-primary fs-7'
+                className='text-primary text-[11.2px]'
                 style={{ cursor: 'pointer' }}
                 onClick={() =>
                   setdimensionsModal({
@@ -291,16 +292,16 @@ const MasterBoxesTable = ({
               </span>
               {row.hasError && (
                 <>
-                  <i className='ri-information-fill m-0 p-0 fs-5 text-danger' id={`tooltipFBABoxesErrors${row.inventoryId}`}></i>
+                  <i className='ri-information-fill m-0 p-0 text-[16.25px] text-danger' id={`tooltipFBABoxesErrors${row.inventoryId}`}></i>
                   <UncontrolledTooltip
                     placement='right'
                     target={`tooltipFBABoxesErrors${row.inventoryId}`}
                     popperClassName='bg-white shadow p-3 rounded'
                     style={{ display: 'inline-table' }}
                     innerClassName='text-black bg-white p-0 position-relative'>
-                    <p className='fs-6 text-primary m-0 p-0 fw-bold text-start mb-2'>SKU Errors</p>
+                    <p className='text-[13px] text-primary m-0 p-0 font-bold text-start mb-2'>SKU Errors</p>
                     <table className='table table-striped table-bordered table-sm table-responsive px-2 m-0'>
-                      <tbody className='fs-7 text-start'>
+                      <tbody className='text-[11.2px] text-start'>
                         {row.maxOrderQty <= 0 ? (
                           <tr>
                             <td>{`There's not enough stock to fill a master box`}</td>
@@ -418,7 +419,7 @@ const MasterBoxesTable = ({
               {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
-                  color='light'
+                  variant='light'
                   outline
                   className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
@@ -516,7 +517,7 @@ const MasterBoxesTable = ({
           <>
             <Button
               tabIndex={-1}
-              color='info'
+              variant='info'
               outline
               className='btn btn-ghost-info text-[11.2px]'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
@@ -613,7 +614,7 @@ const MasterBoxesTable = ({
               minLength={1}
               debounceTimeout={300}
               disabled={row.hasError || row.maxOrderQty <= 0}
-              className='form-control text-[13px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px]'
               placeholder={row?.maxOrderQty! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onClick={(e: any) => e.target.select()}
@@ -621,12 +622,12 @@ const MasterBoxesTable = ({
                 handleOrderQty(e.target.value, row.msku, row?.boxQty || 0)
               }}
               max={row.maxOrderQty}
-              invalid={Boolean(rowValidation?.hasInputError)}
+              aria-invalid={Boolean(rowValidation?.hasInputError) || undefined}
             />
             {rowValidation?.hasInputError ? (
-              <FormFeedback className='text-left text-[11.2px]' type='invalid'>
+              <div className='text-left text-[11.2px] text-destructive'>
                 Quantity Error
-              </FormFeedback>
+              </div>
             ) : null}
             {rowValidation?.hasExceededQtyError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Quantity Exceeded</span> : null}
             {rowValidation?.hasMissingAvailabilityError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Unable to verify available warehouse quantity</span> : null}

@@ -5,7 +5,9 @@ import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSe
 import InputCheckFilter from '@components/ui/filters/InputCheckFilter'
 import { useMarketplaceListingsQueries } from '@hooks/products/useMarketplaceListingsQuery'
 import { Form, Formik } from 'formik'
-import { Button, Card, CardBody, Col, FormGroup, Label, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Label } from '@shadcn/ui/label'
 import * as Yup from 'yup'
 
 type Props = {
@@ -76,13 +78,13 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
 
   return (
     <Card className='mb-0' style={{ zIndex: '999' }}>
-      <CardBody className='w-full'>
+      <CardContent className='w-full'>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleBlur, setFieldValue, setValues }) => (
             <Form>
-              <Row className='mt-2'>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+              <div className='flex flex-wrap -mx-3 mt-2'>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Suppliers
                     </Label>
@@ -94,10 +96,10 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                       }}
                       options={supplierOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+                  </div>
+                </div>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Brands
                     </Label>
@@ -109,10 +111,10 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                       }}
                       options={brandOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+                  </div>
+                </div>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='form-label'>
                       Categories
                     </Label>
@@ -124,11 +126,11 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                       }}
                       options={categoryOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Col md={12} className='flex flex-row flex-wrap justify-between items-center gap-4'>
-                <Col xs={12} md={7} className='flex flex-row flex-wrap justify-start items-center gap-6'>
+                  </div>
+                </div>
+              </div>
+              <div className='px-3 w-full flex flex-row flex-wrap justify-between items-center gap-4'>
+                <div className='px-3 w-full md:w-7/12 flex flex-row flex-wrap justify-start items-center gap-6'>
                   <InputCheckFilter
                     inputLabel='Show Mapped'
                     inputName='showMapped'
@@ -159,23 +161,23 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
                     }}
                     handleBlur={handleBlur}
                   />
-                </Col>
+                </div>
 
-                <Col xs={12} md={4}>
+                <div className='px-3 w-full md:w-4/12'>
                   <div className='flex flex-row justify-end items-center gap-4'>
-                    <Button type='button' color='light' className='text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
+                    <Button type='button' variant='light' className='text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
                       Clear
                     </Button>
-                    <Button type='submit' className='text-[11.2px]' color='primary'>
+                    <Button type='submit' className='text-[11.2px]'>
                       Apply Filters
                     </Button>
                   </div>
-                </Col>
-              </Col>
+                </div>
+              </div>
             </Form>
           )}
         </Formik>
-      </CardBody>
+      </CardContent>
     </Card>
   )
 }

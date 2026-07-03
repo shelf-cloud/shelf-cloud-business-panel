@@ -67,14 +67,14 @@ const ProductsBulkEditTable = ({ tableData, pending }: Props) => {
 
   const columns: any = [
     {
-      name: <span className='font-weight-bold fs-13'>SKU</span>,
+      name: <span className='font-bold fs-13'>SKU</span>,
       cell: (row: ProductsDetails) => row.sku,
       sortable: true,
       center: false,
       compact: true,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Title</span>,
+      name: <span className='font-bold fs-13'>Title</span>,
       cell: (row: ProductsDetails, index: number, _column: any, id: number) => {
         const isEditing = editCell === `${index}-${id}`
         return isEditing ? (
@@ -101,7 +101,7 @@ const ProductsBulkEditTable = ({ tableData, pending }: Props) => {
       compact: true,
     },
     {
-      name: <span className='font-weight-bold fs-13'>Description</span>,
+      name: <span className='font-bold fs-13'>Description</span>,
       cell: (_row: ProductsDetails, index: number, _column: any, id: number) => {
         return <div>{`${index}-${id}`}</div>
       },

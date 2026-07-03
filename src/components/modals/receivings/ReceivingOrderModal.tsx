@@ -14,26 +14,13 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Spinner,
-  TabContent,
-  TabPane,
-} from '@/components/migration-ui'
+import { Alert } from '@/components/ui/Alert'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 import Create_Manual_Receiving_Packages_Tab from './createReceiving/Create_Manual_Receiving_Packages_Tab'
@@ -208,28 +195,20 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
   const { filteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, validation.values.shipmentType.value)
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='createReceivingOrderFromTable'
-      isOpen={state.showWholeSaleOrderModal}
-      toggle={() => {
-        setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
+    <Dialog
+      open={!!state.showWholeSaleOrderModal}
+      onOpenChange={(open) => {
+        if (!open) setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setWholeSaleOrderModal(!state.showWholeSaleOrderModal)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Create Manual Receiving
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='createReceivingOrderFromTable'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Create Manual Receiving</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleAddProduct}>
           <h5 className='text-[16.25px] font-extrabold'>Receiving Details</h5>
-          <Row>
-            <Col xs={12} md={4}>
-              <FormGroup>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full md:w-4/12'>
+              <div className='mb-3'>
                 <Label htmlFor='orderNumber' className='mb-2 inline-block text-[11.2px]'>
                   *Transaction Number
                 </Label>
@@ -239,20 +218,19 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                   </span>
                   <Input
                     type='text'
-                    className='text-[13px]'
+                    className='text-[13px] h-8 text-xs'
                     id='orderNumber'
                     name='orderNumber'
-                    bsSize='sm'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.orderNumber || ''}
-                    invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
+                    aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
+                  {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
                 </div>
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
+              </div>
+            </div>
+            <div className='px-3 w-full md:w-4/12'>
               <Label className='mb-2 inline-block text-[11.2px]'>*Shipment Type</Label>
               <SimpleSelect
                 options={RECEIVING_SHIPMENT_TYPES}
@@ -265,8 +243,8 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 customStyle='sm'
               />
               {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.shipmentType.value}</div> : null}
-            </Col>
-            <Col xs={12} md={4}>
+            </div>
+            <div className='px-3 w-full md:w-4/12'>
               <Label className='mb-2 inline-block text-[11.2px]'>*Select Destination</Label>
               <SimpleSelect
                 options={filteredWarehouses}
@@ -280,8 +258,8 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
               {validation.errors.destinationSC && validation.touched.destinationSC ? (
                 <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
               ) : null}
-            </Col>
-          </Row>
+            </div>
+          </div>
 
           <Nav className='nav-tabs border-b' role='tablist'>
             <NavItem style={{ cursor: 'pointer' }}>
@@ -331,28 +309,28 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
             </TabPane>
           </TabContent>
 
-          <Row className='mb-2'>
+          <div className='flex flex-wrap -mx-3 mb-2'>
             {hasBoxedErrors.error && (
-              <Col xs={12} className='m-0'>
+              <div className='px-3 w-full m-0'>
                 <Alert color='danger' className='text-[11.2px] py-1 mb-2'>
                   <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                   {hasBoxedErrors.message}
                 </Alert>
-              </Col>
+              </div>
             )}
-          </Row>
-          <Row md={12}>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
             <div className='flex justify-end items-center gap-2'>
               {activeTab == 'summary' && (
-                <Button disabled={loading || receivingProducts.length <= 0} type='button' color='primary' onClick={() => setactiveTab('packages')}>
+                <Button disabled={loading || receivingProducts.length <= 0} type='button' onClick={() => setactiveTab('packages')}>
                   Next Step
                 </Button>
               )}
               {activeTab == 'packages' && (
-                <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' color='success'>
+                <Button disabled={loading || receivingProducts.length <= 0 || hasBoxedErrors.error} type='submit' variant='success'>
                   {loading ? (
                     <span>
-                      <Spinner color='light' size={'sm'} /> Creating...
+                      <Spinner className='text-white' /> Creating...
                     </span>
                   ) : (
                     'Create Receiving'
@@ -360,10 +338,10 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                 </Button>
               )}
             </div>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

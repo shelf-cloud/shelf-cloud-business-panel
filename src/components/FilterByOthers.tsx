@@ -5,7 +5,8 @@ import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
 import { useSkus } from '@hooks/products/useSkus'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 import { SelectSingleValueType } from './Common/SimpleSelect'
 import SelectSingleFilter from './ui/filters/SelectSingleFilter'
@@ -70,15 +71,17 @@ const FilterByOthers = ({
 
   return (
     <>
-      <ButtonGroup>
-        <Dropdown isOpen={isFiltersOpen} toggle={() => setOpenFilters(!isFiltersOpen)}>
-          <DropdownToggle
-            caret
-            className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
-            color='light'>
-            Filters
-          </DropdownToggle>
-          <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+      <div role='group' className='inline-flex'>
+        <DropdownMenu open={isFiltersOpen} onOpenChange={(open) => { if (open !== isFiltersOpen) setOpenFilters(!isFiltersOpen) }}>
+          <DropdownMenuTrigger asChild>
+            <button
+              type='button'
+              className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'>
+              Filters
+              <ChevronDownIcon className='ml-1 size-4' />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
             <div className={'px-4 py-3'}>
               <div className='flex flex-col justify-start gap-2'>
                 <SelectSingleFilter
@@ -164,9 +167,9 @@ const FilterByOthers = ({
                 </button>
               </div>
             </div>
-          </DropdownMenu>
-        </Dropdown>
-      </ButtonGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </>
   )
 }

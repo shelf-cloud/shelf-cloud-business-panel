@@ -13,7 +13,11 @@ import axios from 'axios'
 import { CSVLink } from 'react-csv'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, DropdownItem, DropdownMenu, DropdownToggle, Row, Spinner, UncontrolledButtonDropdown } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -167,14 +171,14 @@ const Listings = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Amazon Listings' pageTitle='Amazon' />
-          <Container fluid>
-            <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-end md:items-center px-6'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3 flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-end md:items-center px-6'>
               <div className='app-search flex flex-row justify-between items-center p-0'>
                 <div className='flex flex-row justify-start items-center gap-6'>
                   <FilterListings showHidden={showHidden} condition={condition} mapped={mapped} />
                   <Button
                     size='sm'
-                    color='info'
+                    variant='info'
                     onClick={() => {
                       router.replace(`/amazon-sellers/listings?showHidden=${parseInt(showHidden) === 0 ? 1 : 0}&condition=${condition}&mapped=${mapped}`)
                     }}>
@@ -191,32 +195,35 @@ const Listings = ({ session }: Props) => {
                     )}
                   </Button>
                   <CSVLink data={csvData} style={{ width: 'fit-content' }} filename={`${session?.user?.businessName?.toUpperCase()}-Amazon-FBA-Listings.csv`}>
-                    <Button color='primary' className='text-[13px] py-1'>
+                    <Button className='text-[13px] py-1'>
                       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
                       Export
                     </Button>
                   </CSVLink>
                   {selectedRows.length > 0 && (
-                    <UncontrolledButtonDropdown>
-                      <DropdownToggle
-                        className='inline-flex h-9 items-center gap-2 rounded-md bg-info px-3 text-[13px] font-medium text-white whitespace-nowrap shadow-xs'
-                        caret>
-                        {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem className='text-nowrap text-primary' onClick={setSelectedRowstoVisible}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type='button'
+                          className='inline-flex h-9 items-center gap-2 rounded-md bg-info px-3 text-[13px] font-medium text-white whitespace-nowrap shadow-xs'>
+                          {`${selectedRows.length} item${selectedRows.length > 1 ? 's' : ''} Selected`}
+                          <ChevronDownIcon className='ml-1 size-4' />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align='start'>
+                        <DropdownMenuItem className='text-nowrap text-primary' onClick={setSelectedRowstoVisible}>
                           <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
                           Set as Visible
-                        </DropdownItem>
-                        <DropdownItem className='text-nowrap text-danger' onClick={setSelectedRowstoHidden}>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='text-nowrap text-danger' onClick={setSelectedRowstoHidden}>
                           <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2' />
                           Set as Hidden
-                        </DropdownItem>
-                        <DropdownItem className='text-nowrap text-[13px] text-right' onClick={clearAllSelectedRows}>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='text-nowrap text-[13px] text-right' onClick={clearAllSelectedRows}>
                           Clear Selection
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   )}
                 </div>
                 <div className='w-full md:w-1/4'>
@@ -225,7 +232,7 @@ const Listings = ({ session }: Props) => {
                       type='text'
                       minLength={3}
                       debounceTimeout={300}
-                      className='form-control input_background_white'
+                      className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white'
                       placeholder='Search...'
                       id='search-options'
                       value={searchValue}
@@ -244,14 +251,14 @@ const Listings = ({ session }: Props) => {
                   </div>
                 </div>
               </div>
-            </Row>
+            </div>
             <Card>
-              <CardBody>
+              <CardContent>
                 {data?.error ? (
                   <div>
                     <p className='font-bold text-[26px]'>Amazon Seller</p>
                     <p className='text-[16.25px] text-[var(--bs-secondary-color)]'>
-                      {data?.message} <Spinner color='primary' size={'sm'} />
+                      {data?.message} <Spinner className='text-primary' />
                     </p>
                   </div>
                 ) : (
@@ -261,9 +268,9 @@ const Listings = ({ session }: Props) => {
                     </div>
                   </div>
                 )}
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

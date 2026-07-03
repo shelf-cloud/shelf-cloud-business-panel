@@ -64,11 +64,11 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
         </div>
       ) : (
         <button type='button' className='btn-group w-full p-0 border-0 bg-transparent' onClick={() => setOpenSelectionList(!openSelectionList)}>
-          <span className='btn btn-light btn-sm form-control text-[13px] w-full text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
+          <span className='btn btn-light btn-sm block w-full text-[13px] text-left' style={{ backgroundColor: 'white', opacity: '100%' }}>
             {showMappedListingModal.shelfCloudSku == '' ? `Select...` : showMappedListingModal.shelfCloudSku}
           </span>
           <span
-            className='btn btn-light btn-sm dropdown-toggle form-control text-[13px] dropdown-toggle dropdown-toggle-split'
+            className='btn btn-light btn-sm text-[13px]'
             style={{ backgroundColor: 'white', maxWidth: '35px' }}
             aria-expanded='false'>
             <span className='sr-only'>Toggle Dropdown</span>
@@ -83,7 +83,7 @@ const Select_Product_Mapped = ({ data, showMappedListingModal, setshowMappedList
                 type='text'
                 minLength={3}
                 debounceTimeout={300}
-                className='form-control input_background_white text-[13px] py-0'
+                className='h-9 w-full px-3 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 input_background_white text-[13px] py-0'
                 placeholder='Search...'
                 id='search-options-mapped'
                 value={searchValue}

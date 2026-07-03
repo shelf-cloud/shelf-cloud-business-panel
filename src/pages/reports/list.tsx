@@ -13,7 +13,9 @@ import { ShelfCloudReportList } from '@typesTs/reports/reportsList'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Input, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
 import useSWR, { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -153,13 +155,12 @@ const List = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Report List' pageTitle='Reports' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
-                <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
+                <div className='flex flex-wrap -mx-3 flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
                   <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                     <Button
-                      color='primary'
                       className='text-[13px] py-1'
                       onClick={() =>
                         setshowMappedCreateReport((prev: any) => {
@@ -197,15 +198,15 @@ const List = ({ session }: Props) => {
                       </div>
                     </div>
                   </div>
-                </Row>
+                </div>
                 <Card>
-                  <CardBody>
+                  <CardContent>
                     <ReportsTable reportList={reportList} pending={data ? false : true} handleDownloadReport={handleDownloadReport} />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {showMappedCreateReport.show && (

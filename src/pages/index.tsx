@@ -18,7 +18,6 @@ import { SalesOverTimeResponse } from '@typesTs/dashboard/salesOverTime'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Col, Container, Row } from '@/components/migration-ui'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -97,17 +96,17 @@ const Home = ({ session }: Props) => {
 
       <div className='page-content'>
         <BreadCrumb title='Dashboard' pageTitle='Dashboard' />
-        <Container fluid>
-          <Row>
-            <Col>
+        <div className='mx-auto w-full px-3'>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 flex-1 basis-0'>
               <DashboardHeader user={state.user.name} handleChangeDates={handleChangeDates} startDate={dashboardStartDate} endDate={dashboardEndDate} />
               {summary ? (
                 <>
-                  <Row>
+                  <div className='flex flex-wrap -mx-3'>
                     <Widget summary={summary} />
-                  </Row>
-                  <Row>
-                    <Col md={7}>
+                  </div>
+                  <div className='flex flex-wrap -mx-3'>
+                    <div className='px-3 md:w-7/12'>
                       {isLoadingSalesOverTime ? (
                         <SalesOverTimeLoading />
                       ) : salesOverTime?.error ? (
@@ -116,21 +115,21 @@ const Home = ({ session }: Props) => {
                         <SalesOverTime salesOverTime={salesOverTime} />
                       ) : null}
                       {summary && <MostInvenotryList products={summary?.mostInventory} />}
-                    </Col>
-                    <Col md={5}>
+                    </div>
+                    <div className='px-3 md:w-5/12'>
                       <TotalChagesList totalCharges={summary?.totalCharges} />
                       <InvoicesList invoices={summary?.invoices} />
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                 </>
               ) : (
-                <Row>
+                <div className='flex flex-wrap -mx-3'>
                   <h5>Loading...</h5>
-                </Row>
+                </div>
               )}
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

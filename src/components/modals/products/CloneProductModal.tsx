@@ -7,7 +7,11 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 type CloneProductModal = {
@@ -87,121 +91,115 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={cloneProductModal.isOpen}
-      toggle={() => {
-        setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
+    <Dialog
+      open={!!cloneProductModal.isOpen}
+      onOpenChange={(open) => {
+        if (!open) setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Clone Product
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row>
-            <p className='m-0 font-bold text-[16.25px] text-primary'>Cloning From:</p>
-            <p className='m-0 font-light'>{cloneProductModal.originalName}</p>
-            <p className='m-0 font-semibold'>{cloneProductModal.originalSku}</p>
-          </Row>
-          <Row>
-            <h5 className='text-[16.25px] m-0 mt-4 mb-2 font-semibold text-primary'>New Product Details:</h5>
-            <Col xs={12} md={6}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='firstNameinput' className='form-label'>
-                  *Title
-                </Label>
-                <Input
-                  type='text'
-                  className='text-[11.2px]'
-                  placeholder='Title...'
-                  id='title'
-                  name='title'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.title || ''}
-                  invalid={validation.touched.title && validation.errors.title ? true : false}
-                />
-                {validation.touched.title && validation.errors.title ? <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={6}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='lastNameinput' className='form-label'>
-                  *SKU
-                </Label>
-                <Input
-                  type='text'
-                  className='text-[11.2px] uppercase'
-                  placeholder='Sku...'
-                  id='sku'
-                  name='sku'
-                  onChange={(e) => {
-                    e.target.value = e.target.value.toUpperCase()
-                    validation.handleChange(e)
-                  }}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.sku || ''}
-                  invalid={validation.touched.sku && validation.errors.sku ? true : false}
-                />
-                {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={6}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='lastNameinput' className='form-label'>
-                  *UPC
-                </Label>
-                <Input
-                  type='text'
-                  className='text-[11.2px] uppercase'
-                  placeholder='UPC...'
-                  id='upc'
-                  name='upc'
-                  onChange={(e) => {
-                    e.target.value = e.target.value.toUpperCase()
-                    validation.handleChange(e)
-                  }}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.upc || ''}
-                  invalid={validation.touched.upc && validation.errors.upc ? true : false}
-                />
-                {validation.touched.upc && validation.errors.upc ? <FormFeedback type='invalid'>{validation.errors.upc}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={12}>
-              <div className='mt-6 flex flex-row gap-4 justify-end'>
-                <Button
-                  disabled={isLoading}
-                  type='button'
-                  color='light'
-                  className='btn'
-                  onClick={() => {
-                    setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
-                  }}>
-                  Cancel
-                </Button>
-                <Button type='submit' color='success' className='btn'>
-                  {isLoading ? (
-                    <span>
-                      <Spinner color='light' size={'sm'} /> Cloning...
-                    </span>
-                  ) : (
-                    'Clone'
-                  )}
-                </Button>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
+        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+          <DialogTitle>Clone Product</DialogTitle>
+        </DialogHeader>
+        <div>
+          <form onSubmit={handleAddProduct}>
+            <div className='flex flex-wrap -mx-3'>
+              <p className='m-0 font-bold text-[16.25px] text-primary'>Cloning From:</p>
+              <p className='m-0 font-light'>{cloneProductModal.originalName}</p>
+              <p className='m-0 font-semibold'>{cloneProductModal.originalSku}</p>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <h5 className='text-[16.25px] m-0 mt-4 mb-2 font-semibold text-primary'>New Product Details:</h5>
+              <div className='px-3 w-full md:w-6/12'>
+                <div className='mb-4'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
+                    *Title
+                  </Label>
+                  <Input
+                    type='text'
+                    className='text-[11.2px]'
+                    placeholder='Title...'
+                    id='title'
+                    name='title'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.title || ''}
+                    aria-invalid={Boolean(validation.touched.title && validation.errors.title) || undefined}
+                  />
+                  {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                </div>
               </div>
-            </Col>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+              <div className='px-3 w-full md:w-6/12'>
+                <div className='mb-4'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
+                    *SKU
+                  </Label>
+                  <Input
+                    type='text'
+                    className='text-[11.2px] uppercase'
+                    placeholder='Sku...'
+                    id='sku'
+                    name='sku'
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase()
+                      validation.handleChange(e)
+                    }}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.sku || ''}
+                    aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
+                  />
+                  {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                </div>
+              </div>
+              <div className='px-3 w-full md:w-6/12'>
+                <div className='mb-4'>
+                  <Label htmlFor='lastNameinput' className='form-label'>
+                    *UPC
+                  </Label>
+                  <Input
+                    type='text'
+                    className='text-[11.2px] uppercase'
+                    placeholder='UPC...'
+                    id='upc'
+                    name='upc'
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase()
+                      validation.handleChange(e)
+                    }}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.upc || ''}
+                    aria-invalid={Boolean(validation.touched.upc && validation.errors.upc) || undefined}
+                  />
+                  {validation.touched.upc && validation.errors.upc ? <div className='text-sm text-destructive'>{validation.errors.upc}</div> : null}
+                </div>
+              </div>
+              <div className='px-3 w-full'>
+                <div className='mt-6 flex flex-row gap-4 justify-end'>
+                  <Button
+                    disabled={isLoading}
+                    type='button'
+                    variant='light'
+                    className='btn'
+                    onClick={() => {
+                      setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
+                    }}>
+                    Cancel
+                  </Button>
+                  <Button type='submit' variant='success' className='btn'>
+                    {isLoading ? (
+                      <span>
+                        <Spinner className='text-white' /> Cloning...
+                      </span>
+                    ) : (
+                      'Clone'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

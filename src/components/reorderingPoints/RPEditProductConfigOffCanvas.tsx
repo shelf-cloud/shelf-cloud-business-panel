@@ -6,7 +6,11 @@ import { RPProductUpdateConfig } from '@hooks/reorderingPoints/useRPProductsInfo
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { Button, Col, Form, Input, Label, Offcanvas, OffcanvasBody, OffcanvasHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@shadcn/ui/sheet'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   rpProductConfig: RPProductConfig
@@ -90,205 +94,198 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
   }
 
   return (
-    <Offcanvas isOpen={isOpen} direction='end' toggle={handleCloseCanvas}>
-      <OffcanvasHeader className='pb-2' toggle={handleCloseCanvas}>
-        Product Config
-      </OffcanvasHeader>
-      <OffcanvasBody className='pt-0'>
+    <Sheet open={!!isOpen} onOpenChange={(open) => { if (!open) handleCloseCanvas() }}>
+      <SheetContent side='right' aria-describedby={undefined} className='overflow-y-auto sm:max-w-md'>
+        <SheetHeader className='pr-10 pb-2'>
+          <SheetTitle>Product Config</SheetTitle>
+        </SheetHeader>
+        <div className='px-4 pb-4 pt-0'>
         <div className='flex flex-col'>
           <p className='text-[16.25px] font-bold m-0 p-0'>
             SKU: <span className='text-primary'>{rpProductConfig.product.sku}</span>
           </p>
           <p className='text-[13px] m-0 p-0 font-semibold'>{rpProductConfig.product.title}</p>
           <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>Here you can edit some configurations related to the product to adjust the forecast.</p>
-          <Form onSubmit={handleAddProduct}>
+          <form onSubmit={handleAddProduct}>
             <h5 className='text-[16.25px] font-bold'>Warehouse</h5>
-            <Row>
-              <Col xs={12} md={10}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-10/12'>
                 <Label htmlFor='orderFrequency' className='text-[11.2px] form-label'>
                   Order Frequency (Weeks)
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control text-[13px]'
-                    bsSize='sm'
+                    className='text-[13px] h-8 text-xs'
                     id='orderFrequency'
                     name='orderFrequency'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.orderFrequency}
-                    invalid={validation.touched.orderFrequency && validation.errors.orderFrequency ? true : false}
+                    aria-invalid={validation.touched.orderFrequency && validation.errors.orderFrequency ? true : false || undefined}
                   />
                   <span>Weeks</span>
                 </div>
                 {validation.touched.orderFrequency && validation.errors.orderFrequency ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.orderFrequency}</p> : null}
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={10}>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-10/12'>
                 <Label htmlFor='leadTimeSC' className='text-[11.2px] form-label'>
                   Lead Time
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control text-[13px]'
-                    bsSize='sm'
+                    className='text-[13px] h-8 text-xs'
                     id='leadTimeSC'
                     name='leadTimeSC'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.leadTimeSC}
-                    invalid={validation.touched.leadTimeSC && validation.errors.leadTimeSC ? true : false}
+                    aria-invalid={validation.touched.leadTimeSC && validation.errors.leadTimeSC ? true : false || undefined}
                   />
                   <span>Days</span>
                 </div>
                 {validation.touched.leadTimeSC && validation.errors.leadTimeSC ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeSC}</p> : null}
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={10} className='mb-4'>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-10/12 mb-4'>
                 <Label htmlFor='daysOfStockSC' className='text-[11.2px] form-label'>
                   *Days of Stock after Lead Time
                 </Label>
                 <div className='flex flex-row justify-start items-center gap-2'>
                   <Input
                     type='number'
-                    className='form-control text-[13px]'
-                    bsSize='sm'
+                    className='text-[13px] h-8 text-xs'
                     id='daysOfStockSC'
                     name='daysOfStockSC'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.daysOfStockSC || ''}
-                    invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : false}
+                    aria-invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : false || undefined}
                   />
                   <span>Days</span>
                 </div>
                 {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockSC}</p> : null}
-              </Col>
-            </Row>
+              </div>
+            </div>
             {state.user[state.currentRegion]?.showAmazonTab && state.user[state.currentRegion]?.amazonConnected && (
               <>
                 <h5 className='text-[16.25px] font-bold'>Amazon FBA</h5>
-                <Row>
-                  <Col xs={12} md={10}>
+                <div className='flex flex-wrap -mx-3'>
+                  <div className='px-3 w-full md:w-10/12'>
                     <Label htmlFor='leadTimeFBA' className='text-[11.2px] form-label'>
                       Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control text-[13px]'
-                        bsSize='sm'
+                        className='text-[13px] h-8 text-xs'
                         id='leadTimeFBA'
                         name='leadTimeFBA'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.leadTimeFBA}
-                        invalid={validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? true : false}
+                        aria-invalid={validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? true : false || undefined}
                       />
                       <span>Days</span>
                     </div>
                     {validation.touched.leadTimeFBA && validation.errors.leadTimeFBA ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeFBA}</p> : null}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={10} className='mb-4'>
+                  </div>
+                </div>
+                <div className='flex flex-wrap -mx-3'>
+                  <div className='px-3 w-full md:w-10/12 mb-4'>
                     <Label htmlFor='daysOfStockFBA' className='text-[11.2px] form-label'>
                       *Days of Stock after Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control text-[13px]'
-                        bsSize='sm'
+                        className='text-[13px] h-8 text-xs'
                         id='daysOfStockFBA'
                         name='daysOfStockFBA'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.daysOfStockFBA || ''}
-                        invalid={validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? true : false}
+                        aria-invalid={validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? true : false || undefined}
                       />
                       <span>Days</span>
                     </div>
                     {validation.touched.daysOfStockFBA && validation.errors.daysOfStockFBA ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockFBA}</p> : null}
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </>
             )}
             {state.user[state.currentRegion]?.rpShowAWD && (
               <>
                 <h5 className='text-[16.25px] font-bold'>Amazon AWD</h5>
-                <Row>
-                  <Col xs={12} md={10}>
+                <div className='flex flex-wrap -mx-3'>
+                  <div className='px-3 w-full md:w-10/12'>
                     <Label htmlFor='leadTimeAWD' className='text-[11.2px] form-label'>
                       Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control text-[13px]'
-                        bsSize='sm'
+                        className='text-[13px] h-8 text-xs'
                         id='leadTimeAWD'
                         name='leadTimeAWD'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.leadTimeAWD}
-                        invalid={validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? true : false}
+                        aria-invalid={validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? true : false || undefined}
                       />
                       <span>Days</span>
                     </div>
                     {validation.touched.leadTimeAWD && validation.errors.leadTimeAWD ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.leadTimeAWD}</p> : null}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={10} className='mb-4'>
+                  </div>
+                </div>
+                <div className='flex flex-wrap -mx-3'>
+                  <div className='px-3 w-full md:w-10/12 mb-4'>
                     <Label htmlFor='daysOfStockAWD' className='text-[11.2px] form-label'>
                       *Days of Stock after Lead Time
                     </Label>
                     <div className='flex flex-row justify-start items-center gap-2'>
                       <Input
                         type='number'
-                        className='form-control text-[13px]'
-                        bsSize='sm'
+                        className='text-[13px] h-8 text-xs'
                         id='daysOfStockAWD'
                         name='daysOfStockAWD'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.daysOfStockAWD || ''}
-                        invalid={validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? true : false}
+                        aria-invalid={validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? true : false || undefined}
                       />
                       <span>Days</span>
                     </div>
                     {validation.touched.daysOfStockAWD && validation.errors.daysOfStockAWD ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.daysOfStockAWD}</p> : null}
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </>
             )}
             <h5 className='text-[16.25px] font-bold'>Extra Config</h5>
-            <Row>
-              <Col xs={12} md={10}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-10/12'>
                 <Label htmlFor='buffer' className='text-[11.2px] form-label'>
                   Buffer
                 </Label>
                 <Input
                   type='number'
-                  className='form-control text-[13px]'
-                  bsSize='sm'
+                  className='text-[13px] h-8 text-xs'
                   id='buffer'
                   name='buffer'
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.buffer || ''}
-                  invalid={validation.touched.buffer && validation.errors.buffer ? true : false}
+                  aria-invalid={validation.touched.buffer && validation.errors.buffer ? true : false || undefined}
                 />
                 {validation.touched.buffer && validation.errors.buffer ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.buffer}</p> : null}
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={10} className='mb-4'>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-10/12 mb-4'>
                 <Label htmlFor='sellerCost' className='text-[11.2px] form-label'>
                   Seller Cost
                 </Label>
@@ -296,39 +293,39 @@ const RPEditProductConfigOffCanvas = ({ rpProductConfig, setRPProductConfig, han
                   <span>$</span>
                   <Input
                     type='number'
-                    className='form-control text-[13px]'
-                    bsSize='sm'
+                    className='text-[13px] h-8 text-xs'
                     id='sellerCost'
                     name='sellerCost'
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
                     value={validation.values.sellerCost || ''}
-                    invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false}
+                    aria-invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false || undefined}
                   />
                 </div>
                 {validation.touched.sellerCost && validation.errors.sellerCost ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.sellerCost}</p> : null}
-              </Col>
-            </Row>
+              </div>
+            </div>
             <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>*The number of days you want to have of stock in addition to the lead time.</p>
-            <Row className='mt-4'>
-              <Col md={12}>
+            <div className='flex flex-wrap -mx-3 mt-4'>
+              <div className='px-3 md:w-full'>
                 <div className='text-right'>
-                  <Button disabled={loading} type='submit' color='success' className='text-[11.2px]'>
+                  <Button disabled={loading} type='submit' variant='success' className='text-[11.2px]'>
                     {loading ? (
                       <span>
-                        <Spinner color='#fff' size={'sm'} /> Saving...
+                        <Spinner className='text-white' /> Saving...
                       </span>
                     ) : (
                       'Save Changes'
                     )}
                   </Button>
                 </div>
-              </Col>
-            </Row>
-          </Form>
+              </div>
+            </div>
+          </form>
         </div>
-      </OffcanvasBody>
-    </Offcanvas>
+        </div>
+      </SheetContent>
+    </Sheet>
   )
 }
 

@@ -11,7 +11,9 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Container, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-blue-h-solo.png'
@@ -70,10 +72,10 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Amazon Auth' pageTitle='Amazon' />
             <Card className='py-12'>
-              <CardBody className='text-center'>
+              <CardContent className='text-center'>
                 <p className='text-primary font-semibold text-[40px]'>ShelfCloud - Amazon Advertising Partner</p>
                 <p className='text-[var(--bs-secondary-color)] font-normal text-[22.75px]'>Integration</p>
                 <div className='flex flex-row justify-center items-center gap-6 mt-6 mb-12'>
@@ -112,17 +114,17 @@ const AmazonAdsAuthRedirect = ({}: Props) => {
                 </div>
 
                 <div className='flex flex-col justify-center items-center gap-12'>
-                  <Button className='mt-2 text-[16.25px]' color='primary' onClick={() => authorizeSeller()}>
-                    {loading ? <Spinner color='#fff' /> : 'Authorize ShelfCloud'}
+                  <Button className='mt-2 text-[16.25px]' onClick={() => authorizeSeller()}>
+                    {loading ? <Spinner className='text-white' /> : 'Authorize ShelfCloud'}
                   </Button>
-                  <Button className='mt-2 text-[13px]' color='light' onClick={() => router.push('/')}>
+                  <Button className='mt-2 text-[13px]' variant='light' onClick={() => router.push('/')}>
                     Cancel
                   </Button>
                 </div>
                 <p className='text-[var(--bs-secondary-color)] font-normal text-[13px] mt-0'>Expire at: {expire}</p>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

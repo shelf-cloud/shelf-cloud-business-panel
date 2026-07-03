@@ -14,7 +14,12 @@ import moment from 'moment'
 // import SelectShippingCarrier from './SelectShippingCarrier'
 import { toast } from 'react-toastify'
 
-import { Alert, Button, Card, CardBody, CardHeader, Col, Input, Label, Row, Spinner, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Alert } from '@/components/ui/Alert'
+import { Switch } from '@/components/ui/Switch'
 
 import ShippingSelectDate from './ShippingSelectDate'
 import { regenerateFBAPlacementOptions } from './helperFunctions/fbaRegenerate'
@@ -545,7 +550,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               'border border-[3px] border-success')
                           }
                           style={{ cursor: 'pointer' }}>
-                          <CardBody>
+                          <CardContent>
                             <p className='mt-2 mb-1 p-0 font-semibold text-[19.5px]'>
                               <span>{placementOption.shipmentIds.length}</span> {placementOption.shipmentIds.length > 1 ? 'Shipments' : 'Shipment'}
                               {placementOptionSelected.placementOptionId === placementOption.placementOptionId && (
@@ -571,7 +576,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               </p>
                             ))}
                             <p className='m-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {placementOption.placementOptionId}</p>
-                          </CardBody>
+                          </CardContent>
                         </Card>
                       )
                   )}
@@ -600,19 +605,19 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       })
                     }}
                   />
-                  <Label className='check-form-label m-0 font-normal' for='showShippingMode'>
+                  <Label className='check-form-label m-0 font-normal' htmlFor='showShippingMode'>
                     Shipping mode will be same for all shipments
                   </Label>
                 </div>
                 {!finalShippingCharges.sameShippingMode && (
-                  <Row>
-                    <Col xs='12' lg='8' xl='6'>
+                  <div className='flex flex-wrap -mx-3'>
+                    <div className='px-3 w-full lg:w-8/12 xl:w-6/12'>
                       <Alert color='secondary' className='alert-border-left'>
                         <i className='ri-error-warning-line me-4 align-middle text-[16.25px]' />
                         Please select the shipping mode that you will use for each shipment
                       </Alert>
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                 )}
                 {finalShippingCharges.sameShippingMode && (
                   <div className='flex justify-start items-start gap-4'>
@@ -633,7 +638,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       }}
                       className={'shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'SPD' && 'border border-[3px] border-success')}
                       style={{ cursor: 'pointer' }}>
-                      <CardBody className='flex justify-start items-center gap-1'>
+                      <CardContent className='flex justify-start items-center gap-1'>
                         <div
                           className='my-2'
                           style={{
@@ -677,7 +682,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             )}
                           </p>
                         </div>
-                      </CardBody>
+                      </CardContent>
                     </Card>
                     <Card
                       onClick={() =>
@@ -691,7 +696,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                       }
                       className={'shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.shippingMode === 'LTL' && 'border border-[3px] border-success')}
                       style={{ cursor: 'pointer' }}>
-                      <CardBody className='flex justify-start items-center gap-1'>
+                      <CardContent className='flex justify-start items-center gap-1'>
                         <div
                           className='my-2'
                           style={{
@@ -729,7 +734,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             )}
                           </p>
                         </div>
-                      </CardBody>
+                      </CardContent>
                     </Card>
                   </div>
                 )}
@@ -739,8 +744,8 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
               {finalShippingCharges.sameShippingMode && finalShippingCharges.shippingMode === 'SPD' && (
                 <div>
                   <p className='text-[16.25px] font-bold'>Select Shipping Carrier</p>
-                  <Row className='my-4 flex gap-4'>
-                    <Col xs='12' lg='3'>
+                  <div className='flex flex-wrap -mx-3 my-4 flex gap-4'>
+                    <div className='px-3 w-full lg:w-3/12'>
                       <Card
                         onClick={() =>
                           setfinalShippingCharges((prev) => {
@@ -749,7 +754,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                         }
                         className={'m-0 shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] ' + (finalShippingCharges.sameShippingCarrier === 'amazon' && 'border border-[3px] border-success')}
                         style={{ cursor: 'pointer' }}>
-                        <CardBody>
+                        <CardContent>
                           <p className='m-0 p-0 text-[11.2px] font-semibold'>UPS (Amazon Partnered Carrier)*</p>
                           <p className='m-0 p-0 text-[11.2px]'>Pickup cost is NOT Included with the rate</p>
                           <p className='m-0 p-0 text-[16.25px] font-bold'>
@@ -774,9 +779,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               <span className='text-danger font-semibold'>Not Available</span>
                             )}
                           </p>
-                        </CardBody>
+                        </CardContent>
                       </Card>
-                    </Col>
+                    </div>
                     {/* <Col xs='12' lg='3'>
                       <Card
                         onClick={() =>
@@ -786,8 +791,8 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                         }
                         className={'m-0 py-1 shadow-sm ' + (finalShippingCharges.sameShippingCarrier === 'non-amazon' && 'border border-3 border-success')}
                         style={{ zIndex: 9, cursor: 'pointer' }}>
-                        <CardBody>
-                          <p className='m-0 mb-2 p-0 fs-7 font-semibold'>Non-Amazon Partnered Carrier</p>
+                        <CardContent>
+                          <p className='m-0 mb-2 p-0 text-[11.2px] font-semibold'>Non-Amazon Partnered Carrier</p>
                           <SelectShippingCarrier
                             id={`shippingCarrierNonAmazon`}
                             selectionInfo={nonAmazonCarrierOptions}
@@ -799,10 +804,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               })
                             }
                           />
-                        </CardBody>
+                        </CardContent>
                       </Card>
                     </Col> */}
-                  </Row>
+                  </div>
                 </div>
               )}
 
@@ -819,7 +824,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                         <p className='m-0 p-0 font-bold text-[13px]'>Shipment #{shipmentIndex + 1}</p>
                         <p className='m-0 p-0 text-[11.2px] text-[var(--bs-secondary-color)] font-light'>ID: {shipmentId}</p>
                       </CardHeader>
-                      <CardBody>
+                      <CardContent>
                         <p className='m-0 text-[11.2px]'>
                           <span className='text-primary'>Ship From: </span>
                           {inboundPlan.shipments[shipmentId]?.shipment.source.address.name}, {inboundPlan.shipments[shipmentId]?.shipment.source.address.addressLine1},{' '}
@@ -1000,8 +1005,8 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               <div className='my-2 flex flex-col justify-start items-start gap-2'>
                                 {/* SHIPPING MODE SPD */}
                                 <div className='flex flex-row justify-start items-center gap-4'>
-                                  <Input
-                                    className='my-0'
+                                  <input
+                                    className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                                     type='radio'
                                     style={{ cursor: 'pointer' }}
                                     id={`shippingModeSPD-${shipmentId}`}
@@ -1072,8 +1077,8 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 {/* SHIPPING MODE LTL */}
                                 <div className='flex flex-col justify-start items-center gap-2'>
                                   <div className='flex flex-row justify-start items-center gap-4'>
-                                    <Input
-                                      className='my-0'
+                                    <input
+                                      className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                                       type='radio'
                                       disabled={
                                         !Object.values(inboundPlan.transportationOptions[placementOptionSelected.placementOptionId][shipmentId]).some(
@@ -1144,8 +1149,8 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                   <div className='my-2 flex flex-col justify-start items-start gap-2'>
                                     {/* CARRIER AMAZON PARTNERED */}
                                     <div className='flex flex-row justify-start items-center gap-4'>
-                                      <Input
-                                        className='my-0'
+                                      <input
+                                        className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                                         type='radio'
                                         style={{ cursor: 'pointer' }}
                                         id={`shippingCarrierAmazon-${shipmentId}`}
@@ -1194,9 +1199,9 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                     </div>
 
                                     {/* CARRIER NON-AMAZON */}
-                                    {/* <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
-                                      <Input
-                                        className='my-0'
+                                    {/* <div className='flex flex-row justify-content-start items-center gap-3'>
+                                      <input
+                                        className='my-0 size-4 shrink-0 border border-input-border accent-primary rounded-full'
                                         type='radio'
                                         style={{ cursor: 'pointer' }}
                                         id={`shippingCarrierNonAmazon-${shipmentId}`}
@@ -1216,7 +1221,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                         }
                                       />
                                       <div>
-                                        <p className={'m-0 p-0 fs-7 ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'text-[var(--bs-secondary-color)]')}>
+                                        <p className={'m-0 p-0 text-[11.2px] ' + (finalShippingCharges.sameShippingCarrier !== 'non-amazon' && 'text-[var(--bs-secondary-color)]')}>
                                           Non-Amazon Partnered Carrier
                                         </p>
                                         <SelectShippingCarrier
@@ -1343,7 +1348,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                               {finalShippingCharges.shipments[shipmentId].loadingDeliveryWindowOptions && (
                                 <div className='w-full'>
                                   <div className='my-4 flex justify-start items-center gap-4'>
-                                    <Spinner color='primary' size={'sm'} />
+                                    <Spinner className='text-primary' />
                                     <p className='m-0 p-0 font-normal text-[11.2px]'>Generating Delivery Window Options...</p>
                                   </div>
                                 </div>
@@ -1394,7 +1399,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                                 {finalShippingCharges.shipments[shipmentId].loadingDeliveryWindowOptions && (
                                   <div className='w-full'>
                                     <div className='my-4 flex justify-start items-center gap-4'>
-                                      <Spinner color='primary' size={'sm'} />
+                                      <Spinner className='text-primary' />
                                       <p className='m-0 p-0 font-normal text-[11.2px]'>Generating Delivery Window Options...</p>
                                     </div>
                                   </div>
@@ -1431,19 +1436,19 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                             </div>
                           )}
                         </div>
-                      </CardBody>
+                      </CardContent>
                     </Card>
                   ))}
                 </div>
               </div>
 
               {/* TOTAL ESTIMATED FEES */}
-              <Row className='my-4'>
-                <Col xs='12' lg='8'>
+              <div className='flex flex-wrap -mx-3 my-4'>
+                <div className='px-3 w-full lg:w-8/12'>
                   <p className='text-[16.25px] font-bold'>Ready to continue?</p>
                   <p className='text-[11.2px]'>Before we generate the shipping labels for you, take a moment to review the details and check that all is correct.</p>
-                </Col>
-                <Col xs='12' lg='4'>
+                </div>
+                <div className='px-3 w-full lg:w-4/12'>
                   <table className='w-full align-middle mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                     <tbody>
                       <tr>
@@ -1479,7 +1484,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                   </table>
                   {placementOptionsExpired && (
                     <div className='flex justify-end items-center'>
-                      <Button color='danger' onClick={() => regenerateFBAPlacementOptions(state.currentRegion, state.user.businessId, inboundPlan.inboundPlanId)}>
+                      <Button variant='destructive' onClick={() => regenerateFBAPlacementOptions(state.currentRegion, state.user.businessId, inboundPlan.inboundPlanId)}>
                         Placement Needs to be Re-Generated
                       </Button>
                     </div>
@@ -1487,10 +1492,10 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                   {!placementOptionsExpired && inboundPlan.fulfillmentType === 'Master Boxes' && (
                     <div className='flex justify-end items-center'>
                       {!inboundPlan.steps[3].complete ? (
-                        <Button disabled={shippingHasErrors || watingRepsonse.boxLabels} color='success' id='btn_handleNextShipping' onClick={handleConfirmChargesFees}>
+                        <Button disabled={shippingHasErrors || watingRepsonse.boxLabels} variant='success' id='btn_handleNextShipping' onClick={handleConfirmChargesFees}>
                           {watingRepsonse.boxLabels ? (
                             <div className='flex gap-4'>
-                              <Spinner color='light' size={'sm'} />
+                              <Spinner className='text-white' />
                               <span>Confirming Charges and Shipping...</span>
                             </div>
                           ) : (
@@ -1498,18 +1503,18 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
                           )}
                         </Button>
                       ) : (
-                        <Button disabled={true} color='success' id='btn_handleNextShipping'>
+                        <Button disabled={true} variant='success' id='btn_handleNextShipping'>
                           Charges Already Confirmed
                         </Button>
                       )}
                     </div>
                   )}
-                </Col>
-              </Row>
+                </div>
+              </div>
             </>
           ) : (
             <div className='my-4 flex justify-start items-center gap-4'>
-              <Spinner color='primary' />
+              <Spinner className='size-6 text-primary' />
               <p className='m-0 p-0 font-normal text-[16.25px]'>Generating Inbound Transportation Options, this may take a few minutes...</p>
             </div>
           )}
@@ -1517,7 +1522,7 @@ const Shipping = ({ sessionToken, inboundPlan, handleNextStep, watingRepsonse }:
       ) : (
         <div className='w-full px-4'>
           <div className='my-4 flex justify-start items-center gap-4'>
-            <Spinner color='primary' />
+            <Spinner className='size-6 text-primary' />
             <p className='m-0 p-0 font-normal text-[16.25px]'>Placement Options expired, generating new options, this may take a few minutes...</p>
           </div>
         </div>

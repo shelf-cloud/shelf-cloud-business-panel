@@ -4,17 +4,19 @@ import { type SPSCommerceBusinessInfo, type SPSCommerceItem } from '@hooks/integ
 import moment from 'moment'
 import { toast } from 'react-toastify'
 
-import { Button, type ButtonProps } from '@/components/migration-ui'
+import { type VariantProps } from 'class-variance-authority'
+
+import { Button, buttonVariants } from '@shadcn/ui/button'
 
 type Props = {
   integrationInfo: SPSCommerceBusinessInfo
   items: SPSCommerceItem[]
   warehouseId: string
   disabled?: boolean
-  color?: ButtonProps['color']
+  color?: VariantProps<typeof buttonVariants>['variant']
 }
 
-const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, disabled = false, color = 'primary' }: Props) => {
+const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, disabled = false, color = 'default' }: Props) => {
   const generateFile = useCallback(async () => {
     const generatingDocument = toast.loading('Generating document...')
     try {
@@ -75,7 +77,7 @@ const GenerateSPSCommerceFileButton = ({ integrationInfo, items, warehouseId, di
   }, [integrationInfo, items, warehouseId])
 
   return (
-    <Button color={color} size='sm' className='text-nowrap' onClick={generateFile} disabled={disabled}>
+    <Button variant={color} size='sm' className='text-nowrap' onClick={generateFile} disabled={disabled}>
       <i className='mdi mdi-arrow-down-bold align-middle text-[16.25px] me-2' />
       Generate File
     </Button>

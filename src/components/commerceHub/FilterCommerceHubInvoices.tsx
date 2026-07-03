@@ -5,7 +5,10 @@ import { useClickOutside } from '@hooks/useClickOutside'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
 import { DebounceInput } from 'react-debounce-input'
 
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Label, Switch } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
 
 export type InvoiceCommerceHubFiltersType = {
   onlyOverdue: boolean
@@ -39,12 +42,15 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
   }, [daysOverdue, filters.store, stores])
 
   return (
-    <ButtonGroup>
-      <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-        <DropdownToggle caret className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }} color='light'>
-          Filters
-        </DropdownToggle>
-        <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+    <div role='group' className='inline-flex'>
+      <DropdownMenu open={openDatesMenu} onOpenChange={(open) => { if (open !== openDatesMenu) setOpenDatesMenu(!openDatesMenu) }}>
+        <DropdownMenuTrigger asChild>
+          <button type='button' className='text-[11.2px]' style={{ backgroundColor: 'white', border: '1px solid #E1E3E5' }}>
+            Filters
+            <ChevronDownIcon className='ml-1 size-4' />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
           <div className={'px-6 py-4'}>
             <div className='flex flex-col justify-start gap-2'>
               <span className='text-[11.2px] font-normal'>Filter By Store:</span>
@@ -93,7 +99,7 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
                         type='number'
                         minLength={1}
                         debounceTimeout={700}
-                        className='form-control form-control-sm text-[13px]'
+                        className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px]"
                         placeholder='Days Overdue'
                         id='daysOverdue'
                         value={handleDaysOverdueValue}
@@ -122,9 +128,9 @@ const FilterCommerceHubInvoices = ({ filters, setfilters, stores, statusOptions,
               </button>
             </div>
           </div>
-        </DropdownMenu>
-      </Dropdown>
-    </ButtonGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 

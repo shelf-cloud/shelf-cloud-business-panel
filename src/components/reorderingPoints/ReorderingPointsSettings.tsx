@@ -6,7 +6,10 @@ import { Form, Formik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react'
 import * as Yup from 'yup'
 
-import { Button, Col, Input, InputGroup, InputGroupText, Label, Switch } from '@/components/migration-ui'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 
 type Props = {
   initialHighAlert: number
@@ -95,8 +98,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                 <Input
                   type='number'
                   disabled={!canSplit}
-                  className='form-control text-[13px] m-0'
-                  bsSize='sm'
+                  className='text-xs m-0'
                   style={{ padding: '0.2rem 0.9rem' }}
                   placeholder='Splits'
                   id='splitsMax'
@@ -120,7 +122,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
             {({ values, errors, touched, handleChange, handleBlur }) => (
               <Form className='my-2'>
-                <Col xs={12} className='mb-1'>
+                <div className='px-3 w-full mb-1'>
                   <Label htmlFor='highAlertMax' className='form-label mb-1'>
                     <i className={'mdi mdi-alert-octagon text-destructive text-[16.25px]'} /> High Alert
                   </Label>
@@ -129,8 +131,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                       <Input
                         type='number'
                         disabled
-                        className='form-control text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-xs m-0'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='highAlertMin'
@@ -143,8 +144,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                     <InputGroup size='sm'>
                       <Input
                         type='number'
-                        className='form-control text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-xs m-0'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='highAlertMax'
@@ -153,14 +153,14 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.highAlertMax}
-                        invalid={touched.highAlertMax && errors.highAlertMax ? true : false}
+                        aria-invalid={Boolean(touched.highAlertMax && errors.highAlertMax) || undefined}
                       />
                       <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
                     </InputGroup>
                   </div>
                   {touched.highAlertMax && errors.highAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.highAlertMax}</p> : null}
-                </Col>
-                <Col xs={12} className='mb-1'>
+                </div>
+                <div className='px-3 w-full mb-1'>
                   <Label htmlFor='mediumAlertMin' className='form-label mb-1'>
                     <i className={'mdi mdi-alert-octagon text-warning text-[16.25px]'} /> Medium Alert
                   </Label>
@@ -170,7 +170,6 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         type='number'
                         disabled
                         className='text-[13px] m-0'
-                        bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='mediumAlertMin'
@@ -184,8 +183,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                     <InputGroup size='sm'>
                       <Input
                         type='number'
-                        className='form-control text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-xs m-0'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='mediumAlertMax'
@@ -194,14 +192,14 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.mediumAlertMax}
-                        invalid={touched.mediumAlertMax && errors.mediumAlertMax ? true : false}
+                        aria-invalid={Boolean(touched.mediumAlertMax && errors.mediumAlertMax) || undefined}
                       />
                       <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
                     </InputGroup>
                   </div>
                   {touched.mediumAlertMax && errors.mediumAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.mediumAlertMax}</p> : null}
-                </Col>
-                <Col xs={12} className='mb-1'>
+                </div>
+                <div className='px-3 w-full mb-1'>
                   <Label htmlFor='lowAlertMin' className='form-label mb-1'>
                     <i className={'mdi mdi-alert-octagon text-info text-[16.25px]'} /> Low Alert
                   </Label>
@@ -211,7 +209,6 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         type='number'
                         disabled
                         className='text-[13px] m-0'
-                        bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='lowAlertMin'
@@ -225,8 +222,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                     <InputGroup size='sm'>
                       <Input
                         type='number'
-                        className='form-control text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-xs m-0'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='lowAlertMax'
@@ -235,14 +231,14 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.lowAlertMax}
-                        invalid={touched.lowAlertMax && errors.lowAlertMax ? true : false}
+                        aria-invalid={Boolean(touched.lowAlertMax && errors.lowAlertMax) || undefined}
                       />
                       <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
                     </InputGroup>
                   </div>
                   {touched.lowAlertMax && errors.lowAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.lowAlertMax}</p> : null}
-                </Col>
-                <Col xs={12} className='mb-1'>
+                </div>
+                <div className='px-3 w-full mb-1'>
                   <Label htmlFor='noAlertMin' className='form-label mb-1'>
                     <i className={'mdi mdi-alert-octagon text-success text-[16.25px]'} /> No Alert
                   </Label>
@@ -252,7 +248,6 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                         type='number'
                         disabled
                         className='text-[13px] m-0'
-                        bsSize='sm'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Min'
                         id='noAlertMin'
@@ -267,8 +262,7 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                       <Input
                         type='text'
                         disabled
-                        className='form-control text-[13px] m-0'
-                        bsSize='sm'
+                        className='text-xs m-0'
                         style={{ padding: '0.2rem 0.9rem' }}
                         placeholder='Max'
                         id='noAlertMax'
@@ -278,14 +272,14 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
                       <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
                     </InputGroup>
                   </div>
-                </Col>
-                <Col xs={12} className='mt-4'>
+                </div>
+                <div className='px-3 w-full mt-4'>
                   <div className='flex flex-row justify-end items-center gap-4'>
-                    <Button type='submit' color='primary' className='text-[11.2px]' size='sm'>
+                    <ShadcnButton type='submit' className='text-[11.2px]' size='sm'>
                       Apply Urgency
-                    </Button>
+                    </ShadcnButton>
                   </div>
-                </Col>
+                </div>
               </Form>
             )}
           </Formik>

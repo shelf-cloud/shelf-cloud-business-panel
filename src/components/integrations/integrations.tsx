@@ -6,7 +6,8 @@ import AmazonAuthButton from '@components/amazon/AmazonAuthButton'
 import AmazonReconnectButton from '@components/amazon/AmazonReconnectButton'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 type Props = {
   env: string
@@ -16,11 +17,11 @@ const Integrations = ({ env }: Props) => {
   const { state }: any = useContext(AppContext)
 
   return (
-    <Row>
+    <div className='flex flex-wrap -mx-3'>
       {state.user[state.currentRegion]?.showAmazonTab && (
-        <Col sm={6} xl={4}>
+        <div className='px-3 sm:w-6/12 xl:w-4/12'>
           <Card>
-            <CardBody>
+            <CardContent>
               <div className='flex flex-row justify-start items-center gap-4'>
                 <div
                   style={{
@@ -46,19 +47,19 @@ const Integrations = ({ env }: Props) => {
                 ) : state.user[state.currentRegion]?.amazonNeedsUpdate ? (
                   <AmazonReconnectButton />
                 ) : (
-                  <Button outline color='success' className='font-semibold'>
+                  <Button outline variant='success' className='font-semibold'>
                     Active
                   </Button>
                 )}
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
+        </div>
       )}
       {state.user[state.currentRegion]?.showAmazonAdsTab && (
-        <Col sm={6} xl={4}>
+        <div className='px-3 sm:w-6/12 xl:w-4/12'>
           <Card>
-            <CardBody>
+            <CardContent>
               <div className='flex flex-row justify-start items-center gap-4'>
                 <div
                   style={{
@@ -82,16 +83,16 @@ const Integrations = ({ env }: Props) => {
                 {!state.user[state.currentRegion]?.amazonAdsConnected ? (
                   <AmazonAdsAuthButton env={env} />
                 ) : (
-                  <Button outline color='success' className='font-semibold'>
+                  <Button outline variant='success' className='font-semibold'>
                     Active
                   </Button>
                 )}
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
+        </div>
       )}
-    </Row>
+    </div>
   )
 }
 

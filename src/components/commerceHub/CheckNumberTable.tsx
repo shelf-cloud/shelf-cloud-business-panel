@@ -7,7 +7,7 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 import { getTotalPaid } from './helperFunctions'
 
@@ -19,13 +19,13 @@ const CheckNumberTable = ({ summary }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
     <React.Fragment>
-      <Col>
+      <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='items-center flex justify-between'>
             <h4 className='card-title mb-0 grow'>Check Summary</h4>
           </CardHeader>
 
-          <CardBody>
+          <CardContent>
             <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:hover]:bg-[color:var(--vz-light)]'>
                 <thead>
@@ -80,9 +80,9 @@ const CheckNumberTable = ({ summary }: Props) => {
                 </Link>
               </div>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

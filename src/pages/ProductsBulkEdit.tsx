@@ -8,7 +8,7 @@ import ProductsBulkEditTable from '@components/products/ProductsBulkEditTable'
 import AppContext from '@context/AppContext'
 import { ProductsDetails } from '@typesTs/products/products'
 import axios from 'axios'
-import { Card, CardBody, CardHeader } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 type Props = {}
 
@@ -121,7 +121,7 @@ const ProductsBulkEdit = ({}: Props) => {
           <CardHeader>
             <h4 className='card-title'>Products Bulk Edit</h4>
           </CardHeader>
-          <CardBody>{productsDetailsData.length > 0 ? <ProductsBulkEditTable tableData={productsDetailsData || []} pending={pending} /> : <span>Loading...</span>}</CardBody>
+          <CardContent>{productsDetailsData.length > 0 ? <ProductsBulkEditTable tableData={productsDetailsData || []} pending={pending} /> : <span>Loading...</span>}</CardContent>
         </Card>
       </React.Fragment>
     </div>

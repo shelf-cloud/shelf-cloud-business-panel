@@ -4,7 +4,8 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { IndividualUnitsPlan } from '@typings'
-import { Button, Col, Modal, ModalBody, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 
 type Props = {
   individualUnitsPlan: IndividualUnitsPlan
@@ -94,24 +95,17 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={state.showIndividualUnitsPlan}
-      toggle={() => {
-        setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
+    <Dialog
+      open={!!state.showIndividualUnitsPlan}
+      onOpenChange={(open) => {
+        if (!open) setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Individual Units Plan
-      </ModalHeader>
-      <ModalBody style={{ overflow: 'auto' }}>
-        <Col>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='myModal'>
+        <DialogHeader className='pr-6' id='myModalLabel'>
+          <DialogTitle className='modal-title'>Individual Units Plan</DialogTitle>
+        </DialogHeader>
+        <div style={{ overflow: 'auto' }}>
+        <div className='px-3 flex-1 basis-0'>
           <div className='overflow-x-auto'>
           <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
             <thead className='bg-[color:var(--vz-light)] text-center font-semibold'>
@@ -181,8 +175,8 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
             </tbody>
           </table>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='overflow-x-auto'>
           <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
             <thead className='bg-[color:var(--vz-light)] text-center font-semibold'>
@@ -216,25 +210,26 @@ const IndividualUnitsPlanModal = ({ individualUnitsPlan }: Props) => {
             </tbody>
           </table>
           </div>
-        </Col>
-        <Col md={12}>
+        </div>
+        <div className='px-3 md:w-full'>
           <div className='text-right'>
             <Button
               type='submit'
-              color='light'
+              variant='light'
               className='btn mr-4'
               onClick={() => {
                 setIndividualUnitsPlan(!state.showIndividualUnitsPlan)
               }}>
               Close
             </Button>
-            <Button type='submit' color='success' className='btn' onClick={handlePrintPlan}>
+            <Button type='submit' variant='success' className='btn' onClick={handlePrintPlan}>
               Print Plan
             </Button>
           </div>
-        </Col>
-      </ModalBody>
-    </Modal>
+        </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

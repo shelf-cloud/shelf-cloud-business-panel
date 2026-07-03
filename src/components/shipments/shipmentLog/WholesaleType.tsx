@@ -7,7 +7,8 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
-import { Button, Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
@@ -47,20 +48,20 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
   return (
     <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px 10px' }}>
       {data.carrierStatus && (
-        <Row className=''>
-          <Col xs={12}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 w-full'>
             <ShipmentCarrierStatusBar carrier={data.carrierUsed} currentStatus={data.carrierStatus} />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
 
-      <Row>
-        <Col xl={8}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 xl:w-8/12'>
           <Card>
             <CardHeader className='py-4'>
               <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)]'>
@@ -95,16 +96,16 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                   </tbody>
                 </table>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
-        <Col xl={4}>
-          <Col xl={12}>
+        </div>
+        <div className='px-3 xl:w-4/12'>
+          <div className='px-3 xl:w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Shipping</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
@@ -142,15 +143,15 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     carrierService={data.carrierService}
                   />
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xl={12}>
+          </div>
+          <div className='px-3 xl:w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='table table-sm table-borderless table-nowrap mb-0'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b pb-2'>
@@ -205,27 +206,27 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
+          </div>
           {data.extraComment != '' && (
-            <Col xl={12}>
+            <div className='px-3 xl:w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <p>{data.extraComment}</p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
+            </div>
           )}
           {showActions && (
-            <Row>
-              <Col xl={12} className='flex flex-row flex-wrap justify-start items-end gap-2'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 xl:w-full flex flex-row flex-wrap justify-start items-end gap-2'>
                 {data.proofOfShipped != '' && data.proofOfShipped != null && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
-                    <Button color='info' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='info' className='btn-label btn-sm text-[11.2px] text-nowrap'>
                       <i className='las la-truck label-icon align-middle text-[19.5px] me-2' />
                       Proof Of Shipped
                     </Button>
@@ -235,7 +236,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 {data.isIndividualUnits && (
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
-                    color='info'
+                    variant='info'
                     className='btn-label btn-sm text-[11.2px] text-nowrap'
                     onClick={() => setIndividualUnitsPlan(!state.showIndividualUnitsPlan)}>
                     <i className='las la-boxes label-icon align-middle text-[22.75px] me-2' />
@@ -247,7 +248,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.labelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button color='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                       FBA Labels
                     </Button>
@@ -258,7 +259,7 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                     href={`https://firebasestorage.googleapis.com/v0/b/etiquetas-fba.appspot.com/o/shelf-cloud%2F${data.palletLabelsName}?alt=media&token=837cdbcf-11ab-4555-9697-50f1c6a3d0e3`}
                     target='blank'
                     rel='noopener noreferrer'>
-                    <Button color='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
+                    <Button variant='secondary' className='btn-label btn-sm text-[11.2px] text-nowrap'>
                       <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                       Pallet Labels
                     </Button>
@@ -267,18 +268,18 @@ const WholesaleType = ({ data, showActions, mutateShipment }: Props) => {
                 {(data.labelsName == '' || (data.numberPallets > 0 && data.palletLabelsName == '')) && (
                   <Button
                     disabled={data.individualUnitsPlan?.state == 'Pending' ? true : false}
-                    color='secondary'
+                    variant='secondary'
                     className='btn-label btn-sm text-[11.2px] text-nowrap'
                     onClick={() => setUploadIndividualUnitsLabelsModal(!state.showUploadIndividualUnitsLabelsModal)}>
                     <i className='las la-toilet-paper label-icon align-middle text-[19.5px] me-2' />
                     Upload Labels
                   </Button>
                 )}
-              </Col>
-            </Row>
+              </div>
+            </div>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
       {state.showIndividualUnitsPlan && <IndividualUnitsPlanModal individualUnitsPlan={data.individualUnitsPlan!} />}
       {state.showUploadIndividualUnitsLabelsModal && <UploadIndividualUnitsLabelsModal data={data} mutateShipment={mutateShipment} />}
     </div>

@@ -4,7 +4,7 @@ import { SelectOptionType, SelectSingleValueType } from '@components/Common/Simp
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { Label } from '@/components/migration-ui'
+import { Label } from '@shadcn/ui/label'
 
 import ErrorInputLabel from '../forms/ErrorInputLabel'
 

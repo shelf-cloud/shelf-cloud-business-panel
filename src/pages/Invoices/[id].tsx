@@ -17,7 +17,8 @@ import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import useSWR from 'swr'
 
-import { Button, Card, CardBody, CardHeader, Col, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -68,9 +69,9 @@ const InvoiceDetails = () => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Invoices' pageTitle='Billing' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 lg:w-full'>
                 <Card>
                   {!loading ? (
                     <>
@@ -78,7 +79,6 @@ const InvoiceDetails = () => {
                         <div>
                           <Link href={'/Invoices'}>
                             <Button
-                              color='primary'
                               outline
                               // className="d-flex flex-row gap-1 text-decoration-none text-primary"
                               style={{ cursor: 'pointer' }}>
@@ -111,7 +111,7 @@ const InvoiceDetails = () => {
                           </h4>
                         </div>
                       </CardHeader>
-                      <CardBody>
+                      <CardContent>
                         <div className='overflow-x-auto'>
                           <table className='w-full align-middle text-center [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                             <thead className='text-[16.25px]'>
@@ -182,15 +182,15 @@ const InvoiceDetails = () => {
                             </tfoot>
                           </table>
                         </div>
-                      </CardBody>
+                      </CardContent>
                     </>
                   ) : (
                     <CardHeader className='font-bold text-[16.25px] text-center'>Loading...</CardHeader>
                   )}
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {shipmentDetailModal.show && <ShipmentDetailsModal />}

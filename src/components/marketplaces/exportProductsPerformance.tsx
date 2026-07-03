@@ -2,7 +2,7 @@ import { AMAZON_MARKETPLACES, AMAZON_MARKETPLACES_ID } from '@lib/AmzConstants'
 import { ProductPerformance } from '@typesTs/marketplaces/productPerformance'
 import ExcelJS from 'exceljs'
 
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 import { getProductMargin, getProductNetProfit, getProductRoi } from './productPerformanceMetrics'
 
@@ -126,7 +126,7 @@ const ExportProductsPerformance = ({ products, startDate, endDate, selectedMarke
   }
 
   return (
-    <Button color='primary' size='sm' className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
+    <Button size='sm' className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-1' />
       Export Products
     </Button>

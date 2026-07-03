@@ -6,7 +6,9 @@ import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Label, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 type Props = {}
@@ -83,7 +85,7 @@ const ResetPasswordPage = ({}: Props) => {
               <div className='relative auth-pass-inputgroup mb-4'>
                 <input
                   type={show ? 'text' : 'password'}
-                  className='form-control pe-12'
+                  className='h-9 w-full px-3 py-1 text-sm rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 pe-12'
                   placeholder='Enter new password'
                   id='newPassword'
                   name='newPassword'
@@ -106,7 +108,7 @@ const ResetPasswordPage = ({}: Props) => {
               <div className='relative auth-pass-inputgroup mb-4'>
                 <input
                   type={showConfirm ? 'text' : 'password'}
-                  className='form-control pe-12'
+                  className='h-9 w-full px-3 py-1 text-sm rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 pe-12'
                   placeholder='Confirm your password'
                   id='confirmPassword'
                   name='confirmPassword'
@@ -123,8 +125,8 @@ const ResetPasswordPage = ({}: Props) => {
               ) : null}
             </div>
             <div className='mt-6 w-full'>
-              <Button color='primary' className='w-full font-semibold text-[16.25px]' type='submit'>
-                {loading ? <Spinner size='sm' color='light' role='status' aria-hidden='true' animation='border' /> : 'Set New Password'}
+              <Button className='w-full font-semibold text-[16.25px]' type='submit'>
+                {loading ? <Spinner className='text-white' role='status' aria-hidden='true' /> : 'Set New Password'}
               </Button>
             </div>
           </form>

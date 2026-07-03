@@ -9,7 +9,9 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Shipment, ShipmentOrderItem } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
-import { Button, Card, CardBody, CardHeader, Col, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 
 import ShipmentCarrierStatusBar from './ShipmentCarrierStatusBar'
 import ShipmentTrackingNumber from './ShipmentTrackingNumber'
@@ -65,23 +67,23 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
       {data.carrierStatus && (
-        <Row>
-          <Col xs={12}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 w-full'>
             <ShipmentCarrierStatusBar carrier={data.carrierUsed} currentStatus={data.carrierStatus} />
-          </Col>
-        </Row>
+          </div>
+        </div>
       )}
-      <Row>
-        <Col xs={12} lg={8}>
-          <Row>
-            <Col xs={12} lg={6} className='pb-4'>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full lg:w-8/12'>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full lg:w-6/12 pb-4'>
               <Card className='h-full'>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Order Summary</h5>
                 </CardHeader>
-                <CardBody>
-                  <Row className='m-0 p-0 flex flex-row justify-between items-start'>
-                    <Col xs={6} className='m-0 p-0'>
+                <CardContent>
+                  <div className='flex flex-wrap -mx-3 m-0 p-0 flex flex-row justify-between items-start'>
+                    <div className='px-3 w-6/12 m-0 p-0'>
                       <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Store:</span>
                       <div className='flex flex-col justify-start items-start gap-2'>
                         <img
@@ -101,8 +103,8 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
                       <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.orderDate).format('LL')}</p>
                       <span className='text-[var(--bs-secondary-color)] text-[11.2px]'>Closed Date:</span>
                       {data.closedDate && <p className='text-[11.2px] font-semibold m-0'>{moment.utc(data.closedDate).format('LL')}</p>}
-                    </Col>
-                    <Col xs={6} className='m-0 p-0'>
+                    </div>
+                    <div className='px-3 w-6/12 m-0 p-0'>
                       <table className='w-full whitespace-nowrap m-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                         <tbody>
                           <tr className='border-b border-[color:var(--border)]'>
@@ -131,17 +133,17 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
                           </tr>
                         </tbody>
                       </table>
-                    </Col>
-                  </Row>
-                </CardBody>
+                    </div>
+                  </div>
+                </CardContent>
               </Card>
-            </Col>
-            <Col xs={12} lg={6} className='pb-4'>
+            </div>
+            <div className='px-3 w-full lg:w-6/12 pb-4'>
               <Card className='h-full'>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Shipping</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <table className='w-full whitespace-nowrap m-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                     <tbody>
                       <tr>
@@ -177,17 +179,17 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
                       carrierService={data.carrierService}
                     />
                   </div>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
+            </div>
+          </div>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Products</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <div className='overflow-x-auto'>
                     <table className='w-full align-middle mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                       <thead className='bg-[color:var(--vz-light)]'>
@@ -227,18 +229,18 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
                       </tbody>
                     </table>
                   </div>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={12} lg={4}>
-          <Col xs={12}>
+            </div>
+          </div>
+        </div>
+        <div className='px-3 w-full lg:w-4/12'>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     <tr className='border-b border-[color:var(--border)]'>
@@ -267,44 +269,44 @@ const ReturnType = ({ data, showActions, mutateShipments }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
+          </div>
           {data.extraComment != '' && (
-            <Col xs={12}>
+            <div className='px-3 w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <p>{data.extraComment}</p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
+            </div>
           )}
           {showActions && (
-            <Row>
-              <Col xs={12} className='flex flex-row flex-wrap justify-start items-end gap-2'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full flex flex-row flex-wrap justify-start items-end gap-2'>
                 {data.returnOrigin === 'shipment' && (
                   <Card className='m-0'>
                     {loadingLabel ? (
-                      <Button color='secondary' size='sm' className='btn-label text-[11.2px] whitespace-nowrap'>
+                      <Button variant='secondary' size='sm' className='btn-label text-[11.2px] whitespace-nowrap'>
                         <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
-                        <Spinner color='light' size={'sm'} />
+                        <Spinner className='text-white' />
                       </Button>
                     ) : (
-                      <Button color='secondary' size='sm' className='btn-label text-[11.2px] whitespace-nowrap' onClick={() => handlePrintingLabel()}>
+                      <Button variant='secondary' size='sm' className='btn-label text-[11.2px] whitespace-nowrap' onClick={() => handlePrintingLabel()}>
                         <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                         Print Label
                       </Button>
                     )}
                   </Card>
                 )}
-              </Col>
-            </Row>
+              </div>
+            </div>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   )
 }

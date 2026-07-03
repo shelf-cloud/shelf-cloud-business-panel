@@ -5,7 +5,8 @@ import { FormEventHandler, useRef } from 'react'
 import { getSession } from '@auth/client'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Label } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
 
 import RightImage from '../assets/images/contactform-image-right.png'
 import ShelfCloudLogo from '../assets/images/shelfcloud-blue-h.png'
@@ -82,14 +83,29 @@ function ContactForm({}: Props) {
                 <Label htmlFor='name' className='form-label'>
                   Name
                 </Label>
-                <input type='text' required className='form-control' id='name' name='name' placeholder='Please enter your name' ref={nameRef} />
+                <input
+                  type='text'
+                  required
+                  className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
+                  id='name'
+                  name='name'
+                  placeholder='Please enter your name'
+                  ref={nameRef}
+                />
               </div>
               <div className='mb-1 w-full'>
                 <Label className='form-label' htmlFor='email'>
                   Email
                 </Label>
                 <div className='relative auth-pass-inputgroup mb-4'>
-                  <input className='form-control pe-12' required placeholder='Please enter your email' id='email' name='email' ref={emailRef} />
+                  <input
+                    className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 pe-12'
+                    required
+                    placeholder='Please enter your email'
+                    id='email'
+                    name='email'
+                    ref={emailRef}
+                  />
                 </div>
               </div>
               <div className='mb-1 w-full'>
@@ -97,11 +113,18 @@ function ContactForm({}: Props) {
                   Message
                 </Label>
                 <div className='relative auth-pass-inputgroup mb-4'>
-                  <textarea className='form-control text-[16.25px] pe-12' placeholder='Please enter your message' required id='message' name='message' ref={messageRef} rows={3}></textarea>
+                  <textarea
+                    className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[16.25px] pe-12'
+                    placeholder='Please enter your message'
+                    required
+                    id='message'
+                    name='message'
+                    ref={messageRef}
+                    rows={3}></textarea>
                 </div>
               </div>
               <div className='mt-6 w-full'>
-                <Button color='primary' className='w-full font-semibold text-[16.25px]' type='submit'>
+                <Button className='w-full font-semibold text-[16.25px]' type='submit'>
                   Submit
                 </Button>
               </div>

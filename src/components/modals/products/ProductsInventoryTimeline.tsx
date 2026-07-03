@@ -1,7 +1,7 @@
  
  
 import ProductsQtyTimeline from '@components/products/ProductsQtyTimeline'
-import { Modal, ModalBody, ModalHeader } from '@/components/migration-ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 
 type Props = {
   dates: string[]
@@ -14,26 +14,20 @@ type Props = {
 
 const ProductsInventoryTimelineModal = ({ dates, dailyQty, dailySellerValue, dailyLandedValue, productsQtyTimelineModal, setproductsQtyTimelineModal }: Props) => {
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='ProductsInventoryTimelineModal'
-      isOpen={productsQtyTimelineModal.show}
-      toggle={() => {
-        setproductsQtyTimelineModal({ show: false })
+    <Dialog
+      open={!!productsQtyTimelineModal.show}
+      onOpenChange={(open) => {
+        if (!open) setproductsQtyTimelineModal({ show: false })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setproductsQtyTimelineModal({ show: false })
-        }}
-        className='modal-title'
-        id='ProductsInventoryTimeline'>
-        Inventory Timeline
-      </ModalHeader>
-      <ModalBody>
-        <ProductsQtyTimeline dates={dates} dailyQty={dailyQty} dailySellerValue={dailySellerValue} dailyLandedValue={dailyLandedValue} />
-      </ModalBody>
-    </Modal>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='ProductsInventoryTimelineModal'>
+        <DialogHeader className='pr-6' id='ProductsInventoryTimeline'>
+          <DialogTitle>Inventory Timeline</DialogTitle>
+        </DialogHeader>
+        <div>
+          <ProductsQtyTimeline dates={dates} dailyQty={dailyQty} dailySellerValue={dailySellerValue} dailyLandedValue={dailyLandedValue} />
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

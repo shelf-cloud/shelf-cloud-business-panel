@@ -5,7 +5,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { StorageProduct } from '@typesTs/storage/storage'
-import { Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 type Props = {
   data: { [inventoryId: string]: StorageProduct }
@@ -17,15 +17,15 @@ const StorageType = ({ data, totalCharge }: Props) => {
   const products = Object.values(data)
   return (
     <div className='w-full' style={{ backgroundColor: '#F0F4F7', padding: '0px' }}>
-      <Row>
-        <Col xs={12}>
-          <Row>
-            <Col xs={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full'>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Products</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <div className='overflow-x-auto'>
                     <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                       <thead className='bg-[color:var(--vz-light)]'>
@@ -72,12 +72,12 @@ const StorageType = ({ data, totalCharge }: Props) => {
                       </tbody>
                     </table>
                   </div>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

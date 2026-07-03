@@ -5,7 +5,9 @@ import { Identifier } from '@typings'
 import axios from 'axios'
 import { Field, FieldArray, Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, FormFeedback, FormGroup, Input } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { NativeSelect } from '@shadcn/ui/native-select'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -142,19 +144,18 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                   <tr>
                     <td className='align-middle'>UPC</td>
                     <td>
-                      <FormGroup className='createOrder_inputs'>
+                      <div className='createOrder_inputs'>
                         <Input
                           disabled
                           type='text'
-                          className='text-[13px]'
+                          className='text-[13px] h-8 text-xs'
                           style={{ minWidth: '150px', padding: '0.2rem 0.9rem' }}
                           placeholder='Upc...'
                           id='upc'
                           name='upc'
-                          bsSize='sm'
                           value={upc || ''}
                         />
-                      </FormGroup>
+                      </div>
                     </td>
                   </tr>
                   <FieldArray name='identifiers'>
@@ -172,43 +173,41 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                         <tr>
                           <td className='align-middle'>ASIN</td>
                           <td>
-                            <FormGroup className='createOrder_inputs'>
+                            <div className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='text-[13px]'
+                                className='text-[13px] h-8 text-xs'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='Asin...'
                                 id='asin'
                                 name='asin'
-                                bsSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.asin || ''}
-                                invalid={touched.asin && errors.asin ? true : false}
+                                aria-invalid={(touched.asin && errors.asin ? true : false) || undefined}
                               />
-                              {touched.asin && errors.asin ? <FormFeedback type='invalid'>{errors.asin}</FormFeedback> : null}
-                            </FormGroup>
+                              {touched.asin && errors.asin ? <div className='text-sm text-destructive'>{errors.asin}</div> : null}
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td className='align-middle'>FNSKU</td>
                           <td>
-                            <FormGroup className='createOrder_inputs'>
+                            <div className='createOrder_inputs'>
                               <Input
                                 type='text'
-                                className='text-[13px]'
+                                className='text-[13px] h-8 text-xs'
                                 style={{ padding: '0.2rem 0.9rem' }}
                                 placeholder='FNSKU...'
                                 id='fnsku'
                                 name='fnsku'
-                                bsSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.fnsku || ''}
-                                invalid={touched.fnsku && errors.fnsku ? true : false}
+                                aria-invalid={(touched.fnsku && errors.fnsku ? true : false) || undefined}
                               />
-                              {touched.fnsku && errors.fnsku ? <FormFeedback type='invalid'>{errors.fnsku}</FormFeedback> : null}
-                            </FormGroup>
+                              {touched.fnsku && errors.fnsku ? <div className='text-sm text-destructive'>{errors.fnsku}</div> : null}
+                            </div>
                           </td>
                         </tr>
                         {values.identifiers.map((_identifiers, index) => (
@@ -216,53 +215,50 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                             <td>
                               <Field name={`identifiers.${index}.type`}>
                                 {({ meta }: any) => (
-                                  <FormGroup className='createOrder_inputs'>
-                                    <Input
-                                      type='select'
+                                  <div className='createOrder_inputs'>
+                                    <NativeSelect
                                       disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
-                                      className='text-center align-middle text-[13px]'
+                                      className='text-center align-middle text-[13px] h-8'
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
                                       name={`identifiers.${index}.type`}
-                                      bsSize='sm'
-                                      placeholder='Type...'
+                                      size='sm'
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.identifiers[index].type || ''}
-                                      invalid={meta.touched && meta.error ? true : false}>
+                                      aria-invalid={(meta.touched && meta.error ? true : false) || undefined}>
                                       {Object.entries(IDENTIFIERS_TYPES).map(([_type, option]) => (
                                         <option key={option.value} value={option.value}>
                                           {option.label}
                                         </option>
                                       ))}
-                                    </Input>
-                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
-                                  </FormGroup>
+                                    </NativeSelect>
+                                    {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
+                                  </div>
                                 )}
                               </Field>
                             </td>
                             <td>
                               <Field name={`identifiers.${index}.value`}>
                                 {({ meta }: any) => (
-                                  <FormGroup className='createOrder_inputs'>
+                                  <div className='createOrder_inputs'>
                                     <Input
                                       type='text'
-                                      className='align-middle text-[13px]'
+                                      className='align-middle text-[13px] h-8 text-xs'
                                       disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
                                       style={{
                                         padding: '0.2rem 0.9rem',
                                       }}
-                                      bsSize='sm'
                                       name={`identifiers.${index}.value`}
                                       placeholder='Value...'
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.identifiers[index].value || ''}
-                                      invalid={meta.touched && meta.error ? true : false}
+                                      aria-invalid={(meta.touched && meta.error ? true : false) || undefined}
                                     />
-                                    {meta.touched && meta.error ? <FormFeedback type='invalid'>{meta.error}</FormFeedback> : null}
-                                  </FormGroup>
+                                    {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
+                                  </div>
                                 )}
                               </Field>
                             </td>
@@ -280,16 +276,16 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
                   </FieldArray>
                 </tbody>
               </table>
-              <Col md={12}>
+              <div className='px-3 w-full'>
                 <div className='flex flex-row justify-end items-center gap-3'>
-                  <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
+                  <Button disabled={isLoading} type='button' variant='light' onClick={() => setShowEditFields(false)}>
                     Cancel
                   </Button>
-                  <Button disabled={isLoading} type='submit' color='primary'>
+                  <Button disabled={isLoading} type='submit'>
                     {isLoading ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
-              </Col>
+              </div>
             </Form>
           )}
         </Formik>

@@ -4,7 +4,9 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 
 import Select_Product_Mapped from './Select_Product_Mapped'
@@ -117,89 +119,61 @@ const MappedListing = ({ showMappedListingModal, setshowMappedListingModal, load
     setLoading(false)
   }
 
+  const closeModal = () => {
+    setshowMappedListingModal({
+      show: false,
+      listingSku: '',
+      listingFnsku: '',
+      listingId: 0,
+      shelfCloudSku: '',
+      shelfCloudSkuId: 0,
+      shelfCloudSkuIsKit: false,
+      currentSkuMapped: '',
+      currentSkuIdMapped: 0,
+      currentSkuIsKitMapped: false,
+    })
+  }
+
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='confirmDelete'
-      isOpen={showMappedListingModal.show}
-      toggle={() => {
-        setshowMappedListingModal({
-          show: false,
-          listingSku: '',
-          listingFnsku: '',
-          listingId: 0,
-          shelfCloudSku: '',
-          shelfCloudSkuId: 0,
-          shelfCloudSkuIsKit: false,
-          currentSkuMapped: '',
-          currentSkuIdMapped: 0,
-          currentSkuIsKitMapped: false,
-        })
+    <Dialog
+      open={!!showMappedListingModal.show}
+      onOpenChange={(open) => {
+        if (!open) closeModal()
       }}>
-      <ModalHeader
-        toggle={() => {
-          setshowMappedListingModal({
-            show: false,
-            listingSku: '',
-            listingFnsku: '',
-            listingId: 0,
-            shelfCloudSku: '',
-            shelfCloudSkuId: 0,
-            shelfCloudSkuIsKit: false,
-            currentSkuMapped: '',
-            currentSkuIdMapped: 0,
-            currentSkuIsKitMapped: false,
-          })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Mapped Amazon Listing to ShelfCloud Sku
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>Mapped Amazon Listing to ShelfCloud Sku</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>Amazon Listing:</h5>
           <p className='text-[19.5px] font-semibold text-black'>{showMappedListingModal.listingSku}</p>
-          <Col md={12}>
+          <div className='px-3 w-full'>
             <p className='font-semibold text-[13px] m-0 mb-1'>Map to Product or Kit:</p>
             <Select_Product_Mapped data={data || []} showMappedListingModal={showMappedListingModal} setshowMappedListingModal={setshowMappedListingModal} />
-          </Col>
-          <Row md={12} className='mt-4'>
+          </div>
+          <div className='flex flex-wrap -mx-3 mt-4'>
             <div className='text-right mt-2 flex flex-row gap-6 justify-between'>
-              <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' color='danger' onClick={handleUnMappedProduct}>
+              <Button disabled={loading || showMappedListingModal.currentSkuMapped === ''} type='button' variant='destructive' onClick={handleUnMappedProduct}>
                 <i className='las la-unlink text-[16.25px] text-white m-0 p-0 me-1' />
-                {loading ? <Spinner color='#fff' size={'sm'} /> : 'UnMap'}
+                {loading ? <Spinner className='text-white' /> : 'UnMap'}
               </Button>
               <div className='flex flex-row gap-4'>
                 <Button
                   disabled={loading}
                   type='button'
-                  color='light'
-                  onClick={() => {
-                    setshowMappedListingModal({
-                      show: false,
-                      listingSku: '',
-                      listingFnsku: '',
-                      listingId: 0,
-                      shelfCloudSku: '',
-                      shelfCloudSkuId: 0,
-                      shelfCloudSkuIsKit: false,
-                      currentSkuMapped: '',
-                      currentSkuIdMapped: 0,
-                      currentSkuIsKitMapped: false,
-                    })
-                  }}>
+                  variant='light'
+                  onClick={closeModal}>
                   Cancel
                 </Button>
-                <Button disabled={loading || showMappedListingModal.currentSkuMapped !== ''} type='button' color='success' onClick={handleSaveMappedProduct}>
-                  {loading ? <Spinner color='#fff' size={'sm'} /> : 'Save'}
+                <Button disabled={loading || showMappedListingModal.currentSkuMapped !== ''} type='button' variant='success' onClick={handleSaveMappedProduct}>
+                  {loading ? <Spinner className='text-white' /> : 'Save'}
                 </Button>
               </div>
             </div>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

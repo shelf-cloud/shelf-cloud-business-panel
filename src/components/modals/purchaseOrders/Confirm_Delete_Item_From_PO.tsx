@@ -8,7 +8,9 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { Split } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 export type DeleteItemFromOrderType = {
@@ -85,11 +87,14 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
   }
 
   return (
-    <Modal fade={false} size='md' id='confirmDelete' isOpen={show} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
-        Confirm Delete Item From PO
-      </ModalHeader>
-      <ModalBody>
+    <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleClose() }}>
+      <DialogContent id='confirmDelete' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Confirm Delete Item From PO
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         <p className='m-0 text-[16.25px] font-semibold'>
           Purchase Order: <span className='text-primary'>{orderNumber}</span>
         </p>
@@ -115,21 +120,22 @@ const Confirm_Delete_Item_From_PO = ({ showDeleteModal, setshowDeleteModal, load
           </div>
         </div>
         <div className='mt-4 flex justify-end items-center gap-2'>
-          <Button type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
+          <Button type='button' variant='light' className='text-[11.2px]' onClick={handleClose}>
             Cancel
           </Button>
-          <Button disabled={loading} type='button' color='danger' className='text-[11.2px]' onClick={handleDeleteFromSkuList}>
+          <Button disabled={loading} type='button' variant='destructive' className='text-[11.2px]' onClick={handleDeleteFromSkuList}>
             {loading ? (
               <span>
-                <Spinner color='light' size={'sm'} /> Deleting...
+                <Spinner className='text-white' /> Deleting...
               </span>
             ) : (
               'Delete'
             )}
           </Button>
         </div>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

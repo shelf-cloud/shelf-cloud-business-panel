@@ -4,7 +4,8 @@ import AppContext from '@context/AppContext'
 import { ExpandedRowProps } from '@hooks/reorderingPoints/useRPProductSale'
 import { useRPProductTimeline } from '@hooks/reorderingPoints/useRPProductTimeline'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Card, CardBody, CardHeader, Col, Spinner } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Spinner } from '@shadcn/ui/spinner'
 
 import ReorderingPointsTimeLine from './ReorderingPointsTimeLine'
 
@@ -18,13 +19,13 @@ const ReorderingPointsTimelineDetails = ({ data, expandedRowProps }: Props) => {
   const { session } = expandedRowProps!
   const { productTimeline, isLoadingProductsTimeline } = useRPProductTimeline({ session, state, sku: data.sku })
   return (
-    <Col xs={8}>
+    <div className='px-3 w-2/3'>
       <Card>
         <CardHeader className='py-3'>
           <h5 className='font-semibold m-0'>Performance Timeline</h5>
         </CardHeader>
         {!isLoadingProductsTimeline && productTimeline ? (
-          <CardBody>
+          <CardContent>
             <ReorderingPointsTimeLine
               productTimeLine={productTimeline?.dateList ?? []}
               leadtime={data.leadTime}
@@ -33,17 +34,17 @@ const ReorderingPointsTimelineDetails = ({ data, expandedRowProps }: Props) => {
               forecast={data.dailyTotalForecast}
               bestModel={data.forecastModel}
             />
-          </CardBody>
+          </CardContent>
         ) : (
-          <CardBody>
+          <CardContent>
             <p>
-              <Spinner color='primary' size={'sm'} />
+              <Spinner className='text-primary' />
               Loading Sales...
             </p>
-          </CardBody>
+          </CardContent>
         )}
       </Card>
-    </Col>
+    </div>
   )
 }
 

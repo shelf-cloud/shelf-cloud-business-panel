@@ -9,7 +9,9 @@ import { LogRowType } from '@typings'
 import axios from 'axios'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -115,9 +117,9 @@ const InventoryLogs = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Inventory Log' pageTitle='Warehouse' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
                 <Card>
                   <CardHeader>
                     <div className='app-search flex flex-row justify-end items-center p-0'>
@@ -131,7 +133,7 @@ const InventoryLogs = ({ session }: Props) => {
                       </Button>
                     </div>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <DataTable
                       columns={columns}
                       data={filteredData}
@@ -141,11 +143,11 @@ const InventoryLogs = ({ session }: Props) => {
                       highlightOnHover={true}
                       conditionalRowStyles={conditionalRowStyles}
                     />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

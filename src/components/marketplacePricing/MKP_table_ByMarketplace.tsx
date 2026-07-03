@@ -185,7 +185,7 @@ const MKP_table_ByMarketplace = ({
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+              className='h-8 px-2 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.storeOtherCosts}
@@ -288,7 +288,7 @@ const MKP_table_ByMarketplace = ({
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+              className='h-8 px-2 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.proposedPrice}
@@ -418,7 +418,7 @@ const MKP_table_ByMarketplace = ({
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-1/2 text-center'
+              className='h-8 px-2 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-1/2 text-center'
               min={0}
               id={`marketplaceMargin-${storeId}`}
               onClick={(e: any) => e.target.select()}
@@ -449,7 +449,7 @@ const MKP_table_ByMarketplace = ({
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-1/2 text-center'
+              className='h-8 px-2 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-1/2 text-center'
               min={0}
               id={`orderQty-${row.sku}-${row.storeId}`}
               value={row.proposedMargin}
@@ -480,7 +480,7 @@ const MKP_table_ByMarketplace = ({
           element='textarea'
           minLength={3}
           debounceTimeout={600}
-          className='form-control form-control-sm text-[11.2px] m-0'
+          className='h-8 px-2 rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0'
           rows={2}
           id={`notes-${row.sku}-${row.storeId}`}
           value={row.notes}

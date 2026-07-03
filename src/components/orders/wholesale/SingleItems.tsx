@@ -6,7 +6,7 @@ import SearchInput from '@components/ui/SearchInput'
 import AppContext from '@context/AppContext'
 import { RegionInfoTypeUS, UserType } from '@hooks/useInitialState'
 import { wholesaleProductRow } from '@typings'
-import { Button, Col } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   completeData: wholesaleProductRow[]
@@ -79,15 +79,14 @@ const SingleItems = ({ completeData, pending, orderNumberStart }: Props) => {
                 : false || hasQtyError
             }
             className='text-[13px]'
-            color='primary'
             onClick={() => setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)}>
             Create Order
           </Button>
         </div>
       </div>
-      <Col xs='12' className='flex justify-end items-center mb-2'>
+      <div className='px-3 w-full flex justify-end items-center mb-2'>
         <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12 col-md-4' />
-      </Col>
+      </div>
       <WholeSaleTableSingleItem
         allData={allData}
         filteredItems={filteredItems}

@@ -15,7 +15,10 @@ import AppContext from '@context/AppContext'
 import { useMarketplacePricing } from '@hooks/marketplacePricing/useMarketplacePricing'
 import { useMarketplaces } from '@hooks/marketplaces/useMarketplaces'
 import { MKP_Product } from '@typesTs/marketplacePricing/marketplacePricing'
-import { Button, Card, CardBody, CardHeader, Collapse, Container, Nav, NavItem, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Collapse } from '@/components/ui/Collapse'
+import { Nav, NavItem, TabContent, TabPane } from '@/components/ui/nav-tabs'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -185,13 +188,13 @@ const MarketplacePricing = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Marketplace Pricing' pageTitle='Marketplaces' />
-          <Container fluid>
-            <Row className='flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3 flex flex-col justify-center items-end gap-2 mb-2 md:flex-row md:justify-end md:items-center px-4'>
               <div className='flex flex-col justify-between items-start p-0 md:flex-row md:items-center gap-2'>
                 <div className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                   <Button
                     className='text-[11.2px]'
-                    color={filters === 'true' ? 'info' : 'light'}
+                    variant={filters === 'true' ? 'info' : 'light'}
                     style={filters === 'true' ? {} : { backgroundColor: 'white', border: '1px solid #E1E3E5' }}
                     type='button'
                     aria-expanded='false'
@@ -200,7 +203,7 @@ const MarketplacePricing = ({ session }: Props) => {
                   </Button>
 
                   <ExportMarketplacePricing products={activeTab === 'byProducts' ? products : filteredByMarketplaceProducts} activeTab={activeTab} />
-                  <Button className='text-[11.2px]' color={changesMade ? 'warning' : 'light'} onClick={() => handleSaveProductsInfo()}>
+                  <Button className='text-[11.2px]' variant={changesMade ? 'warning' : 'light'} onClick={() => handleSaveProductsInfo()}>
                     Save Changes
                   </Button>
                 </div>
@@ -228,13 +231,13 @@ const MarketplacePricing = ({ session }: Props) => {
                   activeTab={activeTab}
                 />
               </Collapse>
-            </Row>
+            </div>
             <Card>
               <CardHeader className='flex flex-row flex-wrap justify-start items-center gap-2 w-full'>
                 <Nav className='flex flex-row gap-2' role='tablist'>
                   <NavItem>
                     <Button
-                      color={activeTab === 'byProducts' ? 'primary' : 'light'}
+                      variant={activeTab === 'byProducts' ? 'default' : 'light'}
                       className='text-[11.2px]'
                       onClick={() => {
                         setSelectedMarketplace({ storeId: '9999', name: 'All Marketplaces', logo: '' })
@@ -245,7 +248,7 @@ const MarketplacePricing = ({ session }: Props) => {
                   </NavItem>
                   <NavItem>
                     <Button
-                      color={activeTab === 'byMarketplace' ? 'primary' : 'light'}
+                      variant={activeTab === 'byMarketplace' ? 'default' : 'light'}
                       className='text-[11.2px]'
                       onClick={() => {
                         setSelectedMarketplace(marketplaces[0])
@@ -262,7 +265,7 @@ const MarketplacePricing = ({ session }: Props) => {
                   showAllMarketsOption={activeTab === 'byProducts'}
                 />
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId='byProducts'>
                     {activeTab === 'byProducts' && (
@@ -296,9 +299,9 @@ const MarketplacePricing = ({ session }: Props) => {
                     )}
                   </TabPane>
                 </TabContent>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

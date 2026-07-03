@@ -6,7 +6,8 @@ import { sortNumbers } from '@lib/helperFunctions'
 import { PurchaseOrder, PurchaseOrderBySkus, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import DataTable from 'react-data-table-component'
 import { ExpanderComponentProps } from 'react-data-table-component'
-import { Badge, Card } from '@/components/migration-ui'
+import { Badge } from '@shadcn/ui/badge'
+import { Card } from '@shadcn/ui/card'
 
 import Expanded_By_Orders from './Expanded_By_Orders'
 import PurchaseOrderActionsDropdown from './PurchaseOrderActionsDropdown'
@@ -144,7 +145,7 @@ const Table_By_Skus_Orders: React.FC<ExpanderComponentProps<PurchaseOrderBySkus>
       selector: (row: PurchaseOrder) =>
         state.receivingFromPo.items[row.poId] ? (
           <>
-            <Badge pill color='success' className='text-[11.2px]'>
+            <Badge variant='success' className='text-[11.2px]'>
               {FormatIntNumber(
                 state.currentRegion,
                 Object.entries(state.receivingFromPo.items[row.poId]).reduce((total: number, obj: [string, any]) => total + obj[1].receivingQty, 0)

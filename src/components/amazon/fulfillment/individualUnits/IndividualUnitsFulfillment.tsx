@@ -6,7 +6,7 @@ import CreateIndvUnitsInboundPlanModal from '@components/modals/amazon/CreateInd
 import InboundFBAHistoryModal from '@components/modals/amazon/InboundFBAHistoryModal'
 import SearchInput from '@components/ui/SearchInput'
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
-import { Button, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 import FilterListings from '../FilterListings'
 import IndividualUnitsTable from './IndividualUnitsTable'
@@ -103,12 +103,12 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
 
   return (
     <>
-      <Row className='justify-between gap-0'>
-        <Col xs='12' lg='8' className='flex flex-wrap justify-start items-center gap-2'>
+      <div className='flex flex-wrap -mx-3 justify-between gap-0'>
+        <div className='px-3 w-full lg:w-8/12 flex flex-wrap justify-start items-center gap-2'>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
             className='text-[11.2px] text-nowrap'
-            color='success'
+            variant='success'
             onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
@@ -118,11 +118,11 @@ const IndividualUnitsFulfillment = ({ lisiting, pending }: Props) => {
             showNotEnough={showNotEnough !== undefined || showNotEnough === '' ? showNotEnough : 'false'}
             ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
           />
-        </Col>
-        <Col xs='12' lg='4' className='flex justify-end items-center'>
+        </div>
+        <div className='px-3 w-full lg:w-4/12 flex justify-end items-center'>
           <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12' />
-        </Col>
-      </Row>
+        </div>
+      </div>
       <div className='flex justify-start items-center gap-4 mt-4'>
         <p className='m-0 p-0 text-primary uppercase'>
           Total SKUs: <span className='font-bold'>{orderProducts.length}</span>

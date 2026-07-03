@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TotalChagres } from '@typings'
-import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
+import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
 
 import ChargesChart from './ChargesChart'
 
@@ -14,25 +14,25 @@ type Props = {
 const TotalChagesList = ({ totalCharges }: Props) => {
   return (
     <React.Fragment>
-      <Col>
+      <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='flex items-center'>
             <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Total Charges</h4>
           </CardHeader>
 
-          <CardBody>
+          <CardContent>
             <ChargesChart totalCharges={totalCharges} />
             {/* <div className="table-responsive table-card">
-              <table className="table table-sm table-hover table-centered align-middle table-nowrap mb-0">
+              <table className="table table-sm table-hover [&_:is(th,td)]:align-middle align-middle table-nowrap mb-0">
                 <tbody>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Pick and Pack</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -47,12 +47,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Shipping</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -67,12 +67,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Labeling</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -87,12 +87,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Man Hours</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -107,12 +107,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Extra Charges</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -127,12 +127,12 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                   </tr>
                   <tr>
                     <td>
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         <h5 className="fs-14 my-1">Receiving</h5>
                       </div>
                     </td>
                     <td>
-                      <h5 className="fs-14 my-1 fw-normal">
+                      <h5 className="fs-14 my-1 font-normal">
                         <CountUp
                           start={0}
                           prefix={'$ '}
@@ -148,9 +148,9 @@ const TotalChagesList = ({ totalCharges }: Props) => {
                 </tbody>
               </table>
             </div> */}
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

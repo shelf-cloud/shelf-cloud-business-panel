@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
 
-import { Input } from '@/components/migration-ui'
+import { NativeSelect } from '@shadcn/ui/native-select'
 
 type Props = {
   type: string
@@ -34,8 +34,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto px-4 py-0 rounded-lg'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
                 className='border-0 text-[13px] w-full'
                 id='type'
                 name='type'
@@ -47,7 +46,7 @@ const FilterCheckNumber = ({ type, setInvoiceType }: Props) => {
                 <option value='all'>All</option>
                 <option value='invoices'>Invoice</option>
                 <option value='deductions'>Deductions</option>
-              </Input>
+              </NativeSelect>
             </div>
             <button
               type='button'

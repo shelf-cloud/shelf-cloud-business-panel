@@ -6,9 +6,11 @@ import {
 } from "@/lib/shadcn/presets"
 import { cn } from "@/lib/shadcn/utils"
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+// forwardRef required on React 18: callers read values via ref (e.g. SignIn, innerRef conversions).
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(({ className, type, ...props }, ref) => {
   return (
     <input
+      ref={ref}
       type={type}
       data-slot="input"
       className={cn(
@@ -20,6 +22,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       {...props}
     />
   )
-}
+})
+Input.displayName = 'Input'
 
 export { Input }

@@ -10,7 +10,11 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Card, CardBody, CardHeader, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -115,10 +119,10 @@ const Profile = () => {
 
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Profile' pageTitle='Profile' />
-            <Row>
-              <Col lg={12}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
                 <Card className=''>
                   <CardHeader>
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
@@ -152,13 +156,13 @@ const Profile = () => {
                       </NavItem>
                     </Nav>
                   </CardHeader>
-                  <CardBody className='p-6'>
+                  <CardContent className='p-6'>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
-                        <Form onSubmit={handleUpdateProfile}>
-                          <Row>
-                            <Col lg={6}>
-                              <FormGroup className='mb-4'>
+                        <form onSubmit={handleUpdateProfile}>
+                          <div className='flex flex-wrap -mx-3'>
+                            <div className='px-3 md:w-1/2'>
+                              <div className='mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Company Name
                                 </Label>
@@ -170,15 +174,15 @@ const Profile = () => {
                                   onChange={validation.handleChange}
                                   onBlur={validation.handleBlur}
                                   value={validation.values.companyName || ''}
-                                  invalid={validation.touched.companyName && validation.errors.companyName ? true : false}
+                                  aria-invalid={(validation.touched.companyName && validation.errors.companyName ? true : false) || undefined}
                                 />
                                 {validation.touched.companyName && validation.errors.companyName ? (
-                                  <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback>
+                                  <div className='text-sm text-destructive'>{validation.errors.companyName}</div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
-                            <Col lg={6}>
-                              <FormGroup className='mb-4'>
+                              </div>
+                            </div>
+                            <div className='px-3 md:w-1/2'>
+                              <div className='mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Email Address
                                 </Label>
@@ -190,12 +194,12 @@ const Profile = () => {
                                   onChange={validation.handleChange}
                                   onBlur={validation.handleBlur}
                                   value={validation.values.email || ''}
-                                  invalid={validation.touched.email && validation.errors.email ? true : false}
+                                  aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
                                 />
-                                {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
-                              </FormGroup>
-                            </Col>
-                            <Col lg={12}>
+                                {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                              </div>
+                            </div>
+                            <div className='px-3 w-full'>
                               <div className='flex flex-row items-center gap-2 justify-end'>
                                 <button type='submit' className='btn btn-primary text-[16.25px]'>
                                   Updates
@@ -204,16 +208,16 @@ const Profile = () => {
                                   Cancel
                                 </button>
                               </div>
-                            </Col>
-                          </Row>
-                        </Form>
+                            </div>
+                          </div>
+                        </form>
                       </TabPane>
 
                       <TabPane tabId='2'>
-                        <Form onSubmit={handleChangePassword}>
-                          <Row className='gap-y-2'>
-                            <Col lg={4}>
-                              <FormGroup className='mb-4'>
+                        <form onSubmit={handleChangePassword}>
+                          <div className='flex flex-wrap -mx-3 gap-y-2'>
+                            <div className='px-3 md:w-1/3'>
+                              <div className='mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Curent Password
                                 </Label>
@@ -225,16 +229,16 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.currentPassword || ''}
-                                  invalid={validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? true : false}
+                                  aria-invalid={(validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? true : false) || undefined}
                                 />
                                 {validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? (
-                                  <FormFeedback type='invalid'>{validationChangePassword.errors.currentPassword}</FormFeedback>
+                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.currentPassword}</div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
+                              </div>
+                            </div>
 
-                            <Col lg={4}>
-                              <FormGroup className='mb-4'>
+                            <div className='px-3 md:w-1/3'>
+                              <div className='mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *New Password
                                 </Label>
@@ -246,16 +250,16 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.newPassword1 || ''}
-                                  invalid={validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? true : false}
+                                  aria-invalid={(validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? true : false) || undefined}
                                 />
                                 {validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? (
-                                  <FormFeedback type='invalid'>{validationChangePassword.errors.newPassword1}</FormFeedback>
+                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.newPassword1}</div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
+                              </div>
+                            </div>
 
-                            <Col lg={4}>
-                              <FormGroup className='mb-4'>
+                            <div className='px-3 md:w-1/3'>
+                              <div className='mb-4'>
                                 <Label htmlFor='firstNameinput' className='form-label'>
                                   *Confirm Password
                                 </Label>
@@ -267,13 +271,13 @@ const Profile = () => {
                                   onChange={validationChangePassword.handleChange}
                                   onBlur={validationChangePassword.handleBlur}
                                   value={validationChangePassword.values.newPassword2 || ''}
-                                  invalid={validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? true : false}
+                                  aria-invalid={(validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? true : false) || undefined}
                                 />
                                 {validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? (
-                                  <FormFeedback type='invalid'>{validationChangePassword.errors.newPassword2}</FormFeedback>
+                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.newPassword2}</div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
+                              </div>
+                            </div>
 
                             {/* <Col lg={12}>
                               <div className="mb-3">
@@ -286,22 +290,22 @@ const Profile = () => {
                               </div>
                             </Col> */}
 
-                            <Col lg={12}>
+                            <div className='px-3 w-full'>
                               <div className='text-right'>
                                 <button type='submit' className='btn btn-success'>
                                   Change Password
                                 </button>
                               </div>
-                            </Col>
-                          </Row>
-                        </Form>
+                            </div>
+                          </div>
+                        </form>
                       </TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

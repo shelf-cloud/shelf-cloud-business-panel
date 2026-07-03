@@ -12,7 +12,11 @@ import { useFormik } from 'formik'
 import { CameraIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
+import { Textarea } from '@shadcn/ui/textarea'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -147,14 +151,14 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
   }
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col xl={4}>
-          <Col xl={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full xl:w-4/12'>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Return</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     <tr>
@@ -175,15 +179,15 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xl={12}>
+          </div>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-4'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     <tr className='border-b border-[color:var(--border)]'>
@@ -212,10 +216,10 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xl={12}>
+          </div>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-4 flex justify-between items-center'>
                 <h5 className='font-semibold m-0'>Order Comment</h5>
@@ -227,51 +231,49 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                   <i className='las la-edit text-[22.75px] m-0 p-0' />
                 </button>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 {showEditNote ? (
-                  <Form onSubmit={handleAddComment}>
-                    <Col md={12}>
-                      <FormGroup className='m-0'>
+                  <form onSubmit={handleAddComment}>
+                    <div className='px-3 w-full'>
+                      <div className='m-0'>
                         <Label htmlFor='comment' className='form-label'>
                           Edit Comment
                         </Label>
-                        <Input
-                          type='textarea'
-                          className='text-[13px]'
+                        <Textarea
+                          className='text-xs'
                           placeholder=''
                           id='comment'
                           name='comment'
-                          bsSize='sm'
                           onChange={validationNote.handleChange}
                           onBlur={validationNote.handleBlur}
                           value={validationNote.values.comment || ''}
-                          invalid={validationNote.touched.comment && validationNote.errors.comment ? true : false}
+                          aria-invalid={Boolean(validationNote.touched.comment && validationNote.errors.comment) || undefined}
                         />
-                        {validationNote.touched.comment && validationNote.errors.comment ? <FormFeedback type='invalid'>{validationNote.errors.comment}</FormFeedback> : null}
-                      </FormGroup>
+                        {validationNote.touched.comment && validationNote.errors.comment ? <div className='text-sm text-destructive'>{validationNote.errors.comment}</div> : null}
+                      </div>
                       <div className='flex flex-row justify-end items-center gap-4'>
-                        <Button type='button' disabled={loading} color='light' size='sm' onClick={() => setShowEditNote(false)}>
+                        <Button type='button' disabled={loading} variant='light' size='sm' onClick={() => setShowEditNote(false)}>
                           Cancel
                         </Button>
-                        <Button type='submit' disabled={loading} color='primary' size='sm'>
-                          {loading ? <Spinner size={'sm'} color='light' /> : 'Save Changes'}
+                        <Button type='submit' disabled={loading} size='sm'>
+                          {loading ? <Spinner className='text-white' /> : 'Save Changes'}
                         </Button>
                       </div>
-                    </Col>
-                  </Form>
+                    </div>
+                  </form>
                 ) : (
                   <p>{data.extraComment}</p>
                 )}
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-        </Col>
-        <Col xl={8}>
+          </div>
+        </div>
+        <div className='px-3 w-full xl:w-8/12'>
           <Card>
             <CardHeader className='py-4'>
               <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle mb-0 text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)]'>
@@ -317,29 +319,29 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                   </tbody>
                 </table>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col xl={12} className='flex justify-end items-end'>
+        </div>
+      </div>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full flex justify-end items-end'>
           {data.returnOrigin === 'shipment' && (
             <Card className='m-0'>
               {loadingLabel ? (
-                <Button color='secondary' className='btn-label'>
+                <Button variant='secondary' className='btn-label'>
                   <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
-                  <Spinner color='light' size={'sm'} />
+                  <Spinner className='text-white' />
                 </Button>
               ) : (
-                <Button color='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
+                <Button variant='secondary' className='btn-label' onClick={() => handlePrintingLabel()}>
                   <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                   Print Label
                 </Button>
               )}
             </Card>
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
       <ShowReturnItemImagesDialog
         imagesDialogItem={imagesDialogItem}
         imagesDialogImages={imagesDialogItem?.images || []}

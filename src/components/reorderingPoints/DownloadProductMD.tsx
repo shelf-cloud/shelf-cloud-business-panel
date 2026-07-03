@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo } from 'react'
 
 import type { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 import useSWR from 'swr'
 
 import AppContext from '@/context/AppContext'
@@ -56,10 +56,10 @@ const DownloadProductMD = ({ product }: Props) => {
   }, [fileName, markdown])
 
   return (
-    <DropdownItem className='edit-item-btn' onClick={handleDownloadFile}>
+    <DropdownMenuItem className='edit-item-btn' onClick={handleDownloadFile}>
       <i className='ri-download-2-line align-middle me-2 text-[16.25px] text-black'></i>
       <span className='text-[11.2px] font-normal text-black'>Download Markdown</span>
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

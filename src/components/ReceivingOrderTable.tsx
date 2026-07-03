@@ -9,7 +9,7 @@ import { sortNumbers, sortStringsCaseInsensitive } from '@lib/helperFunctions'
 import DataTable from '@components/Common/DataTableSC'
 import { tableRowTint } from '@/lib/shadcn/dataTableStyles'
 import { DebounceInput } from 'react-debounce-input'
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   data: ReceivingInventory[]
@@ -101,7 +101,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
       selector: (row: ReceivingInventory) => {
         return (
           <Button
-            color='ghost'
+            variant='ghost'
             size='sm'
             className='!text-info hover:bg-[color-mix(in_srgb,var(--info)_10%,transparent)]'
             onClick={() => {
@@ -129,7 +129,7 @@ const ReceivingOrderTable = ({ data, pending, handleOrderQty }: Props) => {
               type='number'
               minLength={0}
               debounceTimeout={200}
-              className='form-control form-control-sm text-[13px] mt-1'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px] mt-1'
               placeholder={'Receiving Qty...'}
               value={row.quantity}
               onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}

@@ -7,7 +7,9 @@ import InputNumberFilter from '@components/ui/filters/InputNumberFilter'
 import InputPercentageFilter from '@components/ui/filters/InputPercentageFilter'
 import { COMPARE_NUMBER_OPERATORS } from '@components/ui/filters/constants'
 import { Form, Formik } from 'formik'
-import { Button, Card, CardBody, Col, FormFeedback, FormGroup, Label, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Label } from '@shadcn/ui/label'
 import * as Yup from 'yup'
 
 export type MKP_FiltersType = {
@@ -98,13 +100,13 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
 
   return (
     <Card className='mb-0' style={{ zIndex: '999' }}>
-      <CardBody className='w-full'>
+      <CardContent className='w-full'>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
             <Form>
-              <Row>
-                <Col xs={12} md={3}>
-                  <FormGroup className='createOrder_inputs'>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 w-full md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='mb-2'>
                       Units Sold 1 Month
                     </Label>
@@ -128,12 +130,12 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       />
                       <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>max</span>
                     </div>
-                    {touched.units1monthmin && errors.units1monthmin ? <FormFeedback type='invalid'>{errors.units1monthmin}</FormFeedback> : null}
-                    {touched.units1monthmax && errors.units1monthmax ? <FormFeedback type='invalid'>{errors.units1monthmax}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-                <Col xs={12} md={3}>
-                  <FormGroup className='createOrder_inputs'>
+                    {touched.units1monthmin && errors.units1monthmin ? <div className='text-sm text-destructive'>{errors.units1monthmin}</div> : null}
+                    {touched.units1monthmax && errors.units1monthmax ? <div className='text-sm text-destructive'>{errors.units1monthmax}</div> : null}
+                  </div>
+                </div>
+                <div className='px-3 w-full md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='mb-2'>
                       Units Sold 1 Year
                     </Label>
@@ -157,13 +159,13 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       />
                       <span className='text-[11.2px] text-[var(--bs-secondary-color)] p-0 m-0'>max</span>
                     </div>
-                    {touched.units1yearmin && errors.units1yearmin ? <FormFeedback type='invalid'>{errors.units1yearmin}</FormFeedback> : null}
-                    {touched.units1yearmax && errors.units1yearmax ? <FormFeedback type='invalid'>{errors.units1yearmax}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
+                    {touched.units1yearmin && errors.units1yearmin ? <div className='text-sm text-destructive'>{errors.units1yearmin}</div> : null}
+                    {touched.units1yearmax && errors.units1yearmax ? <div className='text-sm text-destructive'>{errors.units1yearmax}</div> : null}
+                  </div>
+                </div>
                 {activeTab === 'byMarketplace' && (
-                  <Col xs={12} md={5}>
-                    <FormGroup className='createOrder_inputs'>
+                  <div className='px-3 w-full md:w-5/12'>
+                    <div className='mb-3 createOrder_inputs'>
                       <Label htmlFor='lastNameinput' className='mb-2'>
                         Margin
                       </Label>
@@ -187,13 +189,13 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                         />
                       </div>
                       {errors.marginoperator ? <p className='m-0 p-0 mt-1 text-[11.2px] text-danger'>{errors.marginoperator}</p> : null}
-                    </FormGroup>
-                  </Col>
+                    </div>
+                  </div>
                 )}
-              </Row>
-              <Row className='mt-2'>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+              </div>
+              <div className='flex flex-wrap -mx-3 mt-2'>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='mb-2'>
                       Suppliers
                     </Label>
@@ -205,10 +207,10 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       }}
                       options={supplierOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+                  </div>
+                </div>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='mb-2'>
                       Brands
                     </Label>
@@ -220,10 +222,10 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       }}
                       options={brandOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-                <Col md={3}>
-                  <FormGroup className='createOrder_inputs'>
+                  </div>
+                </div>
+                <div className='px-3 md:w-3/12'>
+                  <div className='mb-3 createOrder_inputs'>
                     <Label htmlFor='lastNameinput' className='mb-2'>
                       Categories
                     </Label>
@@ -235,12 +237,12 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       }}
                       options={categoryOptionsList}
                     />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Col md={12} className='flex flex-row flex-wrap justify-between items-center gap-4'>
+                  </div>
+                </div>
+              </div>
+              <div className='px-3 w-full flex flex-row flex-wrap justify-between items-center gap-4'>
                 {activeTab === 'byMarketplace' ? (
-                  <Col xs={12} md={7} className='flex flex-row flex-wrap justify-start items-center gap-6'>
+                  <div className='px-3 w-full md:w-7/12 flex flex-row flex-wrap justify-start items-center gap-6'>
                     <InputCheckFilter
                       inputLabel='Show only On Watch Products'
                       inputName='showOnlyOnWatch'
@@ -251,25 +253,25 @@ const MKP_Filters = ({ filters, supplierOptions, brandOptions, categoryOptions, 
                       }}
                       handleBlur={handleBlur}
                     />
-                  </Col>
+                  </div>
                 ) : (
                   <div></div>
                 )}
-                <Col xs={12} md={4}>
+                <div className='px-3 w-full md:w-4/12'>
                   <div className='flex flex-row justify-end items-center gap-4'>
-                    <Button type='button' color='light' className='text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
+                    <Button type='button' variant='light' className='text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
                       Clear
                     </Button>
-                    <Button type='submit' className='text-[11.2px]' color='primary'>
+                    <Button type='submit' className='text-[11.2px]'>
                       Apply Filters
                     </Button>
                   </div>
-                </Col>
-              </Col>
+                </div>
+              </div>
             </Form>
           )}
         </Formik>
-      </CardBody>
+      </CardContent>
     </Card>
   )
 }

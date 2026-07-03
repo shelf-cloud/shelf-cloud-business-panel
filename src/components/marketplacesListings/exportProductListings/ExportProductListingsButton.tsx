@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { MarketplaceListingsProduct } from '@hooks/products/useMarketplaceListings'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   products: MarketplaceListingsProduct[]
@@ -66,10 +66,10 @@ const ExportProductListingsButton = ({ products }: Props) => {
   }, [products])
 
   return (
-    <DropdownItem className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
+    <DropdownMenuItem className='text-nowrap text-[11.2px]' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold align-middle text-[16.25px] me-2 text-primary' />
       Export Listings
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

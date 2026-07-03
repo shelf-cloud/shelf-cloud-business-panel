@@ -9,7 +9,11 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Textarea } from '@shadcn/ui/textarea'
 import * as Yup from 'yup'
 
 import PlaneImage from '../assets/images/contactus-plane.png'
@@ -73,12 +77,12 @@ function ContactUs() {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Contact Us' pageTitle='Profile' />
-            <Row>
-              <Col lg={12}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
                 <Card className='border-t-[5px] border-primary'>
-                  <CardBody className='pb-2 md:pb-12'>
+                  <CardContent className='pb-2 md:pb-12'>
                     <div className='flex flex-row justify-between w-full items-start pt-4 pb-2'>
                       <div className='relative flex' style={{ width: '30%', minWidth: '130px' }}>
                         <Image
@@ -103,12 +107,12 @@ function ContactUs() {
                         />
                       </div>
                     </div>
-                    <Col md={9} className='mx-auto my-0'>
+                    <div className='px-3 md:w-9/12 mx-auto my-0'>
                       <h2 className='mb-6 font-semibold'>Get in touch</h2>
-                      <Form onSubmit={handleContactForm}>
-                        <Row>
-                          <Col lg={6}>
-                            <FormGroup className='mb-6'>
+                      <form onSubmit={handleContactForm}>
+                        <div className='flex flex-wrap -mx-3'>
+                          <div className='px-3 w-full lg:w-6/12'>
+                            <div className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Company Name
                               </Label>
@@ -120,11 +124,11 @@ function ContactUs() {
                                 onChange={validation.handleChange}
                                 onBlur={validation.handleBlur}
                                 value={validation.values.companyName || ''}
-                                invalid={validation.touched.companyName && validation.errors.companyName ? true : false}
+                                aria-invalid={(validation.touched.companyName && validation.errors.companyName ? true : false) || undefined}
                               />
-                              {validation.touched.companyName && validation.errors.companyName ? <FormFeedback type='invalid'>{validation.errors.companyName}</FormFeedback> : null}
-                            </FormGroup>
-                            <FormGroup className='mb-6'>
+                              {validation.touched.companyName && validation.errors.companyName ? <div className='text-sm text-destructive'>{validation.errors.companyName}</div> : null}
+                            </div>
+                            <div className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Email Address
                               </Label>
@@ -136,11 +140,11 @@ function ContactUs() {
                                 onChange={validation.handleChange}
                                 onBlur={validation.handleBlur}
                                 value={validation.values.email || ''}
-                                invalid={validation.touched.email && validation.errors.email ? true : false}
+                                aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
                               />
-                              {validation.touched.email && validation.errors.email ? <FormFeedback type='invalid'>{validation.errors.email}</FormFeedback> : null}
-                            </FormGroup>
-                            <FormGroup className='mb-6'>
+                              {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                            </div>
+                            <div className='mb-6'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Message Subject
                               </Label>
@@ -152,18 +156,17 @@ function ContactUs() {
                                 onChange={validation.handleChange}
                                 onBlur={validation.handleBlur}
                                 value={validation.values.subject || ''}
-                                invalid={validation.touched.subject && validation.errors.subject ? true : false}
+                                aria-invalid={(validation.touched.subject && validation.errors.subject ? true : false) || undefined}
                               />
-                              {validation.touched.subject && validation.errors.subject ? <FormFeedback type='invalid'>{validation.errors.subject}</FormFeedback> : null}
-                            </FormGroup>
-                          </Col>
-                          <Col lg={6} className='h-auto flex flex-col justify-between pb-6'>
-                            <FormGroup className='mb-6 flex flex-col h-full md:mb-12'>
+                              {validation.touched.subject && validation.errors.subject ? <div className='text-sm text-destructive'>{validation.errors.subject}</div> : null}
+                            </div>
+                          </div>
+                          <div className='px-3 w-full lg:w-6/12 h-auto flex flex-col justify-between pb-6'>
+                            <div className='mb-6 flex flex-col h-full md:mb-12'>
                               <Label htmlFor='firstNameinput' className='form-label'>
                                 *Message
                               </Label>
-                              <Input
-                                type='textarea'
+                              <Textarea
                                 className='grow text-[16.25px]'
                                 placeholder='Enter your message here'
                                 id='message'
@@ -171,22 +174,22 @@ function ContactUs() {
                                 onChange={validation.handleChange}
                                 onBlur={validation.handleBlur}
                                 value={validation.values.message || ''}
-                                invalid={validation.touched.message && validation.errors.message ? true : false}
+                                aria-invalid={(validation.touched.message && validation.errors.message ? true : false) || undefined}
                               />
-                              {validation.touched.message && validation.errors.message ? <FormFeedback type='invalid'>{validation.errors.message}</FormFeedback> : null}
-                            </FormGroup>
-                            <Button color='primary' type='submit' className='form-control text-[16.25px] w-full'>
+                              {validation.touched.message && validation.errors.message ? <div className='text-sm text-destructive'>{validation.errors.message}</div> : null}
+                            </div>
+                            <Button type='submit' className='text-[16.25px] w-full'>
                               Submit
                             </Button>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </Col>
-                  </CardBody>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

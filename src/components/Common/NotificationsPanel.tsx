@@ -9,7 +9,8 @@ import { NotificationsPanelResponse } from '@typesTs/notifications'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, ButtonGroup, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 import useSWR from 'swr'
 
 const fetcher = async (endPoint: string) => await axios.get<NotificationsPanelResponse>(endPoint).then((res) => res.data.notifications)
@@ -64,19 +65,23 @@ const NotificationsPanel = () => {
   }
   return (
     <div className='notification-panel'>
-      <ButtonGroup>
-        <UncontrolledDropdown className='dropdown inline-block' direction='down'>
-          <DropdownToggle tag='button' className='btn btn-primary btn-icon'>
-            <i className='mdi mdi-bell text-[19.5px]' />
-            {notifications?.some((info) => !info.read) && (
-              <span className='badge bg-destructive absolute top-0 left-full -translate-x-1/2 -translate-y-1/2'>{notifications?.filter((info) => !info.read).length}</span>
-            )}
-          </DropdownToggle>
-          <DropdownMenu className='dropdown-menu-lg pt-0 mt-2' end style={{ minWidth: '200px' }}>
+      <div role='group' className='inline-flex'>
+        <DropdownMenu>
+          <div className='dropdown inline-block'>
+            <DropdownMenuTrigger asChild>
+              <button type='button' className='btn btn-primary btn-icon'>
+                <i className='mdi mdi-bell text-[19.5px]' />
+                {notifications?.some((info) => !info.read) && (
+                  <span className='badge bg-destructive absolute top-0 left-full -translate-x-1/2 -translate-y-1/2'>{notifications?.filter((info) => !info.read).length}</span>
+                )}
+              </button>
+            </DropdownMenuTrigger>
+          </div>
+          <DropdownMenuContent align='end' className='dropdown-menu-lg pt-0 mt-2' style={{ minWidth: '200px' }}>
             <div className='bg-primary bg-pattern rounded-t flex flex-col justify-between items-baseline md:flex-row'>
               <h6 className='font-semibold text-white text-left p-4 text-[16.25px]'>Notifications</h6>
               {notifications && notifications?.length > 0 && (
-                <Button color='ghost' className='text-white text-[11.2px]' size='sm' onClick={markNotificationsAsRead}>
+                <Button variant='ghost' className='text-white text-[11.2px]' size='sm' onClick={markNotificationsAsRead}>
                   Mark as Read
                 </Button>
               )}
@@ -111,9 +116,9 @@ const NotificationsPanel = () => {
                 </div>
               </div>
             )}
-          </DropdownMenu>
-        </UncontrolledDropdown>
-      </ButtonGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   )
 }

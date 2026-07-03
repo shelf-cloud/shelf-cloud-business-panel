@@ -6,7 +6,9 @@ import { useFormik } from 'formik'
 import { DebounceInput } from 'react-debounce-input'
 import * as Yup from 'yup'
 
-import { Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type InputModalProps = {
   isOpen: boolean
@@ -76,31 +78,32 @@ const InputNumberModal = ({
   }
 
   return (
-    <Modal fade={false} size='md' id='inputNumberModal' isOpen={isOpen} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='myModalLabel'>
+    <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) handleClose() }}>
+      <DialogContent id='inputNumberModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         {headerText}
-      </ModalHeader>
-      <Form onSubmit={handleSubmitForm}>
-        <ModalBody>
-          <Row>
+      </DialogHeader>
+      <form onSubmit={handleSubmitForm}>
+        <div>
+          <div className='flex flex-wrap -mx-3'>
             <p className='text-[16.25px] font-semibold'>
               {primaryText} {primaryTextSub && <span className='text-primary'>{primaryTextSub}</span>}
             </p>
             {descriptionText && <p className='text-[11.2px] text-[var(--bs-secondary-color)]'>{descriptionText}</p>}
-            <Col sm={12} className='flex flex-col justify-end items-end'>
-              <Col xs={12} lg={4} className='text-right'>
+            <div className='px-3 sm:w-full flex flex-col justify-end items-end'>
+              <div className='px-3 w-full lg:w-4/12 text-right'>
                 <DebounceInput
                   type='number'
                   minLength={minLength}
                   debounceTimeout={600}
-                  className={`form-control form-control-sm text-right text-[13px] ${validation.errors.inputValue ? 'is-invalid' : ''}`}
+                  className={`h-8 text-xs w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-right ${validation.errors.inputValue ? 'border-destructive' : ''}`}
                   placeholder={placeholder}
                   id='inputValue'
                   name='inputValue'
                   value={validation.values.inputValue || ''}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  invalid={validation.touched.inputValue && validation.errors.inputValue ? true : false}
+                  aria-invalid={(validation.touched.inputValue && validation.errors.inputValue ? true : false) || undefined}
                   inputRef={(input) => {
                     if (isOpen && input) {
                       input.focus()
@@ -109,25 +112,25 @@ const InputNumberModal = ({
                 />
                 {isPrice && <p className='m-0 mt-1 pl-1 font-semibold text-primary'>{FormatCurrency(state.currentRegion, Number(validation.values.inputValue))}</p>}
                 {validation.touched.inputValue && validation.errors.inputValue ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputValue}</p> : null}
-              </Col>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
+              </div>
+            </div>
+          </div>
+        </div>
+        <DialogFooter className='items-center'>
           <div className='w-full mt-2 flex flex-row gap-2 justify-between items-center'>
             <div>
-              <Button disabled={isLoading} type='button' color='danger' className='text-[11.2px]' onClick={handleClearValue}>
+              <Button disabled={isLoading} type='button' variant='destructive' className='text-[11.2px]' onClick={handleClearValue}>
                 Clear Value
               </Button>
             </div>
             <div className='flex flex-row gap-2 justify-end'>
-              <Button disabled={isLoading} type='button' color='light' className='text-[11.2px]' onClick={handleClose}>
+              <Button disabled={isLoading} type='button' variant='light' className='text-[11.2px]' onClick={handleClose}>
                 Cancel
               </Button>
-              <Button disabled={isLoading} type='submit' color='success' className='text-[11.2px]'>
+              <Button disabled={isLoading} type='submit' variant='success' className='text-[11.2px]'>
                 {isLoading ? (
                   <span>
-                    <Spinner color='light' size={'sm'} /> {loadingText}
+                    <Spinner className='text-white' /> {loadingText}
                   </span>
                 ) : (
                   confirmText
@@ -135,9 +138,10 @@ const InputNumberModal = ({
               </Button>
             </div>
           </div>
-        </ModalFooter>
-      </Form>
-    </Modal>
+        </DialogFooter>
+      </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

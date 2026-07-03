@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
 
-import { Input } from '@/components/migration-ui'
+import { NativeSelect } from '@shadcn/ui/native-select'
 
 type Props = {
   searchStatus: string
@@ -36,8 +36,8 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
+                
                 className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
@@ -50,14 +50,14 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
                 <option value='unsellable'>Unsellable</option>
                 <option value='converted'>Converted Sellable</option>
                 <option value='dispose'>Dispose</option>
-              </Input>
+              </NativeSelect>
             </div>
             <span className='font-semibold text-[11.2px]'>Reason:</span>
             <div
               className='flex flex-row items-center justify-between gap-2 w-auto ps-1 pe-0 py-0 rounded'
               style={{ backgroundColor: 'white', minWidth: '200px', border: '1px solid #E1E3E5' }}>
-              <Input
-                type='select'
+              <NativeSelect
+                
                 className='border-0 text-[11.2px] w-full'
                 id='type'
                 name='type'
@@ -73,7 +73,7 @@ const FilterUnsellables = ({ searchStatus, setSearchStatus, searchReason, setSea
                 <option value='Return'>Return</option>
                 <option value='Undeliverable'>Undeliverable</option>
                 <option value='Other'>Other</option>
-              </Input>
+              </NativeSelect>
             </div>
             <button
               type='button'

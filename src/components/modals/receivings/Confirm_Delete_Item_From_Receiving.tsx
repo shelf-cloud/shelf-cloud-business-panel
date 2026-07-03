@@ -5,7 +5,9 @@ import { DeleteSKUFromReceivingModalType } from '@components/receiving/Receiving
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   deleteSKUModal: DeleteSKUFromReceivingModalType
@@ -51,12 +53,16 @@ const Confirm_Delete_Item_From_Receiving = ({ deleteSKUModal, setDeleteSKUModal,
   }
 
   return (
-    <Modal fade={false} size='md' id='confirmDeleteItemFromReceiving' isOpen={show} toggle={handleClose}>
-      <ModalHeader toggle={handleClose} className='modal-title' id='confirmDeleteItemFromReceivingModalLabel'>
-        Confirm Delete Item From Receiving
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+    <Dialog
+      open={!!show}
+      onOpenChange={(open) => {
+        if (!open) handleClose()
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='confirmDeleteItemFromReceivingModalLabel'>Confirm Delete Item From Receiving</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <p className='mb-2 text-[16.25px] font-semibold'>
             Receiving: <span className='text-primary'>{orderNumber}</span>
           </p>
@@ -70,22 +76,22 @@ const Confirm_Delete_Item_From_Receiving = ({ deleteSKUModal, setDeleteSKUModal,
             </div>
           </div>
           <div className='mt-4 flex justify-end items-center gap-2'>
-            <Button type='button' color='light' onClick={handleClose}>
+            <Button type='button' variant='light' onClick={handleClose}>
               Cancel
             </Button>
-            <Button disabled={loading} type='button' color='danger' onClick={handleDeleteFromSkuList}>
+            <Button disabled={loading} type='button' variant='destructive' onClick={handleDeleteFromSkuList}>
               {loading ? (
                 <span>
-                  <Spinner color='light' size={'sm'} /> Deleting...
+                  <Spinner className='text-white' /> Deleting...
                 </span>
               ) : (
                 'Delete'
               )}
             </Button>
           </div>
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

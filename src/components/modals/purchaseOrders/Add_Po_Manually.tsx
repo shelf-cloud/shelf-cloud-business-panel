@@ -9,7 +9,11 @@ import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
 import { Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -82,29 +86,20 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='addPoFromFile'
-      isOpen={state.showCreatePoManually}
-      toggle={() => {
-        setShowCreatePoManually(!state.showCreatePoManually)
-      }}>
-      <ModalHeader
-        toggle={() => {
-          setShowCreatePoManually(!state.showCreatePoManually)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Create New Purchase Order
-      </ModalHeader>
-      <ModalBody>
+    <Dialog open={!!state.showCreatePoManually} onOpenChange={(open) => { if (!open) setShowCreatePoManually(!state.showCreatePoManually) }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='addPoFromFile'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Create New Purchase Order
+          </DialogTitle>
+        </DialogHeader>
+        <div>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
           {({ values, errors, touched, handleChange, handleBlur }) => (
             <Form>
-              <Row>
-                <Col md={6}>
-                  <FormGroup className='mb-1'>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 md:w-1/2'>
+                  <div className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label'>
                       *Purchase Order Number
                     </Label>
@@ -114,18 +109,17 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                       </span>
                       <Input
                         type='text'
-                        className='text-[13px]'
+                        className='text-[13px] h-8 text-xs'
                         id='orderNumber'
                         name='orderNumber'
-                        bsSize='sm'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.orderNumber || ''}
-                        invalid={touched.orderNumber && errors.orderNumber ? true : false}
+                        aria-invalid={(touched.orderNumber && errors.orderNumber ? true : false) || undefined}
                       />
-                      {touched.orderNumber && errors.orderNumber ? <FormFeedback type='invalid'>{errors.orderNumber}</FormFeedback> : null}
+                      {touched.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber}</div> : null}
                     </div>
-                  </FormGroup>
+                  </div>
                   <SelectSingleFilter
                     inputLabel={'*Supplier'}
                     inputName={'supplier'}
@@ -137,8 +131,8 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     }}
                     error={errors.supplier}
                   />
-                </Col>
-                <Col md={6} className='py-1'>
+                </div>
+                <div className='px-3 md:w-1/2 py-1'>
                   <div className='mb-2'>
                     <Label className='form-label mb-1 text-[11.2px]'>*Destination</Label>
                     <SimpleSelect
@@ -153,44 +147,44 @@ const Add_Po_Manually = ({ orderNumberStart }: Props) => {
                     {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.destinationSC.value}</div> : null}
                   </div>
 
-                  <FormGroup className='mb-1'>
+                  <div className='mb-1'>
                     <Label htmlFor='firstNameinput' className='form-label mb-1 text-[11.2px]'>
                       *Date
                     </Label>
                     <Input
                       type='date'
-                      className='text-[13px]'
-                      bsSize='sm'
+                      className='text-[13px] h-8 text-xs'
                       id='date'
                       name='date'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.date || ''}
-                      invalid={touched.date && errors.date ? true : false}
+                      aria-invalid={(touched.date && errors.date ? true : false) || undefined}
                     />
-                    {touched.date && errors.date ? <FormFeedback type='invalid'>{errors.date}</FormFeedback> : null}
-                  </FormGroup>
-                </Col>
-              </Row>
+                    {touched.date && errors.date ? <div className='text-sm text-destructive'>{errors.date}</div> : null}
+                  </div>
+                </div>
+              </div>
 
-              <Col md={12} className='mt-6'>
+              <div className='px-3 w-full mt-6'>
                 <div className='text-right'>
-                  <Button disabled={loading} type='submit' color='success' className='text-[11.2px]'>
+                  <Button disabled={loading} type='submit' variant='success' className='text-[11.2px]'>
                     {loading ? (
                       <span>
-                        <Spinner color='light' size={'sm'} /> Creating...
+                        <Spinner className='text-white' /> Creating...
                       </span>
                     ) : (
                       'Create PO'
                     )}
                   </Button>
                 </div>
-              </Col>
+              </div>
             </Form>
           )}
         </Formik>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

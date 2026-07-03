@@ -4,7 +4,8 @@ import AppContext from '@context/AppContext'
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
 // import { Product, RowType } from '@typings'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
 import useSWR from 'swr'
 
 export interface InventoryBinsResponse {
@@ -58,25 +59,21 @@ function InventoryBinsModal() {
   ]
 
   return (
-    <Modal
-      id='myModal'
-      isOpen={state.showInventoryBinsModal}
-      toggle={() => {
-        setshowInventoryBinsModal(!state.showInventoryBinsModal)
+    <Dialog
+      open={!!state.showInventoryBinsModal}
+      onOpenChange={(open) => {
+        if (!open) setshowInventoryBinsModal(!state.showInventoryBinsModal)
       }}>
-      <ModalHeader
-        className='flex justify-between items-start'
-        toggle={() => {
-          setshowInventoryBinsModal(!state.showInventoryBinsModal)
-        }}>
-        <p className='modal-title text-[19.5px]' id='myModalLabel'>
-          Warehouse Inventory
-        </p>
-        <p className='text-[16.25px]'>
-          Sku: <span className='text-primary'>{state.modalProductInfo.sku}</span>
-        </p>
-      </ModalHeader>
-      <ModalBody className='flex flex-col gap-4'>
+      <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6 flex justify-between items-start'>
+          <p className='modal-title text-[19.5px]' id='myModalLabel'>
+            Warehouse Inventory
+          </p>
+          <p className='text-[16.25px]'>
+            Sku: <span className='text-primary'>{state.modalProductInfo.sku}</span>
+          </p>
+        </DialogHeader>
+      <div className='flex flex-col gap-4'>
         {!data && isValidating && <p className='text-center text-[16.25px] font-bold'>Loading...</p>}
         {data && Object.values(data.warehouses).every((warehouse) => warehouse.bins.length === 0) && (
           <p className='text-center text-[13px] font-normal'>No inventory quantities found for this product.</p>
@@ -92,17 +89,18 @@ function InventoryBinsModal() {
               </div>
             )
           })}
-      </ModalBody>
-      <ModalFooter>
+      </div>
+      <DialogFooter className='items-center'>
         <Button
-          color='light'
+          variant='light'
           onClick={() => {
             setshowInventoryBinsModal(!state.showInventoryBinsModal)
           }}>
           Close
         </Button>
-      </ModalFooter>
-    </Modal>
+      </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

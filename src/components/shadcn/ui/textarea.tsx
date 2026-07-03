@@ -6,9 +6,11 @@ import {
 } from "@/lib/shadcn/presets"
 import { cn } from "@/lib/shadcn/utils"
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+// forwardRef required on React 18: some callers attach refs (innerRef conversions).
+const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'textarea'>>(({ className, ...props }, ref) => {
   return (
     <textarea
+      ref={ref}
       data-slot="textarea"
       className={cn(
         "flex field-sizing-content min-h-16 w-full rounded-md px-3 py-2 text-base placeholder:text-muted-foreground md:text-sm dark:bg-input/30",
@@ -19,6 +21,7 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
       {...props}
     />
   )
-}
+})
+Textarea.displayName = 'Textarea'
 
 export { Textarea }

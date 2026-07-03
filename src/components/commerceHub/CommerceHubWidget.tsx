@@ -6,7 +6,7 @@ import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col } from '@/components/migration-ui'
+import { Card, CardContent } from '@shadcn/ui/card'
 
 type Props = {
   summary: DashboardResponse
@@ -41,9 +41,9 @@ const CommerceHubWidget = ({ summary }: Props) => {
 
   return (
     <React.Fragment>
-      <Col xs={6}>
+      <div className='px-3 w-6/12'>
         <Card className='card-animate'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -73,12 +73,12 @@ const CommerceHubWidget = ({ summary }: Props) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col xs={6}>
+      </div>
+      <div className='px-3 w-6/12'>
         <Card className='card-animate'>
-          <CardBody>
+          <CardContent>
             <div className='flex items-center justify-between'>
               <div className='flex flex-row justify-start items-center'>
                 <div className=''>
@@ -99,12 +99,12 @@ const CommerceHubWidget = ({ summary }: Props) => {
                 </span>
               </h4>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col xs={12}>
+      </div>
+      <div className='px-3 w-full'>
         <Card>
-          <CardBody>
+          <CardContent>
             <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:hover]:bg-[color:var(--vz-light)]'>
                 <thead>
@@ -140,9 +140,9 @@ const CommerceHubWidget = ({ summary }: Props) => {
                 </tbody>
               </table>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

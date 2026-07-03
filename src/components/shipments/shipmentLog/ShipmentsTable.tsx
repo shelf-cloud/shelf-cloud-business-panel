@@ -8,7 +8,8 @@ import { NoImageAdress } from '@lib/assetsConstants'
 import { AddNoteToShipmentModalType } from '@pages/Shipments'
 import { Shipment } from '@typesTs/shipments/shipments'
 import DataTable from 'react-data-table-component'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '@shadcn/ui/dropdown-menu'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import DownloadPackingSlip from '../wholesale/DownloadPackingSlip'
 import NoShipmentsFound from './NoShipmentsFound'
@@ -330,145 +331,161 @@ const ShipmentsTable = ({ tableData, pending, sortBy, setSortBy, handleGetShipme
         switch (row.orderType) {
           case 'Shipment':
             return row.orderStatus === 'shipped' ? (
-              <UncontrolledDropdown className='inline-block' direction='start'>
-                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
-                </DropdownToggle>
-                <DropdownMenu end container={'body'}>
-                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+              <DropdownMenu>
+                <div className='relative inline-block'>
+                <DropdownMenuTrigger asChild>
+                  <button type='button' className='m-0 p-0 bg-transparent border-0'>
+                    <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='end'>
+                  <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
-                  </DropdownItem>
+                  </DropdownMenuItem>
                   {state.currentRegion == 'us' && row.orderStatus == 'shipped' && row.hasReturn == false && row.shipCountry == 'US' && (
                     <>
-                      <DropdownItem header>Actions</DropdownItem>
-                      <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                         <div>
                           <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
                           <span className='font-normal text-dark'>Shipment Note</span>
                         </div>
-                      </DropdownItem>
-                      <DropdownItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className='edit-item-btn' onClick={() => setModalCreateReturnInfo(row.businessId, row.id)}>
                         <i className='las la-reply label-icon align-middle text-[16.25px] me-2' />
                         Create Return
-                      </DropdownItem>
+                      </DropdownMenuItem>
                     </>
                   )}
                   {row.carrierService.toLowerCase() === 'ltl' && (
                     <>
-                      <DropdownItem header>Documents</DropdownItem>
-                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
+                      <DropdownMenuLabel>Documents</DropdownMenuLabel>
+                      <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
                         <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                         <span className='text-[13px] font-normal text-dark'>Download BOL</span>
-                      </DropdownItem>
-                      <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
                         <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                         <span className='text-[13px] font-normal text-dark'>Carton Label</span>
-                      </DropdownItem>
+                      </DropdownMenuItem>
                       <DownloadPackingSlip order={row} />
                     </>
                   )}
-                </DropdownMenu>
-              </UncontrolledDropdown>
+                </DropdownMenuContent>
+                </div>
+              </DropdownMenu>
             ) : (
-              <UncontrolledDropdown className='inline-block' direction='start'>
-                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
-                </DropdownToggle>
-                <DropdownMenu end container={'body'}>
-                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+              <DropdownMenu>
+                <div className='relative inline-block'>
+                <DropdownMenuTrigger asChild>
+                  <button type='button' className='m-0 p-0 bg-transparent border-0'>
+                    <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='end'>
+                  <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
-                  </DropdownItem>
-                  <DropdownItem header>Actions</DropdownItem>
-                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
                       <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
                       <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
-                  </DropdownItem>
-                  <DropdownItem header>Documents</DropdownItem>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Documents</DropdownMenuLabel>
                   {row.carrierService.toLowerCase() === 'ltl' && (
-                    <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
+                    <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'bill_of_lading')}>
                       <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                       <span className='text-[13px] font-normal text-dark'>Download BOL</span>
-                    </DropdownItem>
+                    </DropdownMenuItem>
                   )}
-                  <DropdownItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
+                  <DropdownMenuItem onClick={() => handleGetShipmentBOL(row.orderNumber, row.orderId, 'carton_labels')}>
                     <i className='ri-file-text-fill align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                     <span className='text-[13px] font-normal text-dark'>Carton Label</span>
-                  </DropdownItem>
+                  </DropdownMenuItem>
                   <DownloadPackingSlip order={row} />
-                </DropdownMenu>
-              </UncontrolledDropdown>
+                </DropdownMenuContent>
+                </div>
+              </DropdownMenu>
             )
           case 'Wholesale':
             return (
-              <UncontrolledDropdown className='inline-block' direction='start'>
-                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
-                </DropdownToggle>
-                <DropdownMenu end container={'body'}>
-                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+              <DropdownMenu>
+                <div className='relative inline-block'>
+                <DropdownMenuTrigger asChild>
+                  <button type='button' className='m-0 p-0 bg-transparent border-0'>
+                    <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='end'>
+                  <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
-                  </DropdownItem>
-                  <DropdownItem header>Actions</DropdownItem>
-                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
                       <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
                       <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
-                  </DropdownItem>
-                  <DropdownItem header>Documents</DropdownItem>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Documents</DropdownMenuLabel>
                   {row.proofOfShipped != '' && row.proofOfShipped != null && (
-                    <DropdownItem className='edit-item-btn'>
+                    <DropdownMenuItem className='edit-item-btn'>
                       <a className='text-black' href={row.proofOfShipped} target='blank' rel='noopener noreferrer'>
                         <i className='las la-truck label-icon align-middle text-[22.75px] me-2' />
                         Proof Of Shipped
                       </a>
-                    </DropdownItem>
+                    </DropdownMenuItem>
                   )}
                   {row.labelsName != '' && (
-                    <DropdownItem className='edit-item-btn'>
+                    <DropdownMenuItem className='edit-item-btn'>
                       <a className='text-black' href={row.labelsName} target='blank' rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                         Shipping Labels
                       </a>
-                    </DropdownItem>
+                    </DropdownMenuItem>
                   )}
                   {row.palletLabelsName != '' && (
-                    <DropdownItem className='edit-item-btn'>
+                    <DropdownMenuItem className='edit-item-btn'>
                       <a className='text-black' href={row.palletLabelsName} target='blank' rel='noopener noreferrer'>
                         <i className='las la-toilet-paper label-icon align-middle text-[22.75px] me-2' />
                         Pallet Labels
                       </a>
-                    </DropdownItem>
+                    </DropdownMenuItem>
                   )}
                   {row.orderStatus === 'shipped' && <DownloadPackingSlip order={row} />}
-                </DropdownMenu>
-              </UncontrolledDropdown>
+                </DropdownMenuContent>
+                </div>
+              </DropdownMenu>
             )
           default:
             return (
-              <UncontrolledDropdown className='inline-block' direction='start'>
-                <DropdownToggle className='m-0 p-0 bg-transparent border-0' tag='button'>
-                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
-                </DropdownToggle>
-                <DropdownMenu end container={'body'}>
-                  <DropdownItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
+              <DropdownMenu>
+                <div className='relative inline-block'>
+                <DropdownMenuTrigger asChild>
+                  <button type='button' className='m-0 p-0 bg-transparent border-0'>
+                    <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='end'>
+                  <DropdownMenuItem onClick={() => setShipmentDetailsModal(true, row.id, row.orderNumber, row.orderType, row.orderStatus, row.orderDate, true)}>
                     <i className='ri-article-line align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
                     <span className='text-[13px] font-normal text-dark'>View Details</span>
-                  </DropdownItem>
-                  <DropdownItem header>Actions</DropdownItem>
-                  <DropdownItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setaddNoteToShipmentModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, note: row.note ?? '' })}>
                     <div>
                       <i className='las la-clipboard label-icon align-middle me-2 text-[16.25px]' />
                       <span className='font-normal text-dark'>Shipment Note</span>
                     </div>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+                </div>
+              </DropdownMenu>
             )
         }
       },

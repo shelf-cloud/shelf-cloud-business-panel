@@ -7,7 +7,8 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
-import { Button, Card, CardBody, CardHeader, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 import { NoImageAdress } from '@/lib/assetsConstants'
 
@@ -161,14 +162,14 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col sm={3}>
-          <Col sm={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 sm:w-3/12'>
+          <div className='px-3 sm:w-full'>
             <Card>
               <CardHeader className='py-2'>
                 <h5 className='font-semibold m-0'>Receiving Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr>
@@ -193,15 +194,15 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col sm={12}>
+          </div>
+          <div className='px-3 sm:w-full'>
             <Card>
               <CardHeader className='py-2'>
                 <h5 className='font-semibold m-0'>Charge Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full whitespace-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody className='text-[11.2px]'>
                     <tr className='border-b border-[color:var(--border)] pb-2'>
@@ -265,28 +266,28 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                     </tr>
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
+          </div>
           {data.extraComment != '' && (
-            <Col sm={12}>
+            <div className='px-3 sm:w-full'>
               <Card>
                 <CardHeader className='py-4'>
                   <h5 className='font-semibold m-0'>Order Comment</h5>
                 </CardHeader>
-                <CardBody>
+                <CardContent>
                   <p>{data.extraComment}</p>
-                </CardBody>
+                </CardContent>
               </Card>
-            </Col>
+            </div>
           )}
-        </Col>
-        <Col sm={9}>
+        </div>
+        <div className='px-3 sm:w-9/12'>
           <Card className='mb-4'>
             <CardHeader className='py-2 flex flex-row justify-between'>
               <h5 className='font-semibold m-0'>Products</h5>
             </CardHeader>
-            <CardBody>
+            <CardContent>
               <div className='overflow-x-auto'>
                 <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)] text-[11.2px]'>
@@ -387,24 +388,24 @@ const ReceivingType = ({ data, mutateReceivings }: Props) => {
                   </tbody>
                 </table>
               </div>
-            </CardBody>
+            </CardContent>
           </Card>
-          <Row className='mb-2'>
-            <Col sm={12} className='flex flex-row justify-end items-end'>
+          <div className='flex flex-wrap -mx-3 mb-2'>
+            <div className='px-3 sm:w-full flex flex-row justify-end items-end'>
               <div className='m-0 flex flex-row justify-end items-end gap-2'>
                 {!data.isReceivingFromPo && data.orderStatus !== 'received' && (
                   <a href={data.proofOfShipped} target='blank' rel='noopener noreferrer'>
-                    <Button color='info'>
+                    <Button variant='info'>
                       <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
                       Proof Of Received
                     </Button>
                   </a>
                 )}
               </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            </div>
+          </div>
+        </div>
+      </div>
       {deleteSKUModal.show && <Confirm_Delete_Item_From_Receiving deleteSKUModal={deleteSKUModal} setDeleteSKUModal={setDeleteSKUModal} mutateReceivings={mutateReceivings} />}
       {showEditOrderQty.show && <EditManualReceivingLog showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} mutateReceivings={mutateReceivings} />}
       {addSkuToReceiving.show && (

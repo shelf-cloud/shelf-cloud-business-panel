@@ -4,7 +4,9 @@ import { useContext, useState } from 'react'
 import AppContext from '@context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 
 type Props = {
@@ -57,42 +59,31 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
   }
 
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='confirmCancelInboundPlan'
-      isOpen={cancelInboundPlanModal.show}
-      toggle={() => {
-        setcancelInboundPlanModal({
-          show: false,
-          inboundPlanId: '',
-          inboundPlanName: '',
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!cancelInboundPlanModal.show}
+      onOpenChange={(open) => {
+        if (!open)
           setcancelInboundPlanModal({
             show: false,
             inboundPlanId: '',
             inboundPlanName: '',
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Confirm Cancel Inbound Plan
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>Confirm Cancel Inbound Plan</DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <h5 className='text-[19.5px] mb-0 font-semibold text-primary'>InboundPlan:</h5>
-          <Col md={12} className='mt-2'>
+          <div className='px-3 w-full mt-2'>
             <p className='text-[16.25px]'>{cancelInboundPlanModal.inboundPlanName}</p>
-          </Col>
-          <Row md={12} className='mt-4'>
+          </div>
+          <div className='flex flex-wrap -mx-3 mt-4'>
             <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
               <Button
                 disabled={isLoading}
                 type='button'
-                color='light'
+                variant='light'
                 onClick={() => {
                   setcancelInboundPlanModal({
                     show: false,
@@ -105,15 +96,15 @@ const ConfirmCancelInboundPlan = ({ cancelInboundPlanModal, setcancelInboundPlan
               <Button
                 disabled={isLoading}
                 type='button'
-                color='danger'
+                variant='destructive'
                 onClick={() => handleCancelInboundPlan(cancelInboundPlanModal.inboundPlanId, cancelInboundPlanModal.inboundPlanName)}>
-                {isLoading ? <Spinner color='#fff' size={'sm'} /> : 'Cancel Inbound Plan'}
+                {isLoading ? <Spinner className='text-white' /> : 'Cancel Inbound Plan'}
               </Button>
             </div>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

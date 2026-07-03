@@ -1,4 +1,6 @@
-import { FormFeedback, Input, InputGroup, InputGroupText } from '@/components/migration-ui'
+import { Input } from '@shadcn/ui/input'
+
+import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 
 type Props = {
   inputName: string
@@ -20,8 +22,7 @@ const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChang
     <InputGroup size='sm'>
       <Input
         type='number'
-        className='text-[13px] m-0'
-        bsSize='sm'
+        className='text-[13px] m-0 h-8 text-xs'
         style={{ padding: '0.2rem 0.9rem' }}
         placeholder='Min'
         id={inputName}
@@ -30,10 +31,10 @@ const InputPercentageFilter = ({ inputName, value, isInvalid, error, handleChang
         onChange={handleChange}
         onBlur={handleBlur}
         value={value}
-        invalid={isInvalid}
+        aria-invalid={isInvalid || undefined}
       />
       <InputGroupText className='text-[16.25px] py-0'>%</InputGroupText>
-      {isInvalid ? <FormFeedback type='invalid'>{error}</FormFeedback> : null}
+      {isInvalid ? <div className='text-sm text-destructive'>{error}</div> : null}
     </InputGroup>
   )
 }

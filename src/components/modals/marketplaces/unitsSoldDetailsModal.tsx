@@ -1,6 +1,7 @@
 import { Marketplace } from '@typesTs/marketplaces/productPerformance'
 import DataTable from 'react-data-table-component'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 
 type Props = {
   showUnitsSoldDetailsModal: {
@@ -47,22 +48,10 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
     },
   ]
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='unitsSoldDetailsModal'
-      isOpen={showUnitsSoldDetailsModal.showUnitsSoldDetailsModal}
-      toggle={() => {
-        setshowUnitsSoldDetailsModal({
-          showUnitsSoldDetailsModal: false,
-          totalUnitsSold: 0,
-          sku: '',
-          title: '',
-          marketplacesData: [],
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!showUnitsSoldDetailsModal.showUnitsSoldDetailsModal}
+      onOpenChange={(open) => {
+        if (!open)
           setshowUnitsSoldDetailsModal({
             showUnitsSoldDetailsModal: false,
             totalUnitsSold: 0,
@@ -70,27 +59,32 @@ function UnitsSoldDetailsModal({ showUnitsSoldDetailsModal, setshowUnitsSoldDeta
             title: '',
             marketplacesData: [],
           })
-        }}>
-        <p className='m-0 p-0 font-bold text-[16.25px]'>Units Sold by Marketplace</p>
-        <p className='m-0 p-0 font-normal text-[16.25px]'>{showUnitsSoldDetailsModal.title}</p>
-        <p className='m-0 p-0 font-light text-[16.25px]'>{showUnitsSoldDetailsModal.sku}</p>
-      </ModalHeader>
-      <ModalBody>
-        <DataTable columns={columns} data={sortedTableData} striped={true} highlightOnHover={true} dense />
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          color='light'
-          onClick={() => {
-            setshowUnitsSoldDetailsModal({
-              showUnitsSoldDetailsModal: false,
-              marketplacesData: [],
-            })
-          }}>
-          Close
-        </Button>
-      </ModalFooter>
-    </Modal>
+      }}>
+      <DialogContent id='unitsSoldDetailsModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>
+            <p className='m-0 p-0 font-bold text-[16.25px]'>Units Sold by Marketplace</p>
+            <p className='m-0 p-0 font-normal text-[16.25px]'>{showUnitsSoldDetailsModal.title}</p>
+            <p className='m-0 p-0 font-light text-[16.25px]'>{showUnitsSoldDetailsModal.sku}</p>
+          </DialogTitle>
+        </DialogHeader>
+        <div>
+          <DataTable columns={columns} data={sortedTableData} striped={true} highlightOnHover={true} dense />
+        </div>
+        <DialogFooter className='items-center'>
+          <Button
+            variant='light'
+            onClick={() => {
+              setshowUnitsSoldDetailsModal({
+                showUnitsSoldDetailsModal: false,
+                marketplacesData: [],
+              })
+            }}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

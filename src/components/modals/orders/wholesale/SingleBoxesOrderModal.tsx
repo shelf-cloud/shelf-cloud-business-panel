@@ -11,7 +11,12 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Textarea } from '@shadcn/ui/textarea'
 import * as Yup from 'yup'
 
 type Props = {
@@ -149,29 +154,21 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   }
 
   return (
-    <Modal
-      fade={false}
-      size='xl'
-      id='myModal'
-      isOpen={state.showSingleBoxesOrderModal}
-      toggle={() => {
-        setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)
+    <Dialog
+      open={!!state.showSingleBoxesOrderModal}
+      onOpenChange={(open) => {
+        if (!open) setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setSingleBoxesOrderModal(!state.showSingleBoxesOrderModal)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        WholeSale Order with Individual Units
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle id='myModalLabel'>WholeSale Order with Individual Units</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <p className='text-[19.5px] font-bold text-primary'>Order Details</p>
-            <Col md={6}>
-              <Col md={12}>
-                <FormGroup className='mb-4'>
+            <div className='px-3 md:w-6/12'>
+              <div className='px-3 md:w-full'>
+                <div className='mb-4'>
                   <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
                     *Order Number
                   </Label>
@@ -181,21 +178,20 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                     </span>
                     <Input
                       type='text'
-                      bsSize='sm'
-                      className='text-[13px]'
+                      className='h-8 text-xs text-[13px]'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
                       name='orderNumber'
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.orderNumber || ''}
-                      invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : false}
+                      aria-invalid={(validation.touched.orderNumber && validation.errors.orderNumber ? true : false) || undefined}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? <FormFeedback type='invalid'>{validation.errors.orderNumber}</FormFeedback> : null}
+                    {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
                   </div>
-                </FormGroup>
-              </Col>
-              <Col md={12}>
+                </div>
+              </div>
+              <div className='px-3 md:w-full'>
                 <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
                   *Type of Shipment
                 </Label>
@@ -203,22 +199,22 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   <Button
                     type='button'
                     className={validation.values.type == 'Parcel Boxes' ? '' : 'text-[var(--bs-secondary-color)]'}
-                    color={validation.values.type == 'Parcel Boxes' ? 'primary' : 'light'}
+                    variant={validation.values.type == 'Parcel Boxes' ? 'default' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
                     className={validation.values.type == 'LTL' ? '' : 'text-[var(--bs-secondary-color)]'}
-                    color={validation.values.type == 'LTL' ? 'primary' : 'light'}
+                    variant={validation.values.type == 'LTL' ? 'default' : 'light'}
                     onClick={() => validation.setFieldValue('type', 'LTL')}>
                     Pallets
                   </Button>
                 </div>
-              </Col>
+              </div>
               {validation.values.type == 'LTL' && (
-                <Col md={6}>
-                  <FormGroup className='mb-4'>
+                <div className='px-3 md:w-6/12'>
+                  <div className='mb-4'>
                     <Label htmlFor='firstNameinput' className='form-label text-[11.2px]'>
                       *How many Pallets will be used?
                     </Label>
@@ -230,15 +226,15 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
                       value={validation.values.numberOfPallets || ''}
-                      invalid={validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false}
+                      aria-invalid={(validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false) || undefined}
                     />
                     {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
-                      <FormFeedback type='invalid'>{validation.errors.numberOfPallets}</FormFeedback>
+                      <div className='text-sm text-destructive'>{validation.errors.numberOfPallets}</div>
                     ) : null}
-                  </FormGroup>
-                </Col>
+                  </div>
+                </div>
               )}
-              <Col md={6}>
+              <div className='px-3 md:w-6/12'>
                 <SelectSingleFilter
                   inputLabel={'*Select Shipment Type'}
                   inputName={'isThird'}
@@ -250,27 +246,26 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   }}
                   error={validation.errors.isThird}
                 />
-              </Col>
-            </Col>
-            <Col md={12}>
+              </div>
+            </div>
+            <div className='px-3 md:w-full'>
               {validation.values.isThird == 'true' && (
                 <>
-                  <Input
-                    type='textarea'
+                  <Textarea
                     id='thirdInfo'
                     name='thirdInfo'
                     placeholder='Please enter the Third Party Shipping Information: Recepient, Company, Address, City, State, Zipcode, Country.'
                     value={validation.values.thirdInfo}
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    invalid={validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false}
+                    aria-invalid={(validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false) || undefined}
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <FormFeedback type='invalid'>{validation.errors.thirdInfo}</FormFeedback> : null}
+                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <div className='text-sm text-destructive'>{validation.errors.thirdInfo}</div> : null}
                   <h5 className='text-[13px] mb-4 text-[var(--bs-secondary-color)]'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
-            </Col>
-            <Col md={12}>
+            </div>
+            <div className='px-3 md:w-full'>
               <span className='text-info text-[13px] font-light'>*The distribution plan for boxes and items will be available after picking.</span>
               <p className='text-[13px] m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
               {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-white'>{validation.errors.hasProducts}</p> : null}
@@ -301,18 +296,18 @@ const SingleBoxesOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 </tfoot>
               </table>
               </div>
-            </Col>
-            <Col md={12}>
+            </div>
+            <div className='px-3 md:w-full'>
               <div className='text-right'>
-                <Button disabled={loading} type='submit' color='success'>
-                  {loading ? <Spinner color='#fff' /> : 'Confirm Order'}
+                <Button disabled={loading} type='submit' variant='success'>
+                  {loading ? <Spinner className='text-white' /> : 'Confirm Order'}
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+            </div>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

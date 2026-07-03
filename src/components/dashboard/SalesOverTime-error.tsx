@@ -1,9 +1,9 @@
 import moment from 'moment'
-import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 
 const SalesOverTimeError = () => {
   return (
-    <Col>
+    <div className='px-3 flex-1 basis-0'>
       <Card style={{ width: '100%', height: '426px' }}>
         <CardHeader className='flex items-center justify-between'>
           <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Sales Over Time</h4>
@@ -13,13 +13,13 @@ const SalesOverTimeError = () => {
           </span>
         </CardHeader>
 
-        <CardBody className='flex flex-row justify-center items-center text-destructive'>
+        <CardContent className='flex flex-row justify-center items-center text-destructive'>
           <p className='text-[16.25px] m-0 p-0 font-normal'>
             <i className='las la-exclamation-triangle text-[19.5px] me-1'></i> Error loading sales data. Please try again later.
           </p>
-        </CardBody>
+        </CardContent>
       </Card>
-    </Col>
+    </div>
   )
 }
 

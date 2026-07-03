@@ -5,7 +5,8 @@ import AppContext from '@context/AppContext'
 import { POBalanceResponse } from '@typesTs/purchaseOrders'
 import axios from 'axios'
 import CountUp from 'react-countup'
-import { Button, Card, CardBody, Col, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR from 'swr'
 
 type Props = {}
@@ -27,10 +28,10 @@ const PurchaseOrdersWidgets = ({}: Props) => {
   )
 
   return (
-    <Row className='mb-2 gap-y-2'>
-      <Col xs={12} md={3}>
+    <div className='flex flex-wrap -mx-3 mb-2 gap-y-2'>
+      <div className='px-3 w-full md:w-3/12'>
         <Card className='card-animate mb-0'>
-          <CardBody className='py-2 flex items-center justify-between gap-4'>
+          <CardContent className='py-2 flex items-center justify-between gap-4'>
             <div className='flex items-center justify-between mb-1'>
               <p className='capitalize font-normal mb-0 text-nowrap' style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <span className='text-primary font-bold'>PO</span> Balance
@@ -43,15 +44,15 @@ const PurchaseOrdersWidgets = ({}: Props) => {
                   <CountUp start={0} prefix={'$'} separator={','} end={data?.balance ?? 0} decimals={2} duration={1} />
                 </span>
               </h4>
-              <Button color='primary' size='sm' className='m-0' onClick={() => setpoBalanceListModal({ show: true })}>
+              <Button size='sm' className='m-0' onClick={() => setpoBalanceListModal({ show: true })}>
                 <i className='ri-list-check text-[16.25px] align-middle' />
               </Button>
             </div>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
       {poBalanceListModal.show && <PoBalanceListModal poBalanceListModal={poBalanceListModal} poBalanceList={data?.po ?? []} setpoBalanceListModal={setpoBalanceListModal} />}
-    </Row>
+    </div>
   )
 }
 

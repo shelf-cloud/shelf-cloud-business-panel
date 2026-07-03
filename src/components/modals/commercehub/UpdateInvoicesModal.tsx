@@ -9,7 +9,12 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import Papa from 'papaparse'
 import { toast } from 'react-toastify'
-import { Button, Card, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card } from '@shadcn/ui/card'
+import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
+import { Label } from '@shadcn/ui/label'
+import { NativeSelect } from '@shadcn/ui/native-select'
+import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
 
 import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
@@ -184,23 +189,16 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='myModal'
-      isOpen={showUpdateInvoices.show}
-      toggle={() => {
-        setshowUpdateInvoices({ show: false })
+    <Dialog
+      open={!!showUpdateInvoices.show}
+      onOpenChange={(open) => {
+        if (!open) setshowUpdateInvoices({ show: false })
       }}>
-      <ModalHeader
-        toggle={() => {
-          setshowUpdateInvoices({ show: false })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
+      <DialogContent id='myModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+      <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
         <p className='text-primary text-[19.5px]'>Import File to Update Commerce Hub Invoices</p>
-      </ModalHeader>
-      <ModalBody>
+      </DialogHeader>
+      <div>
         <div className='mb-4'>
           <p className='m-0 text-[16.25px] font-bold'>Download Guide:</p>
           <p className='m-0 mb-1 text-[13px] font-semibold'>
@@ -211,15 +209,14 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             <span className='m-0 text-[11.2px] font-light'>{`Download de Supplier Hub -> FINANCE AND ACCOUNTING -> Merch Payables Self-Service Portal -> Payments -> Remittance Advice`}</span>
           </p>
         </div>
-        <Form onSubmit={handleUploadFile}>
-          <Row className='mb-4'>
-            <Col md={6}>
-              <FormGroup className='mb-0'>
+        <form onSubmit={handleUploadFile}>
+          <div className='flex flex-wrap -mx-3 mb-4'>
+            <div className='px-3 md:w-6/12'>
+              <div className='mb-0'>
                 <Label htmlFor='storeId' className='form-label'>
                   *Store
                 </Label>
-                <Input
-                  type='select'
+                <NativeSelect
                   className='text-[11.2px]'
                   id='storeId'
                   name='storeId'
@@ -228,16 +225,16 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                     validation.setFieldValue('fileType', stores.find((store) => store.value === e.target.value)?.fileType)
                   }}
                   onBlur={validation.handleBlur}
-                  invalid={validation.touched.storeId && validation.errors.storeId ? true : false}>
+                  aria-invalid={(validation.touched.storeId && validation.errors.storeId ? true : false) || undefined}>
                   <option value=''>Choose Store..</option>
                   {stores?.map((store) => (
                     <option key={store.value} value={store.value}>
                       {store.label} - File: {store.fileType}
                     </option>
                   ))}
-                </Input>
-                {validation.touched.storeId && validation.errors.storeId ? <FormFeedback type='invalid'>{validation.errors.storeId}</FormFeedback> : null}
-              </FormGroup>
+                </NativeSelect>
+                {validation.touched.storeId && validation.errors.storeId ? <div className='text-sm text-destructive'>{validation.errors.storeId}</div> : null}
+              </div>
               <p className='text-[11.2px] text-[var(--bs-secondary-color)] font-light m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}
                 <span onClick={() => router.push('/marketplaceManager')} className='text-primary' style={{ cursor: 'pointer' }}>
@@ -249,8 +246,8 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   return (
                     <Card className='mt-1 mb-0 shadow-[0_0.125rem_0.25rem_rgba(0,0,0,0.075)] border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
                       <div className='p-2'>
-                        <Row className='items-center'>
-                          <Col className='flex justify-between items-center'>
+                        <div className='flex flex-wrap -mx-3 items-center'>
+                          <div className='px-3 flex justify-between items-center'>
                             <div>
                               <p className='text-[var(--bs-secondary-color)] font-bold m-0'>{f.name}</p>
                               <p className='mb-0'>
@@ -259,7 +256,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                             </div>
                             <div>
                               <Button
-                                color='light'
+                                variant='light'
                                 className='btn-icon'
                                 onClick={() => {
                                   setselectedFiles([])
@@ -271,15 +268,15 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                                 <i className=' ri-close-line' />
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
                       </div>
                     </Card>
                   )
                 })}
               </div>
-            </Col>
-            <Col md={6}>
+            </div>
+            <div className='px-3 md:w-6/12'>
               {/* <Dropzone
                 accept={{ 'text/csv': ['.csv'] }}
                 multiple={false}
@@ -292,7 +289,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                       <div className='mb-3'>
                         <i className='display-4 text-muted ri-upload-cloud-2-fill' />
                       </div>
-                      <p className='fs-6'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
+                      <p className='text-[13px]'>Upload Invoices File. Drop Only CSV files here or click to upload.</p>
                     </div>
                   </div>
                 )}
@@ -302,8 +299,8 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                 handleAcceptedFiles={handleAcceptedFiles}
                 description={`Upload Products Details. Drop Only CSV files here or click to upload.`}
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
           {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload products.</p>}
           {showErrorLines && (
             <div style={{ overflowY: 'scroll', height: '30vh', scrollbarWidth: 'none' }} className='my-4'>
@@ -331,22 +328,23 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
             </div>
           )}
           {showerrorResponse && errorResponse?.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
-          <Col md={12}>
+          <div className='px-3 w-full'>
             <div className='text-right'>
-              <Button type='submit' color='success'>
+              <Button type='submit' variant='success'>
                 {loading ? (
                   <span>
-                    <Spinner size={'sm'} color='light' /> Uploading...
+                    <Spinner className='text-white' /> Uploading...
                   </span>
                 ) : (
                   'Upload File'
                 )}
               </Button>
             </div>
-          </Col>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </div>
+        </form>
+      </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

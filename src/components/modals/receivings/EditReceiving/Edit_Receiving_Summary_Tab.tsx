@@ -5,7 +5,6 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ShipmentOrderItem } from '@typings'
-import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderItems: ShipmentOrderItem[]
@@ -17,7 +16,7 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
   const { state } = useContext(AppContext)
   return (
     <div className='overflow-auto'>
-      <Col md={12}>
+      <div className='px-3 md:w-full'>
         <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr key='edit-receiving-summary-header'>
@@ -85,7 +84,7 @@ const Edit_Receiving_Summary_Tab = ({ orderItems, handleDeleteItem, isReceivingF
             </tr>
           </tbody>
         </table>
-      </Col>
+      </div>
     </div>
   )
 }

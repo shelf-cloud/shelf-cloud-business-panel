@@ -13,7 +13,8 @@ import moment from 'moment'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, FormFeedback, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type Props = {
   allData: AmazonFulfillmentSku[]
@@ -296,7 +297,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               {FormatIntNumber(state.currentRegion, row.afn_inbound_receiving_quantity + row.afn_inbound_shipped_quantity + row.afn_inbound_working_quantity)}
               {row.fbaShipments.length > 0 && (
                 <Button
-                  color='light'
+                  variant='light'
                   outline
                   className='p-0 m-0 btn btn-sm btn-icon btn-ghost-info'
                   onClick={() => setinboundFBAHistoryModal({ show: true, sku: row.shelfcloud_sku, msku: row.msku, shipments: row.fbaShipments })}>
@@ -394,7 +395,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
           <>
             <Button
               tabIndex={-1}
-              color='info'
+              variant='info'
               outline
               className='btn btn-ghost-info text-[11.2px]'
               id={`reservedMasterQty${CleanSpecialCharacters(cell.sku)}`}
@@ -480,7 +481,7 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
               onWheel={(e: any) => e.currentTarget.blur()}
               debounceTimeout={300}
               disabled={row.hasIndividualUnitsDimensionsError || row.quantity <= 0}
-              className='form-control text-[13px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px]'
               placeholder={row?.quantity! <= 0 ? 'Not Enough Qty' : 'Order Qty...'}
               value={row.orderQty}
               onClick={(e: any) => e.target.select()}
@@ -488,13 +489,9 @@ const IndividualUnitsTable = ({ allData, filteredItems, setAllData, pending, set
                 handleOrderQty(e.target.value, row.msku)
               }}
               max={row.quantity}
-              invalid={Boolean(rowValidation?.hasInputError)}
+              aria-invalid={Boolean(rowValidation?.hasInputError) || undefined}
             />
-            {rowValidation?.hasInputError ? (
-              <FormFeedback className='text-left text-[11.2px]' type='invalid'>
-                Quantity Error
-              </FormFeedback>
-            ) : null}
+            {rowValidation?.hasInputError ? <div className='text-left text-[11.2px] text-destructive'>Quantity Error</div> : null}
             {rowValidation?.hasExceededQtyError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Quantity Exceeded</span> : null}
             {rowValidation?.hasMissingAvailabilityError ? <span className='text-[11.2px] font-normal text-danger text-wrap'>Unable to verify available warehouse quantity</span> : null}
           </>

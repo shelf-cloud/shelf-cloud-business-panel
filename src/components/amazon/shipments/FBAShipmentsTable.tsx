@@ -7,7 +7,7 @@ import { CleanStatus } from '@lib/SkuFormatting'
 import { FBAShipment } from '@typesTs/amazon/fbaShipments.interface'
 import moment from 'moment'
 import DataTable from '@components/Common/DataTableSC'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 import FBAShipmentPackingSlip from './FBAShipmentPackingSlip'
 
@@ -268,41 +268,48 @@ const FBAShipmentsTable = ({ filteredItems, pending, getFBAShipmentProofOfShippe
       cell: (row: FBAShipment) => {
         if (row.shipment.status.toLowerCase() !== 'cancelled') {
           return (
-            <UncontrolledDropdown className='dropdown inline-block' direction='start'>
-              <DropdownToggle className='btn btn-light btn-sm m-0 p-0' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-                <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }} />
-              </DropdownToggle>
-              <DropdownMenu className='dropdown-menu-end' container={'body'}>
-                <DropdownItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
-                  <div>
-                    <i className='ri-file-list-line label-icon align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
-                    <span className='text-[13px] font-normal text-black'>View Shipment</span>
-                  </div>
-                </DropdownItem>
-                <DropdownItem header>Documents</DropdownItem>
-                <FBAShipmentPackingSlip order={row} />
-                {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
-                  <DropdownItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
+            <div className='relative inline-block dropdown inline-block'>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type='button'
+                    className='btn btn-light btn-sm m-0 p-0'
+                    style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                    <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='end'>
+                  <DropdownMenuItem onClick={() => router.push(`/amazon-sellers/shipments/${row.shipmentId}`)}>
                     <div>
-                      <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
-                      <span className='text-[11.2px] font-normal text-black'>Proof Of Shipped</span>
+                      <i className='ri-file-list-line label-icon align-middle me-2 text-[16.25px] text-[color:var(--bs-secondary-color)]' />
+                      <span className='text-[13px] font-normal text-black'>View Shipment</span>
                     </div>
-                  </DropdownItem>
-                )}
-                <DropdownItem header>Actions</DropdownItem>
-                {row.status !== 'REVIEWING' && (
-                  <DropdownItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'IN_DISPUTE')}>
+                  </DropdownMenuItem>
+                  <DropdownMenuLabel>Documents</DropdownMenuLabel>
+                  <FBAShipmentPackingSlip order={row} />
+                  {row.shipment.trackingDetails?.ltlTrackingDetail.billOfLadingNumber && (
+                    <DropdownMenuItem onClick={() => getFBAShipmentProofOfShipped(row.shipment.shipmentConfirmationId)}>
+                      <div>
+                        <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
+                        <span className='text-[11.2px] font-normal text-black'>Proof Of Shipped</span>
+                      </div>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  {row.status !== 'REVIEWING' && (
+                    <DropdownMenuItem onClick={() => setFBAShipmentReviewingStatus(row.shipmentId, !row.isComplete ? 1 : 0, 'IN_DISPUTE')}>
+                      <i className='las la-clipboard-check label-icon align-middle text-[16.25px] me-2' />
+                      <span className='text-[13px] font-normal text-black'>Mark In Dispute</span>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'MANUALLY_CLOSED' : 'PENDING')}>
                     <i className='las la-clipboard-check label-icon align-middle text-[16.25px] me-2' />
-                    <span className='text-[13px] font-normal text-black'>Mark In Dispute</span>
-                  </DropdownItem>
-                )}
-                <DropdownItem
-                  onClick={() => setFBAShipmentCompleteStatus(row.shipmentId, !row.isComplete ? 1 : 0, !row.isComplete ? 1 : 0, !row.isComplete ? 'MANUALLY_CLOSED' : 'PENDING')}>
-                  <i className='las la-clipboard-check label-icon align-middle text-[16.25px] me-2' />
-                  <span className='text-[13px] font-normal text-black'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
-                </DropdownItem>
+                    <span className='text-[13px] font-normal text-black'>{!row.isComplete ? 'Mark Closed' : 'Mark Open'}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
               </DropdownMenu>
-            </UncontrolledDropdown>
+            </div>
           )
         } else {
           return <></>

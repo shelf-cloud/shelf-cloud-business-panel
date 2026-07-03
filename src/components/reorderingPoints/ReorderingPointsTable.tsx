@@ -16,7 +16,10 @@ import { Badge as ShadcnBadge } from '@shadcn/ui/badge'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
+
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 import { getAIForecastTotal, getProductAIForecastCoverageQty, getProductAIForecastUrgency } from '@/lib/getAIForecastUrgency'
 import { tableRowTint } from '@/lib/shadcn/dataTableStyles'
@@ -143,7 +146,7 @@ const ReorderingPointsTable = ({
                     type='number'
                     disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                     debounceTimeout={400}
-                    className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+                    className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center"
                     placeholder='Order Qty'
                     min={0}
                     id={`orderQty-${row.sku}`}
@@ -183,7 +186,7 @@ const ReorderingPointsTable = ({
             <div className='text-center flex flex-col justify-center items-center'>
               <span className={'text-[11.2px] font-bold'}>
                 {splitNames[`${splitIndex}`].length > 10 ? `${splitNames[`${splitIndex}`].substring(0, 11)}..` : splitNames[`${splitIndex}`]}
-                <Button className='m-0 p-0' color='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
+                <Button className='m-0 p-0' variant='ghost' size='sm' onClick={() => setValuesAndOpen({ id: `${splitIndex}`, text: splitNames[`${splitIndex}`] })}>
                   <i className='las la-edit text-[16.25px] text-primary m-0 p-0 ' />
                 </Button>
               </span>
@@ -198,7 +201,7 @@ const ReorderingPointsTable = ({
                   type='number'
                   disabled={row.supplier === '' ? false : selectedSupplier !== '' && selectedSupplier.toLowerCase() !== row.supplier.toLowerCase()}
                   debounceTimeout={400}
-                  className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+                  className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center"
                   placeholder='Order Qty'
                   min={0}
                   id={`orderQty-${row.sku}`}
@@ -866,38 +869,42 @@ const ReorderingPointsTable = ({
       name: <span className='text-[11.2px] text-center text-[var(--bs-secondary-color)]'>Actions</span>,
       cell: (row: ReorderingPointsProduct) => {
         return (
-          <UncontrolledDropdown className='inline-block' direction='start'>
-            <DropdownToggle className='m-0 p-0 rounded bg-[var(--vz-light)]' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }} tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
-            </DropdownToggle>
-            <DropdownMenu className='dropdown-menu-end' container={'body'}>
-              <DropdownItem className='edit-item-btn' onClick={() => setRPProductConfig({ isOpen: true, product: row })}>
-                <i className='ri-settings-3-line align-middle me-2 text-[16.25px] text-black'></i>
-                <span className='text-[11.2px] font-normal text-black'>Edit Config</span>
-              </DropdownItem>
-              {state.user.us.useAiForecast ? (
-                <DropdownItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
-                  <i className='mdi mdi-reload align-middle me-2 text-[16.25px] text-primary'></i>
-                  <span className='text-[11.2px] font-normal text-black'>Regenerate Forecast</span>
-                </DropdownItem>
-              ) : null}
-              {state.user.us.useAiForecast ? (
-                <DropdownItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
-                  <i className='las la-brain align-middle me-2 text-[16.25px] text-info'></i>
-                  <span className='text-[11.2px] font-normal text-black'>AI Forecast Details</span>
-                </DropdownItem>
-              ) : null}
-              {/* <DownloadProductMD product={row} /> */}
-              <DropdownItem
-                className='edit-item-btn'
-                onClick={() => {
-                  setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
-                }}>
-                <i className='ri-search-eye-line align-middle me-2 text-[16.25px] text-primary'></i>
-                <span className='text-[11.2px] font-normal text-black'>Sales By Marketpalce</span>
-              </DropdownItem>
+          <div className='relative inline-block'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button type='button' className='m-0 p-0 rounded bg-[var(--vz-light)]' style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-2 py-0' style={{ color: '#919FAF' }} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end'>
+                <DropdownMenuItem className='edit-item-btn' onClick={() => setRPProductConfig({ isOpen: true, product: row })}>
+                  <i className='ri-settings-3-line align-middle me-2 text-[16.25px] text-black'></i>
+                  <span className='text-[11.2px] font-normal text-black'>Edit Config</span>
+                </DropdownMenuItem>
+                {state.user.us.useAiForecast ? (
+                  <DropdownMenuItem className='edit-item-btn' onClick={() => handleRegenerateForecast({ inventoryId: row.inventoryId, sku: row.sku })}>
+                    <i className='mdi mdi-reload align-middle me-2 text-[16.25px] text-primary'></i>
+                    <span className='text-[11.2px] font-normal text-black'>Regenerate Forecast</span>
+                  </DropdownMenuItem>
+                ) : null}
+                {state.user.us.useAiForecast ? (
+                  <DropdownMenuItem className='edit-item-btn' onClick={() => setAIForecastProduct(row)}>
+                    <i className='las la-brain align-middle me-2 text-[16.25px] text-info'></i>
+                    <span className='text-[11.2px] font-normal text-black'>AI Forecast Details</span>
+                  </DropdownMenuItem>
+                ) : null}
+                {/* <DownloadProductMD product={row} /> */}
+                <DropdownMenuItem
+                  className='edit-item-btn'
+                  onClick={() => {
+                    setSalesModal({ showSalesModal: true, sku: row.sku, title: row.title, totalUnitsSold: row.totalUnitsSold, marketplaces: row.marketplaces })
+                  }}>
+                  <i className='ri-search-eye-line align-middle me-2 text-[16.25px] text-primary'></i>
+                  <span className='text-[11.2px] font-normal text-black'>Sales By Marketpalce</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </div>
         )
       },
       sortable: false,

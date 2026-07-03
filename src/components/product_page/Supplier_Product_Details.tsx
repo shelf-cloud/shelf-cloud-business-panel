@@ -5,7 +5,9 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Row, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -140,8 +142,8 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
           </table>
         </div>
       ) : (
-        <Form onSubmit={handleAddProduct}>
-          <Row>
+        <form onSubmit={handleAddProduct}>
+          <div className='flex flex-wrap -mx-3'>
             <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
               <thead>
                 <tr className='text-center'>
@@ -164,7 +166,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
               <tbody>
                 <tr className='text-center'>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
@@ -172,56 +174,53 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                         placeholder='Seller Cost...'
                         id='sellerCost'
                         name='sellerCost'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.sellerCost || 0}
-                        invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false}
+                        aria-invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : undefined}
                       />
-                      {validation.touched.sellerCost && validation.errors.sellerCost ? <FormFeedback type='invalid'>{validation.errors.sellerCost}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.sellerCost && validation.errors.sellerCost ? <div className='text-sm text-destructive'>{validation.errors.sellerCost}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
                         placeholder='Shipping Cost...'
                         id='inboundShippingCost'
                         name='inboundShippingCost'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.inboundShippingCost || 0}
-                        invalid={validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? true : false}
+                        aria-invalid={validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? true : undefined}
                       />
                       {validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? (
-                        <FormFeedback type='invalid'>{validation.errors.inboundShippingCost}</FormFeedback>
+                        <div className='text-sm text-destructive'>{validation.errors.inboundShippingCost}</div>
                       ) : null}
-                    </FormGroup>
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
                         placeholder='Other Cost...'
                         id='otherCosts'
                         name='otherCosts'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.otherCosts || 0}
-                        invalid={validation.touched.otherCosts && validation.errors.otherCosts ? true : false}
+                        aria-invalid={validation.touched.otherCosts && validation.errors.otherCosts ? true : undefined}
                       />
-                      {validation.touched.otherCosts && validation.errors.otherCosts ? <FormFeedback type='invalid'>{validation.errors.otherCosts}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.otherCosts && validation.errors.otherCosts ? <div className='text-sm text-destructive'>{validation.errors.otherCosts}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         disabled
                         type='number'
@@ -230,52 +229,49 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                         placeholder='Seller Cost...'
                         id='landedCost'
                         name='landedCost'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={Number(validation.values.sellerCost + validation.values.inboundShippingCost + validation.values.otherCosts).toFixed(2) || 0}
                       />
-                    </FormGroup>
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
                         placeholder='Production...'
                         id='productionTime'
                         name='productionTime'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.productionTime || 0}
-                        invalid={validation.touched.productionTime && validation.errors.productionTime ? true : false}
+                        aria-invalid={validation.touched.productionTime && validation.errors.productionTime ? true : undefined}
                       />
                       {validation.touched.productionTime && validation.errors.productionTime ? (
-                        <FormFeedback type='invalid'>{validation.errors.productionTime}</FormFeedback>
+                        <div className='text-sm text-destructive'>{validation.errors.productionTime}</div>
                       ) : null}
-                    </FormGroup>
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
                         placeholder='Transit...'
                         id='transitTime'
                         name='transitTime'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.transitTime || 0}
-                        invalid={validation.touched.transitTime && validation.errors.transitTime ? true : false}
+                        aria-invalid={validation.touched.transitTime && validation.errors.transitTime ? true : undefined}
                       />
-                      {validation.touched.transitTime && validation.errors.transitTime ? <FormFeedback type='invalid'>{validation.errors.transitTime}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.transitTime && validation.errors.transitTime ? <div className='text-sm text-destructive'>{validation.errors.transitTime}</div> : null}
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         disabled
                         type='number'
@@ -283,46 +279,44 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                         placeholder='Transit...'
                         id='totalTime'
                         name='totalTime'
-                        bsSize='sm'
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={Number(validation.values.productionTime + validation.values.transitTime) || 0}
                       />
-                    </FormGroup>
+                    </div>
                   </td>
                   <td>
-                    <FormGroup>
+                    <div className='mb-3'>
                       <Input
                         type='number'
                         className='text-[13px]'
                         placeholder='FBA Cost...'
                         id='shippingToFBA'
                         name='shippingToFBA'
-                        bsSize='sm'
                         step={0.01}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.shippingToFBA || 0}
-                        invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : false}
+                        aria-invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : undefined}
                       />
-                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <FormFeedback type='invalid'>{validation.errors.shippingToFBA}</FormFeedback> : null}
-                    </FormGroup>
+                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <div className='text-sm text-destructive'>{validation.errors.shippingToFBA}</div> : null}
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <Col md={12}>
+            <div className='px-3 md:w-full'>
               <div className='flex flex-row justify-end items-center gap-3'>
-                <Button disabled={isLoading} type='button' color='light' onClick={() => setShowEditFields(false)}>
+                <Button disabled={isLoading} type='button' variant='light' onClick={() => setShowEditFields(false)}>
                   Cancel
                 </Button>
-                <Button disabled={isLoading} type='submit' color='primary'>
+                <Button disabled={isLoading} type='submit'>
                   {isLoading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
-            </Col>
-          </Row>
-        </Form>
+            </div>
+          </div>
+        </form>
       )}
     </div>
   )

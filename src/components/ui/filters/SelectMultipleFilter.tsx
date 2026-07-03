@@ -1,4 +1,4 @@
-import { FormGroup, Label } from '@/components/migration-ui'
+import { Label } from '@shadcn/ui/label'
 
 import SelectMultipleDropDown, { SelectMultipleOptions } from '../SelectMultipleDropDown'
 
@@ -13,12 +13,12 @@ type Props = {
 
 const SelectMultipleFilter = ({ inputLabel, inputName, value, selectionInfo, selected, handleSelection }: Props) => {
   return (
-    <FormGroup id={inputName} className='createOrder_inputs'>
+    <div id={inputName} className='mb-3 createOrder_inputs'>
       <Label htmlFor='lastNameinput' className='form-label'>
         {inputLabel}
       </Label>
       <SelectMultipleDropDown formValue={value} selectionInfo={selectionInfo} selected={selected} handleSelection={handleSelection} />
-    </FormGroup>
+    </div>
   )
 }
 

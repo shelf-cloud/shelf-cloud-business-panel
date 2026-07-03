@@ -10,7 +10,7 @@ import { MKP_Marketplaces, MKP_Product } from '@typesTs/marketplacePricing/marke
 import { ExpanderComponentProps } from 'react-data-table-component'
 import DataTable from '@components/Common/DataTableSC'
 import { DebounceInput } from 'react-debounce-input'
-import { Card } from '@/components/migration-ui'
+import { Card } from '@shadcn/ui/card'
 
 type Props = {
   data: MKP_Product
@@ -94,7 +94,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+              className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center"
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.storeOtherCosts}
@@ -176,7 +176,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-3/4 text-center'
+              className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-3/4 text-center"
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedPrice}
@@ -260,7 +260,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-1/2 text-center'
+              className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-1/2 text-center"
               min={0}
               id={`productMargin-${data.sku}`}
               onClick={(e: any) => e.target.select()}
@@ -282,7 +282,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
             <DebounceInput
               type='number'
               debounceTimeout={400}
-              className='form-control form-control-sm text-[11.2px] m-0 py-0 w-1/2 text-center'
+              className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0 py-0 w-1/2 text-center"
               min={0}
               id={`orderQty-${data.sku}-${row.storeId}`}
               value={row.proposedMargin}
@@ -312,7 +312,7 @@ const MKP_ExpandedDetails: React.FC<ExpanderComponentProps<MKP_Product>> = ({ da
         <DebounceInput
           element='textarea'
           debounceTimeout={600}
-          className='form-control form-control-sm text-[11.2px] m-0'
+          className="h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] m-0"
           min={3}
           id={`notes-${data.sku}-${row.storeId}`}
           value={row.notes}

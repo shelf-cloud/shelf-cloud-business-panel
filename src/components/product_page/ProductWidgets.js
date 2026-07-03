@@ -4,15 +4,15 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import moment from 'moment'
 import CountUp from 'react-countup'
-import { Card, CardBody, Col, Row, UncontrolledTooltip } from '@/components/migration-ui'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValue }) => {
   const { state } = useContext(AppContext)
   const currentMonthDays = moment().format('D') - 1
   return (
     <React.Fragment>
-      <Row className='gap-2'>
-        <Col>
+      <div className='flex flex-wrap -mx-3 gap-2'>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -31,8 +31,8 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l border-[color:var(--border)] ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -59,8 +59,8 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l border-[color:var(--border)] ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -87,8 +87,8 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className='px-3 flex-1 basis-0'>
           <div className='shadow-none mb-0 border-l border-[color:var(--border)] ps-2'>
             <div className='p-0'>
               <div className='flex items-center'>
@@ -122,8 +122,8 @@ const ProductWidgets = ({ onhand, currentStorageBalance, binsUsed, inventoryValu
               </div>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </React.Fragment>
   )
 }

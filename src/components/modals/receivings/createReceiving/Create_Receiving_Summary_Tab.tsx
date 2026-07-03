@@ -4,7 +4,6 @@ import { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
-import { Col } from '@/components/migration-ui'
 
 type Props = {}
 
@@ -12,7 +11,7 @@ const Create_Receiving_Summary_Tab = ({}: Props) => {
   const { state } = useContext(AppContext)
   return (
     <div className='overflow-auto'>
-      <Col md={12}>
+      <div className='px-3 md:w-full'>
         <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr>
@@ -86,7 +85,7 @@ const Create_Receiving_Summary_Tab = ({}: Props) => {
             </tr>
           </tbody>
         </table>
-      </Col>
+      </div>
     </div>
   )
 }

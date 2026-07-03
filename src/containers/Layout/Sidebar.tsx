@@ -6,8 +6,6 @@ import { signOut } from '@auth/client'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-import { Container } from '@/components/migration-ui'
-
 //import logo
 import ShelfCloudLogo from '../../assets/images/shelfcloud-white-h.png'
 import ShelfCloudLogoSolo from '../../assets/images/shelfcloud-white-solo.png'
@@ -87,12 +85,12 @@ const Sidebar = ({}: Props) => {
         </div>
         <React.Fragment>
           <SimpleBar id='scrollbar' className=''>
-            <Container fluid>
+            <div className='mx-auto w-full px-3'>
               <div id='two-column-menu'></div>
               <ul className='navbar-nav' id='navbar-nav'>
                 <VerticalLayout />
               </ul>
-            </Container>
+            </div>
           </SimpleBar>
           <button type='button' className='logout_container border-0 bg-transparent' onClick={() => signOut()}>
             <i className='mdi mdi-logout'></i>

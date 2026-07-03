@@ -6,7 +6,10 @@ import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ShipmentOrderItem } from '@typings'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Input, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 
 type Props = {
   showEditOrderQty: {
@@ -63,34 +66,24 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='confirmDelete'
-      isOpen={showEditOrderQty.show}
-      toggle={() => {
-        setshowEditOrderQty({
-          show: false,
-          receivingId: 0,
-          orderNumber: '',
-          receivingItems: [],
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!showEditOrderQty.show}
+      onOpenChange={(open) => {
+        if (!open) {
           setshowEditOrderQty({
             show: false,
             receivingId: 0,
             orderNumber: '',
             receivingItems: [],
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Edit Receiving Quantities
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='confirmDelete'>
+        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+          <DialogTitle>Edit Receiving Quantities</DialogTitle>
+        </DialogHeader>
+        <div>
+          <div className='flex flex-wrap -mx-3'>
           <h5 className='text-[16.25px] mb-6 font-semibold text-primary'>
             Purchase Order: <span className='text-[16.25px] font-bold text-black'>{showEditOrderQty.orderNumber}</span>
           </h5>
@@ -119,12 +112,11 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
                       <Input
                         type='number'
                         onWheel={(e) => e.currentTarget.blur()}
-                        className='text-[11.2px] mx-auto text-center'
+                        className='h-8 text-xs mx-auto text-center'
                         style={{ maxWidth: '80px' }}
                         placeholder='Qty'
                         id='newOrderQty'
                         name='newOrderQty'
-                        bsSize='sm'
                         min={0}
                         value={product.quantity || 0}
                         onChange={(e) => {
@@ -139,7 +131,7 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
                           newOrderedQty[key].quantity = parseInt(e.target.value)
                           setnewOrderedQtyItems(newOrderedQty)
                         }}
-                        invalid={product.quantity <= 0 || product.quantity < product.qtyReceived! ? true : false}
+                        aria-invalid={(product.quantity <= 0 || product.quantity < product.qtyReceived!) || undefined}
                       />
                     </td>
                     <td className='text-center text-nowrap'>{FormatIntNumber(state.currentRegion, product.qtyReceived!)}</td>
@@ -148,22 +140,23 @@ const EditManualReceivingLog = ({ showEditOrderQty, setshowEditOrderQty, mutateR
               </tbody>
             </table>
           </div>
-          <Row md={12}>
+          <div className='flex flex-wrap -mx-3'>
             <div className='text-end mt-6'>
-              <Button disabled={loading || error ? true : false} type='button' color='success' onClick={handleEditManualReceiving}>
+              <Button disabled={loading || error ? true : false} type='button' variant='success' onClick={handleEditManualReceiving}>
                 {loading ? (
                   <span>
-                    <Spinner color='#fff' size={'sm'} /> Saving...
+                    <Spinner className='text-white' /> Saving...
                   </span>
                 ) : (
                   'Save Changes'
                 )}
               </Button>
             </div>
-          </Row>
-        </Row>
-      </ModalBody>
-    </Modal>
+          </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

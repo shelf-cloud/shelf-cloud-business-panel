@@ -4,7 +4,9 @@ import { useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { Form, Formik } from 'formik'
 
-import { Button, Label, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
 
 type Props = {
   filters: string
@@ -60,7 +62,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
       className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
       <div className='relative'>
         <Button
-          color={filters === 'true' ? 'info' : 'light'}
+          variant={filters === 'true' ? 'info' : 'light'}
           className='text-[11.2px]'
           type='button'
           aria-expanded='false'
@@ -130,7 +132,7 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
                     className='p-0 border-0 bg-transparent no-underline font-normal m-0 text-[11.2px] text-[color:var(--bs-secondary-color)]'>
                     Clear All
                   </button>
-                  <Button color='primary' type='submit' size='sm'>
+                  <Button type='submit' size='sm'>
                     Apply
                   </Button>
                 </div>

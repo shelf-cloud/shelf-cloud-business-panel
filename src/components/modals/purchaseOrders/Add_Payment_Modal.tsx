@@ -6,7 +6,12 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Textarea } from '@shadcn/ui/textarea'
+import { Label } from '@shadcn/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -62,108 +67,98 @@ const Add_Payment_Modal = ({}: Props) => {
     validation.handleSubmit()
   }
   return (
-    <Modal
-      fade={false}
-      size='md'
-      id='addPaymentToPoModal'
-      isOpen={state.showAddPaymentToPo}
-      toggle={() => {
-        setShowAddPaymentToPo(!state.showAddPaymentToPo)
+    <Dialog
+      open={!!state.showAddPaymentToPo}
+      onOpenChange={(open) => {
+        if (!open) setShowAddPaymentToPo(!state.showAddPaymentToPo)
       }}>
-      <ModalHeader
-        toggle={() => {
-          setShowAddPaymentToPo(!state.showAddPaymentToPo)
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Add Payment
-      </ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleAddProduct}>
-          <Row md={12}>
-            <h5 className='text-[16.25px] mb-4 font-semibold'>
-              PO: <span className='font-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
-            </h5>
-          </Row>
-          <Row md={12}>
-            <Col md={6}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='firstNameinput' className='form-label'>
-                  *Payment Date
-                </Label>
-                <Input
-                  type='date'
-                  className='text-[13px]'
-                  bsSize='sm'
-                  id='paymentDate'
-                  name='paymentDate'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.paymentDate || ''}
-                  invalid={validation.touched.paymentDate && validation.errors.paymentDate ? true : false}
-                />
-                {validation.touched.paymentDate && validation.errors.paymentDate ? <FormFeedback type='invalid'>{validation.errors.paymentDate}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='firstNameinput' className='form-label'>
-                  *Payment Amount
-                </Label>
-                <Input
-                  type='number'
-                  onWheel={(e: any) => e.currentTarget.blur()}
-                  className='text-[13px]'
-                  bsSize='sm'
-                  id='amount'
-                  name='amount'
-                  step='.01'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  invalid={validation.touched.amount && validation.errors.amount ? true : false}
-                />
-                <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
-                {validation.touched.amount && validation.errors.amount ? <FormFeedback type='invalid'>{validation.errors.amount}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row md={12}>
-            <Col md={12}>
-              <FormGroup className='mb-4'>
-                <Label htmlFor='comment' className='form-label'>
-                  Comments
-                </Label>
-                <Input
-                  type='textarea'
-                  className='text-[13px]'
-                  bsSize='sm'
-                  id='comment'
-                  name='comment'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.comment || ''}
-                  invalid={validation.touched.comment && validation.errors.comment ? true : false}
-                />
-                {validation.touched.comment && validation.errors.comment ? <FormFeedback type='invalid'>{validation.errors.comment}</FormFeedback> : null}
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row md={12}>
-            <div className='text-right'>
-              <Button disabled={loading} type='submit' color='success' className='btn text-[11.2px]'>
-                {loading ? (
-                  <span>
-                    <Spinner color='light' size={'sm'} /> Adding...
-                  </span>
-                ) : (
-                  'Add Payment'
-                )}
-              </Button>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg' id='addPaymentToPoModal'>
+        <DialogHeader className='pr-6 modal-title' id='myModalLabel'>
+          <DialogTitle>Add Payment</DialogTitle>
+        </DialogHeader>
+        <div>
+          <form onSubmit={handleAddProduct}>
+            <div className='flex flex-wrap -mx-3'>
+              <h5 className='text-[16.25px] mb-4 font-semibold'>
+                PO: <span className='font-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
+              </h5>
             </div>
-          </Row>
-        </Form>
-      </ModalBody>
-    </Modal>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full md:w-6/12'>
+                <div className='mb-4'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
+                    *Payment Date
+                  </Label>
+                  <Input
+                    type='date'
+                    className='h-8 text-xs'
+                    id='paymentDate'
+                    name='paymentDate'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.paymentDate || ''}
+                    aria-invalid={Boolean(validation.touched.paymentDate && validation.errors.paymentDate) || undefined}
+                  />
+                  {validation.touched.paymentDate && validation.errors.paymentDate ? <div className='text-sm text-destructive'>{validation.errors.paymentDate}</div> : null}
+                </div>
+              </div>
+              <div className='px-3 w-full md:w-6/12'>
+                <div className='mb-4'>
+                  <Label htmlFor='firstNameinput' className='form-label'>
+                    *Payment Amount
+                  </Label>
+                  <Input
+                    type='number'
+                    onWheel={(e: any) => e.currentTarget.blur()}
+                    className='h-8 text-xs'
+                    id='amount'
+                    name='amount'
+                    step='.01'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    aria-invalid={Boolean(validation.touched.amount && validation.errors.amount) || undefined}
+                  />
+                  <small className='text-[11.2px] text-[var(--bs-secondary-color)]'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
+                  {validation.touched.amount && validation.errors.amount ? <div className='text-sm text-destructive'>{validation.errors.amount}</div> : null}
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
+                <div className='mb-4'>
+                  <Label htmlFor='comment' className='form-label'>
+                    Comments
+                  </Label>
+                  <Textarea
+                    className='text-xs'
+                    id='comment'
+                    name='comment'
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.comment || ''}
+                    aria-invalid={Boolean(validation.touched.comment && validation.errors.comment) || undefined}
+                  />
+                  {validation.touched.comment && validation.errors.comment ? <div className='text-sm text-destructive'>{validation.errors.comment}</div> : null}
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='text-right'>
+                <Button disabled={loading} type='submit' variant='success' className='btn text-[11.2px]'>
+                  {loading ? (
+                    <span>
+                      <Spinner className='text-white' /> Adding...
+                    </span>
+                  ) : (
+                    'Add Payment'
+                  )}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

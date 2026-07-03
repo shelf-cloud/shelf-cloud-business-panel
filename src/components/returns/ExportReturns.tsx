@@ -1,7 +1,7 @@
 import { ReturnType } from '@typesTs/returns/returns'
 import ExcelJS from 'exceljs'
 
-import { Button } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 
 type Props = {
   returns: ReturnType[]
@@ -60,7 +60,7 @@ const ExportReturns = ({ returns }: Props) => {
   }
 
   return (
-    <Button color='primary' size='sm' className='text-[11.2px]' onClick={exportExcelFile}>
+    <Button size='sm' className='text-[11.2px]' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle me-2 text-[16.25px]' />
       Export List
     </Button>

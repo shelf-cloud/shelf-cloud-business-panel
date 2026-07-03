@@ -5,7 +5,6 @@ import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ShipmentOrderItem } from '@typings'
-import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderItems: ShipmentOrderItem[]
@@ -19,7 +18,7 @@ const Edit_Receiving_Boxes_Box = ({ orderItems, isReceivingFromPo }: Props) => {
       <div className='flex flex-row justify-between items-center gap-4 mb-2'>
         <p className='m-0 font-bold text-[16.25px]'>All Products in 1 Box</p>
       </div>
-      <Col md={12} className='overflow-auto'>
+      <div className='px-3 md:w-full overflow-auto'>
         <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr key='edit-receiving-boxes-box-total-header'>
@@ -82,7 +81,7 @@ const Edit_Receiving_Boxes_Box = ({ orderItems, isReceivingFromPo }: Props) => {
             </tr>
           </tbody>
         </table>
-      </Col>
+      </div>
     </div>
   )
 }

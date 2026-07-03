@@ -1,5 +1,6 @@
 import { ReorderingPointsMarketplace } from '@typesTs/reorderingPoints/reorderingPoints'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 
 type Props = {
   salesModal: {
@@ -14,22 +15,10 @@ type Props = {
 
 function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='unitsSoldDetailsModal'
-      isOpen={salesModal.showSalesModal}
-      toggle={() => {
-        setSalesModal({
-          showSalesModal: false,
-          sku: '',
-          title: '',
-          totalUnitsSold: {},
-          marketplaces: {},
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!salesModal.showSalesModal}
+      onOpenChange={(open) => {
+        if (!open) {
           setSalesModal({
             showSalesModal: false,
             sku: '',
@@ -37,10 +26,13 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
             totalUnitsSold: {},
             marketplaces: {},
           })
-        }}>
-        Orders by Marketplaces
-      </ModalHeader>
-      <ModalBody className='overflow-auto'>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle>Orders by Marketplaces</DialogTitle>
+        </DialogHeader>
+        <div className='overflow-auto'>
         <p className='text-[16.25px] font-bold m-0 p-0'>
           SKU: <span className='text-primary'>{salesModal.sku}</span>
         </p>
@@ -235,23 +227,24 @@ function ReorderingPointsSalesModal({ salesModal, setSalesModal }: Props) {
             </table>
           </div>
         </div>
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          color='light'
-          onClick={() => {
-            setSalesModal({
-              showSalesModal: false,
-              sku: '',
-              title: '',
-              totalUnitsSold: {},
-              marketplaces: {},
-            })
-          }}>
-          Close
-        </Button>
-      </ModalFooter>
-    </Modal>
+        </div>
+        <DialogFooter className='items-center'>
+          <Button
+            variant='light'
+            onClick={() => {
+              setSalesModal({
+                showSalesModal: false,
+                sku: '',
+                title: '',
+                totalUnitsSold: {},
+                marketplaces: {},
+              })
+            }}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

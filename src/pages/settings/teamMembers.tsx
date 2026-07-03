@@ -11,7 +11,8 @@ import AppContext from '@context/AppContext'
 import { ManageUser, TeamMember } from '@typesTs/settings/team_members'
 import axios from 'axios'
 import { DebounceInput } from 'react-debounce-input'
-import { Button, Card, CardBody, Container } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -88,9 +89,9 @@ const TeamMembers = ({}: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Team Members' pageTitle='Settings' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <Card>
-              <CardBody className='p-6'>
+              <CardContent className='p-6'>
                 <div className='flex sm:flex-col xl:flex-row justify-between items-center p-0 sm:gap-2 xl:gap-0'>
                   <div className='flex flex-wrap justify-start items-center gap-4 w-full'>
                     {Members?.length! < 3 && <Button onClick={() => setShowNewMemberModal(true)}>+ Add Member</Button>}
@@ -101,7 +102,7 @@ const TeamMembers = ({}: Props) => {
                         type='text'
                         minLength={3}
                         debounceTimeout={500}
-                        className='form-control text-[13px] bg-white'
+                        className="h-9 w-full min-w-0 rounded-md border border-input bg-white px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[13px]"
                         placeholder='Search...'
                         id='search-options'
                         value={searchValue}
@@ -121,9 +122,9 @@ const TeamMembers = ({}: Props) => {
                   </div>
                 </div>
                 <TeamMembersTable teamMembers={filterTeamMembers} handleManageUser={handleManageUser} pending={Members ? false : true} />
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {showModal && <ManageTeamMemberModal manageUser={manageUser} setManageUser={setManageUser} showModal={showModal} setShowModal={setShowModal} />}
         {showNewMemberModal && <CreateNewTeamMemberModal showModal={showNewMemberModal} setShowModal={setShowNewMemberModal} />}

@@ -12,7 +12,7 @@ import { DashboardResponse } from '@typesTs/commercehub/dashboard'
 import { CommerceHubStoresResponse } from '@typesTs/commercehub/invoices'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -79,11 +79,10 @@ const Dashboard = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Dashboard' pageTitle='Commerce HUB' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <div className='flex flex-col justify-center items-end gap-2 mb-4 lg:flex-row md:justify-between md:items-center px-1'>
               <div className='w-full flex flex-col justify-center items-start gap-2 mb-0 lg:flex-row lg:justify-start lg:items-center px-0'>
                 <Button
-                  color='primary'
                   className='text-[11.2px] text-nowrap'
                   onClick={() => {
                     setshowUpdateInvoices({ show: true })
@@ -93,20 +92,20 @@ const Dashboard = ({ session }: Props) => {
               </div>
             </div>
             {summary ? (
-              <Row>
-                <Col xs={12} lg={6}>
-                  <Row>
+              <div className='flex flex-wrap -mx-3'>
+                <div className='px-3 w-full lg:w-6/12'>
+                  <div className='flex flex-wrap -mx-3'>
                     <CommerceHubWidget summary={summary} />
-                  </Row>
-                </Col>
-                <Col xs={12} lg={6}>
+                  </div>
+                </div>
+                <div className='px-3 w-full lg:w-6/12'>
                   <CheckNumberTable summary={summary} />
-                </Col>
-              </Row>
+                </div>
+              </div>
             ) : (
               <p className='text-[19.5px] font-semibold'>Loading...</p>
             )}
-          </Container>
+          </div>
         </div>
         {showUpdateInvoices.show && (
           <UpdateInvoicesModal showUpdateInvoices={showUpdateInvoices} setshowUpdateInvoices={setshowUpdateInvoices} stores={stores?.stores ?? []} mutate={mutate} />

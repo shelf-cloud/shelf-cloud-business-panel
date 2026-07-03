@@ -17,7 +17,12 @@ import { toast } from 'react-toastify'
 import useSWR, { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
-import { Button, Card, CardBody, Col, Container, FormFeedback, FormGroup, Input, Label, Row, Spinner, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Spinner } from '@shadcn/ui/spinner'
+import { Switch } from '@/components/ui/Switch'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -298,17 +303,17 @@ const CreateOrder = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Create Order' pageTitle='Shipments' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <Card className='text-[13px]'>
-              <CardBody>
+              <CardContent>
                 {ready ? (
                   <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
                       <Form>
-                        <Row>
+                        <div className='flex flex-wrap -mx-3'>
                           <div className='flex justify-end items-center'>
                             <div className='form-check form-check-inline form-switch form-switch-md form-switch-warning mb-2 md:mb-0'>
-                              <Label className='form-check-label' for='SwitchCheck4'>
+                              <Label className='form-check-label' htmlFor='SwitchCheck4'>
                                 Select for Local PickUp
                               </Label>
                               <Switch
@@ -321,90 +326,90 @@ const CreateOrder = ({ session }: Props) => {
                               />
                             </div>
                           </div>
-                        </Row>
-                        <Row>
+                        </div>
+                        <div className='flex flex-wrap -mx-3'>
                           {/* NAME */}
 
-                          <Col xs={12} md={8} className='flex flex-col gap-1'>
-                            <Row>
-                              <Col xs={12} md={6}>
-                                <FormGroup className='createOrder_inputs'>
+                          <div className='px-3 w-full md:w-8/12 flex flex-col gap-1'>
+                            <div className='flex flex-wrap -mx-3'>
+                              <div className='px-3 w-full md:w-6/12'>
+                                <div className='mb-3 createOrder_inputs'>
                                   <Label htmlFor='firstNameinput' className='form-label mb-1'>
                                     *First Name
                                   </Label>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm text-[13px]'
+                                    className='h-8 text-xs'
                                     placeholder='First Name...'
                                     id='firstName'
                                     name='firstName'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.firstName || ''}
-                                    invalid={touched.firstName && errors.firstName ? true : false}
+                                    aria-invalid={touched.firstName && errors.firstName ? true : undefined}
                                   />
                                   {touched.firstName && errors.firstName ? (
-                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                    <div className='m-0 text-sm text-destructive'>
                                       {errors.firstName}
-                                    </FormFeedback>
+                                    </div>
                                   ) : null}
-                                </FormGroup>
-                              </Col>
-                              <Col xs={12} md={6}>
-                                <FormGroup className='createOrder_inputs'>
+                                </div>
+                              </div>
+                              <div className='px-3 w-full md:w-6/12'>
+                                <div className='mb-3 createOrder_inputs'>
                                   <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                     *Last Name
                                   </Label>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm text-[13px]'
+                                    className='h-8 text-xs'
                                     placeholder='Last Name...'
                                     id='lastName'
                                     name='lastName'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.lastName || ''}
-                                    invalid={touched.lastName && errors.lastName ? true : false}
+                                    aria-invalid={touched.lastName && errors.lastName ? true : undefined}
                                   />
                                   {touched.lastName && errors.lastName ? (
-                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                    <div className='m-0 text-sm text-destructive'>
                                       {errors.lastName}
-                                    </FormFeedback>
+                                    </div>
                                   ) : null}
-                                </FormGroup>
-                              </Col>
-                            </Row>
+                                </div>
+                              </div>
+                            </div>
 
                             {/* COMPANY */}
 
-                            <Col md={12}>
-                              <FormGroup className='createOrder_inputs'>
+                            <div className='px-3 md:w-full'>
+                              <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='company' className='form-label mb-1'>
                                   Company
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm text-[13px]'
+                                  className='h-8 text-xs'
                                   placeholder='Company...'
                                   id='company'
                                   name='company'
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   value={values.company || ''}
-                                  invalid={touched.company && errors.company ? true : false}
+                                  aria-invalid={touched.company && errors.company ? true : undefined}
                                 />
                                 {touched.company && errors.company ? (
-                                  <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                  <div className='m-0 text-sm text-destructive'>
                                     {errors.company}
-                                  </FormFeedback>
+                                  </div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
+                              </div>
+                            </div>
 
                             {/* ADDRESS */}
 
-                            <Col md={12}>
-                              <FormGroup className='createOrder_inputs relative'>
+                            <div className='px-3 md:w-full'>
+                              <div className='mb-3 createOrder_inputs relative'>
                                 <Label htmlFor='adress1' className='form-label mb-1'>
                                   *Address
                                 </Label>
@@ -412,7 +417,7 @@ const CreateOrder = ({ session }: Props) => {
                                   minLength={3}
                                   debounceTimeout={500}
                                   type='text'
-                                  className={'form-control form-control-sm text-[13px] ' + (errors.adress1 && touched.adress1 ? 'is-invalid' : '')}
+                                  className='h-8 text-xs'
                                   placeholder='Address...'
                                   id='adress1'
                                   name='adress1'
@@ -428,7 +433,7 @@ const CreateOrder = ({ session }: Props) => {
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
                                   <div className='absolute'>
                                     <Card>
-                                      <CardBody className='flex flex-col gap-2'>
+                                      <CardContent className='flex flex-col gap-2'>
                                         {autoCompleteAddress?.map((address: any) => (
                                           <div key={address.id} className='rounded-lg'>
                                             <div className='flex justify-between items-center border-b'>
@@ -440,7 +445,7 @@ const CreateOrder = ({ session }: Props) => {
                                               </div>
                                               <div className='flex justify-end items-center'>
                                                 <Button
-                                                  color='info'
+                                                  variant='info'
                                                   size='sm'
                                                   onClick={() => {
                                                     values.adress1 = address.properties.address_line1
@@ -468,7 +473,7 @@ const CreateOrder = ({ session }: Props) => {
                                             <span className='text-[13px] text-[var(--bs-secondary-color)]'></span>
                                             <div className='flex justify-end items-center mt-1'>
                                               <Button
-                                                color='light'
+                                                variant='light'
                                                 size='sm'
                                                 onClick={() => {
                                                   setAutoCompleteAddress([])
@@ -478,15 +483,15 @@ const CreateOrder = ({ session }: Props) => {
                                             </div>
                                           </div>
                                         </div>
-                                      </CardBody>
+                                      </CardContent>
                                     </Card>
                                   </div>
                                 )}
-                              </FormGroup>
-                              <FormGroup className='createOrder_inputs mt-2'>
+                              </div>
+                              <div className='mb-3 createOrder_inputs mt-2'>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm text-[13px]'
+                                  className='h-8 text-xs'
                                   placeholder='Apartment, suite, etc...'
                                   id='adress2'
                                   name='adress2'
@@ -496,25 +501,25 @@ const CreateOrder = ({ session }: Props) => {
                                   value={values.adress2 || ''}
                                 />
                                 {touched.adress2 && errors.adress2 ? (
-                                  <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                  <div className='m-0 text-sm text-destructive'>
                                     {errors.adress2}
-                                  </FormFeedback>
+                                  </div>
                                 ) : null}
-                              </FormGroup>
-                            </Col>
+                              </div>
+                            </div>
 
                             {/* CITY, STATE, ZIP CODE AND COUNTRY */}
 
-                            <Col xs={12}>
-                              <Row>
-                                <Col xs={12} md={3}>
-                                  <FormGroup className='createOrder_inputs'>
+                            <div className='px-3 w-full'>
+                              <div className='flex flex-wrap -mx-3'>
+                                <div className='px-3 w-full md:w-3/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *City
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm text-[13px]'
+                                      className='h-8 text-xs'
                                       placeholder='City...'
                                       id='city'
                                       name='city'
@@ -522,23 +527,23 @@ const CreateOrder = ({ session }: Props) => {
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.city || ''}
-                                      invalid={touched.city && errors.city ? true : false}
+                                      aria-invalid={touched.city && errors.city ? true : undefined}
                                     />
                                     {touched.city && errors.city ? (
-                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                      <div className='m-0 text-sm text-destructive'>
                                         {errors.city}
-                                      </FormFeedback>
+                                      </div>
                                     ) : null}
-                                  </FormGroup>
-                                </Col>
-                                <Col xs={12} md={3}>
-                                  <FormGroup className='createOrder_inputs'>
+                                  </div>
+                                </div>
+                                <div className='px-3 w-full md:w-3/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *Zip Code
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm text-[13px]'
+                                      className='h-8 text-xs'
                                       placeholder='Zip Code...'
                                       id='zipCode'
                                       name='zipCode'
@@ -546,17 +551,17 @@ const CreateOrder = ({ session }: Props) => {
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.zipCode || ''}
-                                      invalid={touched.zipCode && errors.zipCode ? true : false}
+                                      aria-invalid={touched.zipCode && errors.zipCode ? true : undefined}
                                     />
                                     {touched.zipCode && errors.zipCode ? (
-                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                      <div className='m-0 text-sm text-destructive'>
                                         {errors.zipCode}
-                                      </FormFeedback>
+                                      </div>
                                     ) : null}
-                                  </FormGroup>
-                                </Col>
-                                <Col xs={12} md={3}>
-                                  <FormGroup className='createOrder_inputs'>
+                                  </div>
+                                </div>
+                                <div className='px-3 w-full md:w-3/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *Country
                                     </Label>
@@ -579,10 +584,10 @@ const CreateOrder = ({ session }: Props) => {
                                       menuPortalTarget={document.body}
                                     />
                                     {errors.country ? <ErrorInputLabel error={errors.country} marginTop='mt-0' /> : null}
-                                  </FormGroup>
-                                </Col>
-                                <Col xs={12} md={3}>
-                                  <FormGroup className='createOrder_inputs'>
+                                  </div>
+                                </div>
+                                <div className='px-3 w-full md:w-3/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='compnayNameinput' className='form-label mb-1'>
                                       *State
                                     </Label>
@@ -612,7 +617,7 @@ const CreateOrder = ({ session }: Props) => {
                                       <>
                                         <Input
                                           type='text'
-                                          className='form-control form-control-sm text-[13px]'
+                                          className='h-8 text-xs'
                                           placeholder='State...'
                                           id='state'
                                           name='state'
@@ -620,32 +625,32 @@ const CreateOrder = ({ session }: Props) => {
                                           onChange={handleChange}
                                           onBlur={handleBlur}
                                           value={values.state || ''}
-                                          invalid={touched.state && errors.state ? true : false}
+                                          aria-invalid={touched.state && errors.state ? true : undefined}
                                         />
                                         {touched.state && errors.state ? (
-                                          <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                          <div className='m-0 text-sm text-destructive'>
                                             {errors.state}
-                                          </FormFeedback>
+                                          </div>
                                         ) : null}
                                       </>
                                     )}
-                                  </FormGroup>
-                                </Col>
-                              </Row>
-                            </Col>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
                             {/* PHONE AND EMAIL */}
 
-                            <Col xs={12}>
-                              <Row>
-                                <Col xs={12} md={6}>
-                                  <FormGroup className='createOrder_inputs'>
+                            <div className='px-3 w-full'>
+                              <div className='flex flex-wrap -mx-3'>
+                                <div className='px-3 w-full md:w-6/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                       Phone #
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm text-[13px]'
+                                      className='h-8 text-xs'
                                       placeholder='Phone Number...'
                                       id='phoneNumber'
                                       name='phoneNumber'
@@ -653,23 +658,23 @@ const CreateOrder = ({ session }: Props) => {
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.phoneNumber || ''}
-                                      invalid={touched.phoneNumber && errors.phoneNumber ? true : false}
+                                      aria-invalid={touched.phoneNumber && errors.phoneNumber ? true : undefined}
                                     />
                                     {touched.phoneNumber && errors.phoneNumber ? (
-                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                      <div className='m-0 text-sm text-destructive'>
                                         {errors.phoneNumber}
-                                      </FormFeedback>
+                                      </div>
                                     ) : null}
-                                  </FormGroup>
-                                </Col>
-                                <Col xs={12} md={6}>
-                                  <FormGroup className='createOrder_inputs'>
+                                  </div>
+                                </div>
+                                <div className='px-3 w-full md:w-6/12'>
+                                  <div className='mb-3 createOrder_inputs'>
                                     <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                       *Email
                                     </Label>
                                     <Input
                                       type='text'
-                                      className='form-control form-control-sm text-[13px]'
+                                      className='h-8 text-xs'
                                       placeholder='Email Address...'
                                       id='email'
                                       name='email'
@@ -677,24 +682,24 @@ const CreateOrder = ({ session }: Props) => {
                                       onChange={handleChange}
                                       onBlur={handleBlur}
                                       value={values.email || ''}
-                                      invalid={touched.email && errors.email ? true : false}
+                                      aria-invalid={touched.email && errors.email ? true : undefined}
                                     />
                                     {touched.email && errors.email ? (
-                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                      <div className='m-0 text-sm text-destructive'>
                                         {errors.email}
-                                      </FormFeedback>
+                                      </div>
                                     ) : null}
-                                  </FormGroup>
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Col>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
                           {/* ORDER NUMBER */}
 
-                          <Col xs={12} md={4}>
-                            <Col xs={12} md={12}>
-                              <FormGroup className='createOrder_inputs'>
+                          <div className='px-3 w-full md:w-4/12'>
+                            <div className='px-3 w-full md:w-full'>
+                              <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label mb-1'>
                                   *Order Number
                                 </Label>
@@ -704,7 +709,7 @@ const CreateOrder = ({ session }: Props) => {
                                   </span>
                                   <Input
                                     type='text'
-                                    className='form-control form-control-sm text-[13px]'
+                                    className='h-8 text-xs'
                                     placeholder='Order Number...'
                                     aria-describedby='orderNumberid'
                                     id='orderNumber'
@@ -712,75 +717,75 @@ const CreateOrder = ({ session }: Props) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.orderNumber || ''}
-                                    invalid={touched.orderNumber && errors.orderNumber ? true : false}
+                                    aria-invalid={touched.orderNumber && errors.orderNumber ? true : undefined}
                                   />
                                   {touched.orderNumber && errors.orderNumber ? (
-                                    <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                    <div className='m-0 text-sm text-destructive'>
                                       {errors.orderNumber}
-                                    </FormFeedback>
+                                    </div>
                                   ) : null}
                                 </div>
-                              </FormGroup>
-                            </Col>
-                            <Col xs={12} md={6} className='mt-4'>
-                              <FormGroup className='createOrder_inputs'>
+                              </div>
+                            </div>
+                            <div className='px-3 w-full md:w-6/12 mt-4'>
+                              <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Amount Paid
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm text-[13px]'
+                                  className='h-8 text-xs'
                                   placeholder='Amount...'
                                   id='amount'
                                   name='amount'
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   value={values.amount || ''}
-                                  invalid={touched.amount && errors.amount ? true : false}
+                                  aria-invalid={touched.amount && errors.amount ? true : undefined}
                                 />
-                                {touched.amount && errors.amount ? <FormFeedback type='invalid'>{errors.amount}</FormFeedback> : null}
-                              </FormGroup>
-                              <FormGroup className='createOrder_inputs'>
+                                {touched.amount && errors.amount ? <div className='text-sm text-destructive'>{errors.amount}</div> : null}
+                              </div>
+                              <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Shipping Paid
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm text-[13px]'
+                                  className='h-8 text-xs'
                                   placeholder='Shipping...'
                                   id='shipping'
                                   name='shipping'
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   value={values.shipping || ''}
-                                  invalid={touched.shipping && errors.shipping ? true : false}
+                                  aria-invalid={touched.shipping && errors.shipping ? true : undefined}
                                 />
-                                {touched.shipping && errors.shipping ? <FormFeedback type='invalid'>{errors.shipping}</FormFeedback> : null}
-                              </FormGroup>
-                              <FormGroup className='createOrder_inputs'>
+                                {touched.shipping && errors.shipping ? <div className='text-sm text-destructive'>{errors.shipping}</div> : null}
+                              </div>
+                              <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='form-label'>
                                   *Tax Paid
                                 </Label>
                                 <Input
                                   type='text'
-                                  className='form-control form-control-sm text-[13px]'
+                                  className='h-8 text-xs'
                                   placeholder='Tax...'
                                   id='tax'
                                   name='tax'
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   value={values.tax || ''}
-                                  invalid={touched.tax && errors.tax ? true : false}
+                                  aria-invalid={touched.tax && errors.tax ? true : undefined}
                                 />
-                                {touched.tax && errors.tax ? <FormFeedback type='invalid'>{errors.tax}</FormFeedback> : null}
-                              </FormGroup>
-                            </Col>
-                          </Col>
-                        </Row>
+                                {touched.tax && errors.tax ? <div className='text-sm text-destructive'>{errors.tax}</div> : null}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         {/* TABLE OF PRODUCTS */}
-                        <Row>
-                          <Col xs={12} className='mt-2'>
+                        <div className='flex flex-wrap -mx-3'>
+                          <div className='px-3 w-full mt-2'>
                             <div className='overflow-x-auto'>
                               <table className='w-full align-middle whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                                 <thead>
@@ -811,7 +816,7 @@ const CreateOrder = ({ session }: Props) => {
                                           <tr key={index}>
                                             <td style={{ minWidth: '50px' }}>
                                               {index > 0 ? (
-                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
+                                                <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
@@ -833,9 +838,9 @@ const CreateOrder = ({ session }: Props) => {
                                                     onClick={() => remove(index)}>
                                                     <i className='text-[22.75px] las la-minus-circle m-0 p-0' />
                                                   </button>
-                                                </Row>
+                                                </div>
                                               ) : (
-                                                <Row className='w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
+                                                <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
                                                   <button
                                                     type='button'
                                                     aria-label='Add product row'
@@ -850,13 +855,13 @@ const CreateOrder = ({ session }: Props) => {
                                                     }>
                                                     <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
                                                   </button>
-                                                </Row>
+                                                </div>
                                               )}
                                             </td>
                                             <td style={{ minWidth: '200px' }}>
                                               <Field name={`products.${index}.sku`}>
                                                 {({ meta }: any) => (
-                                                  <FormGroup className='createOrder_inputs'>
+                                                  <div className='mb-3 createOrder_inputs'>
                                                     <SimpleSelect
                                                       selected={{ label: values.products[index].sku, value: values.products[index].sku }}
                                                       options={skus.map((sku: { sku: string; name: string }) => ({ label: sku.sku, value: sku.sku, description: sku.name }))}
@@ -876,78 +881,78 @@ const CreateOrder = ({ session }: Props) => {
                                                       menuPortalTarget={document.body}
                                                     />
                                                     {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
-                                                  </FormGroup>
+                                                  </div>
                                                 )}
                                               </Field>
                                             </td>
                                             <td style={{ minWidth: '200px' }}>
                                               <Field name={`products.${index}.title`}>
                                                 {({ meta }: any) => (
-                                                  <FormGroup className='createOrder_inputs'>
+                                                  <div className='mb-3 createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm text-[13px]'
+                                                      className='h-8 text-xs'
                                                       name={`products.${index}.title`}
                                                       placeholder='Title...'
                                                       list='skuNames'
                                                       readOnly
                                                       onBlur={handleBlur}
                                                       value={values.products[index].title?.split(' -||- ')[0] || ''}
-                                                      invalid={meta.touched && meta.error ? true : false}
+                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                                      <div className='m-0 text-sm text-destructive'>
                                                         {meta.error}
-                                                      </FormFeedback>
+                                                      </div>
                                                     ) : null}
-                                                  </FormGroup>
+                                                  </div>
                                                 )}
                                               </Field>
                                             </td>
                                             <td style={{ minWidth: '80px' }}>
                                               <Field name={`products.${index}.price`}>
                                                 {({ meta }: any) => (
-                                                  <FormGroup className='createOrder_inputs'>
+                                                  <div className='mb-3 createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm text-[13px]'
+                                                      className='h-8 text-xs'
                                                       name={`products.${index}.price`}
                                                       placeholder='Price...'
                                                       onChange={handleChange}
                                                       onBlur={handleBlur}
                                                       value={values.products[index].price || ''}
-                                                      invalid={meta.touched && meta.error ? true : false}
+                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='m-0 text-[11.2px]' type='invalid'>
+                                                      <div className='m-0 text-sm text-destructive'>
                                                         {meta.error}
-                                                      </FormFeedback>
+                                                      </div>
                                                     ) : null}
-                                                  </FormGroup>
+                                                  </div>
                                                 )}
                                               </Field>
                                             </td>
                                             <td style={{ minWidth: '80px' }}>
                                               <Field name={`products.${index}.qty`}>
                                                 {({ meta }: any) => (
-                                                  <FormGroup className='createOrder_inputs'>
+                                                  <div className='mb-3 createOrder_inputs'>
                                                     <Input
                                                       type='text'
-                                                      className='form-control form-control-sm text-[13px] text-center'
+                                                      className='h-8 text-xs text-center'
                                                       name={`products.${index}.qty`}
                                                       max={skuQuantities[values.products[index].sku]}
                                                       placeholder='Qty...'
                                                       onChange={handleChange}
                                                       onBlur={handleBlur}
                                                       value={values.products[index].qty || ''}
-                                                      invalid={meta.touched && meta.error ? true : false}
+                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
                                                     />
                                                     {meta.touched && meta.error ? (
-                                                      <FormFeedback className='m-0 text-[11.2px] text-wrap' type='invalid'>
+                                                      <div className='m-0 text-sm text-destructive text-wrap'>
                                                         {meta.error}
-                                                      </FormFeedback>
+                                                      </div>
                                                     ) : null}
-                                                  </FormGroup>
+                                                  </div>
                                                 )}
                                               </Field>
                                             </td>
@@ -981,41 +986,41 @@ const CreateOrder = ({ session }: Props) => {
                                 </tfoot>
                               </table>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
 
                         {/* INFO AND SUBMIT BUTTON */}
 
-                        <Row>
+                        <div className='flex flex-wrap -mx-3'>
                           {skuExceededAvailability.sku !== '' && (
                             <span className='text-danger text-[13px] font-normal'>{`*SKU: ${skuExceededAvailability.sku} Available: ${skuExceededAvailability.availableQty} Ordered: ${skuExceededAvailability.orderedQty}`}</span>
                           )}
                           <p className='text-[13px] mb-0 text-[var(--bs-secondary-color)]'>*You must complete all required fields or you will not be able to create your product.</p>
-                          <Col md={12}>
+                          <div className='px-3 md:w-full'>
                             <div className='text-right'>
                               <Button type='submit' disabled={creatingOrder} className='text-[13px] bg-primary'>
                                 {creatingOrder ? (
                                   <span className='flex items-center gap-2'>
-                                    <Spinner color='light' size={'sm'} /> Creating...
+                                    <Spinner className='text-white' /> Creating...
                                   </span>
                                 ) : (
                                   'Create Order'
                                 )}
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
                       </Form>
                     )}
                   </Formik>
                 ) : (
-                  <Row>
+                  <div className='flex flex-wrap -mx-3'>
                     <h5>Loading Create Order Form...</h5>
-                  </Row>
+                  </div>
                 )}
-              </CardBody>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
       </React.Fragment>
     </div>

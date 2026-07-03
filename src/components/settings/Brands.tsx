@@ -5,7 +5,9 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from 'react-toastify'
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
@@ -168,14 +170,14 @@ const Brands = ({}: Props) => {
     <>
       {!showAddNewFields ? (
         <div className='flex flex-row justify-end items-end'>
-          <Button type='submit' color='primary' size='sm' className='m-0' onClick={handleShowAddSupplier}>
+          <Button type='submit' size='sm' className='m-0' onClick={handleShowAddSupplier}>
             Add New
           </Button>
         </div>
       ) : (
         <div>
-          <Form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
-            <FormGroup>
+          <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Brand Name
               </Label>
@@ -185,15 +187,14 @@ const Brands = ({}: Props) => {
                 placeholder='Name...'
                 id='name'
                 name='name'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.name || ''}
-                invalid={validation.touched.name && validation.errors.name ? true : false}
+                aria-invalid={Boolean(validation.touched.name && validation.errors.name) || undefined}
               />
-              {validation.touched.name && validation.errors.name ? <FormFeedback type='invalid'>{validation.errors.name}</FormFeedback> : null}
-            </FormGroup>
-            <FormGroup>
+              {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+            </div>
+            <div className='mb-3'>
               <Label htmlFor='title' className='form-label'>
                 *Logo
               </Label>
@@ -203,29 +204,28 @@ const Brands = ({}: Props) => {
                 placeholder='Logo...'
                 id='logo'
                 name='logo'
-                bsSize='sm'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.logo || ''}
-                invalid={validation.touched.logo && validation.errors.logo ? true : false}
+                aria-invalid={Boolean(validation.touched.logo && validation.errors.logo) || undefined}
               />
-              {validation.touched.logo && validation.errors.logo ? <FormFeedback type='invalid'>{validation.errors.logo}</FormFeedback> : null}
-            </FormGroup>
+              {validation.touched.logo && validation.errors.logo ? <div className='text-sm text-destructive'>{validation.errors.logo}</div> : null}
+            </div>
             <div className='flex flex-row justify-end items-end gap-4'>
-              <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
+              <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
                 Cancel
               </Button>
-              <Button type='submit' color='primary' size='sm' className='m-0'>
+              <Button type='submit' size='sm' className='m-0'>
                 Add New
               </Button>
             </div>
-          </Form>
+          </form>
         </div>
       )}
 
       {showEditFields && (
-        <Form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
-          <FormGroup>
+        <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Supplier Name
             </Label>
@@ -235,15 +235,14 @@ const Brands = ({}: Props) => {
               placeholder='Name...'
               id='name'
               name='name'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.name || ''}
-              invalid={validationEdit.touched.name && validationEdit.errors.name ? true : false}
+              aria-invalid={Boolean(validationEdit.touched.name && validationEdit.errors.name) || undefined}
             />
-            {validationEdit.touched.name && validationEdit.errors.name ? <FormFeedback type='invalid'>{validationEdit.errors.name}</FormFeedback> : null}
-          </FormGroup>
-          <FormGroup>
+            {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
+          </div>
+          <div className='mb-3'>
             <Label htmlFor='title' className='form-label'>
               *Logo
             </Label>
@@ -253,23 +252,22 @@ const Brands = ({}: Props) => {
               placeholder='Logo...'
               id='logo'
               name='logo'
-              bsSize='sm'
               onChange={validationEdit.handleChange}
               onBlur={validationEdit.handleBlur}
               value={validationEdit.values.logo || ''}
-              invalid={validationEdit.touched.logo && validationEdit.errors.logo ? true : false}
+              aria-invalid={Boolean(validationEdit.touched.logo && validationEdit.errors.logo) || undefined}
             />
-            {validationEdit.touched.logo && validationEdit.errors.logo ? <FormFeedback type='invalid'>{validationEdit.errors.logo}</FormFeedback> : null}
-          </FormGroup>
+            {validationEdit.touched.logo && validationEdit.errors.logo ? <div className='text-sm text-destructive'>{validationEdit.errors.logo}</div> : null}
+          </div>
           <div className='flex flex-row justify-end items-end gap-4'>
-            <Button type='button' color='light' size='sm' className='m-0' onClick={handleCancelEdit}>
+            <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelEdit}>
               Cancel
             </Button>
-            <Button type='submit' color='primary' size='sm' className='m-0'>
+            <Button type='submit' size='sm' className='m-0'>
               Update
             </Button>
           </div>
-        </Form>
+        </form>
       )}
 
       <DataTable columns={columns} data={brands} progressPending={loading} striped={true} defaultSortFieldId={1} />

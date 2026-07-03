@@ -8,7 +8,7 @@ import { sortNumbers, sortStringsLocaleCompare } from '@lib/helperFunctions'
 import { AddShippingCostModalType, AddTagToOrderType, DeleteReceivingModalType, EditReceivingType, MarkReceivedModalType } from '@pages/receivings'
 import { OrderRowType, ShipmentOrderItem } from '@typings'
 import DataTable from '@components/Common/DataTableSC'
-import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from '@/components/migration-ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 import ShipmentExpandedDetail from '../ShipmentExpandedDetail'
 import GenerateReceivingLabels from './GenerateReceivingLabels'
@@ -171,85 +171,87 @@ const ReceivingTable = ({ tableData, pending, mutateReceivings, setshowDeleteMod
       center: true,
       cell: (row: OrderRowType) => {
         return (
-          <UncontrolledDropdown className='inline-block' direction='start'>
-            <DropdownToggle
-              className='inline-flex items-center justify-center rounded bg-[color:var(--vz-light)] m-0 p-0'
-              style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}
-              tag='button'>
-              <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }} />
-            </DropdownToggle>
-            <DropdownMenu className='dropdown-menu-end text-[11.2px]' container={'body'}>
-              <DropdownItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
-                <div>
-                  <i className='las la-ship label-icon align-middle me-2 text-[16.25px]' />
-                  <span className='font-normal text-black'>Shipping Cost</span>
-                </div>
-              </DropdownItem>
-              <DropdownItem onClick={() => setaddTagToOrder({ show: true, orderId: row.id, orderNumber: row.orderNumber, tag: row.tag ?? '' })}>
-                <div>
-                  <i className='las la-tag label-icon align-middle me-2 text-[16.25px]' />
-                  <span className='font-normal text-black'>Add Tag</span>
-                </div>
-              </DropdownItem>
-              {row.boxes ? <ReceivingPackingSlip receiving={row} /> : null}
-              {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
-                <DropdownItem>
-                  <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='!text-black'>
-                    <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
-                    <span className='font-normal text-black'>Proof Of Received</span>
-                  </a>
-                </DropdownItem>
-              )}
-              {row.boxes && (
-                <>
-                  <DropdownItem header>Labels</DropdownItem>
-                  <GenerateReceivingLabels
-                    finalBoxesConfiguration={row.boxes}
-                    orderBarcode={row.isShipjoyCreated && row.id3PL ? row.id3PL : row.orderNumber}
-                    fileName={row.orderNumber}
-                    warehouseId={row.warehouseId}
-                    isManualReceiving={!row.isReceivingFromPo}>
-                    <DropdownItem>
-                      <i className='las la-toilet-paper label-icon align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]' />
-                      <span className='font-normal text-black'>Receiving Labels</span>
-                    </DropdownItem>
-                  </GenerateReceivingLabels>
-                </>
-              )}
-              <DropdownItem header>Actions</DropdownItem>
-              {row.boxes && (
-                <DropdownItem onClick={() => seteditReceiving({ show: true, order: row })}>
-                  <i className='las la-edit text-primary label-icon align-middle me-2 text-[16.25px]' />
-                  <span className='font-normal text-black'>Edit Receiving</span>
-                </DropdownItem>
-              )}
-              {!row.isSCDestination && row.orderStatus !== 'received' && (
-                <DropdownItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
-                  <i className='las la-check-circle text-success label-icon align-middle me-2 text-[16.25px]' />
-                  <span className='font-normal text-black'>Mark as Received</span>
-                </DropdownItem>
-              )}
-              {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
-                row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+          <DropdownMenu>
+            <div className='inline-block'>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type='button'
+                  className='inline-flex items-center justify-center rounded bg-[color:var(--vz-light)] m-0 p-0'
+                  style={{ border: '1px solid rgba(68, 129, 253, 0.06)' }}>
+                  <i className='mdi mdi-dots-vertical align-middle text-[19.5px] m-0 px-1 py-0' style={{ color: '#919FAF' }} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='text-[11.2px]'>
+                <DropdownMenuItem onClick={() => setaddShippingCostModal({ show: true, orderId: row.id, orderNumber: row.orderNumber, shippingCost: row.receivingShippingCost ?? '' })}>
+                  <div>
+                    <i className='las la-ship label-icon align-middle me-2 text-[16.25px]' />
+                    <span className='font-normal text-black'>Shipping Cost</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setaddTagToOrder({ show: true, orderId: row.id, orderNumber: row.orderNumber, tag: row.tag ?? '' })}>
+                  <div>
+                    <i className='las la-tag label-icon align-middle me-2 text-[16.25px]' />
+                    <span className='font-normal text-black'>Add Tag</span>
+                  </div>
+                </DropdownMenuItem>
+                {row.boxes ? <ReceivingPackingSlip receiving={row} /> : null}
+                {!row.isReceivingFromPo && row.orderStatus !== 'received' && (
+                  <DropdownMenuItem>
+                    <a href={row.proofOfShipped || '#'} target='blank' rel='noopener noreferrer' className='!text-black'>
+                      <i className='las la-truck label-icon align-middle text-[16.25px] me-2' />
+                      <span className='font-normal text-black'>Proof Of Received</span>
+                    </a>
+                  </DropdownMenuItem>
+                )}
+                {row.boxes && (
                   <>
-                    <DropdownItem header className='text-destructive'>
-                      Danger Zone
-                    </DropdownItem>
-                    <DropdownItem
-                      onClick={() =>
-                        setshowDeleteModal({
-                          show: true,
-                          orderId: row.id,
-                          orderNumber: row.orderNumber,
-                        })
-                      }>
-                      <i className='las la-trash-alt text-destructive label-icon align-middle text-[16.25px] me-2' />
-                      <span className='font-normal text-destructive'>Delete Receiving</span>
-                    </DropdownItem>
+                    <DropdownMenuLabel>Labels</DropdownMenuLabel>
+                    <GenerateReceivingLabels
+                      finalBoxesConfiguration={row.boxes}
+                      orderBarcode={row.isShipjoyCreated && row.id3PL ? row.id3PL : row.orderNumber}
+                      fileName={row.orderNumber}
+                      warehouseId={row.warehouseId}
+                      isManualReceiving={!row.isReceivingFromPo}>
+                      <DropdownMenuItem>
+                        <i className='las la-toilet-paper label-icon align-middle me-2 text-[16.25px] text-[var(--bs-secondary-color)]' />
+                        <span className='font-normal text-black'>Receiving Labels</span>
+                      </DropdownMenuItem>
+                    </GenerateReceivingLabels>
                   </>
                 )}
-            </DropdownMenu>
-          </UncontrolledDropdown>
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                {row.boxes && (
+                  <DropdownMenuItem onClick={() => seteditReceiving({ show: true, order: row })}>
+                    <i className='las la-edit text-primary label-icon align-middle me-2 text-[16.25px]' />
+                    <span className='font-normal text-black'>Edit Receiving</span>
+                  </DropdownMenuItem>
+                )}
+                {!row.isSCDestination && row.orderStatus !== 'received' && (
+                  <DropdownMenuItem onClick={() => setmarkReceivedModal({ show: true, orderId: row.id, orderNumber: row.orderNumber })}>
+                    <i className='las la-check-circle text-success label-icon align-middle me-2 text-[16.25px]' />
+                    <span className='font-normal text-black'>Mark as Received</span>
+                  </DropdownMenuItem>
+                )}
+                {(row.orderStatus == 'awaiting' || row.orderStatus == 'awaiting_shipment') &&
+                  row.orderItems.reduce((totalReceived, item: ShipmentOrderItem) => totalReceived + item.qtyReceived!, 0) <= 0 && (
+                    <>
+                      <DropdownMenuLabel className='text-destructive'>Danger Zone</DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setshowDeleteModal({
+                            show: true,
+                            orderId: row.id,
+                            orderNumber: row.orderNumber,
+                          })
+                        }>
+                        <i className='las la-trash-alt text-destructive label-icon align-middle text-[16.25px] me-2' />
+                        <span className='font-normal text-destructive'>Delete Receiving</span>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+              </DropdownMenuContent>
+            </div>
+          </DropdownMenu>
         )
       },
     },

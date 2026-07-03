@@ -2,7 +2,9 @@ import { useState } from 'react'
 
 import SimpleSelect from '@components/Common/SimpleSelect'
 import type { ProductStatusFilter } from '@hooks/products/productFilters'
-import { ButtonGroup, Dropdown, DropdownMenu, DropdownToggle } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@shadcn/ui/dropdown-menu'
 
 type ProductFilterQuery = {
   brand: string
@@ -35,14 +37,17 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
 
   return (
     <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
-      <ButtonGroup>
-        <Dropdown isOpen={openDatesMenu} toggle={() => setOpenDatesMenu(!openDatesMenu)}>
-          <DropdownToggle
-            className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'
-            color='light'>
-            Filters
-          </DropdownToggle>
-          <DropdownMenu style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
+      <div role='group' className='inline-flex'>
+        <DropdownMenu open={openDatesMenu} onOpenChange={(open) => { if (open !== openDatesMenu) setOpenDatesMenu(!openDatesMenu) }}>
+          <DropdownMenuTrigger asChild>
+            <button
+              type='button'
+              className='inline-flex h-9 items-center gap-2 rounded-md border border-[#E1E3E5] bg-white px-3 text-sm font-semibold text-foreground whitespace-nowrap'>
+              Filters
+              <ChevronDownIcon className='ml-1 size-4' />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='start' style={{ backgroundColor: 'white', minWidth: '250px', border: '1px solid #E1E3E5' }}>
             <div className='px-4 py-3'>
               <div className='flex flex-col justify-start gap-2'>
                 <span className='font-semibold text-[11.2px]'>Brand:</span>
@@ -121,9 +126,9 @@ const FilterProducts = ({ brands, suppliers, categories, brand, supplier, catego
                 </button>
               </div>
             </div>
-          </DropdownMenu>
-        </Dropdown>
-      </ButtonGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   )
 }

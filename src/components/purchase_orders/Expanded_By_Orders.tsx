@@ -11,7 +11,13 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Form, FormFeedback, FormGroup, Input, Label, Nav, NavItem, Row, UncontrolledTooltip } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardHeader, CardContent } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Textarea } from '@shadcn/ui/textarea'
+import { Label } from '@shadcn/ui/label'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
+import { Nav, NavItem } from '@/components/ui/nav-tabs'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
@@ -263,14 +269,14 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
 
   return (
     <div style={{ backgroundColor: '#F0F4F7', padding: '10px' }}>
-      <Row>
-        <Col sm={3}>
-          <Col sm={12}>
+      <div className='flex flex-wrap -mx-3'>
+        <div className='px-3 w-full sm:w-3/12'>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-2'>
                 <h5 className='font-semibold m-0'>Details</h5>
               </CardHeader>
-              <CardBody>
+              <CardContent>
                 <table className='w-full text-[11.2px] mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <tbody>
                     {!editPONumber && (
@@ -291,9 +297,9 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     {editPONumber && (
                       <tr>
                         <td colSpan={2}>
-                          <Form onSubmit={handleChangePONumber}>
-                            <Col md={12}>
-                              <FormGroup>
+                          <form onSubmit={handleChangePONumber}>
+                            <div className='px-3 w-full'>
+                              <div className='mb-3'>
                                 <Label htmlFor='orderNumber'>
                                   New PO Number:
                                 </Label>
@@ -304,30 +310,29 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                   <Input
                                     type='text'
                                     aria-label='New PO number'
-                                    className='text-[11.2px]'
+                                    className='h-8 text-xs'
                                     id='orderNumber'
                                     name='orderNumber'
-                                    bsSize='sm'
                                     onChange={validationPONumber.handleChange}
                                     onBlur={validationPONumber.handleBlur}
                                     value={validationPONumber.values.orderNumber || ''}
-                                    invalid={validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? true : false}
+                                    aria-invalid={Boolean(validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber) || undefined}
                                   />
                                   {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? (
-                                    <FormFeedback type='invalid'>{validationPONumber.errors.orderNumber}</FormFeedback>
+                                    <div className='text-sm text-destructive'>{validationPONumber.errors.orderNumber}</div>
                                   ) : null}
                                 </div>
                                 <div className='flex flex-row justify-end items-center gap-2'>
-                                  <Button type='button' disabled={loading} color='light' size='sm' onClick={() => seteditPONumber(false)}>
+                                  <Button type='button' disabled={loading} variant='light' size='sm' onClick={() => seteditPONumber(false)}>
                                     Cancel
                                   </Button>
-                                  <Button type='submit' disabled={loading} color='primary' size='sm'>
+                                  <Button type='submit' disabled={loading} size='sm'>
                                     Save Changes
                                   </Button>
                                 </div>
-                              </FormGroup>
-                            </Col>
-                          </Form>
+                              </div>
+                            </div>
+                          </form>
                         </td>
                       </tr>
                     )}
@@ -357,41 +362,39 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   </button>
                 </p>
                 {showEditNote && (
-                  <Form onSubmit={handleAddComment}>
-                    <Col md={12}>
-                      <FormGroup className='!m-0'>
+                  <form onSubmit={handleAddComment}>
+                    <div className='px-3 w-full'>
+                      <div className='!m-0'>
                         <Label htmlFor='note'>
                           Edit Note
                         </Label>
-                        <Input
-                          type='textarea'
-                          className='text-[13px]'
+                        <Textarea
+                          className='text-xs'
                           placeholder=''
                           id='note'
                           name='note'
-                          bsSize='sm'
                           onChange={validationNote.handleChange}
                           onBlur={validationNote.handleBlur}
                           value={validationNote.values.note || ''}
-                          invalid={validationNote.touched.note && validationNote.errors.note ? true : false}
+                          aria-invalid={Boolean(validationNote.touched.note && validationNote.errors.note) || undefined}
                         />
-                        {validationNote.touched.note && validationNote.errors.note ? <FormFeedback type='invalid'>{validationNote.errors.note}</FormFeedback> : null}
-                      </FormGroup>
+                        {validationNote.touched.note && validationNote.errors.note ? <div className='text-sm text-destructive'>{validationNote.errors.note}</div> : null}
+                      </div>
                       <div className='flex flex-row justify-end items-center gap-3'>
-                        <Button type='button' disabled={loading} color='light' size='sm' onClick={() => setShowEditNote(false)}>
+                        <Button type='button' disabled={loading} variant='light' size='sm' onClick={() => setShowEditNote(false)}>
                           Cancel
                         </Button>
-                        <Button type='submit' disabled={loading} color='primary' size='sm'>
+                        <Button type='submit' disabled={loading} size='sm'>
                           Save Changes
                         </Button>
                       </div>
-                    </Col>
-                  </Form>
+                    </div>
+                  </form>
                 )}
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-          <Col sm={12}>
+          </div>
+          <div className='px-3 w-full'>
             <Card>
               <CardHeader className='py-2 flex flex-row justify-between'>
                 <h5 className='font-semibold m-0'>Payment History</h5>{' '}
@@ -405,7 +408,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   </button>
                 )}
               </CardHeader>
-              <CardBody className='pt-0 px-0'>
+              <CardContent className='pt-0 px-0'>
                 <table className='w-full text-[11.2px] text-nowrap mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                   <thead className='bg-[color:var(--vz-light)] text-[11.2px]'>
                     <tr>
@@ -468,11 +471,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     )}
                   </tbody>
                 </table>
-              </CardBody>
+              </CardContent>
             </Card>
-          </Col>
-        </Col>
-        <Col sm={9}>
+          </div>
+        </div>
+        <div className='px-3 w-full sm:w-9/12'>
           <Card className='mb-3'>
             <CardHeader className='py-2 flex flex-row justify-between items-start'>
               <div>
@@ -482,7 +485,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     <p className='m-0 my-1 p-0 text-[11.2px] text-[color:var(--bs-secondary-color)] font-normal'>Split Destinations:</p>
                     <Nav className='m-0 flex flex-row justify-start items-center gap-2 text-[11.2px]' role='tablist'>
                       <NavItem>
-                        <Button type='button' color={activeTab === 'all' ? 'primary' : 'light'} size='sm' className='text-[11.2px]' onClick={() => setactiveTab('all')}>
+                        <Button type='button' variant={activeTab === 'all' ? undefined : 'light'} size='sm' className='text-[11.2px]' onClick={() => setactiveTab('all')}>
                           All Splits
                         </Button>
                       </NavItem>
@@ -490,7 +493,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                         <NavItem key={`splitId-${split.splitId}`}>
                           <Button
                             type='button'
-                            color={activeTab === `${split.splitId}` ? 'primary' : 'light'}
+                            variant={activeTab === `${split.splitId}` ? undefined : 'light'}
                             size='sm'
                             className='text-[11.2px]'
                             onClick={() => setactiveTab(`${split.splitId}`)}>
@@ -572,7 +575,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 </div>
               )}
             </CardHeader>
-            <CardBody className='pt-0 px-0'>
+            <CardContent className='pt-0 px-0'>
               <ExpandedOrderItems
                 activeTab={activeTab}
                 poItems={activeTab === 'all' ? data.poItems : data.splits[activeTab].items}
@@ -581,29 +584,29 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                 handlereceivingOrderFromPo={handlereceivingOrderFromPo}
                 setshowDeleteModal={setshowDeleteModal}
               />
-            </CardBody>
+            </CardContent>
           </Card>
-          <Row className='mb-2'>
-            <Col sm={12} className='flex flex-row justify-end items-end'>
+          <div className='flex flex-wrap -mx-3 mb-2'>
+            <div className='px-3 w-full flex flex-row justify-end items-end'>
               <div className='m-0 flex flex-row justify-end items-end gap-2'>
                 {/* <DownloadExcelPurchaseOrder purchaseOrder={data}/> */}
                 <DownloadExcelPurchaseOrder purchaseOrder={data} />
                 {data.isOpen ? (
-                  <Button color='success' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                  <Button variant='success' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
                     <i className='las la-check-circle label-icon align-middle text-[19.5px] me-2' />
                     Mark as Complete
                   </Button>
                 ) : (
-                  <Button color='info' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
+                  <Button variant='info' disabled={loading} className='text-[11.2px]' onClick={() => handlePoOpenState(data.poId, !data.isOpen)}>
                     <i className='las la-lock-open label-icon align-middle text-[16.25px] me-2' />
                     ReOpen PO
                   </Button>
                 )}
               </div>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            </div>
+          </div>
+        </div>
+      </div>
       {showDeleteModal.show && <Confirm_Delete_Item_From_PO showDeleteModal={showDeleteModal} setshowDeleteModal={setshowDeleteModal} loading={loading} setLoading={setLoading} />}
       {showEditOrderQty.show && <Edit_PO_Ordered_Qty showEditOrderQty={showEditOrderQty} setshowEditOrderQty={setshowEditOrderQty} loading={loading} setLoading={setLoading} />}
       {editPaymentModal.show && <Edit_Payment_Modal editPaymentModal={editPaymentModal} setEditPaymentModal={setEditPaymentModal} />}

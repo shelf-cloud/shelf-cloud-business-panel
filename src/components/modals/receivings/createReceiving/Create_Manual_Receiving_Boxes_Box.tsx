@@ -6,7 +6,6 @@ import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
 import { sortStringsLocaleCompare } from '@lib/helperFunctions'
-import { Col } from '@/components/migration-ui'
 
 type Props = {
   orderProducts: ReceivingInventory[]
@@ -19,7 +18,7 @@ const Create_Manual_Receiving_Boxes_Box = ({ orderProducts }: Props) => {
       <div className='flex flex-row justify-between items-center gap-4 mb-2'>
         <p className='m-0 font-bold text-[16.25px]'>All Products in 1 Box</p>
       </div>
-      <Col md={12} className='overflow-auto'>
+      <div className='px-3 w-full overflow-auto'>
         <table className='w-full align-middle mb-0 whitespace-nowrap [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tbody_tr:nth-child(odd)]:bg-[color:var(--vz-light)]'>
           <thead className='bg-[color:var(--vz-light)]'>
             <tr>
@@ -72,7 +71,7 @@ const Create_Manual_Receiving_Boxes_Box = ({ orderProducts }: Props) => {
             </tr>
           </tbody>
         </table>
-      </Col>
+      </div>
     </div>
   )
 }

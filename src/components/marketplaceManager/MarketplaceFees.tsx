@@ -12,7 +12,8 @@ import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from 'react-toastify'
-import { Button, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 
 import AssignCommerceHubFileType from './AssignCommerceHubFileType'
@@ -221,7 +222,7 @@ const MarketplacesFees = ({}: Props) => {
               type='text'
               minLength={1}
               debounceTimeout={400}
-              className='form-control text-[11.2px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px]'
               style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
               onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, alias: e.target.value !== '' ? e.target.value : null } }))}
               value={row.alias || ''}
@@ -249,7 +250,7 @@ const MarketplacesFees = ({}: Props) => {
               minLength={1}
               debounceTimeout={200}
               type='number'
-              className={'form-control text-[11.2px] ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'is-invalid')}
+              className={'h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] ' + ((row.comissionFee < 0 || row.comissionFee > 100) && 'border-destructive')}
               style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
               max={100}
               min={0}
@@ -277,7 +278,7 @@ const MarketplacesFees = ({}: Props) => {
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control text-[11.2px] ' + (row.fixedFee < 0 && 'is-invalid')}
+            className={'h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] ' + (row.fixedFee < 0 && 'border-destructive')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -353,7 +354,7 @@ const MarketplacesFees = ({}: Props) => {
             minLength={1}
             debounceTimeout={200}
             type='number'
-            className={'form-control text-[11.2px] ' + (row.payTerms < 0 && 'is-invalid')}
+            className={'h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px] ' + (row.payTerms < 0 && 'border-destructive')}
             style={{ padding: '0.2rem 0.9rem', minWidth: '80px' }}
             min={0}
             onChange={(e) => {
@@ -379,7 +380,7 @@ const MarketplacesFees = ({}: Props) => {
               element='textarea'
               minLength={3}
               debounceTimeout={500}
-              className='form-control text-[11.2px]'
+              className='h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 text-[11.2px]'
               style={{ padding: '0.2rem 0.5rem', minWidth: '80px' }}
               onChange={(e) => setmarketplaceFees((prev) => ({ ...prev, [row.storeId]: { ...row, notes: e.target.value !== '' ? e.target.value : null } }))}
               value={row.notes || ''}
@@ -397,19 +398,19 @@ const MarketplacesFees = ({}: Props) => {
   return (
     <>
       <div className='flex flex-row justify-end items-center gap-4 mb-2'>
-        <Button color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+        <Button size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
           Add New Logo
         </Button>
         {!showEditFields ? (
-          <Button color='primary' size='sm' onClick={() => setshowEditFields(true)}>
+          <Button size='sm' onClick={() => setshowEditFields(true)}>
             Edit
           </Button>
         ) : (
           <div className='flex flex-row justify-end items-center gap-4'>
-            <Button color='success' size='sm' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
-              {updatingFees ? <Spinner size={'sm'} color='white' /> : 'Save'}
+            <Button variant='success' size='sm' disabled={hasError} onClick={handleUpdateMarketplaceFees}>
+              {updatingFees ? <Spinner className='text-white' /> : 'Save'}
             </Button>
-            <Button color='light' size='sm' onClick={() => setshowEditFields(false)}>
+            <Button variant='light' size='sm' onClick={() => setshowEditFields(false)}>
               Cancel
             </Button>
           </div>

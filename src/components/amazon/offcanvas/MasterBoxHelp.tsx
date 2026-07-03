@@ -1,4 +1,4 @@
-import { Offcanvas, OffcanvasBody, OffcanvasHeader } from '@/components/migration-ui'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@shadcn/ui/sheet'
 
 type Props = {
   isOpen: boolean
@@ -7,10 +7,12 @@ type Props = {
 
 const MasterBoxHelp = ({ isOpen, setHelpOffCanvasIsOpen }: Props) => {
   return (
-    <Offcanvas isOpen={isOpen} direction='end' toggle={() => setHelpOffCanvasIsOpen(false)}>
-      <OffcanvasHeader toggle={() => setHelpOffCanvasIsOpen(false)}>Send To Amazon Guide</OffcanvasHeader>
-      <OffcanvasBody>
-        <div className='flex flex-col'>
+    <Sheet open={!!isOpen} onOpenChange={(open) => { if (!open) setHelpOffCanvasIsOpen(false) }}>
+      <SheetContent side='right' aria-describedby={undefined} className='overflow-y-auto sm:max-w-md'>
+        <SheetHeader className='pr-10'>
+          <SheetTitle>Send To Amazon Guide</SheetTitle>
+        </SheetHeader>
+        <div className='px-4 pb-4 flex flex-col'>
           <p className='text-[16.25px] font-bold'>Master Boxes</p>
           <div className='text-[11.2px]'>
             <p className='text-[13px] font-semibold'>Step 1 - Choose Inventory to Send</p>
@@ -60,8 +62,8 @@ const MasterBoxHelp = ({ isOpen, setHelpOffCanvasIsOpen }: Props) => {
             </ul>
           </div>
         </div>
-      </OffcanvasBody>
-    </Offcanvas>
+      </SheetContent>
+    </Sheet>
   )
 }
 

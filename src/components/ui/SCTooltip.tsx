@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { UncontrolledTooltip } from '@/components/migration-ui'
+import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 
 type BasePlacement = 'top' | 'bottom' | 'right' | 'left'
 type VariationPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'right-start' | 'right-end' | 'left-start' | 'left-end'

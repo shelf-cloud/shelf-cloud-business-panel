@@ -10,7 +10,9 @@ import { ListInboundPlan } from '@typesTs/amazon/fulfillments/listInboundPlans'
 import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { Button, Col, Modal, ModalBody, ModalHeader, Row, Spinner } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
 
 type Props = {
@@ -155,24 +157,10 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
   }
 
   return (
-    <Modal
-      fade={false}
-      size='lg'
-      id='assignFinishedWorkflowIdModal'
-      isOpen={assignFinishedWorkflowIdModal.show}
-      toggle={() => {
-        setassignFinishedWorkflowIdModal({
-          show: false,
-          id: 0,
-          inboundPlanName: '',
-          marketplace: '',
-          dateCreated: '',
-          skus: 0,
-          units: 0,
-        })
-      }}>
-      <ModalHeader
-        toggle={() => {
+    <Dialog
+      open={!!assignFinishedWorkflowIdModal.show}
+      onOpenChange={(open) => {
+        if (!open) {
           setassignFinishedWorkflowIdModal({
             show: false,
             id: 0,
@@ -182,13 +170,15 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
             skus: 0,
             units: 0,
           })
-        }}
-        className='modal-title'
-        id='myModalLabel'>
-        Assign Finished Amazon Workflow to ShelfCloud
-      </ModalHeader>
-      <ModalBody>
-        <Row>
+        }
+      }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='assignFinishedWorkflowIdModal'>
+        <DialogHeader className='pr-6'>
+          <DialogTitle className='modal-title' id='myModalLabel'>
+            Assign Finished Amazon Workflow to ShelfCloud
+          </DialogTitle>
+        </DialogHeader>
+        <div className='flex flex-wrap -mx-3'>
           <div className='mb-4'>
             <p className='text-[16.25px] m-0 font-semibold text-primary'>ShelfCloud Fulfillment</p>
             <p className='text-[13px] m-0 text-[var(--bs-secondary-color)]'>
@@ -212,7 +202,7 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
             Shipping.
           </p>
           {!loadingWorflows ? (
-            <Col xs={12}>
+            <div className='px-3 w-full'>
               <p className='text-[16.25px] font-semibold'>Amazon Active Workflows List</p>
               <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 border border-[color:var(--border)] [&_td]:border-t [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
@@ -248,9 +238,9 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                                 disabled={loadingWorflows || loadingAssignment}
                                 size='sm'
                                 type='button'
-                                color='success'
+                                variant='success'
                                 onClick={() => handleAssignWorkflowId(workflow.inboundPlanId)}>
-                                {loadingWorflows ? <Spinner color='light' size={'sm'} /> : 'Assing'}
+                                {loadingWorflows ? <Spinner className='text-white' /> : 'Assing'}
                               </Button>
                             </td>
                           </tr>
@@ -259,13 +249,13 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                 </tbody>
               </table>
               </div>
-              <Row md={12} className=''>
+              <div className='flex flex-wrap -mx-3'>
                 <div className='text-right mt-2 flex flex-row gap-6 justify-end'>
                   <div className='flex flex-row gap-4'>
                     <Button
                       disabled={loadingWorflows || loadingAssignment}
                       type='button'
-                      color='light'
+                      variant='light'
                       onClick={() => {
                         setassignFinishedWorkflowIdModal({
                           show: false,
@@ -281,16 +271,16 @@ const AssignFinishedWorkflowId = ({ assignFinishedWorkflowIdModal, setassignFini
                     </Button>
                   </div>
                 </div>
-              </Row>
-            </Col>
+              </div>
+            </div>
           ) : (
-            <Col xs={12}>
-              <Spinner color='primary' size={'sm'} /> <span>Retrieving active workflows...</span>
-            </Col>
+            <div className='px-3 w-full'>
+              <Spinner className='size-6 text-primary' /> <span>Retrieving active workflows...</span>
+            </div>
           )}
-        </Row>
-      </ModalBody>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

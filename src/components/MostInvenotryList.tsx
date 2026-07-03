@@ -5,7 +5,7 @@ import React, { useContext } from 'react'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { ProductSummary } from '@typings'
-import { Card, CardBody, CardHeader, Col } from '@/components/migration-ui'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shadcn/ui/table'
 
 type Props = {
@@ -16,7 +16,7 @@ const MostInvenotryList = ({ products }: Props) => {
   const { state }: any = useContext(AppContext)
   return (
     <React.Fragment>
-      <Col>
+      <div className='px-3 flex-1 basis-0'>
         <Card>
           <CardHeader className='flex items-center justify-between'>
             <h4 className='grow mb-0 text-[16px] font-medium text-[#212529]'>Stock Inventory</h4>
@@ -25,7 +25,7 @@ const MostInvenotryList = ({ products }: Props) => {
             </Link>
           </CardHeader>
 
-          <CardBody>
+          <CardContent>
             <Table className='mb-0'>
               <TableHeader>
                 <TableRow>
@@ -62,9 +62,9 @@ const MostInvenotryList = ({ products }: Props) => {
                 ))}
               </TableBody>
             </Table>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
+      </div>
     </React.Fragment>
   )
 }

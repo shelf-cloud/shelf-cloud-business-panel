@@ -13,7 +13,8 @@ import AppContext from '@context/AppContext'
 import { UnsellablesType } from '@typesTs/returns/unsellables'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, Col, Container, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
 import useSWR from 'swr'
 
 import ShowBiggerImageDialog, { SelectedUnsellableImage } from '@/components/returns/ShowBiggerImageDialog'
@@ -128,14 +129,14 @@ const Unsellables = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Return Unsellables' pageTitle='Orders' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
-                <Row className='flex flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full'>
+                <div className='flex flex-wrap -mx-3 flex-col-reverse justify-center items-end gap-2 mb-1 md:flex-row md:justify-between md:items-center'>
                   <div className='flex flex-col justify-center items-end gap-2 md:flex-row md:justify-between md:items-center w-auto'>
                     <div>
                       <Link href={'/Returns'}>
-                        <Button color='primary' style={{ cursor: 'pointer' }}>
+                        <Button style={{ cursor: 'pointer' }}>
                           <span className='icon-on'>
                             <i className='ri-arrow-left-line align-bottom me-1' />
                             Returns
@@ -147,15 +148,15 @@ const Unsellables = ({ session }: Props) => {
                     <ExportUnsellables unsellables={filterDataTable || allData} />
                   </div>
                   <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='white' />
-                </Row>
+                </div>
                 <Card>
-                  <CardBody>
+                  <CardContent>
                     <ReturnUnsellablesTable filterDataTable={filterDataTable || []} pending={pending} openImagesDialog={openImagesDialog} />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
         <ShowReturnImagesDialog
           imagesDialogItem={imagesDialogItem}

@@ -17,7 +17,11 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
 
-import { Button, Card, CardBody, Col, Container, Form, FormFeedback, FormGroup, Input, Label, Row, Switch } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
+import { Label } from '@shadcn/ui/label'
+import { Switch } from '@/components/ui/Switch'
 import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
 // import UploadProductsModal from '@components/UploadProductsModal'
@@ -240,129 +244,123 @@ const AddProducts = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Add Basic Product' pageTitle='Warehouse' />
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <Card>
-              <CardBody>
-                <Form onSubmit={handleAddProduct}>
-                  <Row>
+              <CardContent>
+                <form onSubmit={handleAddProduct}>
+                  <div className='flex flex-wrap -mx-3'>
                     <h5 className='text-[16.25px] font-bold text-primary'>Product Details</h5>
-                    <Col md={6}>
-                      <FormGroup>
+                    <div className='px-3 w-full md:w-6/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='firstNameinput' className='text-[11.2px]'>
                           *Title
                         </Label>
                         <Input
                           type='text'
-                          bsSize='sm'
                           placeholder='Title...'
                           id='title'
                           name='title'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.title || ''}
-                          invalid={validation.touched.title && validation.errors.title ? true : false}
+                          aria-invalid={Boolean(validation.touched.title && validation.errors.title) || undefined}
                         />
-                        {validation.touched.title && validation.errors.title ? <FormFeedback type='invalid'>{validation.errors.title}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                      <FormGroup>
+                        {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-6/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='lastNameinput' className='text-[11.2px]'>
                           *SKU
                         </Label>
                         <Input
                           type='text'
-                          bsSize='sm'
                           placeholder='Sku...'
                           id='sku'
                           name='sku'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.sku || ''}
-                          invalid={validation.touched.sku && validation.errors.sku ? true : false}
+                          aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
                         />
-                        {validation.touched.sku && validation.errors.sku ? <FormFeedback type='invalid'>{validation.errors.sku}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           ASIN
                         </Label>
                         <Input
                           type='text'
-                          bsSize='sm'
                           placeholder='Asin...'
                           id='asin'
                           name='asin'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.asin || ''}
-                          invalid={validation.touched.asin && validation.errors.asin ? true : false}
+                          aria-invalid={Boolean(validation.touched.asin && validation.errors.asin) || undefined}
                         />
-                        {validation.touched.asin && validation.errors.asin ? <FormFeedback type='invalid'>{validation.errors.asin}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.asin && validation.errors.asin ? <div className='text-sm text-destructive'>{validation.errors.asin}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           FNSKU
                         </Label>
                         <Input
                           type='text'
-                          bsSize='sm'
                           placeholder='Fnsku...'
                           id='fnsku'
                           name='fnsku'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.fnsku || ''}
-                          invalid={validation.touched.fnsku && validation.errors.fnsku ? true : false}
+                          aria-invalid={Boolean(validation.touched.fnsku && validation.errors.fnsku) || undefined}
                         />
-                        {validation.touched.fnsku && validation.errors.fnsku ? <FormFeedback type='invalid'>{validation.errors.fnsku}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.fnsku && validation.errors.fnsku ? <div className='text-sm text-destructive'>{validation.errors.fnsku}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           UPC / Barcode
                         </Label>
                         <Input
                           type='text'
-                          bsSize='sm'
                           placeholder='Barcode...'
                           id='barcode'
                           name='barcode'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.barcode || ''}
-                          invalid={validation.touched.barcode && validation.errors.barcode ? true : false}
+                          aria-invalid={Boolean(validation.touched.barcode && validation.errors.barcode) || undefined}
                         />
-                        {validation.touched.barcode && validation.errors.barcode ? <FormFeedback type='invalid'>{validation.errors.barcode}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.barcode && validation.errors.barcode ? <div className='text-sm text-destructive'>{validation.errors.barcode}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Selling Price {state?.currentRegion == 'us' ? '($)' : '(€)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Selling Price...'
                           id='defaultPrice'
                           name='defaultPrice'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.defaultPrice || ''}
-                          invalid={validation.touched.defaultPrice && validation.errors.defaultPrice ? true : false}
+                          aria-invalid={Boolean(validation.touched.defaultPrice && validation.errors.defaultPrice) || undefined}
                         />
-                        {validation.touched.defaultPrice && validation.errors.defaultPrice ? <FormFeedback type='invalid'>{validation.errors.defaultPrice}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
+                        {validation.touched.defaultPrice && validation.errors.defaultPrice ? <div className='text-sm text-destructive'>{validation.errors.defaultPrice}</div> : null}
+                      </div>
+                    </div>
 
                     {/* BRAND - SUPPLIERS - CATEGORY SELECT WITH CREATION COMPONENTS HERE */}
-                    <Col md={4}>
+                    <div className='px-3 w-full md:w-4/12'>
                       <SelectSingleFilterWithCreation
                         inputLabel='Brand'
                         inputName='select-new-product-brand'
@@ -393,8 +391,8 @@ const AddProducts = ({ session }: Props) => {
                           return addNewOption({ addEndpoint: 'addNewBrand', values })
                         }}
                       />
-                    </Col>
-                    <Col md={4}>
+                    </div>
+                    <div className='px-3 w-full md:w-4/12'>
                       <SelectSingleFilterWithCreation
                         inputLabel='Supplier'
                         inputName='select-new-product-supplier'
@@ -425,8 +423,8 @@ const AddProducts = ({ session }: Props) => {
                           return addNewOption({ addEndpoint: 'addNewSupplier', values })
                         }}
                       />
-                    </Col>
-                    <Col md={4}>
+                    </div>
+                    <div className='px-3 w-full md:w-4/12'>
                       <SelectSingleFilterWithCreation
                         inputLabel='Category'
                         inputName='select-new-product-category'
@@ -457,12 +455,12 @@ const AddProducts = ({ session }: Props) => {
                           return addNewOption({ addEndpoint: 'addNewCategory', values })
                         }}
                       />
-                    </Col>
+                    </div>
 
                     {/* ADD PRODUCT IMAGE */}
-                    <Row className='items-center'>
+                    <div className='flex flex-wrap -mx-3 items-center'>
                       {validation.values.image && (
-                        <Col xs={2} md={1} style={{ minWidth: 'fit-content' }}>
+                        <div className='px-3 w-2/12 md:w-1/12' style={{ minWidth: 'fit-content' }}>
                           <div
                             style={{
                               width: '60px',
@@ -481,117 +479,112 @@ const AddProducts = ({ session }: Props) => {
                               }}
                             />
                           </div>
-                        </Col>
+                        </div>
                       )}
-                      <Col xs={10} md={9}>
-                        <FormGroup className='!mb-0'>
+                      <div className='px-3 w-10/12 md:w-9/12'>
+                        <div className='!mb-0'>
                           <Label htmlFor='lastNameinput' className='text-[11.2px]'>
                             Product Image
                           </Label>
                           <Input
                             type='text'
                             disabled={uploadLogoImage.selectedFiles.length > 0}
-                            bsSize='sm'
                             placeholder='Image URL...'
                             id='image'
                             name='image'
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values.image || ''}
-                            invalid={validation.touched.image && validation.errors.image ? true : false}
+                            aria-invalid={Boolean(validation.touched.image && validation.errors.image) || undefined}
                           />
-                          {validation.touched.image && validation.errors.image ? <FormFeedback type='invalid'>{validation.errors.image}</FormFeedback> : null}
-                        </FormGroup>
-                      </Col>
-                      <Col xs={4} md={2}>
-                        <Button className='flex items-center gap-2 m-0' color='primary' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
+                          {validation.touched.image && validation.errors.image ? <div className='text-sm text-destructive'>{validation.errors.image}</div> : null}
+                        </div>
+                      </div>
+                      <div className='px-3 w-4/12 md:w-2/12'>
+                        <Button className='flex items-center gap-2 m-0' size='sm' onClick={() => setuploadLogoImage((prev) => ({ ...prev, isOpen: true }))}>
                           <i className='mdi mdi-cloud-upload text-[16.25px] m-0 p-0' />
                           Image
                         </Button>
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
 
                     <div className='mt-3 border border-dashed border-[color:var(--border)]'></div>
 
                     {/* DIMENSIONS & WEIGHTS */}
 
                     <h5 className='text-[16.25px] mt-3 font-bold text-primary'>Unit Dimensions</h5>
-                    <Col md={3}>
-                      <FormGroup>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Weight...'
                           id='weight'
                           name='weight'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.weight || ''}
-                          invalid={validation.touched.weight && validation.errors.weight ? true : false}
+                          aria-invalid={Boolean(validation.touched.weight && validation.errors.weight) || undefined}
                         />
-                        {validation.touched.weight && validation.errors.weight ? <FormFeedback type='invalid'>{validation.errors.weight}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.weight && validation.errors.weight ? <div className='text-sm text-destructive'>{validation.errors.weight}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Width...'
                           id='width'
                           name='width'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.width || ''}
-                          invalid={validation.touched.width && validation.errors.width ? true : false}
+                          aria-invalid={Boolean(validation.touched.width && validation.errors.width) || undefined}
                         />
-                        {validation.touched.width && validation.errors.width ? <FormFeedback type='invalid'>{validation.errors.width}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.width && validation.errors.width ? <div className='text-sm text-destructive'>{validation.errors.width}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Length...'
                           id='length'
                           name='length'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.length || ''}
-                          invalid={validation.touched.length && validation.errors.length ? true : false}
+                          aria-invalid={Boolean(validation.touched.length && validation.errors.length) || undefined}
                         />
-                        {validation.touched.length && validation.errors.length ? <FormFeedback type='invalid'>{validation.errors.length}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.length && validation.errors.length ? <div className='text-sm text-destructive'>{validation.errors.length}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Height...'
                           id='height'
                           name='height'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.height || ''}
-                          invalid={validation.touched.height && validation.errors.height ? true : false}
+                          aria-invalid={Boolean(validation.touched.height && validation.errors.height) || undefined}
                         />
-                        {validation.touched.height && validation.errors.height ? <FormFeedback type='invalid'>{validation.errors.height}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
+                        {validation.touched.height && validation.errors.height ? <div className='text-sm text-destructive'>{validation.errors.height}</div> : null}
+                      </div>
+                    </div>
 
                     <div className='mt-3 border border-dashed border-[color:var(--border)]'></div>
 
@@ -606,115 +599,110 @@ const AddProducts = ({ session }: Props) => {
                         </div>
                       </div>
                     </div>
-                    <Col md={3}>
-                      <FormGroup>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Weight {state?.currentRegion == 'us' ? '(lb)' : '(kg)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Box Weight...'
                           id='boxweight'
                           name='boxweight'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.boxweight || ''}
-                          invalid={validation.touched.boxweight && validation.errors.boxweight ? true : false}
+                          aria-invalid={Boolean(validation.touched.boxweight && validation.errors.boxweight) || undefined}
                         />
-                        {validation.touched.boxweight && validation.errors.boxweight ? <FormFeedback type='invalid'>{validation.errors.boxweight}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.boxweight && validation.errors.boxweight ? <div className='text-sm text-destructive'>{validation.errors.boxweight}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Width {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Box Width...'
                           id='boxwidth'
                           name='boxwidth'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.boxwidth || ''}
-                          invalid={validation.touched.boxwidth && validation.errors.boxwidth ? true : false}
+                          aria-invalid={Boolean(validation.touched.boxwidth && validation.errors.boxwidth) || undefined}
                         />
-                        {validation.touched.boxwidth && validation.errors.boxwidth ? <FormFeedback type='invalid'>{validation.errors.boxwidth}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.boxwidth && validation.errors.boxwidth ? <div className='text-sm text-destructive'>{validation.errors.boxwidth}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Length {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Box Length...'
                           id='boxlength'
                           name='boxlength'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.boxlength || ''}
-                          invalid={validation.touched.boxlength && validation.errors.boxlength ? true : false}
+                          aria-invalid={Boolean(validation.touched.boxlength && validation.errors.boxlength) || undefined}
                         />
-                        {validation.touched.boxlength && validation.errors.boxlength ? <FormFeedback type='invalid'>{validation.errors.boxlength}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.boxlength && validation.errors.boxlength ? <div className='text-sm text-destructive'>{validation.errors.boxlength}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Height {state?.currentRegion == 'us' ? '(in)' : '(cm)'}
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Box Height...'
                           id='boxheight'
                           name='boxheight'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.boxheight || ''}
-                          invalid={validation.touched.boxheight && validation.errors.boxheight ? true : false}
+                          aria-invalid={Boolean(validation.touched.boxheight && validation.errors.boxheight) || undefined}
                         />
-                        {validation.touched.boxheight && validation.errors.boxheight ? <FormFeedback type='invalid'>{validation.errors.boxheight}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
+                        {validation.touched.boxheight && validation.errors.boxheight ? <div className='text-sm text-destructive'>{validation.errors.boxheight}</div> : null}
+                      </div>
+                    </div>
+                    <div className='px-3 w-full md:w-3/12'>
+                      <div className='mb-3'>
                         <Label htmlFor='compnayNameinput' className='text-[11.2px]'>
                           Box Quantity
                         </Label>
                         <Input
                           type='number'
-                          bsSize='sm'
                           placeholder='Box Qty...'
                           id='boxqty'
                           name='boxqty'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.boxqty || ''}
-                          invalid={validation.touched.boxqty && validation.errors.boxqty ? true : false}
+                          aria-invalid={Boolean(validation.touched.boxqty && validation.errors.boxqty) || undefined}
                         />
-                        {validation.touched.boxqty && validation.errors.boxqty ? <FormFeedback type='invalid'>{validation.errors.boxqty}</FormFeedback> : null}
-                      </FormGroup>
-                    </Col>
+                        {validation.touched.boxqty && validation.errors.boxqty ? <div className='text-sm text-destructive'>{validation.errors.boxqty}</div> : null}
+                      </div>
+                    </div>
 
                     <h5 className='text-[11.2px] mb-3 text-[color:var(--bs-secondary-color)] font-light'>*You must complete all required fields.</h5>
-                    <Col md={12}>
+                    <div className='px-3 w-full'>
                       <div className='text-right'>
-                        <Button type='submit' color='primary'>
+                        <Button type='submit'>
                           Add New Product
                         </Button>
                       </div>
-                    </Col>
-                  </Row>
-                </Form>
-              </CardBody>
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
             </Card>
-          </Container>
+          </div>
         </div>
         {uploadLogoImage.isOpen ? <UploadFileModal {...uploadLogoImage} /> : null}
       </React.Fragment>

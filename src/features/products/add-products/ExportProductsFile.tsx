@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { Product } from '@typings'
 import { toast } from 'react-toastify'
 
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   products: Product[]
@@ -64,10 +64,10 @@ const ExportProductsFile = ({ products }: Props) => {
   }, [products])
 
   return (
-    <DropdownItem className='text-primary' onClick={exportExcelFile}>
+    <DropdownMenuItem className='text-primary' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[16.25px] me-2' />
       Export Products
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

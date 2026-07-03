@@ -5,7 +5,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import moment from 'moment'
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   reorderingPointsOrder: {
@@ -246,10 +246,10 @@ function PrintReorderingPointsOrder({ reorderingPointsOrder, orderDetails, selec
   }
 
   return (
-    <DropdownItem className='text-nowrap text-primary text-[13px] py-0' onClick={() => printInvoice()}>
+    <DropdownMenuItem className='text-nowrap text-primary text-[13px] py-0' onClick={() => printInvoice()}>
       <i className='mdi mdi-file-pdf-box label-icon align-middle text-[19.5px] me-2' />
       Print PDF
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

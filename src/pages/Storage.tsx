@@ -12,7 +12,9 @@ import axios from 'axios'
 import { getSession } from 'next-auth/react'
 import CountUp from 'react-countup'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Input, Row } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Input } from '@shadcn/ui/input'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -75,9 +77,9 @@ const Storage = ({ session }: Props) => {
       <React.Fragment>
         <div className='page-content'>
           <BreadCrumb title='Storage' pageTitle='Billing' />
-          <Container fluid>
-            <Row>
-              <Col lg={12}>
+          <div className='mx-auto w-full px-3'>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 lg:w-full'>
                 <Card>
                   <CardHeader>
                     <div className='flex flex-col md:flex-row justify-start gap-0 md:gap-6 mb-2'>
@@ -127,13 +129,13 @@ const Storage = ({ session }: Props) => {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <StorageTable tableData={filteredItems || []} pending={pending} />
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     </div>

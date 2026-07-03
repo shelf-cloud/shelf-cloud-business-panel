@@ -10,7 +10,9 @@ import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku, AmzDimensions, Dimensions, FBAShipmentHisotry, FilterProps } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledButtonDropdown } from '@/components/migration-ui'
+import { ChevronDownIcon } from 'lucide-react'
+import { Button } from '@shadcn/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@shadcn/ui/dropdown-menu'
 
 import FilterListings from '../FilterListings'
 import MasterBoxesTable from './MasterBoxesTable'
@@ -166,19 +168,19 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
 
   return (
     <>
-      <Row className='justify-between gap-0'>
-        <Col xs='12' lg='8' className='flex flex-wrap justify-start items-center gap-2'>
+      <div className='flex flex-wrap -mx-3 justify-between gap-0'>
+        <div className='px-3 w-full lg:w-2/3 flex flex-wrap justify-start items-center gap-2'>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
             className='text-[11.2px] text-nowrap'
-            color='success'
+            variant='success'
             onClick={() => setShowCreateInboundPlanModal(true)}>
             Create Inbound Plan
           </Button>
           <Button
             disabled={orderProducts.length === 0 || hasInputError || hasQtyError}
             className='text-[11.2px] text-nowrap'
-            color='secondary'
+            variant='secondary'
             onClick={() => setShowCreateManualInboundPlanModal(true)}>
             Create Manual Inbound Plan
           </Button>
@@ -189,30 +191,33 @@ const MasterBoxesFulfillment = ({ lisiting, pending, mutateFBASkus }: Props) => 
             ShowNoShipDate={ShowNoShipDate !== undefined || ShowNoShipDate === '' ? ShowNoShipDate : 'false'}
             masterBoxVisibility={masterBoxVisibility !== undefined || masterBoxVisibility === '' ? masterBoxVisibility : 'false'}
           />
-          <UncontrolledButtonDropdown>
-            <DropdownToggle className='btn btn-info text-[11.2px] py-2' caret>
-              Bulk Actions
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>Master Box Visibility</DropdownItem>
-              <DropdownItem className='text-nowrap text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(false)}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type='button' className='btn btn-info text-[11.2px] py-2'>
+                Bulk Actions
+                <ChevronDownIcon className='ml-1 size-4' />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='start'>
+              <DropdownMenuLabel>Master Box Visibility</DropdownMenuLabel>
+              <DropdownMenuItem className='text-nowrap text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(false)}>
                 <i className='mdi mdi-eye-off label-icon align-middle text-[16.25px] me-2' />
                 Hide Selected
-              </DropdownItem>
-              <DropdownItem className='text-nowrap text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(true)}>
+              </DropdownMenuItem>
+              <DropdownMenuItem className='text-nowrap text-[11.2px]' onClick={() => changeSelectedMasterBoxVisibility(true)}>
                 <i className='mdi mdi-eye label-icon align-middle text-[16.25px] me-2' />
                 Show Selected
-              </DropdownItem>
-              <DropdownItem className='text-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
+              </DropdownMenuItem>
+              <DropdownMenuItem className='text-nowrap text-right text-[11.2px] text-[var(--bs-secondary-color)]' onClick={clearAllSelectedRows}>
                 Clear All
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledButtonDropdown>
-        </Col>
-        <Col xs='12' lg='4' className='flex justify-end items-center'>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className='px-3 w-full lg:w-1/3 flex justify-end items-center'>
           <SearchInput searchValue={searchValue} setSearchValue={setSearchValue} background='none' minLength={3} debounceTimeout={300} widths='col-12' />
-        </Col>
-      </Row>
+        </div>
+      </div>
       <div className='flex justify-start items-center gap-4 mt-4'>
         <p className='m-0 p-0'>
           Total SKUs: <span className='font-semibold text-primary'>{orderProducts.length}</span>

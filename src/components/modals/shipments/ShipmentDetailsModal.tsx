@@ -11,7 +11,8 @@ import AppContext from '@context/AppContext'
 import { Shipment, ShipmentDetialsResponse } from '@typesTs/shipments/shipments'
 import axios from 'axios'
 import moment from 'moment'
-import { Modal, ModalBody, ModalHeader, Spinner } from '@/components/migration-ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
+import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
 
 type Props = {
@@ -65,33 +66,39 @@ const ShipmentDetailsModal = ({ mutateShipments }: Props) => {
   )
 
   return (
-    <Modal fade={false} size='xl' id='shipmentDetailsModal' isOpen={show} toggle={handleCloseOffModal}>
-      <ModalHeader toggle={handleCloseOffModal} className='modal-title items-start' id='myModalLabel'>
-        {/* <h4 className='fw-semibold mb-3'>Shipment Details</h4> */}
-        <div className='w-full mt-2 flex flex-row justify-start items-start gap-4'>
-          <p className='font-bold text-primary text-[22.75px] m-0'>{orderNumber}</p>
-          <ShipmentStatusBadge status={status} />
+    <Dialog open={!!show} onOpenChange={(open) => { if (!open) handleCloseOffModal() }}>
+      <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='shipmentDetailsModal'>
+        <DialogHeader className='pr-6 modal-title items-start' id='myModalLabel'>
+          <DialogTitle asChild>
+            <div>
+              {/* <h4 className='fw-semibold mb-3'>Shipment Details</h4> */}
+              <div className='w-full mt-2 flex flex-row justify-start items-start gap-4'>
+                <p className='font-bold text-primary text-[22.75px] m-0'>{orderNumber}</p>
+                <ShipmentStatusBadge status={status} />
+              </div>
+              <p className='font-normal text-[var(--bs-secondary-color)] text-[13px] m-0'>
+                Type: <span className='text-black font-semibold'>{orderType}</span>
+              </p>
+              <p className='font-normal mb-2 text-[var(--bs-secondary-color)] text-[13px] m-0'>
+                Order Date: <span className='text-black font-semibold'>{moment.utc(orderDate).format('LL')}</span>
+              </p>
+            </div>
+          </DialogTitle>
+        </DialogHeader>
+        <div className='pt-2' style={{ backgroundColor: '#F0F4F7' }}>
+          {!isValidating && data?.shipment ? (
+            SelectShipmentType(orderType, data.shipment, showActions, mutateShipment, mutateShipments)
+          ) : (
+            <div className='w-full flex justify-center items-center' style={{ height: '60dvh' }}>
+              <p className='text-[16.25px] text-primary flex justify-center items-center gap-4'>
+                <Spinner className='size-6 text-primary' />
+                Loading Shipment....
+              </p>
+            </div>
+          )}
         </div>
-        <p className='font-normal text-[var(--bs-secondary-color)] text-[13px] m-0'>
-          Type: <span className='text-black font-semibold'>{orderType}</span>
-        </p>
-        <p className='font-normal mb-2 text-[var(--bs-secondary-color)] text-[13px] m-0'>
-          Order Date: <span className='text-black font-semibold'>{moment.utc(orderDate).format('LL')}</span>
-        </p>
-      </ModalHeader>
-      <ModalBody className='pt-2' style={{ backgroundColor: '#F0F4F7' }}>
-        {!isValidating && data?.shipment ? (
-          SelectShipmentType(orderType, data.shipment, showActions, mutateShipment, mutateShipments)
-        ) : (
-          <div className='w-full flex justify-center items-center' style={{ height: '60dvh' }}>
-            <p className='text-[16.25px] text-primary flex justify-center items-center gap-4'>
-              <Spinner color='primary' size={'md'} />
-              Loading Shipment....
-            </p>
-          </div>
-        )}
-      </ModalBody>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   )
 }
 

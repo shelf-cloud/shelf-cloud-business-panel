@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { toast } from 'react-toastify'
 
-import { DropdownItem } from '@/components/migration-ui'
+import { DropdownMenuItem } from '@shadcn/ui/dropdown-menu'
 
 type Props = {
   brands: string[]
@@ -71,10 +71,10 @@ const ExportBlankTemplate = ({ brands, suppliers, categories }: Props) => {
   }, [brands, categories, suppliers])
 
   return (
-    <DropdownItem className='text-nowrap text-info' onClick={exportExcelFile}>
+    <DropdownMenuItem className='text-nowrap text-info' onClick={exportExcelFile}>
       <i className='mdi mdi-arrow-down-bold label-icon align-middle text-[13px] me-2' />
       Export Empty Template
-    </DropdownItem>
+    </DropdownMenuItem>
   )
 }
 

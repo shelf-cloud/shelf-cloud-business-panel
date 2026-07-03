@@ -14,7 +14,9 @@ import AppContext from '@context/AppContext'
 import { AmazonFulfillmentSku } from '@typesTs/amazon/fulfillments'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Button, Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, Row, TabContent, TabPane } from '@/components/migration-ui'
+import { Button } from '@shadcn/ui/button'
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card'
+import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import useSWR from 'swr'
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
@@ -85,10 +87,10 @@ const SendToAmazon = ({ session }: Props) => {
       </Head>
       <React.Fragment>
         <div className='page-content'>
-          <Container fluid>
+          <div className='mx-auto w-full px-3'>
             <BreadCrumb title='Send To Amazon' pageTitle='Amazon' />
-            <Row>
-              <Col lg={12}>
+            <div className='flex flex-wrap -mx-3'>
+              <div className='px-3 w-full lg:w-full'>
                 <Card>
                   <CardHeader className='flex justify-between items-center'>
                     <Nav className='nav-tabs-custom rounded-[0.25rem] card-header-tabs border-b-0' role='tablist'>
@@ -123,7 +125,7 @@ const SendToAmazon = ({ session }: Props) => {
                     </Nav>
                     <div className='flex justify-end items-center gap-4'>
                       <Link href={'/amazon-sellers/fulfillments'}>
-                        <Button color='info' className='text-[11.2px]'>
+                        <Button variant='info' className='text-[11.2px]'>
                           <span className='icon-on'>
                             <i className='ri-external-link-fill align-bottom me-1' />
                             Fulfillments
@@ -136,7 +138,7 @@ const SendToAmazon = ({ session }: Props) => {
                       </Button> */}
                     </div>
                   </CardHeader>
-                  <CardBody>
+                  <CardContent>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId='1'>
                         <MasterBoxesFulfillment lisiting={allData} pending={isLoadingProducts} mutateFBASkus={mutateFBASkus} />
@@ -145,11 +147,11 @@ const SendToAmazon = ({ session }: Props) => {
                         <IndividualUnits lisiting={allData} pending={isLoadingProducts} />
                       </TabPane>
                     </TabContent>
-                  </CardBody>
+                  </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
       {state.showInventoryBinsModal && <InventoryBinsModal />}
