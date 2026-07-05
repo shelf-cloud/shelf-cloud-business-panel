@@ -4,7 +4,7 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const uploadProductsReorderingPointFeed: NextApiHandler = async (request, response) => {
+const uploadProductsDimensionsFeed: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   if (session == null) {
@@ -14,7 +14,7 @@ const uploadProductsReorderingPointFeed: NextApiHandler = async (request, respon
 
   axios
     .post(
-      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/reorderingPoints/uploadProductsReorderingPointFeed.php?businessId=${request.query.businessId}`,
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/uploadProductsDimensionsFeed.php?businessId=${request.query.businessId}`,
       {
         productsInfo: request.body.productsInfo,
       },
@@ -31,7 +31,8 @@ const uploadProductsReorderingPointFeed: NextApiHandler = async (request, respon
       if (error.response) {
         response.json({
           error: true,
-          message: `Error ${error.response.data.error_description}, please try again later.`,
+          errorMessage: error,
+          message: `Error with file uploading, please try again later.`,
         })
       } else if (error.request) {
         response.json({
@@ -47,4 +48,4 @@ const uploadProductsReorderingPointFeed: NextApiHandler = async (request, respon
     })
 }
 
-export default uploadProductsReorderingPointFeed
+export default uploadProductsDimensionsFeed

@@ -1,6 +1,6 @@
 import { columns } from '@components/products/TemplateInfo'
 
-export type ProductFeedType = 'general' | 'identifiers' | 'reorderingPoint'
+export type ProductFeedType = 'general' | 'identifiers' | 'reorderingPoint' | 'dimensions'
 
 export type ProductFeedValidationError = {
   errorLine: number
@@ -8,10 +8,17 @@ export type ProductFeedValidationError = {
   value: string
 }
 
+export type ProductIdentifierType = 'EAN' | 'Barcode' | 'WalmartCode' | 'FBA' | 'Other'
+
 export type ProductIdentifierFeedRow = {
   sku: string
-  type: 'EAN' | 'Barcode' | 'WalmartCode' | 'FBA' | 'Other'
+  type: ProductIdentifierType
   value: string
+}
+
+export type ProductIdentifiersFeedEntry = {
+  sku: string
+  identifiers: { type: ProductIdentifierType; value: string }[]
 }
 
 export type ProductReorderingPointFeedRow = {
@@ -21,6 +28,19 @@ export type ProductReorderingPointFeedRow = {
   leadTimeSC: number
   daysOfStockSC: number
   manualLeadTime: number
+}
+
+export type ProductDimensionsFeedRow = {
+  sku: string
+  weight: number
+  length: number
+  width: number
+  height: number
+  boxQty: number
+  boxWeight: number
+  boxLength: number
+  boxWidth: number
+  boxHeight: number
 }
 
 export const IDENTIFIER_TYPE_LABELS = ['EAN', 'Barcode', 'Walmart Code', 'FBA', 'Other'] as const
@@ -44,6 +64,12 @@ export const PRODUCT_FEED_DEFINITIONS = {
     worksheetName: 'Products Reordering Point Template',
     filename: 'Products Reordering Point Template.xlsx',
     headers: ['Sku', 'isActive', 'orderFrequency', 'leadTimeSC', 'daysOfStockSC', 'manualLeadTime'],
+  },
+  dimensions: {
+    label: 'Products Dimensions',
+    worksheetName: 'Products Dimensions Template',
+    filename: 'Products Dimensions Template.xlsx',
+    headers: ['Sku', 'weight', 'length', 'width', 'height', 'boxQty', 'boxWeight', 'boxLength', 'boxWidth', 'boxHeight'],
   },
 } as const satisfies Record<ProductFeedType, { label: string; worksheetName: string; filename: string; headers: readonly string[] }>
 
@@ -93,6 +119,18 @@ const validateNonNegativeNumber = (value: string, line: number, label: string): 
   return {
     errorLine: line,
     errorMessage: `${label}: Required - Greater or Equal than 0`,
+    value,
+  }
+}
+
+const validatePositiveNumber = (value: string, line: number, label: string, integer = false): ProductFeedValidationError | null => {
+  const numberValue = Number(value)
+  const isValid = value !== '' && Number.isFinite(numberValue) && numberValue > 0 && (!integer || Number.isInteger(numberValue))
+  if (isValid) return null
+
+  return {
+    errorLine: line,
+    errorMessage: `${label}: Required${integer ? ' - Integer' : ''} - Greater than 0`,
     value,
   }
 }
@@ -168,6 +206,39 @@ const validateReorderingPointFeedRows = (rows: unknown[][]): ProductFeedValidati
   return errorsList
 }
 
+const validateDimensionsFeedRows = (rows: unknown[][]): ProductFeedValidationError[] => {
+  const errorsList: ProductFeedValidationError[] = []
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i]
+    const sku = getCellValue(row[0])
+
+    if (!sku) continue
+
+    const skuError = validateSku(sku, i + 1)
+    if (skuError) errorsList.push(skuError)
+
+    const numericColumns = [
+      ['weight', row[1], false],
+      ['length', row[2], false],
+      ['width', row[3], false],
+      ['height', row[4], false],
+      ['boxQty', row[5], true],
+      ['boxWeight', row[6], false],
+      ['boxLength', row[7], false],
+      ['boxWidth', row[8], false],
+      ['boxHeight', row[9], false],
+    ] as const
+
+    for (const [label, value, integer] of numericColumns) {
+      const error = validatePositiveNumber(getCellValue(value), i + 1, label, integer)
+      if (error) errorsList.push(error)
+    }
+  }
+
+  return errorsList
+}
+
 export const validateProductFeedRows = (feedType: ProductFeedType, rows: unknown[][]): ProductFeedValidationError[] => {
   const headerErrors = validateProductFeedHeaders(feedType, rows[0] || [])
   if (headerErrors.length > 0) return headerErrors
@@ -178,25 +249,33 @@ export const validateProductFeedRows = (feedType: ProductFeedType, rows: unknown
 
   if (feedType === 'identifiers') return validateIdentifierFeedRows(rows)
   if (feedType === 'reorderingPoint') return validateReorderingPointFeedRows(rows)
+  if (feedType === 'dimensions') return validateDimensionsFeedRows(rows)
 
   return []
 }
 
-export function parseProductFeedRows(feedType: 'identifiers', rows: unknown[][]): ProductIdentifierFeedRow[]
+export function parseProductFeedRows(feedType: 'identifiers', rows: unknown[][]): ProductIdentifiersFeedEntry[]
 export function parseProductFeedRows(feedType: 'reorderingPoint', rows: unknown[][]): ProductReorderingPointFeedRow[]
-export function parseProductFeedRows(feedType: ProductFeedType, rows: unknown[][]): ProductIdentifierFeedRow[] | ProductReorderingPointFeedRow[] {
+export function parseProductFeedRows(feedType: 'dimensions', rows: unknown[][]): ProductDimensionsFeedRow[]
+export function parseProductFeedRows(
+  feedType: Exclude<ProductFeedType, 'general'>,
+  rows: unknown[][]
+): ProductIdentifiersFeedEntry[] | ProductReorderingPointFeedRow[] | ProductDimensionsFeedRow[]
+export function parseProductFeedRows(feedType: ProductFeedType, rows: unknown[][]): ProductIdentifiersFeedEntry[] | ProductReorderingPointFeedRow[] | ProductDimensionsFeedRow[] {
   if (feedType === 'identifiers') {
-    return rows.slice(1).reduce<ProductIdentifierFeedRow[]>((productsInfo, row) => {
+    const entriesBySku = new Map<string, ProductIdentifiersFeedEntry>()
+    for (const row of rows.slice(1)) {
       const sku = getCellValue(row[0])
-      if (!sku) return productsInfo
+      if (!sku) continue
 
-      productsInfo.push({
-        sku,
-        type: normalizeIdentifierType(row[1]) as ProductIdentifierFeedRow['type'],
+      const entry = entriesBySku.get(sku) ?? { sku, identifiers: [] }
+      entry.identifiers.push({
+        type: normalizeIdentifierType(row[1]) as ProductIdentifierType,
         value: getCellValue(row[2]),
       })
-      return productsInfo
-    }, [])
+      entriesBySku.set(sku, entry)
+    }
+    return [...entriesBySku.values()]
   }
 
   if (feedType === 'reorderingPoint') {
@@ -211,6 +290,27 @@ export function parseProductFeedRows(feedType: ProductFeedType, rows: unknown[][
         leadTimeSC: Number(row[3]),
         daysOfStockSC: Number(row[4]),
         manualLeadTime: Number(row[5]),
+      })
+      return productsInfo
+    }, [])
+  }
+
+  if (feedType === 'dimensions') {
+    return rows.slice(1).reduce<ProductDimensionsFeedRow[]>((productsInfo, row) => {
+      const sku = getCellValue(row[0])
+      if (!sku) return productsInfo
+
+      productsInfo.push({
+        sku,
+        weight: Number(row[1]),
+        length: Number(row[2]),
+        width: Number(row[3]),
+        height: Number(row[4]),
+        boxQty: Number(row[5]),
+        boxWeight: Number(row[6]),
+        boxLength: Number(row[7]),
+        boxWidth: Number(row[8]),
+        boxHeight: Number(row[9]),
       })
       return productsInfo
     }, [])

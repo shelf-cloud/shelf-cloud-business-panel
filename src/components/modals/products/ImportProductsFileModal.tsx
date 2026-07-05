@@ -1,5 +1,3 @@
- 
- 
 import { useContext, useState } from 'react'
 
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
@@ -10,7 +8,29 @@ import { toast } from 'react-toastify'
 import { Button, Card, Col, Input, Label, Modal, ModalBody, ModalHeader, Row, Spinner } from 'reactstrap'
 import * as Yup from 'yup'
 
-import { PRODUCT_FEED_DEFINITIONS, ProductFeedType, parseProductFeedRows, validateProductFeedHeaders, validateProductFeedRows } from '@/features/products/add-products/productFeedDefinitions'
+import {
+  PRODUCT_FEED_DEFINITIONS,
+  ProductFeedType,
+  parseProductFeedRows,
+  validateProductFeedHeaders,
+  validateProductFeedRows,
+} from '@/features/products/add-products/productFeedDefinitions'
+
+const FEED_UPLOAD_ENDPOINTS: Record<ProductFeedType, { endpoint: string; successMessage: string }> = {
+  general: { endpoint: 'api/productDetails/uploadProductsTemplate', successMessage: 'All products were added!' },
+  identifiers: { endpoint: 'api/productDetails/uploadProductIdentifiersFeed', successMessage: 'Products identifiers feed uploaded!' },
+  reorderingPoint: { endpoint: 'api/productDetails/uploadProductsReorderingPointFeed', successMessage: 'Products reordering point feed uploaded!' },
+  dimensions: { endpoint: 'api/productDetails/uploadProductsDimensionsFeed', successMessage: 'Products dimensions feed uploaded!' },
+}
+
+const getUploadConfig = (feedType: ProductFeedType, resultValues: unknown[][], region: string, businessId: string) => {
+  const { endpoint, successMessage } = FEED_UPLOAD_ENDPOINTS[feedType]
+  return {
+    url: `${endpoint}?region=${region}&businessId=${businessId}`,
+    productsInfo: feedType === 'general' ? resultValues : parseProductFeedRows(feedType as Exclude<ProductFeedType, 'general'>, resultValues),
+    successMessage,
+  }
+}
 
 type Props = {
   brands: string[]
@@ -22,9 +42,19 @@ type Props = {
   setimportModalDetails: (prev: any) => void
   mutateProducts: () => void
   canUseReorderingPointFeed: boolean
+  canUseDimensionsFeed: boolean
 }
 
-const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, brands, suppliers, categories, mutateProducts, canUseReorderingPointFeed }: Props) => {
+const ImportProductsFileModal = ({
+  importModalDetails,
+  setimportModalDetails,
+  brands,
+  suppliers,
+  categories,
+  mutateProducts,
+  canUseReorderingPointFeed,
+  canUseDimensionsFeed,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
   const [selectedFeedType, setSelectedFeedType] = useState<ProductFeedType>('general')
@@ -453,24 +483,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             return
           }
 
-          const uploadConfig =
-            selectedFeedType === 'identifiers'
-              ? {
-                  url: `api/productDetails/uploadProductIdentifiersFeed?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-                  productsInfo: parseProductFeedRows('identifiers', resultValues),
-                  successMessage: 'Products identifiers feed uploaded!',
-                }
-              : selectedFeedType === 'reorderingPoint'
-                ? {
-                    url: `api/reorderingPoints/uploadProductsReorderingPointFeed?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-                    productsInfo: parseProductFeedRows('reorderingPoint', resultValues),
-                    successMessage: 'Products reordering point feed uploaded!',
-                  }
-                : {
-                    url: `api/productDetails/uploadProductsTemplate?region=${state.currentRegion}&businessId=${state.user.businessId}`,
-                    productsInfo: results.data,
-                    successMessage: 'All products were added!',
-                  }
+          const uploadConfig = getUploadConfig(selectedFeedType, resultValues, state.currentRegion, state.user.businessId)
 
           const response = await axios.post(uploadConfig.url, {
             productsInfo: uploadConfig.productsInfo,
@@ -544,7 +557,8 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
       <ModalBody>
         <Row>
           <p className='fs-6 fw-normal m-0 mb-1'>
-            You can <span className='fw-bold'>Update</span> existing products in bulk by uploading a CSV file using the selected <span className='fw-bold'>Products Feed</span> file.
+            You can <span className='fw-bold'>Update</span> existing products in bulk by uploading a CSV file using the selected <span className='fw-bold'>Products Feed</span>{' '}
+            file.
           </p>
           <p className='fs-6 fw-normal m-0 mb-3'>
             You can <span className='fw-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='fw-bold'>Empty Template</span> file.
@@ -568,6 +582,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
               <option value='general'>{PRODUCT_FEED_DEFINITIONS.general.label}</option>
               <option value='identifiers'>{PRODUCT_FEED_DEFINITIONS.identifiers.label}</option>
               {canUseReorderingPointFeed && <option value='reorderingPoint'>{PRODUCT_FEED_DEFINITIONS.reorderingPoint.label}</option>}
+              {canUseDimensionsFeed && <option value='dimensions'>{PRODUCT_FEED_DEFINITIONS.dimensions.label}</option>}
             </Input>
           </Col>
           <Col md={6}>

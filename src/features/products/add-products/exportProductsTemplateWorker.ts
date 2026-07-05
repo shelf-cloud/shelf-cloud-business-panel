@@ -149,6 +149,76 @@ const buildReorderingPointWorkbook = async (products: Product[]) => {
   return workbook.xlsx.writeBuffer()
 }
 
+const buildDimensionsWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.dimensions.worksheetName)
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'weight', header: 'weight' },
+    { key: 'length', header: 'length' },
+    { key: 'width', header: 'width' },
+    { key: 'height', header: 'height' },
+    { key: 'boxQty', header: 'boxQty' },
+    { key: 'boxWeight', header: 'boxWeight' },
+    { key: 'boxLength', header: 'boxLength' },
+    { key: 'boxWidth', header: 'boxWidth' },
+    { key: 'boxHeight', header: 'boxHeight' },
+  ]
+
+  for (const product of products) {
+    worksheet.addRow({
+      sku: product.sku,
+      weight: product.weight,
+      length: product.length,
+      width: product.width,
+      height: product.height,
+      boxQty: product.boxQty,
+      boxWeight: product.boxWeight,
+      boxLength: product.boxLength,
+      boxWidth: product.boxWidth,
+      boxHeight: product.boxHeight,
+    })
+  }
+
+  worksheet.getColumn('sku').eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+    cell.protection = { locked: true }
+  })
+
+  worksheet.getColumn('boxQty').eachCell((cell) => {
+    cell.dataValidation = {
+      type: 'whole',
+      operator: 'greaterThan',
+      allowBlank: false,
+      showErrorMessage: true,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'boxQty must be integer and greater than 0',
+    }
+    cell.protection = { locked: false }
+  })
+
+  for (const columnKey of ['weight', 'length', 'width', 'height', 'boxWeight', 'boxLength', 'boxWidth', 'boxHeight']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'decimal',
+        operator: 'greaterThan',
+        allowBlank: false,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: `${columnKey} must be greater than 0`,
+      }
+      cell.protection = { locked: false }
+    })
+  }
+
+  await protectWorksheet(worksheet)
+
+  return workbook.xlsx.writeBuffer()
+}
+
 self.onmessage = async (event: MessageEvent<ExportProductsTemplateMessage>) => {
   const { products, brands, suppliers, categories, feedType = 'general' } = event.data
 
@@ -161,6 +231,12 @@ self.onmessage = async (event: MessageEvent<ExportProductsTemplateMessage>) => {
 
     if (feedType === 'reorderingPoint') {
       const buffer = await buildReorderingPointWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
+    if (feedType === 'dimensions') {
+      const buffer = await buildDimensionsWorkbook(products)
       self.postMessage({ buffer, error: null })
       return
     }
