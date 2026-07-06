@@ -64,6 +64,7 @@ const ImportProductsFileModal = ({
   const [errorLines, setErrorLines] = useState([]) as any
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
+  const selectedFeedDefinition = PRODUCT_FEED_DEFINITIONS[selectedFeedType]
 
   const validateProductsInfo = async (resultValues: any) => {
     let errorsList = []
@@ -563,7 +564,7 @@ const ImportProductsFileModal = ({
           <p className='fs-6 fw-normal m-0 mb-3'>
             You can <span className='fw-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='fw-bold'>Empty Template</span> file.
           </p>
-          <Col md={12} className='mb-3'>
+          <Col md={12} className='mb-2'>
             <Label htmlFor='productFeedType' className='fs-7 form-label'>
               Products Feed
             </Label>
@@ -584,6 +585,17 @@ const ImportProductsFileModal = ({
               {canUseReorderingPointFeed && <option value='reorderingPoint'>{PRODUCT_FEED_DEFINITIONS.reorderingPoint.label}</option>}
               {canUseDimensionsFeed && <option value='dimensions'>{PRODUCT_FEED_DEFINITIONS.dimensions.label}</option>}
             </Input>
+          </Col>
+          <Col md={12} className='mb-3'>
+            <div className='border rounded p-3 bg-light'>
+              <p className='fs-6 fw-semibold m-0 mb-2'>{selectedFeedDefinition.label}</p>
+              <p className='fs-7 m-0 mb-2'>{selectedFeedDefinition.description}</p>
+              <ul className='fs-7 m-0 ps-3'>
+                {selectedFeedDefinition.instructions.map((instruction) => (
+                  <li key={instruction}>{instruction}</li>
+                ))}
+              </ul>
+            </div>
           </Col>
           <Col md={6}>
             {/* <Dropzone

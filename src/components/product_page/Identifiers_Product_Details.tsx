@@ -9,7 +9,6 @@ import { Button, Col, FormFeedback, FormGroup, Input } from 'reactstrap'
 import { useSWRConfig } from 'swr'
 import * as Yup from 'yup'
 
-import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
 type Props = {
   inventoryId?: number
@@ -34,8 +33,6 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
   const [isLoading, setisLoading] = useState(false)
-
-  const { generate_new_forecast_products } = useRPNewForecast()
 
   const initialValues = {
     inventoryId,
@@ -68,10 +65,6 @@ const Identifiers_Product_Details = ({ inventoryId, sku, upc, asin, fnsku, ident
       productInfo: values,
     })
     if (!response.data.error) {
-      generate_new_forecast_products({
-        skus: [sku || ''],
-        productIds: [inventoryId || 0],
-      })
       toast.success(response.data.msg)
       mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
       setShowEditFields(false)

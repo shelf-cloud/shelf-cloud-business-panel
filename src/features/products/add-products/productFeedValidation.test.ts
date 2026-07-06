@@ -2,6 +2,20 @@ import assert from 'node:assert/strict'
 
 import { PRODUCT_FEED_DEFINITIONS, normalizeIdentifierType, parseProductFeedRows, validateProductFeedRows } from './productFeedDefinitions'
 
+const REORDERING_POINT_HEADERS = ['Sku', 'Is Active in Reordering Points', 'Order Frequency (Weeks)', 'Lead Time (Days)', 'Days Of Stock After Lead Time (Days)', 'Manual Lead Time']
+const DIMENSIONS_HEADERS = [
+  'Sku',
+  'Unit Weight',
+  'Unit Length',
+  'Unit Width',
+  'Unit Height',
+  'Carton Box Quantity',
+  'Carton Box Weight',
+  'Carton Box Length',
+  'Carton Box Width',
+  'Carton Box Height',
+]
+
 assert.deepEqual(validateProductFeedRows('identifiers', [['Sku', 'Identifier Type', 'Identifier Value']]), [
   { errorLine: 0, errorMessage: 'No product Information', value: 'No Data Found' },
 ])
@@ -49,36 +63,42 @@ assert.deepEqual(
   ]
 )
 
-assert.deepEqual(validateProductFeedRows('reorderingPoint', [[...PRODUCT_FEED_DEFINITIONS.reorderingPoint.headers], ['SKU-1', 'YES', '2', '30', '45', '10']]), [
+assert.deepEqual(validateProductFeedRows('reorderingPoint', [REORDERING_POINT_HEADERS, ['SKU-1', 'TRUE', '2', '30', '45', 'FALSE']]), [])
+
+assert.deepEqual(validateProductFeedRows('reorderingPoint', [REORDERING_POINT_HEADERS, ['SKU-1', 'YES', '2', '30', '45', 'TRUE']]), [
   { errorLine: 2, errorMessage: 'isActive: Valid values: TRUE or FALSE', value: 'YES' },
 ])
 
-assert.deepEqual(validateProductFeedRows('reorderingPoint', [[...PRODUCT_FEED_DEFINITIONS.reorderingPoint.headers], ['SKU-1', 'TRUE', '-1', '30', '45', '10']]), [
+assert.deepEqual(validateProductFeedRows('reorderingPoint', [REORDERING_POINT_HEADERS, ['SKU-1', 'TRUE', '-1', '30', '45', 'TRUE']]), [
   { errorLine: 2, errorMessage: 'orderFrequency: Required - Greater or Equal than 0', value: '-1' },
 ])
 
-assert.deepEqual(parseProductFeedRows('reorderingPoint', [[...PRODUCT_FEED_DEFINITIONS.reorderingPoint.headers], ['SKU-1', 'TRUE', '2', '30', '45', '10']]), [
+assert.deepEqual(validateProductFeedRows('reorderingPoint', [REORDERING_POINT_HEADERS, ['SKU-1', 'TRUE', '2', '30', '45', '10']]), [
+  { errorLine: 2, errorMessage: 'manualLeadTime: Valid values: TRUE or FALSE', value: '10' },
+])
+
+assert.deepEqual(parseProductFeedRows('reorderingPoint', [REORDERING_POINT_HEADERS, ['SKU-1', 'TRUE', '2', '30', '45', 'FALSE']]), [
   {
     sku: 'SKU-1',
     isActive: true,
     orderFrequency: 2,
     leadTimeSC: 30,
     daysOfStockSC: 45,
-    manualLeadTime: 10,
+    manualLeadTime: false,
   },
 ])
 
-assert.deepEqual(validateProductFeedRows('dimensions', [[...PRODUCT_FEED_DEFINITIONS.dimensions.headers], ['SKU-1', '0', '2', '3', '4', '5', '6', '7', '8', '9']]), [
+assert.deepEqual(validateProductFeedRows('dimensions', [DIMENSIONS_HEADERS, ['SKU-1', '1.5', '2', '3', '4', '5', '6', '7', '8', '9']]), [])
+
+assert.deepEqual(validateProductFeedRows('dimensions', [DIMENSIONS_HEADERS, ['SKU-1', '0', '2', '3', '4', '5', '6', '7', '8', '9']]), [
   { errorLine: 2, errorMessage: 'weight: Required - Greater than 0', value: '0' },
 ])
 
-assert.deepEqual(validateProductFeedRows('dimensions', [[...PRODUCT_FEED_DEFINITIONS.dimensions.headers], ['SKU-1', '1', '2', '3', '4', '5.5', '6', '7', '8', '9']]), [
+assert.deepEqual(validateProductFeedRows('dimensions', [DIMENSIONS_HEADERS, ['SKU-1', '1', '2', '3', '4', '5.5', '6', '7', '8', '9']]), [
   { errorLine: 2, errorMessage: 'boxQty: Required - Integer - Greater than 0', value: '5.5' },
 ])
 
-assert.deepEqual(validateProductFeedRows('dimensions', [[...PRODUCT_FEED_DEFINITIONS.dimensions.headers], ['SKU-1', '1.5', '2', '3', '4', '5', '6', '7', '8', '9']]), [])
-
-assert.deepEqual(parseProductFeedRows('dimensions', [[...PRODUCT_FEED_DEFINITIONS.dimensions.headers], ['SKU-1', '1.5', '2', '3', '4', '5', '6', '7', '8', '9']]), [
+assert.deepEqual(parseProductFeedRows('dimensions', [DIMENSIONS_HEADERS, ['SKU-1', '1.5', '2', '3', '4', '5', '6', '7', '8', '9']]), [
   {
     sku: 'SKU-1',
     weight: 1.5,

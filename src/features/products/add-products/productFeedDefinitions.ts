@@ -27,7 +27,7 @@ export type ProductReorderingPointFeedRow = {
   orderFrequency: number
   leadTimeSC: number
   daysOfStockSC: number
-  manualLeadTime: number
+  manualLeadTime: boolean
 }
 
 export type ProductDimensionsFeedRow = {
@@ -46,32 +46,76 @@ export type ProductDimensionsFeedRow = {
 export const IDENTIFIER_TYPE_LABELS = ['EAN', 'Barcode', 'Walmart Code', 'FBA', 'Other'] as const
 export const IDENTIFIER_TYPE_VALUES = ['EAN', 'Barcode', 'WalmartCode', 'FBA', 'Other'] as const
 
+type ProductFeedDefinition = {
+  label: string
+  worksheetName: string
+  filename: string
+  headers: readonly string[]
+  description: string
+  instructions: readonly string[]
+}
+
 export const PRODUCT_FEED_DEFINITIONS = {
   general: {
     label: 'Product General Information',
     worksheetName: 'Product Details Template',
     filename: 'Product General Information Template.xlsx',
     headers: columns.map((column) => column.header),
+    description: 'Use this feed to add new products or update general product details in bulk.',
+    instructions: [
+      'Export the template, fill or update product rows, then save/export it as a CSV file before uploading.',
+      'Keep column names and column order unchanged.',
+      'Use the Empty Template to add new products; use this feed to update exported product rows.',
+    ],
   },
   identifiers: {
     label: 'Products Identifiers',
     worksheetName: 'Products Identifiers Template',
     filename: 'Products Identifiers Template.xlsx',
     headers: ['Sku', 'Identifier Type', 'Identifier Value'],
+    description: 'Use this feed to add or update product identifiers like EAN, Barcode, Walmart Code, FBA, or Other.',
+    instructions: [
+      'Export the template, add one row per identifier, then save/export it as a CSV file before uploading.',
+      'You can copy rows and add more SKUs, including multiple rows for the same SKU.',
+      'Only use valid identifier types and do not change column names or column order.',
+    ],
   },
   reorderingPoint: {
     label: 'Products Reordering Point',
     worksheetName: 'Products Reordering Point Template',
     filename: 'Products Reordering Point Template.xlsx',
-    headers: ['Sku', 'isActive', 'orderFrequency', 'leadTimeSC', 'daysOfStockSC', 'manualLeadTime'],
+    headers: ['Sku', 'Is Active in Reordering Points', 'Order Frequency (Weeks)', 'Lead Time (Days)', 'Days Of Stock After Lead Time (Days)', 'Manual Lead Time'],
+    description: 'Use this feed to update reordering point settings for existing products.',
+    instructions: [
+      'Export the template, update values, then save/export it as a CSV file before uploading.',
+      'Use TRUE or FALSE for isActive and manualLeadTime.',
+      'Use numbers greater than or equal to 0 for Order Frequency (Weeks), Lead Time (Days), and Days Of Stock After Lead Time (Days).',
+    ],
   },
   dimensions: {
     label: 'Products Dimensions',
     worksheetName: 'Products Dimensions Template',
     filename: 'Products Dimensions Template.xlsx',
-    headers: ['Sku', 'weight', 'length', 'width', 'height', 'boxQty', 'boxWeight', 'boxLength', 'boxWidth', 'boxHeight'],
+    headers: [
+      'Sku',
+      'Unit Weight',
+      'Unit Length',
+      'Unit Width',
+      'Unit Height',
+      'Carton Box Quantity',
+      'Carton Box Weight',
+      'Carton Box Length',
+      'Carton Box Width',
+      'Carton Box Height',
+    ],
+    description: 'Use this feed to update item and box dimensions for existing products.',
+    instructions: [
+      'Export the template, update dimension values, then save/export it as a CSV file before uploading.',
+      'All dimension and weight values must be greater than 0.',
+      'boxQty must be a whole number greater than 0.',
+    ],
   },
-} as const satisfies Record<ProductFeedType, { label: string; worksheetName: string; filename: string; headers: readonly string[] }>
+} as const satisfies Record<ProductFeedType, ProductFeedDefinition>
 
 const SKU_PATTERN = /^[a-zA-Z0-9-]+$/
 
@@ -119,6 +163,16 @@ const validateNonNegativeNumber = (value: string, line: number, label: string): 
   return {
     errorLine: line,
     errorMessage: `${label}: Required - Greater or Equal than 0`,
+    value,
+  }
+}
+
+const validateBooleanValue = (value: string, line: number, label: string): ProductFeedValidationError | null => {
+  if (['TRUE', 'FALSE'].includes(value.toUpperCase())) return null
+
+  return {
+    errorLine: line,
+    errorMessage: `${label}: Valid values: TRUE or FALSE`,
     value,
   }
 }
@@ -181,26 +235,22 @@ const validateReorderingPointFeedRows = (rows: unknown[][]): ProductFeedValidati
     const skuError = validateSku(sku, i + 1)
     if (skuError) errorsList.push(skuError)
 
-    const isActive = getCellValue(row[1]).toUpperCase()
-    if (!['TRUE', 'FALSE'].includes(isActive)) {
-      errorsList.push({
-        errorLine: i + 1,
-        errorMessage: 'isActive: Valid values: TRUE or FALSE',
-        value: getCellValue(row[1]),
-      })
-    }
+    const isActiveError = validateBooleanValue(getCellValue(row[1]), i + 1, 'isActive')
+    if (isActiveError) errorsList.push(isActiveError)
 
     const numericColumns = [
       ['orderFrequency', row[2]],
       ['leadTimeSC', row[3]],
       ['daysOfStockSC', row[4]],
-      ['manualLeadTime', row[5]],
     ] as const
 
     for (const [label, value] of numericColumns) {
       const error = validateNonNegativeNumber(getCellValue(value), i + 1, label)
       if (error) errorsList.push(error)
     }
+
+    const manualLeadTimeError = validateBooleanValue(getCellValue(row[5]), i + 1, 'manualLeadTime')
+    if (manualLeadTimeError) errorsList.push(manualLeadTimeError)
   }
 
   return errorsList
@@ -289,7 +339,7 @@ export function parseProductFeedRows(feedType: ProductFeedType, rows: unknown[][
         orderFrequency: Number(row[2]),
         leadTimeSC: Number(row[3]),
         daysOfStockSC: Number(row[4]),
-        manualLeadTime: Number(row[5]),
+        manualLeadTime: getCellValue(row[5]).toUpperCase() === 'TRUE',
       })
       return productsInfo
     }, [])

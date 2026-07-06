@@ -12,7 +12,7 @@ type ExportProductsTemplateMessage = {
   feedType?: ProductFeedType
 }
 
-const protectWorksheet = (worksheet: ExcelJS.Worksheet) =>
+const protectWorksheet = (worksheet: ExcelJS.Worksheet, options: Partial<ExcelJS.WorksheetProtection> = {}) =>
   worksheet.protect('xmQC!zpH-3ZX', {
     selectLockedCells: true,
     formatCells: false,
@@ -26,9 +26,17 @@ const protectWorksheet = (worksheet: ExcelJS.Worksheet) =>
     sort: true,
     autoFilter: true,
     pivotTables: true,
+    ...options,
   })
 
+const IDENTIFIER_TEMPLATE_MAX_ROWS = 1000
+
 const getIdentifierTypeLabel = (type: string) => (type === 'WalmartCode' ? 'Walmart Code' : type)
+
+const getBooleanLabel = (value: unknown) => {
+  if (typeof value === 'string') return value.trim().toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE'
+  return value ? 'TRUE' : 'FALSE'
+}
 
 const buildIdentifiersWorkbook = async (products: Product[]) => {
   const workbook = new ExcelJS.Workbook()
@@ -53,22 +61,35 @@ const buildIdentifiersWorkbook = async (products: Product[]) => {
     }
   }
 
-  worksheet.getColumn('sku').eachCell((cell) => {
-    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+  worksheet.getRow(1).eachCell((cell) => {
     cell.protection = { locked: true }
   })
-  worksheet.getColumn('identifierType').eachCell((cell) => {
-    cell.dataValidation = {
+
+  for (let rowNumber = 2; rowNumber <= IDENTIFIER_TEMPLATE_MAX_ROWS; rowNumber++) {
+    const skuCell = worksheet.getCell(rowNumber, 1)
+    skuCell.dataValidation = {
+      type: 'textLength',
+      operator: 'greaterThan',
+      showErrorMessage: true,
+      allowBlank: false,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'SKU is required',
+    }
+    skuCell.protection = { locked: false }
+
+    const identifierTypeCell = worksheet.getCell(rowNumber, 2)
+    identifierTypeCell.dataValidation = {
       type: 'list',
       allowBlank: false,
       formulae: ['=ReferenceData!$A$2:$A$999'],
       error: 'Please use the DropDown to select a valid value',
       errorTitle: 'Invalid input',
     }
-    cell.protection = { locked: false }
-  })
-  worksheet.getColumn('identifierValue').eachCell((cell) => {
-    cell.dataValidation = {
+    identifierTypeCell.protection = { locked: false }
+
+    const identifierValueCell = worksheet.getCell(rowNumber, 3)
+    identifierValueCell.dataValidation = {
       type: 'textLength',
       operator: 'greaterThan',
       showErrorMessage: true,
@@ -77,10 +98,10 @@ const buildIdentifiersWorkbook = async (products: Product[]) => {
       errorTitle: 'Invalid input',
       error: 'Identifier Value is required',
     }
-    cell.protection = { locked: false }
-  })
+    identifierValueCell.protection = { locked: false }
+  }
 
-  await protectWorksheet(worksheet)
+  await protectWorksheet(worksheet, { insertRows: true })
   await protectWorksheet(worksheetInfo)
 
   return workbook.xlsx.writeBuffer()
@@ -93,11 +114,11 @@ const buildReorderingPointWorkbook = async (products: Product[]) => {
 
   worksheet.columns = [
     { key: 'sku', header: 'Sku' },
-    { key: 'isActive', header: 'isActive' },
-    { key: 'orderFrequency', header: 'orderFrequency' },
-    { key: 'leadTimeSC', header: 'leadTimeSC' },
-    { key: 'daysOfStockSC', header: 'daysOfStockSC' },
-    { key: 'manualLeadTime', header: 'manualLeadTime' },
+    { key: 'isActive', header: 'Is Active in Reordering Points' },
+    { key: 'orderFrequency', header: 'Order Frequency (Weeks)' },
+    { key: 'leadTimeSC', header: 'Lead Time (Days)' },
+    { key: 'daysOfStockSC', header: 'Days Of Stock After Lead Time (Days)' },
+    { key: 'manualLeadTime', header: 'Manual Lead Time' },
   ]
   worksheetInfo.columns = [{ key: 'booleanValues', header: 'Boolean Values' }]
   worksheetInfo.getColumn('booleanValues').values = ['Boolean Values', 'TRUE', 'FALSE']
@@ -109,7 +130,7 @@ const buildReorderingPointWorkbook = async (products: Product[]) => {
       orderFrequency: product.orderFrequency ?? 0,
       leadTimeSC: product.leadTimeSC ?? 0,
       daysOfStockSC: product.daysOfStockSC ?? product.recommendedDaysOfStock ?? 0,
-      manualLeadTime: product.manualLeadTime ?? 0,
+      manualLeadTime: getBooleanLabel(product.manualLeadTime),
     })
   }
 
@@ -117,18 +138,20 @@ const buildReorderingPointWorkbook = async (products: Product[]) => {
     cell.fill = { type: 'pattern', pattern: 'lightGray' }
     cell.protection = { locked: true }
   })
-  worksheet.getColumn('isActive').eachCell((cell) => {
-    cell.dataValidation = {
-      type: 'list',
-      allowBlank: false,
-      formulae: ['=ReferenceData!$A$2:$A$3'],
-      error: 'Please use TRUE or FALSE',
-      errorTitle: 'Invalid input',
-    }
-    cell.protection = { locked: false }
-  })
+  for (const columnKey of ['isActive', 'manualLeadTime']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'list',
+        allowBlank: false,
+        formulae: ['=ReferenceData!$A$2:$A$3'],
+        error: 'Please use TRUE or FALSE',
+        errorTitle: 'Invalid input',
+      }
+      cell.protection = { locked: false }
+    })
+  }
 
-  for (const columnKey of ['orderFrequency', 'leadTimeSC', 'daysOfStockSC', 'manualLeadTime']) {
+  for (const columnKey of ['orderFrequency', 'leadTimeSC', 'daysOfStockSC']) {
     worksheet.getColumn(columnKey).eachCell((cell) => {
       cell.dataValidation = {
         type: 'decimal',
@@ -155,15 +178,15 @@ const buildDimensionsWorkbook = async (products: Product[]) => {
 
   worksheet.columns = [
     { key: 'sku', header: 'Sku' },
-    { key: 'weight', header: 'weight' },
-    { key: 'length', header: 'length' },
-    { key: 'width', header: 'width' },
-    { key: 'height', header: 'height' },
-    { key: 'boxQty', header: 'boxQty' },
-    { key: 'boxWeight', header: 'boxWeight' },
-    { key: 'boxLength', header: 'boxLength' },
-    { key: 'boxWidth', header: 'boxWidth' },
-    { key: 'boxHeight', header: 'boxHeight' },
+    { key: 'weight', header: 'Unit Weight' },
+    { key: 'length', header: 'Unit Length' },
+    { key: 'width', header: 'Unit Width' },
+    { key: 'height', header: 'Unit Height' },
+    { key: 'boxQty', header: 'Carton Box Quantity' },
+    { key: 'boxWeight', header: 'Carton Box Weight' },
+    { key: 'boxLength', header: 'Carton Box Length' },
+    { key: 'boxWidth', header: 'Carton Box Width' },
+    { key: 'boxHeight', header: 'Carton Box Height' },
   ]
 
   for (const product of products) {
