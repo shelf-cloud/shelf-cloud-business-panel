@@ -12,10 +12,11 @@ import AppContext from '@context/AppContext'
 import { useSuppliersBrandsCategories } from '@hooks/products/useSuppliersBrandsCategories'
 import { FormatBytes } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
@@ -50,6 +51,13 @@ type Props = {
   }
 }
 
+const toNumberOrNaN = (v: unknown) => {
+  if (typeof v === 'number') return v
+  if (v === '' || v === null || v === undefined) return NaN
+  const n = Number(v)
+  return n
+}
+
 const AddProducts = ({ session }: Props) => {
   const { state } = useContext(AppContext)
   const title = `Add Product | ${session?.user?.businessName}`
@@ -58,110 +66,114 @@ const AddProducts = ({ session }: Props) => {
 
   const { brands, suppliers, categories, addNewOption } = useSuppliersBrandsCategories()
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      title: '',
-      sku: '',
-      image: '',
-      asin: '',
-      fnsku: '',
-      barcode: '',
-      brand: '',
-      supplier: '',
-      category: '',
-      defaultPrice: '',
-      weight: '',
-      width: '',
-      length: '',
-      height: '',
-      boxweight: '',
-      boxwidth: '',
-      boxlength: '',
-      boxheight: '',
-      boxqty: '',
-    },
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .matches(/^[a-zA-Z0-9-Á-öø-ÿ\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please Enter Your Title'),
-      sku: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(50, 'SKU is to Long')
-        .required('Please Enter Your Sku'),
-      image: Yup.string().url(),
-      asin: Yup.string().max(50, 'Asin is to Long'),
-      fnsku: Yup.string().max(50, 'Fnsku is to Long'),
-      barcode: Yup.string().max(50, 'barcode is to Long').required('Please Enter Your Barcode'),
-      brand: Yup.string(),
-      supplier: Yup.string(),
-      category: Yup.string(),
-      defaultPrice: Yup.number().default(0),
-      weight: Yup.number().default(0),
-      width: Yup.number().default(0),
-      length: Yup.number().default(0),
-      height: Yup.number().default(0),
-      boxweight: Yup.number().default(0),
-      boxwidth: Yup.number().default(0),
-      boxlength: Yup.number().default(0),
-      boxheight: Yup.number().default(0),
-      boxqty: Yup.number().integer('Only integers').default(0),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const loadingToast = toast.loading('Creating new product...')
-
-      const { data } = await axios.post(`/api/products/createNewProduct?region=${state?.currentRegion}&businessId=${state?.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!data.error && data.inventoryId) {
-        generate_new_forecast_products({
-          skus: [values.sku],
-          productIds: [data.inventoryId],
-        })
-        toast.update(loadingToast, {
-          render: data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        resetForm()
-        uploadLogoImage.handleClearFiles()
-      } else {
-        toast.update(loadingToast, {
-          render: data.message ?? 'Error creating product',
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-    },
+  const schema = z.object({
+    title: z
+      .string()
+      .regex(/^[a-zA-Z0-9-Á-öø-ÿ\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+      .max(100, 'Title is to Long')
+      .min(1, 'Please Enter Your Title'),
+    sku: z
+      .string()
+      .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+      .max(50, 'SKU is to Long')
+      .min(1, 'Please Enter Your Sku'),
+    image: z.union([z.literal(''), z.string().url()]).optional(),
+    asin: z.string().max(50, 'Asin is to Long').optional(),
+    fnsku: z.string().max(50, 'Fnsku is to Long').optional(),
+    barcode: z.string().max(50, 'barcode is to Long').min(1, 'Please Enter Your Barcode'),
+    brand: z.string().optional(),
+    supplier: z.string().optional(),
+    category: z.string().optional(),
+    defaultPrice: z.preprocess(toNumberOrNaN, z.number()),
+    weight: z.preprocess(toNumberOrNaN, z.number()),
+    width: z.preprocess(toNumberOrNaN, z.number()),
+    length: z.preprocess(toNumberOrNaN, z.number()),
+    height: z.preprocess(toNumberOrNaN, z.number()),
+    boxweight: z.preprocess(toNumberOrNaN, z.number()),
+    boxwidth: z.preprocess(toNumberOrNaN, z.number()),
+    boxlength: z.preprocess(toNumberOrNaN, z.number()),
+    boxheight: z.preprocess(toNumberOrNaN, z.number()),
+    boxqty: z.preprocess(toNumberOrNaN, z.number().int('Only integers')),
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const defaultFormValues = {
+    title: '',
+    sku: '',
+    image: '',
+    asin: '',
+    fnsku: '',
+    barcode: '',
+    brand: '',
+    supplier: '',
+    category: '',
+    defaultPrice: '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    boxweight: '',
+    boxwidth: '',
+    boxlength: '',
+    boxheight: '',
+    boxqty: '',
   }
 
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultFormValues as any,
+  })
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    const loadingToast = toast.loading('Creating new product...')
+
+    const { data } = await axios.post(`/api/products/createNewProduct?region=${state?.currentRegion}&businessId=${state?.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!data.error && data.inventoryId) {
+      generate_new_forecast_products({
+        skus: [values.sku],
+        productIds: [data.inventoryId],
+      })
+      toast.update(loadingToast, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      validation.reset(defaultFormValues as any)
+      uploadLogoImage.handleClearFiles()
+    } else {
+      toast.update(loadingToast, {
+        render: data.message ?? 'Error creating product',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+  }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
   const handleBoxDimensionsCheckbox = () => {
-    validation.setFieldValue('boxweight', validation.values.weight)
+    const currentWeight = validation.getValues('weight')
+    validation.setValue('boxweight', currentWeight, { shouldValidate: true, shouldDirty: true })
 
     if (!useSameUnitDimensions) {
       setUseSameUnitDimensions(true)
-      validation.setFieldValue('boxweight', validation.values.weight)
-      validation.setFieldValue('boxwidth', validation.values.width)
-      validation.setFieldValue('boxlength', validation.values.length)
-      validation.setFieldValue('boxheight', validation.values.height)
-      validation.setFieldValue('boxqty', 1)
-      validation.validateForm()
+      validation.setValue('boxweight', validation.getValues('weight'), { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxwidth', validation.getValues('width'), { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxlength', validation.getValues('length'), { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxheight', validation.getValues('height'), { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxqty', 1 as any, { shouldValidate: true, shouldDirty: true })
+      validation.trigger()
     } else {
       setUseSameUnitDimensions(false)
-      validation.setFieldValue('boxweight', '')
-      validation.setFieldValue('boxwidth', '')
-      validation.setFieldValue('boxlength', '')
-      validation.setFieldValue('boxheight', '')
-      validation.setFieldValue('boxqty', '')
-      validation.validateForm()
+      validation.setValue('boxweight', '' as any, { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxwidth', '' as any, { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxlength', '' as any, { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxheight', '' as any, { shouldValidate: true, shouldDirty: true })
+      validation.setValue('boxqty', '' as any, { shouldValidate: true, shouldDirty: true })
+      validation.trigger()
     }
   }
 
@@ -219,7 +231,7 @@ const AddProducts = ({ session }: Props) => {
           autoClose: 3000,
         })
         if (data.url) {
-          validation.setFieldValue('image', data.url)
+          validation.setValue('image', data.url, { shouldValidate: true, shouldDirty: true })
         }
         return { error: true }
       } else {
@@ -236,6 +248,9 @@ const AddProducts = ({ session }: Props) => {
       setuploadLogoImage((prev) => ({ ...prev, isOpen: false }))
     },
   })
+
+  const imageValue = validation.watch('image')
+
   return (
     <div>
       <Head>
@@ -259,13 +274,12 @@ const AddProducts = ({ session }: Props) => {
                           type='text'
                           placeholder='Title...'
                           id='title'
-                          name='title'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.title || ''}
-                          aria-invalid={Boolean(validation.touched.title && validation.errors.title) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.title && validation.formState.errors.title) || undefined}
+                          {...validation.register('title')}
                         />
-                        {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                        {validation.formState.touchedFields.title && validation.formState.errors.title ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.title.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-6/12'>
@@ -277,13 +291,12 @@ const AddProducts = ({ session }: Props) => {
                           type='text'
                           placeholder='Sku...'
                           id='sku'
-                          name='sku'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.sku || ''}
-                          aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.sku && validation.formState.errors.sku) || undefined}
+                          {...validation.register('sku')}
                         />
-                        {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                        {validation.formState.touchedFields.sku && validation.formState.errors.sku ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.sku.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -295,13 +308,12 @@ const AddProducts = ({ session }: Props) => {
                           type='text'
                           placeholder='Asin...'
                           id='asin'
-                          name='asin'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.asin || ''}
-                          aria-invalid={Boolean(validation.touched.asin && validation.errors.asin) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.asin && validation.formState.errors.asin) || undefined}
+                          {...validation.register('asin')}
                         />
-                        {validation.touched.asin && validation.errors.asin ? <div className='text-sm text-destructive'>{validation.errors.asin}</div> : null}
+                        {validation.formState.touchedFields.asin && validation.formState.errors.asin ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.asin.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -313,13 +325,12 @@ const AddProducts = ({ session }: Props) => {
                           type='text'
                           placeholder='Fnsku...'
                           id='fnsku'
-                          name='fnsku'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.fnsku || ''}
-                          aria-invalid={Boolean(validation.touched.fnsku && validation.errors.fnsku) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.fnsku && validation.formState.errors.fnsku) || undefined}
+                          {...validation.register('fnsku')}
                         />
-                        {validation.touched.fnsku && validation.errors.fnsku ? <div className='text-sm text-destructive'>{validation.errors.fnsku}</div> : null}
+                        {validation.formState.touchedFields.fnsku && validation.formState.errors.fnsku ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.fnsku.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -331,13 +342,12 @@ const AddProducts = ({ session }: Props) => {
                           type='text'
                           placeholder='Barcode...'
                           id='barcode'
-                          name='barcode'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.barcode || ''}
-                          aria-invalid={Boolean(validation.touched.barcode && validation.errors.barcode) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.barcode && validation.formState.errors.barcode) || undefined}
+                          {...validation.register('barcode')}
                         />
-                        {validation.touched.barcode && validation.errors.barcode ? <div className='text-sm text-destructive'>{validation.errors.barcode}</div> : null}
+                        {validation.formState.touchedFields.barcode && validation.formState.errors.barcode ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.barcode.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -349,13 +359,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Selling Price...'
                           id='defaultPrice'
-                          name='defaultPrice'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.defaultPrice || ''}
-                          aria-invalid={Boolean(validation.touched.defaultPrice && validation.errors.defaultPrice) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.defaultPrice && validation.formState.errors.defaultPrice) || undefined}
+                          {...validation.register('defaultPrice')}
                         />
-                        {validation.touched.defaultPrice && validation.errors.defaultPrice ? <div className='text-sm text-destructive'>{validation.errors.defaultPrice}</div> : null}
+                        {validation.formState.touchedFields.defaultPrice && validation.formState.errors.defaultPrice ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.defaultPrice.message}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -370,7 +379,7 @@ const AddProducts = ({ session }: Props) => {
                             .map((brand) => {
                               return { value: brand, label: brand }
                             })
-                            .find((brand) => brand.value === validation.values['brand']) || { value: '', label: 'Select Brand...' }
+                            .find((brand) => brand.value === validation.watch('brand')) || { value: '', label: 'Select Brand...' }
                         }
                         options={[
                           { value: '', label: 'Select Brand...' },
@@ -379,13 +388,14 @@ const AddProducts = ({ session }: Props) => {
                           }),
                         ]}
                         handleSelect={(option: SelectSingleValueType) => {
-                          validation.setFieldValue('brand', option?.value || '')
+                          validation.setValue('brand', String(option?.value ?? ''), { shouldValidate: true, shouldDirty: true })
                         }}
-                        validationSchema={Yup.object({
-                          name: Yup.string()
-                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-                            .max(200, 'Name is to Long')
-                            .required(`Brand required`),
+                        validationSchema={z.object({
+                          name: z
+                            .string()
+                            .min(1, `Brand required`)
+                            .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long'),
                         })}
                         submitAddNewOption={(values) => {
                           return addNewOption({ addEndpoint: 'addNewBrand', values })
@@ -402,7 +412,7 @@ const AddProducts = ({ session }: Props) => {
                             .map((supplier) => {
                               return { value: supplier, label: supplier }
                             })
-                            .find((supplier) => supplier.value === validation.values['supplier']) || { value: '', label: 'Select Supplier...' }
+                            .find((supplier) => supplier.value === validation.watch('supplier')) || { value: '', label: 'Select Supplier...' }
                         }
                         options={[
                           { value: '', label: 'Select Supplier...' },
@@ -411,13 +421,14 @@ const AddProducts = ({ session }: Props) => {
                           }),
                         ]}
                         handleSelect={(option: SelectSingleValueType) => {
-                          validation.setFieldValue('supplier', option?.value ?? '')
+                          validation.setValue('supplier', String(option?.value ?? ''), { shouldValidate: true, shouldDirty: true })
                         }}
-                        validationSchema={Yup.object({
-                          name: Yup.string()
-                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-                            .max(200, 'Name is to Long')
-                            .required(`Supplier required`),
+                        validationSchema={z.object({
+                          name: z
+                            .string()
+                            .min(1, `Supplier required`)
+                            .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long'),
                         })}
                         submitAddNewOption={(values) => {
                           return addNewOption({ addEndpoint: 'addNewSupplier', values })
@@ -434,7 +445,7 @@ const AddProducts = ({ session }: Props) => {
                             .map((category) => {
                               return { value: category, label: category }
                             })
-                            .find((category) => category.value === validation.values['category']) || { value: '', label: 'Select Category...' }
+                            .find((category) => category.value === validation.watch('category')) || { value: '', label: 'Select Category...' }
                         }
                         options={[
                           { value: '', label: 'Select Category...' },
@@ -443,13 +454,14 @@ const AddProducts = ({ session }: Props) => {
                           }),
                         ]}
                         handleSelect={(option: SelectSingleValueType) => {
-                          validation.setFieldValue('category', option?.value ?? '')
+                          validation.setValue('category', String(option?.value ?? ''), { shouldValidate: true, shouldDirty: true })
                         }}
-                        validationSchema={Yup.object({
-                          name: Yup.string()
-                            .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-                            .max(200, 'Name is to Long')
-                            .required(`Category required`),
+                        validationSchema={z.object({
+                          name: z
+                            .string()
+                            .min(1, `Category required`)
+                            .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+                            .max(200, 'Name is to Long'),
                         })}
                         submitAddNewOption={(values) => {
                           return addNewOption({ addEndpoint: 'addNewCategory', values })
@@ -459,7 +471,7 @@ const AddProducts = ({ session }: Props) => {
 
                     {/* ADD PRODUCT IMAGE */}
                     <div className='flex flex-wrap -mx-3 items-center'>
-                      {validation.values.image && (
+                      {imageValue && (
                         <div className='px-3 w-2/12 md:w-1/12' style={{ minWidth: 'fit-content' }}>
                           <div
                             style={{
@@ -470,12 +482,12 @@ const AddProducts = ({ session }: Props) => {
                             }}>
                             <img
                               loading='lazy'
-                              src={validation.values.image}
+                              src={imageValue}
                               onError={(e) => (e.currentTarget.src = NoImageAdress)}
                               alt='Product preview'
                               style={{ objectFit: 'contain', objectPosition: 'center', width: '100%', height: '100%' }}
                               onLoad={() => {
-                                URL.revokeObjectURL(validation.values.image)
+                                URL.revokeObjectURL(imageValue)
                               }}
                             />
                           </div>
@@ -491,13 +503,12 @@ const AddProducts = ({ session }: Props) => {
                             disabled={uploadLogoImage.selectedFiles.length > 0}
                             placeholder='Image URL...'
                             id='image'
-                            name='image'
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.image || ''}
-                            aria-invalid={Boolean(validation.touched.image && validation.errors.image) || undefined}
+                            aria-invalid={Boolean(validation.formState.touchedFields.image && validation.formState.errors.image) || undefined}
+                            {...validation.register('image')}
                           />
-                          {validation.touched.image && validation.errors.image ? <div className='text-sm text-destructive'>{validation.errors.image}</div> : null}
+                          {validation.formState.touchedFields.image && validation.formState.errors.image ? (
+                            <div className='text-sm text-destructive'>{validation.formState.errors.image.message}</div>
+                          ) : null}
                         </div>
                       </div>
                       <div className='px-3 w-4/12 md:w-2/12'>
@@ -522,13 +533,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Weight...'
                           id='weight'
-                          name='weight'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.weight || ''}
-                          aria-invalid={Boolean(validation.touched.weight && validation.errors.weight) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.weight && validation.formState.errors.weight) || undefined}
+                          {...validation.register('weight')}
                         />
-                        {validation.touched.weight && validation.errors.weight ? <div className='text-sm text-destructive'>{validation.errors.weight}</div> : null}
+                        {validation.formState.touchedFields.weight && validation.formState.errors.weight ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.weight.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -540,13 +550,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Width...'
                           id='width'
-                          name='width'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.width || ''}
-                          aria-invalid={Boolean(validation.touched.width && validation.errors.width) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.width && validation.formState.errors.width) || undefined}
+                          {...validation.register('width')}
                         />
-                        {validation.touched.width && validation.errors.width ? <div className='text-sm text-destructive'>{validation.errors.width}</div> : null}
+                        {validation.formState.touchedFields.width && validation.formState.errors.width ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.width.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -558,13 +567,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Length...'
                           id='length'
-                          name='length'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.length || ''}
-                          aria-invalid={Boolean(validation.touched.length && validation.errors.length) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.length && validation.formState.errors.length) || undefined}
+                          {...validation.register('length')}
                         />
-                        {validation.touched.length && validation.errors.length ? <div className='text-sm text-destructive'>{validation.errors.length}</div> : null}
+                        {validation.formState.touchedFields.length && validation.formState.errors.length ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.length.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -576,13 +584,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Height...'
                           id='height'
-                          name='height'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.height || ''}
-                          aria-invalid={Boolean(validation.touched.height && validation.errors.height) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.height && validation.formState.errors.height) || undefined}
+                          {...validation.register('height')}
                         />
-                        {validation.touched.height && validation.errors.height ? <div className='text-sm text-destructive'>{validation.errors.height}</div> : null}
+                        {validation.formState.touchedFields.height && validation.formState.errors.height ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.height.message}</div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -608,13 +615,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Box Weight...'
                           id='boxweight'
-                          name='boxweight'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.boxweight || ''}
-                          aria-invalid={Boolean(validation.touched.boxweight && validation.errors.boxweight) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.boxweight && validation.formState.errors.boxweight) || undefined}
+                          {...validation.register('boxweight')}
                         />
-                        {validation.touched.boxweight && validation.errors.boxweight ? <div className='text-sm text-destructive'>{validation.errors.boxweight}</div> : null}
+                        {validation.formState.touchedFields.boxweight && validation.formState.errors.boxweight ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.boxweight.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -626,13 +632,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Box Width...'
                           id='boxwidth'
-                          name='boxwidth'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.boxwidth || ''}
-                          aria-invalid={Boolean(validation.touched.boxwidth && validation.errors.boxwidth) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.boxwidth && validation.formState.errors.boxwidth) || undefined}
+                          {...validation.register('boxwidth')}
                         />
-                        {validation.touched.boxwidth && validation.errors.boxwidth ? <div className='text-sm text-destructive'>{validation.errors.boxwidth}</div> : null}
+                        {validation.formState.touchedFields.boxwidth && validation.formState.errors.boxwidth ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.boxwidth.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -644,13 +649,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Box Length...'
                           id='boxlength'
-                          name='boxlength'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.boxlength || ''}
-                          aria-invalid={Boolean(validation.touched.boxlength && validation.errors.boxlength) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.boxlength && validation.formState.errors.boxlength) || undefined}
+                          {...validation.register('boxlength')}
                         />
-                        {validation.touched.boxlength && validation.errors.boxlength ? <div className='text-sm text-destructive'>{validation.errors.boxlength}</div> : null}
+                        {validation.formState.touchedFields.boxlength && validation.formState.errors.boxlength ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.boxlength.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -662,13 +666,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Box Height...'
                           id='boxheight'
-                          name='boxheight'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.boxheight || ''}
-                          aria-invalid={Boolean(validation.touched.boxheight && validation.errors.boxheight) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.boxheight && validation.formState.errors.boxheight) || undefined}
+                          {...validation.register('boxheight')}
                         />
-                        {validation.touched.boxheight && validation.errors.boxheight ? <div className='text-sm text-destructive'>{validation.errors.boxheight}</div> : null}
+                        {validation.formState.touchedFields.boxheight && validation.formState.errors.boxheight ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.boxheight.message}</div>
+                        ) : null}
                       </div>
                     </div>
                     <div className='px-3 w-full md:w-3/12'>
@@ -680,13 +683,12 @@ const AddProducts = ({ session }: Props) => {
                           type='number'
                           placeholder='Box Qty...'
                           id='boxqty'
-                          name='boxqty'
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.boxqty || ''}
-                          aria-invalid={Boolean(validation.touched.boxqty && validation.errors.boxqty) || undefined}
+                          aria-invalid={Boolean(validation.formState.touchedFields.boxqty && validation.formState.errors.boxqty) || undefined}
+                          {...validation.register('boxqty')}
                         />
-                        {validation.touched.boxqty && validation.errors.boxqty ? <div className='text-sm text-destructive'>{validation.errors.boxqty}</div> : null}
+                        {validation.formState.touchedFields.boxqty && validation.formState.errors.boxqty ? (
+                          <div className='text-sm text-destructive'>{validation.formState.errors.boxqty.message}</div>
+                        ) : null}
                       </div>
                     </div>
 

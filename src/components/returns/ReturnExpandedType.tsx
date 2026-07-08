@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 // import Animation from '@components/Common/Animation'
 import TooltipComponent from '@components/constants/Tooltip'
@@ -7,8 +7,10 @@ import { FormatCurrency } from '@lib/FormatNumbers'
 import { CleanSpecialCharacters } from '@lib/SkuFormatting'
 import { convertLabelZPLToPDF } from '@lib/convertZPLToPDF'
 import { OrderItem, ReturnOrder } from '@typesTs/returns/returns'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { CameraIcon } from 'lucide-react'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from '@/lib/toast'
@@ -18,7 +20,6 @@ import { Textarea } from '@shadcn/ui/textarea'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 import { Button as ShadcnButton } from '../shadcn/ui/button'
 import ShowBiggerImageDialog, { SelectedUnsellableImage } from './ShowBiggerImageDialog'
@@ -28,6 +29,12 @@ type Props = {
   data: ReturnOrder
   apiMutateLink?: string
 }
+
+const returnNoteSchema = z.object({
+  comment: z.string().max(300, 'Title is to Long'),
+})
+
+type ReturnNoteForm = z.infer<typeof returnNoteSchema>
 
 const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ data, apiMutateLink }: Props) => {
   const { mutate } = useSWRConfig()
@@ -101,38 +108,38 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
     setLoadingLabel(false)
   }
 
-  const validationNote = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validationNote = useForm<ReturnNoteForm>({
+    resolver: zodResolver(returnNoteSchema),
+    defaultValues: {
       comment: data.extraComment || '',
-    },
-    validationSchema: Yup.object({
-      comment: Yup.string().max(300, 'Title is to Long'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-
-      const response = await axios.post(`/api/returns/editReturnComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        returnId: data.id,
-        comment: values.comment,
-      })
-
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-
-        mutate(apiMutateLink)
-        setShowEditNote(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setLoading(false)
     },
   })
 
-  const handleAddComment = (event: any) => {
-    event.preventDefault()
-    validationNote.handleSubmit()
+  useEffect(() => {
+    validationNote.reset({ comment: data.extraComment || '' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.extraComment])
+
+  const onSubmitNote = async (values: ReturnNoteForm) => {
+    setLoading(true)
+
+    const response = await axios.post(`/api/returns/editReturnComment?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      returnId: data.id,
+      comment: values.comment,
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+
+      mutate(apiMutateLink)
+      setShowEditNote(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setLoading(false)
   }
+
+  const handleAddComment = validationNote.handleSubmit(onSubmitNote)
 
   const openImagesDialog = (item: OrderItem) => {
     setImagesDialogItem(item)
@@ -243,13 +250,10 @@ const ReturnExpandedType: React.FC<ExpanderComponentProps<ReturnOrder>> = ({ dat
                           className='text-xs'
                           placeholder=''
                           id='comment'
-                          name='comment'
-                          onChange={validationNote.handleChange}
-                          onBlur={validationNote.handleBlur}
-                          value={validationNote.values.comment || ''}
-                          aria-invalid={Boolean(validationNote.touched.comment && validationNote.errors.comment) || undefined}
+                          aria-invalid={Boolean(validationNote.formState.errors.comment) || undefined}
+                          {...validationNote.register('comment')}
                         />
-                        {validationNote.touched.comment && validationNote.errors.comment ? <div className='text-sm text-destructive'>{validationNote.errors.comment}</div> : null}
+                        {validationNote.formState.errors.comment ? <div className='text-sm text-destructive'>{validationNote.formState.errors.comment.message}</div> : null}
                       </div>
                       <div className='flex flex-row justify-end items-center gap-4'>
                         <Button type='button' disabled={loading} variant='light' size='sm' onClick={() => setShowEditNote(false)}>

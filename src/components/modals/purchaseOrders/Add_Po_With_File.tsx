@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
@@ -9,8 +10,9 @@ import { useRPNewForecast } from '@hooks/reorderingPoints/useRPNewForcast'
 import { Supplier, useSuppliers } from '@hooks/suppliers/useSuppliers'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
-import { Form, Formik } from 'formik'
+import { useForm } from 'react-hook-form'
 import Papa from 'papaparse'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
@@ -20,11 +22,28 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type Props = {
   orderNumberStart: string
 }
+
+const addPoFromFileSchema = z.object({
+  orderNumber: z
+    .string()
+    .regex(/^[a-zA-Z0-9-]+$/, { message: `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces` })
+    .max(50, { message: 'Order Number is to Long' })
+    .min(1, { message: 'Required Order Number' }),
+  destinationSC: z.object({
+    value: z.string().min(1, { message: 'Destination Required' }),
+    label: z.string(),
+  }),
+  supplier: z
+    .union([z.string(), z.number()])
+    .refine((value) => value !== '' && value !== undefined && value !== null, { message: 'Required Supplier' }),
+  date: z.string().min(1, { message: 'Required Date' }),
+})
+
+type AddPoFromFileValues = z.infer<typeof addPoFromFileSchema>
 
 const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const router = useRouter()
@@ -42,26 +61,14 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
   const { warehouses, isLoading } = useWarehouses()
   const { generate_new_forecast_products } = useRPNewForecast()
 
-  const initialValues = {
-    orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
-    destinationSC: { value: '', label: 'Select ...' },
-    supplier: '',
-    date: '',
-  }
-
-  const validationSchema = Yup.object({
-    orderNumber: Yup.string()
-      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-      .max(50, 'Order Number is to Long')
-      .required('Required Order Number'),
-    destinationSC: Yup.object().shape({
-      value: Yup.number().when([], {
-        is: () => !false,
-        then: Yup.number().required('Destination Required'),
-      }),
-    }),
-    supplier: Yup.string().required('Required Supplier'),
-    date: Yup.date().required('Required Date'),
+  const validation = useForm<AddPoFromFileValues>({
+    resolver: zodResolver(addPoFromFileSchema),
+    defaultValues: {
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      destinationSC: { value: '', label: 'Select ...' },
+      supplier: '',
+      date: '',
+    },
   })
 
   const validateProductsInfo = async (resultValues: any) => {
@@ -94,7 +101,7 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
     return errorsList
   }
 
-  const handleSubmit = async (values: any) => {
+  const onSubmit = async (values: AddPoFromFileValues) => {
     setLoading(true)
     setErrorLines([])
     setShowErrorLines(false)
@@ -181,6 +188,9 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
   }
 
+  const values = validation.watch()
+  const { errors, touchedFields } = validation.formState
+
   return (
     <Dialog open={!!state.showCreatePoFromFile} onOpenChange={(open) => { if (!open) setShowCreatePoFromFile(!state.showCreatePoFromFile) }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-3xl' id='addPoFromFile'>
@@ -190,161 +200,151 @@ const Add_Po_With_File = ({ orderNumberStart }: Props) => {
           </DialogTitle>
         </DialogHeader>
         <div>
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-          {({ values, errors, touched, handleChange, handleBlur }) => (
-            <Form>
-              <div className='flex flex-wrap -mx-3'>
-                <div className='px-3 md:w-1/2'>
-                  <div className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='mb-2'>
-                      *Purchase Order Number
-                    </Label>
-                    <InputGroup>
-                      <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
-                        {orderNumberStart}
-                      </InputGroupText>
-                      <Input
-                        type='text'
-                        className='text-[13px] h-8 text-xs'
-                        id='orderNumber'
-                        name='orderNumber'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.orderNumber || ''}
-                        aria-invalid={(touched.orderNumber && errors.orderNumber ? true : false) || undefined}
-                      />
-                      {touched.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber}</div> : null}
-                    </InputGroup>
-                  </div>
-
-                  <div className='mb-2'>
-                    <Label className='mb-1 text-[11.2px]'>*Destination</Label>
-                    <SimpleSelect
-                      options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
-                      selected={values.destinationSC}
-                      handleSelect={(selected) => {
-                        handleChange({ target: { name: 'destinationSC', value: selected } })
-                      }}
-                      placeholder={isLoading ? 'Loading...' : 'Select ...'}
-                      customStyle='sm'
-                    />
-                    {errors.destinationSC && touched.destinationSC ? <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.destinationSC.value}</div> : null}
-                  </div>
-
-                  <SelectSingleFilter
-                    inputLabel={'*Supplier'}
-                    inputName={'supplier'}
-                    placeholder={'Select ...'}
-                    selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(values.supplier))?.name || 'Select...' }}
-                    options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
-                    handleSelect={(option: SelectSingleValueType) => {
-                      handleChange({ target: { name: 'supplier', value: option!.value } })
-                    }}
-                    error={errors.supplier}
+        <form onSubmit={validation.handleSubmit(onSubmit)}>
+          <div className='flex flex-wrap -mx-3'>
+            <div className='px-3 md:w-1/2'>
+              <div className='mb-1'>
+                <Label htmlFor='firstNameinput' className='mb-2'>
+                  *Purchase Order Number
+                </Label>
+                <InputGroup>
+                  <InputGroupText className='font-semibold text-[16.25px] m-0 px-2 py-0' id='basic-addon1'>
+                    {orderNumberStart}
+                  </InputGroupText>
+                  <Input
+                    type='text'
+                    className='text-[13px] h-8 text-xs'
+                    id='orderNumber'
+                    aria-invalid={(touchedFields.orderNumber && errors.orderNumber ? true : false) || undefined}
+                    {...validation.register('orderNumber')}
                   />
-                  <div className='mb-1'>
-                    <Label htmlFor='firstNameinput' className='mb-1 text-[11.2px]'>
-                      *Date
-                    </Label>
-                    <Input
-                      type='date'
-                      className='text-[13px] h-8 text-xs'
-                      id='date'
-                      name='date'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.date || ''}
-                      aria-invalid={(touched.date && errors.date ? true : false) || undefined}
-                    />
-                    {touched.date && errors.date ? <div className='text-sm text-destructive'>{errors.date}</div> : null}
-                  </div>
-                  {showErrorLines &&
-                    errorLines.map((error: any, index: number) => (
-                      <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
-                    ))}
-                  {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
-                </div>
-                <div className='px-3 md:w-1/2'>
-                  <p className='text-[13px] font-normal'>
-                    You can import a Purchase Order by uploading a CSV file using the{' '}
-                    <a
-                      className='!text-primary'
-                      href={'https://docs.google.com/spreadsheets/d/15_8JObdU8ysyTPu-CkwdO5yOAioDJVq-/template/preview'}
-                      target={'_blank'}
-                      rel='noreferrer'>
-                      template
-                    </a>{' '}
-                    file.
-                  </p>
-                  {/* <Dropzone
-                    accept={{ 'text/csv': ['.csv'] }}
-                    multiple={false}
-                    onDrop={(acceptedFiles) => {
-                      handleAcceptedFiles(acceptedFiles)
-                    }}>
-                    {({ getRootProps }) => (
-                      <div className='dropzone dz-clickable cursor-pointer'>
-                        <div className='dz-message needsclick' {...getRootProps()}>
-                          <div className='mb-3'>
-                            <i className='display-5 text-muted ri-upload-cloud-2-fill' />
-                          </div>
-                          <h4 className='text-[13px] px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
-                        </div>
+                  {touchedFields.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber.message}</div> : null}
+                </InputGroup>
+              </div>
+
+              <div className='mb-2'>
+                <Label className='mb-1 text-[11.2px]'>*Destination</Label>
+                <SimpleSelect
+                  options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
+                  selected={values.destinationSC}
+                  handleSelect={(selected) => {
+                    validation.setValue('destinationSC', selected as any, { shouldValidate: true, shouldTouch: true })
+                  }}
+                  placeholder={isLoading ? 'Loading...' : 'Select ...'}
+                  customStyle='sm'
+                />
+                {errors.destinationSC && touchedFields.destinationSC ? <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.destinationSC.value?.message}</div> : null}
+              </div>
+
+              <SelectSingleFilter
+                inputLabel={'*Supplier'}
+                inputName={'supplier'}
+                placeholder={'Select ...'}
+                selected={{ value: values.supplier, label: suppliers?.find((supplier: Supplier) => supplier.suppliersId == parseInt(String(values.supplier)))?.name || 'Select...' }}
+                options={suppliers?.map((supplier: Supplier) => ({ value: supplier.suppliersId, label: supplier.name })) || [{ value: '', label: '' }]}
+                handleSelect={(option: SelectSingleValueType) => {
+                  validation.setValue('supplier', option!.value as any, { shouldValidate: true, shouldTouch: true })
+                }}
+                error={errors.supplier?.message}
+              />
+              <div className='mb-1'>
+                <Label htmlFor='firstNameinput' className='mb-1 text-[11.2px]'>
+                  *Date
+                </Label>
+                <Input
+                  type='date'
+                  className='text-[13px] h-8 text-xs'
+                  id='date'
+                  aria-invalid={(touchedFields.date && errors.date ? true : false) || undefined}
+                  {...validation.register('date')}
+                />
+                {touchedFields.date && errors.date ? <div className='text-sm text-destructive'>{errors.date.message}</div> : null}
+              </div>
+              {showErrorLines &&
+                errorLines.map((error: any, index: number) => (
+                  <p key={`ErrorLine${index}`} className='text-danger m-0 p-0'>{`- Error in Line: ${error.errorLine} Value: ${error.value} Error: ${error.errorMessage}`}</p>
+                ))}
+              {showerrorResponse && errorResponse.map((error: any, index: number) => <p key={`ErrorLine${index}`} className='text-danger m-0'>{`Error: ${error}`}</p>)}
+            </div>
+            <div className='px-3 md:w-1/2'>
+              <p className='text-[13px] font-normal'>
+                You can import a Purchase Order by uploading a CSV file using the{' '}
+                <a
+                  className='!text-primary'
+                  href={'https://docs.google.com/spreadsheets/d/15_8JObdU8ysyTPu-CkwdO5yOAioDJVq-/template/preview'}
+                  target={'_blank'}
+                  rel='noreferrer'>
+                  template
+                </a>{' '}
+                file.
+              </p>
+              {/* <Dropzone
+                accept={{ 'text/csv': ['.csv'] }}
+                multiple={false}
+                onDrop={(acceptedFiles) => {
+                  handleAcceptedFiles(acceptedFiles)
+                }}>
+                {({ getRootProps }) => (
+                  <div className='dropzone dz-clickable cursor-pointer'>
+                    <div className='dz-message needsclick' {...getRootProps()}>
+                      <div className='mb-3'>
+                        <i className='display-5 text-muted ri-upload-cloud-2-fill' />
                       </div>
-                    )}
-                  </Dropzone> */}
-                  <UploadFileDropzone
-                    accptedFiles={{ 'text/csv': ['.csv'] }}
-                    handleAcceptedFiles={handleAcceptedFiles}
-                    description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`}
-                  />
-                  <div className='px-3 w-full'>
-                    <div className='list-unstyled mb-0' id='file-previews'>
-                      {selectedFiles.map((f: any, i) => {
-                        return (
-                          <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
-                            <div className='p-2'>
-                              <div className='flex flex-wrap -mx-3 items-center'>
-                                <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
-                                  <div>
-                                    <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
-                                    <p className='mb-0'>
-                                      <strong>{f.formattedSize}</strong>
-                                    </p>
-                                  </div>
-                                  <div>
-                                    <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
-                                      <i className=' ri-close-line' />
-                                    </Button>
-                                  </div>
-                                </div>
+                      <h4 className='text-[13px] px-3'>Upload Purchase Order Info. Drop Only CSV files here or click to upload.</h4>
+                    </div>
+                  </div>
+                )}
+              </Dropzone> */}
+              <UploadFileDropzone
+                accptedFiles={{ 'text/csv': ['.csv'] }}
+                handleAcceptedFiles={handleAcceptedFiles}
+                description={`Upload Purchase Order Info. Drop Only CSV files here or click to upload.`}
+              />
+              <div className='px-3 w-full'>
+                <div className='list-unstyled mb-0' id='file-previews'>
+                  {selectedFiles.map((f: any, i) => {
+                    return (
+                      <Card className='mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete' key={i + '-file'}>
+                        <div className='p-2'>
+                          <div className='flex flex-wrap -mx-3 items-center'>
+                            <div className='px-3 flex-1 basis-0 flex justify-between items-center'>
+                              <div>
+                                <p className='text-muted-foreground font-bold m-0'>{f.name}</p>
+                                <p className='mb-0'>
+                                  <strong>{f.formattedSize}</strong>
+                                </p>
+                              </div>
+                              <div>
+                                <Button variant='light' className='btn-icon' onClick={() => setselectedFiles([])}>
+                                  <i className=' ri-close-line' />
+                                </Button>
                               </div>
                             </div>
-                          </Card>
-                        )
-                      })}
-                    </div>
-                    {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload purchase order.</p>}
-                  </div>
+                          </div>
+                        </div>
+                      </Card>
+                    )
+                  })}
                 </div>
+                {errorFile && <p className='text-danger m-0'>You must Upload a CSV file to upload purchase order.</p>}
               </div>
+            </div>
+          </div>
 
-              <div className='px-3 w-full mt-6'>
-                <div className='text-right'>
-                  <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' variant='success' className='text-[11.2px]'>
-                    {loading ? (
-                      <span>
-                        <Spinner className='text-white' /> Creating...
-                      </span>
-                    ) : (
-                      'Create PO'
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+          <div className='px-3 w-full mt-6'>
+            <div className='text-right'>
+              <Button disabled={errorFile || showErrorLines || showerrorResponse} type='submit' variant='success' className='text-[11.2px]'>
+                {loading ? (
+                  <span>
+                    <Spinner className='text-white' /> Creating...
+                  </span>
+                ) : (
+                  'Create PO'
+                )}
+              </Button>
+            </div>
+          </div>
+        </form>
         </div>
       </DialogContent>
     </Dialog>

@@ -1,7 +1,7 @@
- 
+
 // ALTER TABLE `dbpruebas` ADD `activeState` BOOLEAN NOT NULL DEFAULT TRUE AFTER `image`;
 import router from 'next/router'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 import SimpleSelect from '@components/Common/SimpleSelect'
 import PrintReceivingLabel from '@components/receiving/labels/PrintReceivingLabel'
@@ -11,9 +11,11 @@ import { useGenerateLabels } from '@hooks/pdfRender/useGenerateLabels'
 import { useCreateManualReceivingsBoxes } from '@hooks/receivings/useCreateManualReceivingsBoxes'
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import Papa from 'papaparse'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 
 import { Button } from '@shadcn/ui/button'
@@ -25,7 +27,6 @@ import { Spinner } from '@shadcn/ui/spinner'
 import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { Alert } from '@/components/ui/Alert'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
-import * as Yup from 'yup'
 
 import ExportBlankReceivingTemplate from './ExportBlankReceivingTemplate'
 import Create_Manual_Receiving_Packages_Tab from './createReceiving/Create_Manual_Receiving_Packages_Tab'
@@ -45,6 +46,22 @@ type Props = {
   receivingInventory: ReceivingInventory[]
   setreceivingUploadingModal: (prev: any) => void
 }
+
+const receivingOrderUploadingSchema = z.object({
+  orderNumber: z
+    .string()
+    .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+    .max(100, 'Title is to Long')
+    .min(1, 'Please enter Order Number'),
+  packingConfiguration: z.string(),
+  destinationSC: z.object({
+    value: z.string().min(1, 'Destination Required'),
+    label: z.string(),
+  }),
+})
+
+type ReceivingOrderUploadingForm = z.infer<typeof receivingOrderUploadingSchema>
+
 const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receivingInventory, setreceivingUploadingModal }: Props) => {
   const { state } = useContext(AppContext)
   const { warehouses, isLoading } = useWarehouses()
@@ -77,150 +94,143 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
     })
   }, [uploadedSkuList, validSkuList])
 
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
+  const validation = useForm<ReceivingOrderUploadingForm>({
+    resolver: zodResolver(receivingOrderUploadingSchema),
+    defaultValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       packingConfiguration: 'single',
       destinationSC: { value: '', label: 'Select ...' },
     },
-
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
-      destinationSC: Yup.object().shape({
-        value: Yup.number().when([], {
-          is: () => true,
-          then: Yup.number().required('Destination Required'),
-        }),
-      }),
-    }),
-
-    onSubmit: async (values) => {
-      setLoading(true)
-
-      const creatingUploadedReceiving = toast.loading('Creating Receiving...')
-
-      if (selectedFiles.length == 0) {
-        setErrorFile(true)
-        return
-      }
-
-      if (uploadedSkuList.length == 0) {
-        setErrorFile(true)
-        return
-      }
-
-      // SHIPPING PRODUCTS
-      let shippingProducts = [] as any
-      uploadedSkuList.map((product) => {
-        const item = validSkuList[product.sku]
-        shippingProducts.push({
-          poId: null,
-          hasSplitting: false,
-          splitId: null,
-          sku: item.sku,
-          name: item.title,
-          boxQty: item.boxQty,
-          inventoryId: item.inventoryId,
-          qty: product.quantity,
-          storeId: item.businessId,
-          qtyPicked: 0,
-          pickedHistory: [],
-        })
-      })
-
-      // ORDER PRODUCTS
-      let orderProducts = [] as any
-      uploadedSkuList.map((product) => {
-        const item = validSkuList[product.sku]
-        orderProducts.push({
-          poId: null,
-          poNumber: null,
-          orderNumber: `${orderNumberStart}${validation.values.orderNumber}`,
-          hasSplitting: false,
-          splitId: null,
-          sku: item.sku,
-          inventoryId: item.inventoryId,
-          name: item.title,
-          image: item.image,
-          boxQty: item.boxQty,
-          quantity: product.quantity,
-          businessId: item.businessId,
-          qtyReceived: 0,
-          suppliersName: item.suppliersName,
-        })
-      })
-
-      const { data } = await axios.post(`/api/receivings/createManualReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        shippingProducts,
-        orderInfo: {
-          orderNumber: values.orderNumber,
-          orderProducts,
-        },
-        receivingItems: uploadedSkuList,
-        isNewReceiving: true,
-        receivingIdToAdd: null,
-        // destinationSC: warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
-        warehouseId: parseInt(values.destinationSC.value),
-        finalBoxesConfiguration,
-      })
-
-      if (!data.error) {
-        toast.update(creatingUploadedReceiving, {
-          render: data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-
-        if (data.is3PL) {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === parseInt(validation.values.destinationSC.value))!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={data.orderid3PL}
-              isManualReceiving={true}
-            />,
-            `${orderNumberStart}${validation.values.orderNumber}`
-          )
-        } else {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === parseInt(validation.values.destinationSC.value))!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={`${orderNumberStart}${validation.values.orderNumber}`}
-              isManualReceiving={true}
-            />,
-            `${orderNumberStart}${validation.values.orderNumber}`
-          )
-        }
-
-        router.push('/receivings')
-      } else {
-        toast.update(creatingUploadedReceiving, {
-          render: data.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-      setLoading(false)
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  useEffect(() => {
+    validation.reset({
+      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+      packingConfiguration: 'single',
+      destinationSC: { value: '', label: 'Select ...' },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.currentRegion, state?.user?.orderNumber?.us, state?.user?.orderNumber?.eu])
+
+  const formValues = validation.watch()
+
+  const onSubmit = async (values: ReceivingOrderUploadingForm) => {
+    setLoading(true)
+
+    const creatingUploadedReceiving = toast.loading('Creating Receiving...')
+
+    if (selectedFiles.length == 0) {
+      setErrorFile(true)
+      return
+    }
+
+    if (uploadedSkuList.length == 0) {
+      setErrorFile(true)
+      return
+    }
+
+    // SHIPPING PRODUCTS
+    let shippingProducts = [] as any
+    uploadedSkuList.map((product) => {
+      const item = validSkuList[product.sku]
+      shippingProducts.push({
+        poId: null,
+        hasSplitting: false,
+        splitId: null,
+        sku: item.sku,
+        name: item.title,
+        boxQty: item.boxQty,
+        inventoryId: item.inventoryId,
+        qty: product.quantity,
+        storeId: item.businessId,
+        qtyPicked: 0,
+        pickedHistory: [],
+      })
+    })
+
+    // ORDER PRODUCTS
+    let orderProducts = [] as any
+    uploadedSkuList.map((product) => {
+      const item = validSkuList[product.sku]
+      orderProducts.push({
+        poId: null,
+        poNumber: null,
+        orderNumber: `${orderNumberStart}${values.orderNumber}`,
+        hasSplitting: false,
+        splitId: null,
+        sku: item.sku,
+        inventoryId: item.inventoryId,
+        name: item.title,
+        image: item.image,
+        boxQty: item.boxQty,
+        quantity: product.quantity,
+        businessId: item.businessId,
+        qtyReceived: 0,
+        suppliersName: item.suppliersName,
+      })
+    })
+
+    const { data } = await axios.post(`/api/receivings/createManualReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      shippingProducts,
+      orderInfo: {
+        orderNumber: values.orderNumber,
+        orderProducts,
+      },
+      receivingItems: uploadedSkuList,
+      isNewReceiving: true,
+      receivingIdToAdd: null,
+      // destinationSC: warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+      warehouseId: parseInt(values.destinationSC.value),
+      finalBoxesConfiguration,
+    })
+
+    if (!data.error) {
+      toast.update(creatingUploadedReceiving, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+
+      if (data.is3PL) {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={data.orderid3PL}
+            isManualReceiving={true}
+          />,
+          `${orderNumberStart}${values.orderNumber}`
+        )
+      } else {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={`${orderNumberStart}${values.orderNumber}`}
+            isManualReceiving={true}
+          />,
+          `${orderNumberStart}${values.orderNumber}`
+        )
+      }
+
+      router.push('/receivings')
+    } else {
+      toast.update(creatingUploadedReceiving, {
+        render: data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+    setLoading(false)
   }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
 
   function handleAcceptedFiles(files: any) {
     files.map((file: any) =>
@@ -286,7 +296,7 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
     clearMultiSkuBoxes,
     finalBoxesConfiguration,
     hasBoxedErrors,
-  } = useCreateManualReceivingsBoxes(receivingProducts, validation.values.packingConfiguration, `${orderNumberStart}${validation.values.orderNumber}`)
+  } = useCreateManualReceivingsBoxes(receivingProducts, formValues.packingConfiguration, `${orderNumberStart}${formValues.orderNumber}`)
 
   return (
     <Dialog
@@ -319,13 +329,10 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                       type='text'
                       className='h-8 text-xs'
                       id='orderNumber'
-                      name='orderNumber'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.orderNumber || ''}
-                      aria-invalid={Boolean(validation.touched.orderNumber && validation.errors.orderNumber) || undefined}
+                      aria-invalid={Boolean(validation.formState.errors.orderNumber) || undefined}
+                      {...validation.register('orderNumber')}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
+                    {validation.formState.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.formState.errors.orderNumber.message}</div> : null}
                   </InputGroup>
                 </div>
               </div>
@@ -333,15 +340,15 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                 <Label className='mb-2 inline-block text-[11.2px]'>*Select Destination</Label>
                 <SimpleSelect
                   options={warehouses?.map((w) => ({ value: `${w.warehouseId}`, label: w.name })) || []}
-                  selected={validation.values.destinationSC}
+                  selected={formValues.destinationSC}
                   handleSelect={(selected) => {
-                    validation.setFieldValue('destinationSC', selected)
+                    validation.setValue('destinationSC', selected as any, { shouldValidate: true })
                   }}
                   placeholder={isLoading ? 'Loading...' : 'Select ...'}
                   customStyle='sm'
                 />
-                {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                  <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
+                {validation.formState.errors.destinationSC ? (
+                  <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.formState.errors.destinationSC.value?.message}</div>
                 ) : null}
               </div>
               <div className='px-3 w-full'>
@@ -449,8 +456,8 @@ const ReceivingOrderModal = ({ receivingUploadingModal, orderNumberStart, receiv
                 {activeTab == 'packages' && (
                   <Create_Manual_Receiving_Packages_Tab
                     orderProducts={receivingProducts}
-                    packingConfiguration={validation.values.packingConfiguration}
-                    setPackingConfiguration={(field: string, value: string) => validation.setFieldValue(field, value)}
+                    packingConfiguration={formValues.packingConfiguration}
+                    setPackingConfiguration={(field: string, value: string) => validation.setValue(field as any, value)}
                     singleSkuPackages={singleSkuPackages}
                     addNewSingleSkuBoxConfiguration={addNewSingleSkuBoxConfiguration}
                     removeSingleSkuBoxConfiguration={removeSingleSkuBoxConfiguration}

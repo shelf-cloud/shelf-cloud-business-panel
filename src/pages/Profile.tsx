@@ -1,13 +1,15 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { signOut } from '@auth/client'
 import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { getSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
@@ -17,7 +19,26 @@ import { Label } from '@shadcn/ui/label'
 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+
+const profileSchema = z.object({
+  companyName: z.string().max(80, 'Name is to Long').min(1, 'Please Enter Your Company Name'),
+  email: z.string().email().or(z.literal('')),
+})
+
+type ProfileForm = z.infer<typeof profileSchema>
+
+const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Please Enter Your Current Password'),
+    newPassword1: z.string().min(8, 'Password must be at least 8 characters').min(1, 'Please Enter Your New Password'),
+    newPassword2: z.string().min(8, 'Password must be at least 8 characters').min(1, 'Please Enter Your Confirmation Password'),
+  })
+  .refine((data) => data.newPassword2 === data.newPassword1, {
+    message: "Passwords don't match!",
+    path: ['newPassword2'],
+  })
+
+type ChangePasswordForm = z.infer<typeof changePasswordSchema>
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -44,73 +65,61 @@ const Profile = () => {
     if (activeTab !== tab) setActiveTab(tab)
   }
 
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
+  const validation = useForm<ProfileForm>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
       companyName: String(state.currentRegion == 'us' ? state?.user?.us?.name : state?.user?.eu?.name),
       email: String(state.currentRegion == 'us' ? state?.user?.us?.email : state?.user?.eu?.email),
     },
-    validationSchema: Yup.object({
-      companyName: Yup.string().max(80, 'Name is to Long').required('Please Enter Your Company Name'),
-      email: Yup.string().email(),
-    }),
-    onSubmit: async (values) => {
-      const response = await axios.post(`api/updateUserDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        userDetails: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        mutate('/api/getuser')
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
 
-  const validationChangePassword = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
+  useEffect(() => {
+    validation.reset({
+      companyName: String(state.currentRegion == 'us' ? state?.user?.us?.name : state?.user?.eu?.name),
+      email: String(state.currentRegion == 'us' ? state?.user?.us?.email : state?.user?.eu?.email),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.currentRegion, state?.user?.us?.name, state?.user?.us?.email, state?.user?.eu?.name, state?.user?.eu?.email])
 
-    initialValues: {
+  const onSubmitProfile = async (values: ProfileForm) => {
+    const response = await axios.post(`api/updateUserDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      userDetails: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      mutate('/api/getuser')
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
+
+  const validationChangePassword = useForm<ChangePasswordForm>({
+    resolver: zodResolver(changePasswordSchema),
+    defaultValues: {
       currentPassword: '',
       newPassword1: '',
       newPassword2: '',
     },
-    validationSchema: Yup.object({
-      currentPassword: Yup.string().required('Please Enter Your Current Password'),
-      newPassword1: Yup.string().min(8, 'Password must be at least 8 characters').required('Please Enter Your New Password'),
-      newPassword2: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .oneOf([Yup.ref('newPassword1'), null], "Passwords don't match!")
-        .required('Please Enter Your Confirmation Password'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`api/updatePassword?businessId=${state.user.businessId}`, {
-        passwordInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        resetForm()
-        setTimeout(() => {
-          signOut()
-        }, 3000)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
 
-  const handleUpdateProfile = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onSubmitChangePassword = async (values: ChangePasswordForm) => {
+    const response = await axios.post(`api/updatePassword?businessId=${state.user.businessId}`, {
+      passwordInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      validationChangePassword.reset()
+      setTimeout(() => {
+        signOut()
+      }, 3000)
+    } else {
+      toast.error(response.data.msg)
+    }
   }
 
-  const handleChangePassword = (event: any) => {
-    event.preventDefault()
-    validationChangePassword.handleSubmit()
-  }
+  const handleUpdateProfile = validation.handleSubmit(onSubmitProfile)
+
+  const handleChangePassword = validationChangePassword.handleSubmit(onSubmitChangePassword)
 
   return (
     <div>
@@ -132,7 +141,6 @@ const Profile = () => {
                           className={activeTab == '1' ? '!text-primary text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             tabChange('1')
-                            validation.setFieldValue('isPasswordTab', false)
                           }}>
                           <>
                             <i className='fas fa-home'></i>
@@ -146,7 +154,6 @@ const Profile = () => {
                           className={activeTab == '2' ? '!text-primary text-[16.25px]' : '!text-muted-foreground text-[16.25px]'}
                           onClick={() => {
                             tabChange('2')
-                            validation.setFieldValue('isPasswordTab', true)
                           }}
                           type='button'>
                           <>
@@ -171,14 +178,11 @@ const Profile = () => {
                                   type='text'
                                   placeholder='Company Name...'
                                   id='companyName'
-                                  name='companyName'
-                                  onChange={validation.handleChange}
-                                  onBlur={validation.handleBlur}
-                                  value={validation.values.companyName || ''}
-                                  aria-invalid={(validation.touched.companyName && validation.errors.companyName ? true : false) || undefined}
+                                  aria-invalid={Boolean(validation.formState.errors.companyName) || undefined}
+                                  {...validation.register('companyName')}
                                 />
-                                {validation.touched.companyName && validation.errors.companyName ? (
-                                  <div className='text-sm text-destructive'>{validation.errors.companyName}</div>
+                                {validation.formState.errors.companyName ? (
+                                  <div className='text-sm text-destructive'>{validation.formState.errors.companyName.message}</div>
                                 ) : null}
                               </div>
                             </div>
@@ -191,13 +195,10 @@ const Profile = () => {
                                   type='text'
                                   placeholder='Email Address...'
                                   id='email'
-                                  name='email'
-                                  onChange={validation.handleChange}
-                                  onBlur={validation.handleBlur}
-                                  value={validation.values.email || ''}
-                                  aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
+                                  aria-invalid={Boolean(validation.formState.errors.email) || undefined}
+                                  {...validation.register('email')}
                                 />
-                                {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                                {validation.formState.errors.email ? <div className='text-sm text-destructive'>{validation.formState.errors.email.message}</div> : null}
                               </div>
                             </div>
                             <div className='px-3 w-full'>
@@ -226,14 +227,11 @@ const Profile = () => {
                                   type='password'
                                   placeholder='Enter Current Password'
                                   id='currentPassword'
-                                  name='currentPassword'
-                                  onChange={validationChangePassword.handleChange}
-                                  onBlur={validationChangePassword.handleBlur}
-                                  value={validationChangePassword.values.currentPassword || ''}
-                                  aria-invalid={(validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? true : false) || undefined}
+                                  aria-invalid={Boolean(validationChangePassword.formState.errors.currentPassword) || undefined}
+                                  {...validationChangePassword.register('currentPassword')}
                                 />
-                                {validationChangePassword.touched.currentPassword && validationChangePassword.errors.currentPassword ? (
-                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.currentPassword}</div>
+                                {validationChangePassword.formState.errors.currentPassword ? (
+                                  <div className='text-sm text-destructive'>{validationChangePassword.formState.errors.currentPassword.message}</div>
                                 ) : null}
                               </div>
                             </div>
@@ -247,14 +245,11 @@ const Profile = () => {
                                   type='password'
                                   placeholder='Enter New Password'
                                   id='newPassword1'
-                                  name='newPassword1'
-                                  onChange={validationChangePassword.handleChange}
-                                  onBlur={validationChangePassword.handleBlur}
-                                  value={validationChangePassword.values.newPassword1 || ''}
-                                  aria-invalid={(validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? true : false) || undefined}
+                                  aria-invalid={Boolean(validationChangePassword.formState.errors.newPassword1) || undefined}
+                                  {...validationChangePassword.register('newPassword1')}
                                 />
-                                {validationChangePassword.touched.newPassword1 && validationChangePassword.errors.newPassword1 ? (
-                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.newPassword1}</div>
+                                {validationChangePassword.formState.errors.newPassword1 ? (
+                                  <div className='text-sm text-destructive'>{validationChangePassword.formState.errors.newPassword1.message}</div>
                                 ) : null}
                               </div>
                             </div>
@@ -268,14 +263,11 @@ const Profile = () => {
                                   type='password'
                                   placeholder='Enter New Password'
                                   id='newPassword2'
-                                  name='newPassword2'
-                                  onChange={validationChangePassword.handleChange}
-                                  onBlur={validationChangePassword.handleBlur}
-                                  value={validationChangePassword.values.newPassword2 || ''}
-                                  aria-invalid={(validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? true : false) || undefined}
+                                  aria-invalid={Boolean(validationChangePassword.formState.errors.newPassword2) || undefined}
+                                  {...validationChangePassword.register('newPassword2')}
                                 />
-                                {validationChangePassword.touched.newPassword2 && validationChangePassword.errors.newPassword2 ? (
-                                  <div className='text-sm text-destructive'>{validationChangePassword.errors.newPassword2}</div>
+                                {validationChangePassword.formState.errors.newPassword2 ? (
+                                  <div className='text-sm text-destructive'>{validationChangePassword.formState.errors.newPassword2.message}</div>
                                 ) : null}
                               </div>
                             </div>

@@ -9,9 +9,11 @@ import { validateFulfillmentWarehouseUsage } from '@features/amazon/fulfillmentQ
 import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import moment from 'moment'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
@@ -20,7 +22,6 @@ import { Label } from '@shadcn/ui/label'
 import { NativeSelect } from '@shadcn/ui/native-select'
 import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
-import * as Yup from 'yup'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -63,66 +64,78 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
     }
   )
 
-  const validation = useFormik({
-    initialValues: {
+  const schema = z.object({
+    inboundPlanName: z
+      .string()
+      .regex(/^[a-zA-Z0-9-._\\s]+$/, `Valid special characters: - . _ NO spaces`)
+      .max(150, 'Title is to Long')
+      .min(1, 'Please enter Inbound Plan Name'),
+    marketplace: z.string().min(1, 'Select a Marketplace where your inventory will be shipped.'),
+    shipFrom: z.string().min(1, 'Select from where your inventory will be shipped'),
+    hasProducts: z.number().min(1, 'To create an order, you must add at least one product'),
+  })
+
+  type FormValues = z.infer<typeof schema>
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, touchedFields, isSubmitted },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
       marketplace: '',
       shipFrom: '',
       hasProducts: orderProducts.length,
     },
-    validationSchema: Yup.object({
-      inboundPlanName: Yup.string()
-        .matches(/^[a-zA-Z0-9-._\\s]+$/, `Valid special characters: - . _ NO spaces`)
-        .max(150, 'Title is to Long')
-        .required('Please enter Inbound Plan Name'),
-      marketplace: Yup.string().required('Select a Marketplace where your inventory will be shipped.'),
-      shipFrom: Yup.string().required('Select from where your inventory will be shipped'),
-      hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
-    }),
+  })
 
-    onSubmit: async (values, { resetForm }) => {
-      setcreatingErros([])
-      const validationResult = validateFulfillmentWarehouseUsage(orderProducts, 'individual-units')
-      if (Object.keys(validationResult.exceededSkus).length > 0 || Object.keys(validationResult.missingAvailabilitySkus).length > 0) {
-        setloading(false)
-        toast.error(getValidationFailureMessage(validationResult))
-        return
+  const onSubmit = async (values: FormValues) => {
+    setcreatingErros([])
+    const validationResult = validateFulfillmentWarehouseUsage(orderProducts, 'individual-units')
+    if (Object.keys(validationResult.exceededSkus).length > 0 || Object.keys(validationResult.missingAvailabilitySkus).length > 0) {
+      setloading(false)
+      toast.error(getValidationFailureMessage(validationResult))
+      return
+    }
+
+    setloading(true)
+    const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
+
+    let skus_details = {} as { [msku: string]: any }
+    for await (const product of orderProducts) {
+      skus_details[product.msku] = {
+        title: product.product_name,
+        asin: product.asin,
+        upc: product.barcode,
+        expiration: product.expiration && product.expiration !== '' ? moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD') : '',
+        labelOwner: product.labelOwner,
+        prepOwner: product.prepOwner,
+        shelfcloud_sku: product.shelfcloud_sku,
+        shelfcloud_id: product.shelfcloud_sku_id,
+        image: product.image,
+        isKit: product.isKit,
+        inventoryId: product.inventoryId,
+        cost: product.cost,
+        weight: product.weight,
+        length: product.length,
+        width: product.width,
+        height: product.height,
+        boxQty: product.boxQty,
+        boxWeight: product.boxWeight,
+        boxLength: product.boxLength,
+        boxWidth: product.boxWidth,
+        boxHeight: product.boxHeight,
+        amzDimensions: product.amzDimensions,
+        boxes: parseInt(product.orderQty),
+        children: product.children ?? [],
       }
+    }
 
-      setloading(true)
-      const creatingIndvUnitsPlan = toast.loading('Generating New Inbound Plan...')
-
-      let skus_details = {} as { [msku: string]: any }
-      for await (const product of orderProducts) {
-        skus_details[product.msku] = {
-          title: product.product_name,
-          asin: product.asin,
-          upc: product.barcode,
-          expiration: product.expiration && product.expiration !== '' ? moment(product.expiration, 'MM/DD/YYYY').format('YYYY-MM-DD') : '',
-          labelOwner: product.labelOwner,
-          prepOwner: product.prepOwner,
-          shelfcloud_sku: product.shelfcloud_sku,
-          shelfcloud_id: product.shelfcloud_sku_id,
-          image: product.image,
-          isKit: product.isKit,
-          inventoryId: product.inventoryId,
-          cost: product.cost,
-          weight: product.weight,
-          length: product.length,
-          width: product.width,
-          height: product.height,
-          boxQty: product.boxQty,
-          boxWeight: product.boxWeight,
-          boxLength: product.boxLength,
-          boxWidth: product.boxWidth,
-          boxHeight: product.boxHeight,
-          amzDimensions: product.amzDimensions,
-          boxes: parseInt(product.orderQty),
-          children: product.children ?? [],
-        }
-      }
-
-      const response = await axios.post(`/api/amazon/fullfilments/individualUnits/createIndUnitsInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+    const response = await axios.post(`/api/amazon/fullfilments/individualUnits/createIndUnitsInboundPlan?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
         fulfillmentType: 'Individual Units',
         inboundPlan: {
           contactInformation: {
@@ -270,7 +283,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           isLoading: false,
           autoClose: 3000,
         })
-        resetForm()
+        reset()
         setShowCreateInboundPlanModal(false)
         router.push(`/amazon-sellers/fulfillments`)
       } else {
@@ -282,12 +295,6 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         })
         setcreatingErros(response.data.apiMessage.errors)
       }
-    },
-  })
-
-  const handleCreateInboundPlan = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
   }
 
   const handleSelectLabelOwner = async (selected: any, typeOwner: string, id: number) => {
@@ -380,7 +387,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           </DialogTitle>
         </DialogHeader>
         <div>
-        <form onSubmit={handleCreateInboundPlan}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] font-extrabold text-primary'>Fulfillment Details</h5>
             <div className='flex flex-wrap -mx-3 my-0'>
@@ -394,14 +401,11 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                       type='text'
                       className='h-8 text-xs'
                       id='orderNumber'
-                      name='inboundPlanName'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.inboundPlanName || ''}
-                      aria-invalid={(validation.touched.inboundPlanName && validation.errors.inboundPlanName ? true : false) || undefined}
+                      aria-invalid={(((touchedFields.inboundPlanName || isSubmitted) && errors.inboundPlanName ? true : false)) || undefined}
+                      {...register('inboundPlanName')}
                     />
-                    {validation.touched.inboundPlanName && validation.errors.inboundPlanName ? (
-                      <div className='text-sm text-destructive'>{validation.errors.inboundPlanName}</div>
+                    {(touchedFields.inboundPlanName || isSubmitted) && errors.inboundPlanName ? (
+                      <div className='text-sm text-destructive'>{errors.inboundPlanName.message}</div>
                     ) : null}
                   </div>
                 </div>
@@ -414,10 +418,8 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   <NativeSelect
                     size='sm'
                     id='marketplace'
-                    name='marketplace'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={(validation.touched.marketplace && validation.errors.marketplace ? true : false) || undefined}>
+                    aria-invalid={(((touchedFields.marketplace || isSubmitted) && errors.marketplace ? true : false)) || undefined}
+                    {...register('marketplace')}>
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
@@ -428,7 +430,7 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                         )
                     )}
                   </NativeSelect>
-                  {validation.touched.marketplace && validation.errors.marketplace ? <div className='text-sm text-destructive'>{validation.errors.marketplace}</div> : null}
+                  {(touchedFields.marketplace || isSubmitted) && errors.marketplace ? <div className='text-sm text-destructive'>{errors.marketplace.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -441,20 +443,18 @@ const CreateIndvUnitsInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   <NativeSelect
                     size='sm'
                     id='shipFrom'
-                    name='shipFrom'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={(validation.touched.shipFrom && validation.errors.shipFrom ? true : false) || undefined}>
+                    aria-invalid={(((touchedFields.shipFrom || isSubmitted) && errors.shipFrom ? true : false)) || undefined}
+                    {...register('shipFrom')}>
                     <option value=''>Ship From...</option>
                     <option value='shelfcloud'>Shelf Cloud Warehouse</option>
                   </NativeSelect>
-                  {validation.touched.shipFrom && validation.errors.shipFrom ? <div className='text-sm text-destructive'>{validation.errors.shipFrom}</div> : null}
+                  {(touchedFields.shipFrom || isSubmitted) && errors.shipFrom ? <div className='text-sm text-destructive'>{errors.shipFrom.message}</div> : null}
                 </div>
               </div>
             </div>
             <div className='px-3 w-full' style={{ overflowX: 'auto', overflowY: 'hidden', position: 'relative' }}>
-              <p className='font-semibold mb-0'>SKUs ready to send: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <p className='font-semibold mb-0'>SKUs ready to send: {watch('hasProducts')}</p>
+              {(touchedFields.hasProducts || isSubmitted) && errors.hasProducts ? <p className='text-danger'>{errors.hasProducts.message}</p> : null}
               <table className='w-full align-middle mb-0 whitespace-nowrap text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>
                   <tr>

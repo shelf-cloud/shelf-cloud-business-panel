@@ -3,13 +3,14 @@ import { useContext, useRef, useState } from 'react'
 import { useClickOutside } from '@hooks/useClickOutside'
 
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   inventoryId?: number
@@ -35,30 +36,33 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
 
   useClickOutside(selectKitDetails, () => setOpenDatesMenu(false))
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const schema = z.object({
+    name: z
+      .string()
+      .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+      .max(200, 'Name is to Long')
+      .min(1, `Enter ${type} Name`),
+  })
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       name: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(200, 'Name is to Long')
-        .required(`Enter ${type} Name`),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`/api/settings/${addEndpoint}?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.message)
-        resetForm()
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-      } else {
-        toast.error(response.data.message)
-      }
-    },
   })
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    const response = await axios.post(`/api/settings/${addEndpoint}?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.message)
+      form.reset()
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.message)
+    }
+  }
 
   return (
     <div ref={selectKitDetails} className='relative mb-3'>
@@ -102,11 +106,8 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
                     className='text-[13px] h-8 text-xs'
                     placeholder='Name...'
                     id='name'
-                    name='name'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.name || ''}
-                    aria-invalid={validation.touched.name && validation.errors.name ? true : undefined}
+                    aria-invalid={(form.formState.touchedFields.name && form.formState.errors.name ? true : false) || undefined}
+                    {...form.register('name')}
                   />
                 </div>
                 <div className='flex flex-row justify-end items-end gap-2'>
@@ -114,7 +115,7 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
                     type='button'
                     onClick={(event) => {
                       event.stopPropagation()
-                      validation.handleSubmit()
+                      form.handleSubmit(onSubmit)()
                     }}
                     size='sm'
                     className='m-0 text-nowrap'>
@@ -122,9 +123,9 @@ const Select_Kit_Details = ({ inventoryId, type, addEndpoint, selectionInfo, sel
                   </Button>
                 </div>
               </form>
-              {validation.touched.name && validation.errors.name ? (
+              {form.formState.touchedFields.name && form.formState.errors.name ? (
                 <span className='text-danger m-0 p-0' style={{ fontSize: '12px' }}>
-                  {validation.errors.name}
+                  {form.formState.errors.name.message}
                 </span>
               ) : null}
             </div>

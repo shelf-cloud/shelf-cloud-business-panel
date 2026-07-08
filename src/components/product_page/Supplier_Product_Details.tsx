@@ -1,17 +1,18 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { Switch } from '@shadcn/ui/switch'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Badge } from '@shadcn/ui/badge'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
@@ -29,6 +30,12 @@ type Props = {
   daysOfStockSC?: number
   manualLeadTime?: boolean
   leadTimeSC?: number
+}
+
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
 }
 
 const Supplier_Product_Details = ({
@@ -58,78 +65,96 @@ const Supplier_Product_Details = ({
   const totalLeadTime = productionTime + transitTime
   const productPageDetailsKey = `/api/products/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      inventoryId,
-      sku,
-      sellerCost,
-      inboundShippingCost,
-      otherCosts,
-      productionTime,
-      transitTime,
-      shippingToFBA,
-      hideReorderingPoints: Boolean(hideReorderingPoints),
-      orderFrequency: orderFrequency ?? 0,
-      daysOfStockSC: daysOfStockSC ?? 0,
-      manualLeadTime: Boolean(manualLeadTime),
-      leadTimeSC: leadTimeSC ?? 0,
-    },
-    validationSchema: Yup.object({
-      sellerCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      inboundShippingCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      otherCosts: Yup.number().min(0, 'Minimum of 0'),
-      productionTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-      transitTime: Yup.number().min(0, 'Minimum of 0'),
-      shippingToFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-      orderFrequency: Yup.number().min(0, 'Minimum of 0').required('Enter Order Frequency'),
-      daysOfStockSC: Yup.number().min(0, 'Minimum of 0').required('Enter Days of Stock'),
-      leadTimeSC: Yup.number().min(0, 'Minimum of 0'),
-      manualLeadTime: Yup.boolean(),
-    }),
-    onSubmit: async (values) => {
-      setisLoading(true)
-      const response = await axios.post(`/api/productDetails/supplierProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        generate_new_forecast_products({
-          skus: [sku || ''],
-          productIds: [inventoryId || 0],
-        })
-        toast.success(response.data.msg)
-        mutate(productPageDetailsKey)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setisLoading(false)
-    },
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    sellerCost: z.preprocess(toNumber, z.number({ error: 'Enter Cost' }).min(0, 'Minimum of 0')),
+    inboundShippingCost: z.preprocess(toNumber, z.number({ error: 'Enter Cost' }).min(0, 'Minimum of 0')),
+    otherCosts: z.preprocess(toNumber, z.number().min(0, 'Minimum of 0').optional()),
+    productionTime: z.preprocess(toNumber, z.number({ error: 'Enter Time' }).min(0, 'Minimum of 0')),
+    transitTime: z.preprocess(toNumber, z.number().min(0, 'Minimum of 0').optional()),
+    shippingToFBA: z.preprocess(toNumber, z.number({ error: 'Enter Time' }).min(0, 'Minimum of 0')),
+    orderFrequency: z.preprocess(toNumber, z.number({ error: 'Enter Order Frequency' }).min(0, 'Minimum of 0')),
+    daysOfStockSC: z.preprocess(toNumber, z.number({ error: 'Enter Days of Stock' }).min(0, 'Minimum of 0')),
+    leadTimeSC: z.preprocess(toNumber, z.number().min(0, 'Minimum of 0').optional()),
+    hideReorderingPoints: z.boolean(),
+    manualLeadTime: z.boolean(),
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const defaultFormValues = {
+    inventoryId,
+    sku,
+    sellerCost,
+    inboundShippingCost,
+    otherCosts,
+    productionTime,
+    transitTime,
+    shippingToFBA,
+    hideReorderingPoints: Boolean(hideReorderingPoints),
+    orderFrequency: orderFrequency ?? 0,
+    daysOfStockSC: daysOfStockSC ?? 0,
+    manualLeadTime: Boolean(manualLeadTime),
+    leadTimeSC: leadTimeSC ?? 0,
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      sellerCost,
-      inboundShippingCost,
-      otherCosts,
-      productionTime,
-      transitTime,
-      shippingToFBA,
-      hideReorderingPoints: Boolean(hideReorderingPoints),
-      orderFrequency: orderFrequency ?? 0,
-      daysOfStockSC: daysOfStockSC ?? 0,
-      manualLeadTime: Boolean(manualLeadTime),
-      leadTimeSC: leadTimeSC ?? 0,
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultFormValues,
+  })
+
+  useEffect(() => {
+    validation.reset(defaultFormValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    inventoryId,
+    sku,
+    sellerCost,
+    inboundShippingCost,
+    otherCosts,
+    productionTime,
+    transitTime,
+    shippingToFBA,
+    hideReorderingPoints,
+    orderFrequency,
+    daysOfStockSC,
+    manualLeadTime,
+    leadTimeSC,
+  ])
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    setisLoading(true)
+    const response = await axios.post(`/api/productDetails/supplierProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
     })
+    if (!response.data.error) {
+      generate_new_forecast_products({
+        skus: [sku || ''],
+        productIds: [inventoryId || 0],
+      })
+      toast.success(response.data.msg)
+      mutate(productPageDetailsKey)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setisLoading(false)
+  }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
+  const handleShowEditFields = () => {
+    validation.reset(defaultFormValues)
     setShowEditFields(true)
   }
+
+  const sellerCostValue = Number(validation.watch('sellerCost')) || 0
+  const inboundShippingCostValue = Number(validation.watch('inboundShippingCost')) || 0
+  const otherCostsValue = Number(validation.watch('otherCosts')) || 0
+  const productionTimeValue = Number(validation.watch('productionTime')) || 0
+  const transitTimeValue = Number(validation.watch('transitTime')) || 0
+  const hideReorderingPointsValue = validation.watch('hideReorderingPoints')
+  const manualLeadTimeValue = validation.watch('manualLeadTime')
+  const leadTimeSCValue = Number(validation.watch('leadTimeSC')) || 0
 
   return (
     <div className='py-1 w-full'>
@@ -231,14 +256,13 @@ const Supplier_Product_Details = ({
                         style={{ minWidth: '60px' }}
                         placeholder='Seller Cost...'
                         id='sellerCost'
-                        name='sellerCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.sellerCost || 0}
-                        aria-invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.sellerCost && validation.formState.errors.sellerCost ? true : undefined}
+                        {...validation.register('sellerCost')}
                       />
-                      {validation.touched.sellerCost && validation.errors.sellerCost ? <div className='text-sm text-destructive'>{validation.errors.sellerCost}</div> : null}
+                      {validation.formState.touchedFields.sellerCost && validation.formState.errors.sellerCost ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.sellerCost.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -248,15 +272,12 @@ const Supplier_Product_Details = ({
                         className='text-[13px]'
                         placeholder='Shipping Cost...'
                         id='inboundShippingCost'
-                        name='inboundShippingCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.inboundShippingCost || 0}
-                        aria-invalid={validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.inboundShippingCost && validation.formState.errors.inboundShippingCost ? true : undefined}
+                        {...validation.register('inboundShippingCost')}
                       />
-                      {validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? (
-                        <div className='text-sm text-destructive'>{validation.errors.inboundShippingCost}</div>
+                      {validation.formState.touchedFields.inboundShippingCost && validation.formState.errors.inboundShippingCost ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.inboundShippingCost.message}</div>
                       ) : null}
                     </div>
                   </td>
@@ -267,14 +288,13 @@ const Supplier_Product_Details = ({
                         className='text-[13px]'
                         placeholder='Other Cost...'
                         id='otherCosts'
-                        name='otherCosts'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.otherCosts || 0}
-                        aria-invalid={validation.touched.otherCosts && validation.errors.otherCosts ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.otherCosts && validation.formState.errors.otherCosts ? true : undefined}
+                        {...validation.register('otherCosts')}
                       />
-                      {validation.touched.otherCosts && validation.errors.otherCosts ? <div className='text-sm text-destructive'>{validation.errors.otherCosts}</div> : null}
+                      {validation.formState.touchedFields.otherCosts && validation.formState.errors.otherCosts ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.otherCosts.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -288,9 +308,8 @@ const Supplier_Product_Details = ({
                         id='landedCost'
                         name='landedCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={Number(validation.values.sellerCost + validation.values.inboundShippingCost + validation.values.otherCosts).toFixed(2) || 0}
+                        value={Number((sellerCostValue || 0) + (inboundShippingCostValue || 0) + (otherCostsValue || 0)).toFixed(2) || 0}
+                        readOnly
                       />
                     </div>
                   </td>
@@ -301,14 +320,13 @@ const Supplier_Product_Details = ({
                         className='text-[13px]'
                         placeholder='FBA Cost...'
                         id='shippingToFBA'
-                        name='shippingToFBA'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.shippingToFBA || 0}
-                        aria-invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.shippingToFBA && validation.formState.errors.shippingToFBA ? true : undefined}
+                        {...validation.register('shippingToFBA')}
                       />
-                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <div className='text-sm text-destructive'>{validation.errors.shippingToFBA}</div> : null}
+                      {validation.formState.touchedFields.shippingToFBA && validation.formState.errors.shippingToFBA ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.shippingToFBA.message}</div>
+                      ) : null}
                     </div>
                   </td>
                 </tr>
@@ -343,14 +361,11 @@ const Supplier_Product_Details = ({
                         className='text-[13px]'
                         placeholder='Production...'
                         id='productionTime'
-                        name='productionTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.productionTime || 0}
-                        aria-invalid={validation.touched.productionTime && validation.errors.productionTime ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.productionTime && validation.formState.errors.productionTime ? true : undefined}
+                        {...validation.register('productionTime')}
                       />
-                      {validation.touched.productionTime && validation.errors.productionTime ? (
-                        <div className='text-sm text-destructive'>{validation.errors.productionTime}</div>
+                      {validation.formState.touchedFields.productionTime && validation.formState.errors.productionTime ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.productionTime.message}</div>
                       ) : null}
                     </div>
                   </td>
@@ -361,13 +376,12 @@ const Supplier_Product_Details = ({
                         className='text-[13px]'
                         placeholder='Transit...'
                         id='transitTime'
-                        name='transitTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.transitTime || 0}
-                        aria-invalid={validation.touched.transitTime && validation.errors.transitTime ? true : undefined}
+                        aria-invalid={validation.formState.touchedFields.transitTime && validation.formState.errors.transitTime ? true : undefined}
+                        {...validation.register('transitTime')}
                       />
-                      {validation.touched.transitTime && validation.errors.transitTime ? <div className='text-sm text-destructive'>{validation.errors.transitTime}</div> : null}
+                      {validation.formState.touchedFields.transitTime && validation.formState.errors.transitTime ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.transitTime.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -379,9 +393,8 @@ const Supplier_Product_Details = ({
                         placeholder='Transit...'
                         id='totalTime'
                         name='totalTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={Number(validation.values.productionTime + validation.values.transitTime) || 0}
+                        value={Number((productionTimeValue || 0) + (transitTimeValue || 0)) || 0}
+                        readOnly
                       />
                     </div>
                   </td>
@@ -390,8 +403,8 @@ const Supplier_Product_Details = ({
                       <td>
                         <div className='mb-3 flex justify-center items-center pt-1'>
                           <Switch
-                            checked={!validation.values.hideReorderingPoints}
-                            onCheckedChange={(checked) => validation.setFieldValue('hideReorderingPoints', !checked)}
+                            checked={!hideReorderingPointsValue}
+                            onCheckedChange={(checked) => validation.setValue('hideReorderingPoints', !checked, { shouldValidate: true, shouldDirty: true })}
                             aria-label='Reordering points visibility'
                           />
                         </div>
@@ -403,14 +416,11 @@ const Supplier_Product_Details = ({
                             className='text-[13px]'
                             placeholder='Frequency...'
                             id='orderFrequency'
-                            name='orderFrequency'
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.orderFrequency || 0}
-                            aria-invalid={validation.touched.orderFrequency && validation.errors.orderFrequency ? true : undefined}
+                            aria-invalid={validation.formState.touchedFields.orderFrequency && validation.formState.errors.orderFrequency ? true : undefined}
+                            {...validation.register('orderFrequency')}
                           />
-                          {validation.touched.orderFrequency && validation.errors.orderFrequency ? (
-                            <div className='text-sm text-destructive'>{validation.errors.orderFrequency}</div>
+                          {validation.formState.touchedFields.orderFrequency && validation.formState.errors.orderFrequency ? (
+                            <div className='text-sm text-destructive'>{validation.formState.errors.orderFrequency.message}</div>
                           ) : null}
                         </div>
                       </td>
@@ -421,37 +431,26 @@ const Supplier_Product_Details = ({
                             className='text-[13px]'
                             placeholder='Days...'
                             id='daysOfStockSC'
-                            name='daysOfStockSC'
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.daysOfStockSC || 0}
-                            aria-invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : undefined}
+                            aria-invalid={validation.formState.touchedFields.daysOfStockSC && validation.formState.errors.daysOfStockSC ? true : undefined}
+                            {...validation.register('daysOfStockSC')}
                           />
-                          {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? (
-                            <div className='text-sm text-destructive'>{validation.errors.daysOfStockSC}</div>
+                          {validation.formState.touchedFields.daysOfStockSC && validation.formState.errors.daysOfStockSC ? (
+                            <div className='text-sm text-destructive'>{validation.formState.errors.daysOfStockSC.message}</div>
                           ) : null}
                         </div>
                       </td>
                       <td>
                         <div className='mb-3 flex justify-center items-center pt-1'>
                           <Switch
-                            checked={validation.values.manualLeadTime}
-                            onCheckedChange={(checked) => validation.setFieldValue('manualLeadTime', checked)}
+                            checked={manualLeadTimeValue}
+                            onCheckedChange={(checked) => validation.setValue('manualLeadTime', checked, { shouldValidate: true, shouldDirty: true })}
                             aria-label='Manual lead time'
                           />
                         </div>
                       </td>
                       <td>
                         <div className='mb-3'>
-                          <Input
-                            disabled
-                            type='number'
-                            className='text-[13px]'
-                            placeholder='Lead Time...'
-                            id='leadTimeSC'
-                            name='leadTimeSC'
-                            value={validation.values.leadTimeSC || 0}
-                          />
+                          <Input disabled type='number' className='text-[13px]' placeholder='Lead Time...' id='leadTimeSC' name='leadTimeSC' value={leadTimeSCValue || 0} readOnly />
                         </div>
                       </td>
                     </>

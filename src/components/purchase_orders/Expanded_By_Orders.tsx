@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import Confirm_Delete_Item_From_PO, { DeleteItemFromOrderType } from '@components/modals/purchaseOrders/Confirm_Delete_Item_From_PO'
 import Edit_PO_Ordered_Qty, { EditPurchaseOrderQtyType } from '@components/modals/purchaseOrders/Edit_PO_Ordered_Qty'
 import Edit_Payment_Modal from '@components/modals/purchaseOrders/Edit_Payment_Modal'
@@ -8,7 +9,7 @@ import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import { PoPaymentHistory, PurchaseOrder, PurchaseOrderItem } from '@typesTs/purchaseOrders'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { ExpanderComponentProps } from 'react-data-table-component'
 import { toast } from '@/lib/toast'
 import { Button, buttonVariants } from '@shadcn/ui/button'
@@ -20,10 +21,24 @@ import { Label } from '@shadcn/ui/label'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { Nav, NavItem } from '@/components/ui/nav-tabs'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import DownloadExcelPurchaseOrder from './DownloadExcelPurchaseOrder'
 import ExpandedOrderItems from './ExpandedOrderItems'
+
+const poNumberSchema = z.object({
+  orderNumber: z
+    .string()
+    .regex(/^[a-zA-Z0-9-]+$/, { message: `Invalid special characters: % & # " ' @ ~ , ...` })
+    .max(100, { message: 'Title is to Long' })
+    .min(1, { message: 'Please enter Order Number' }),
+})
+type PoNumberValues = z.infer<typeof poNumberSchema>
+
+const poNoteSchema = z.object({
+  note: z.string().max(300, { message: 'Title is to Long' }).optional(),
+})
+type PoNoteValues = z.infer<typeof poNoteSchema>
 
 type Props = {
   data: PurchaseOrder
@@ -153,85 +168,78 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
     setLoading(false)
   }
 
-  const validationPONumber = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validationPONumber = useForm<PoNumberValues>({
+    resolver: zodResolver(poNumberSchema),
+    defaultValues: {
       orderNumber: data.orderNumber.slice(4),
     },
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-
-      const response = await axios.post(`/api/purchaseOrders/editNewPONumber?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        poId: data.poId,
-        orderNumber: values.orderNumber,
-      })
-
-      if (!response.data.error) {
-        toast.success(response.data.message)
-
-        if (organizeBy == 'suppliers') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'orders') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'sku') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        }
-        seteditPONumber(false)
-      } else {
-        toast.error(response.data.message)
-      }
-      setLoading(false)
-    },
   })
 
-  const validationNote = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      note: data.note || '',
-    },
-    validationSchema: Yup.object({
-      note: Yup.string().max(300, 'Title is to Long'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
+  useEffect(() => {
+    validationPONumber.reset({ orderNumber: data.orderNumber.slice(4) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.orderNumber])
 
-      const response = await axios.post(`/api/purchaseOrders/editNoteFromPO?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        poId: data.poId,
-        note: values.note,
-      })
+  const onSubmitPONumber = async (values: PoNumberValues) => {
+    setLoading(true)
 
-      if (!response.data.error) {
-        toast.success(response.data.msg)
+    const response = await axios.post(`/api/purchaseOrders/editNewPONumber?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId: data.poId,
+      orderNumber: values.orderNumber,
+    })
 
-        if (organizeBy == 'suppliers') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'orders') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'sku') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        }
-        setShowEditNote(false)
-      } else {
-        toast.error(response.data.msg)
+    if (!response.data.error) {
+      toast.success(response.data.message)
+
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
       }
-      setLoading(false)
-    },
-  })
-
-  const handleChangePONumber = (event: any) => {
-    event.preventDefault()
-    validationPONumber.handleSubmit()
+      seteditPONumber(false)
+    } else {
+      toast.error(response.data.message)
+    }
+    setLoading(false)
   }
 
-  const handleAddComment = (event: any) => {
-    event.preventDefault()
-    validationNote.handleSubmit()
+  const validationNote = useForm<PoNoteValues>({
+    resolver: zodResolver(poNoteSchema),
+    defaultValues: {
+      note: data.note || '',
+    },
+  })
+
+  useEffect(() => {
+    validationNote.reset({ note: data.note || '' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.note])
+
+  const onSubmitNote = async (values: PoNoteValues) => {
+    setLoading(true)
+
+    const response = await axios.post(`/api/purchaseOrders/editNoteFromPO?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId: data.poId,
+      note: values.note,
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      }
+      setShowEditNote(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setLoading(false)
   }
 
   const handleReceiveAllPendingItems = () => {
@@ -298,7 +306,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                     {editPONumber && (
                       <tr>
                         <td colSpan={2}>
-                          <form onSubmit={handleChangePONumber}>
+                          <form onSubmit={validationPONumber.handleSubmit(onSubmitPONumber)}>
                             <div className='px-3 w-full'>
                               <div className='mb-3'>
                                 <Label htmlFor='orderNumber'>
@@ -313,14 +321,11 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                                     aria-label='New PO number'
                                     className='h-8 text-xs'
                                     id='orderNumber'
-                                    name='orderNumber'
-                                    onChange={validationPONumber.handleChange}
-                                    onBlur={validationPONumber.handleBlur}
-                                    value={validationPONumber.values.orderNumber || ''}
-                                    aria-invalid={Boolean(validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber) || undefined}
+                                    aria-invalid={Boolean(validationPONumber.formState.touchedFields.orderNumber && validationPONumber.formState.errors.orderNumber) || undefined}
+                                    {...validationPONumber.register('orderNumber')}
                                   />
-                                  {validationPONumber.touched.orderNumber && validationPONumber.errors.orderNumber ? (
-                                    <div className='text-sm text-destructive'>{validationPONumber.errors.orderNumber}</div>
+                                  {validationPONumber.formState.touchedFields.orderNumber && validationPONumber.formState.errors.orderNumber ? (
+                                    <div className='text-sm text-destructive'>{validationPONumber.formState.errors.orderNumber.message}</div>
                                   ) : null}
                                 </div>
                                 <div className='flex flex-row justify-end items-center gap-2'>
@@ -363,7 +368,7 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                   </button>
                 </p>
                 {showEditNote && (
-                  <form onSubmit={handleAddComment}>
+                  <form onSubmit={validationNote.handleSubmit(onSubmitNote)}>
                     <div className='px-3 w-full'>
                       <div className='!m-0'>
                         <Label htmlFor='note'>
@@ -373,13 +378,10 @@ const Expanded_By_Orders: React.FC<ExpanderComponentProps<PurchaseOrder>> = ({ d
                           className='text-xs'
                           placeholder=''
                           id='note'
-                          name='note'
-                          onChange={validationNote.handleChange}
-                          onBlur={validationNote.handleBlur}
-                          value={validationNote.values.note || ''}
-                          aria-invalid={Boolean(validationNote.touched.note && validationNote.errors.note) || undefined}
+                          aria-invalid={Boolean(validationNote.formState.touchedFields.note && validationNote.formState.errors.note) || undefined}
+                          {...validationNote.register('note')}
                         />
-                        {validationNote.touched.note && validationNote.errors.note ? <div className='text-sm text-destructive'>{validationNote.errors.note}</div> : null}
+                        {validationNote.formState.touchedFields.note && validationNote.formState.errors.note ? <div className='text-sm text-destructive'>{validationNote.formState.errors.note.message}</div> : null}
                       </div>
                       <div className='flex flex-row justify-end items-center gap-3'>
                         <Button type='button' disabled={loading} variant='light' size='sm' onClick={() => setShowEditNote(false)}>

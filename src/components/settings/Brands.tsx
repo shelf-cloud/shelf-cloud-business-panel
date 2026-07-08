@@ -1,8 +1,10 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
@@ -10,7 +12,6 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type Props = {}
 
@@ -20,6 +21,26 @@ type Brand = {
   name: string
   logo: string
 }
+
+const nameSchema = z
+  .string()
+  .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+  .max(200, 'Name is to Long')
+  .min(1, 'Enter Supplier Name')
+
+const addBrandSchema = z.object({
+  name: nameSchema,
+  logo: z.string().url('logo must be a valid URL').or(z.literal('')),
+})
+
+const editBrandSchema = z.object({
+  brandId: z.number(),
+  name: nameSchema,
+  logo: z.string().url('logo must be a valid URL').or(z.literal('')),
+})
+
+type AddBrandForm = z.infer<typeof addBrandSchema>
+type EditBrandForm = z.infer<typeof editBrandSchema>
 
 const Brands = ({}: Props) => {
   const { mutate } = useSWRConfig()
@@ -41,36 +62,26 @@ const Brands = ({}: Props) => {
   }, [data])
 
   // ADD NEW SUPPLIER
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<AddBrandForm>({
+    resolver: zodResolver(addBrandSchema),
+    defaultValues: {
       name: '',
       logo: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(200, 'Name is to Long')
-        .required('Enter Supplier Name'),
-      logo: Yup.string().url(),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`/api/settings/addNewBrand?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        resetForm()
-        mutate(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
-  const handleAddSupplier = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onAddSubmit = async (values: AddBrandForm) => {
+    const response = await axios.post(`/api/settings/addNewBrand?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      validation.reset()
+      mutate(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
   }
+  const handleAddSupplier = validation.handleSubmit(onAddSubmit)
   const handleShowAddSupplier = () => {
     setShowAddNewFields(true)
     setShowEditFields(false)
@@ -81,45 +92,35 @@ const Brands = ({}: Props) => {
   }
 
   // EDIT CURRENT SUPPLIER
-  const validationEdit = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validationEdit = useForm<EditBrandForm>({
+    resolver: zodResolver(editBrandSchema),
+    defaultValues: {
       brandId: 0,
       name: '',
       logo: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(200, 'Name is to Long')
-        .required('Enter Supplier Name'),
-      logo: Yup.string().url(),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`/api/settings/updateBrand?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        resetForm()
-        setShowEditFields(false)
-        mutate(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
-  const handleEditSupplier = (event: any) => {
-    event.preventDefault()
-    validationEdit.handleSubmit()
+  const onEditSubmit = async (values: EditBrandForm) => {
+    const response = await axios.post(`/api/settings/updateBrand?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      validationEdit.reset()
+      setShowEditFields(false)
+      mutate(`/api/settings/getBrands?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
   }
+  const handleEditSupplier = validationEdit.handleSubmit(onEditSubmit)
   const handleShowEditFields = (brand: Brand) => {
-    validationEdit.setValues(brand)
+    validationEdit.reset(brand)
     setShowAddNewFields(false)
     setShowEditFields(true)
   }
   const handleCancelEdit = () => {
-    validationEdit.setValues({
+    validationEdit.reset({
       brandId: 0,
       name: '',
       logo: '',
@@ -178,7 +179,7 @@ const Brands = ({}: Props) => {
         <div>
           <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='name' className='mb-2'>
                 *Brand Name
               </Label>
               <Input
@@ -186,16 +187,13 @@ const Brands = ({}: Props) => {
                 className='text-[13px]'
                 placeholder='Name...'
                 id='name'
-                name='name'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.name || ''}
-                aria-invalid={Boolean(validation.touched.name && validation.errors.name) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.name) || undefined}
+                {...validation.register('name')}
               />
-              {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+              {validation.formState.errors.name ? <div className='text-sm text-destructive'>{validation.formState.errors.name.message}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='logo' className='mb-2'>
                 *Logo
               </Label>
               <Input
@@ -203,13 +201,10 @@ const Brands = ({}: Props) => {
                 className='text-[13px]'
                 placeholder='Logo...'
                 id='logo'
-                name='logo'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.logo || ''}
-                aria-invalid={Boolean(validation.touched.logo && validation.errors.logo) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.logo) || undefined}
+                {...validation.register('logo')}
               />
-              {validation.touched.logo && validation.errors.logo ? <div className='text-sm text-destructive'>{validation.errors.logo}</div> : null}
+              {validation.formState.errors.logo ? <div className='text-sm text-destructive'>{validation.formState.errors.logo.message}</div> : null}
             </div>
             <div className='flex flex-row justify-end items-end gap-4'>
               <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelShowAddSupplier}>
@@ -226,7 +221,7 @@ const Brands = ({}: Props) => {
       {showEditFields && (
         <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='name' className='mb-2'>
               *Supplier Name
             </Label>
             <Input
@@ -234,16 +229,13 @@ const Brands = ({}: Props) => {
               className='text-[13px]'
               placeholder='Name...'
               id='name'
-              name='name'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.name || ''}
-              aria-invalid={Boolean(validationEdit.touched.name && validationEdit.errors.name) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.name) || undefined}
+              {...validationEdit.register('name')}
             />
-            {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
+            {validationEdit.formState.errors.name ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.name.message}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='logo' className='mb-2'>
               *Logo
             </Label>
             <Input
@@ -251,13 +243,10 @@ const Brands = ({}: Props) => {
               className='text-[13px]'
               placeholder='Logo...'
               id='logo'
-              name='logo'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.logo || ''}
-              aria-invalid={Boolean(validationEdit.touched.logo && validationEdit.errors.logo) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.logo) || undefined}
+              {...validationEdit.register('logo')}
             />
-            {validationEdit.touched.logo && validationEdit.errors.logo ? <div className='text-sm text-destructive'>{validationEdit.errors.logo}</div> : null}
+            {validationEdit.formState.errors.logo ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.logo.message}</div> : null}
           </div>
           <div className='flex flex-row justify-end items-end gap-4'>
             <Button type='button' variant='light' size='sm' className='m-0' onClick={handleCancelEdit}>

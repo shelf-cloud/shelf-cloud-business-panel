@@ -9,9 +9,11 @@ import { validateFulfillmentWarehouseUsage } from '@features/amazon/fulfillmentQ
 import { Label_Prep_Owner_Options } from '@lib/AmzConstants'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { AmazonFulfillmentSku, AmazonMarketplace } from '@typesTs/amazon/fulfillments'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import moment from 'moment'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
@@ -20,7 +22,6 @@ import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
 import useSWR from 'swr'
-import * as Yup from 'yup'
 
 type Props = {
   orderProducts: AmazonFulfillmentSku[]
@@ -34,6 +35,19 @@ type CreatingErros = {
   message: string
   details: string
 }
+
+const createMastBoxesInboundPlanSchema = z.object({
+  inboundPlanName: z
+    .string()
+    .regex(/^[a-zA-Z0-9-._\\s]+$/, `Valid special characters: - . _ NO spaces`)
+    .max(150, 'Title is to Long')
+    .min(1, 'Please enter Inbound Plan Name'),
+  marketplace: z.string().min(1, 'Select a Marketplace where your inventory will be shipped.'),
+  shipFrom: z.string().min(1, 'Select from where your inventory will be shipped'),
+  hasProducts: z.number().min(1, 'To create an order, you must add at least one product'),
+})
+
+type CreateMastBoxesInboundPlanForm = z.infer<typeof createMastBoxesInboundPlanSchema>
 
 const getValidationFailureMessage = (validationResult: ReturnType<typeof validateFulfillmentWarehouseUsage>) => {
   const exceededMessages = Object.entries(validationResult.exceededSkus).map(
@@ -63,26 +77,18 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
     }
   )
 
-  const validation = useFormik({
-    // enableReinitialize: true,
-
-    initialValues: {
+  const validation = useForm<CreateMastBoxesInboundPlanForm>({
+    resolver: zodResolver(createMastBoxesInboundPlanSchema),
+    defaultValues: {
       inboundPlanName: `${state?.user?.name.substring(0, 3).toUpperCase()}-FBA-${moment().format('MM_DD_YYYY-hh_mma')}`,
       marketplace: '',
       shipFrom: '',
       hasProducts: orderProducts.length,
     },
-    validationSchema: Yup.object({
-      inboundPlanName: Yup.string()
-        .matches(/^[a-zA-Z0-9-._\\s]+$/, `Valid special characters: - . _ NO spaces`)
-        .max(150, 'Title is to Long')
-        .required('Please enter Inbound Plan Name'),
-      marketplace: Yup.string().required('Select a Marketplace where your inventory will be shipped.'),
-      shipFrom: Yup.string().required('Select from where your inventory will be shipped'),
-      hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      setcreatingErros([])
+  })
+
+  const onSubmit = async (values: CreateMastBoxesInboundPlanForm) => {
+    setcreatingErros([])
       const validationResult = validateFulfillmentWarehouseUsage(orderProducts, 'master-boxes')
       if (Object.keys(validationResult.exceededSkus).length > 0 || Object.keys(validationResult.missingAvailabilitySkus).length > 0) {
         setloading(false)
@@ -272,7 +278,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
           isLoading: false,
           autoClose: 3000,
         })
-        resetForm()
+        validation.reset()
         setShowCreateInboundPlanModal(false)
         router.push(`/amazon-sellers/fulfillments`)
       } else {
@@ -284,13 +290,9 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
         })
         setcreatingErros(response.data.apiMessage.errors)
       }
-    },
-  })
-
-  const handleCreateInboundPlan = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
   }
+
+  const handleCreateInboundPlan = validation.handleSubmit(onSubmit)
 
   const handleSelectLabelOwner = async (selected: any, typeOwner: string, id: number) => {
     setloading(true)
@@ -398,14 +400,11 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                     type='text'
                     className='h-8 text-xs'
                     id='orderNumber'
-                    name='inboundPlanName'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.inboundPlanName || ''}
-                    aria-invalid={validation.touched.inboundPlanName && validation.errors.inboundPlanName ? true : undefined}
+                    aria-invalid={Boolean(validation.formState.errors.inboundPlanName) || undefined}
+                    {...validation.register('inboundPlanName')}
                   />
-                  {validation.touched.inboundPlanName && validation.errors.inboundPlanName ? (
-                    <div className='text-sm text-destructive'>{validation.errors.inboundPlanName}</div>
+                  {validation.formState.errors.inboundPlanName ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.inboundPlanName.message}</div>
                   ) : null}
                 </div>
               </div>
@@ -417,10 +416,8 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   <NativeSelect
                     size='sm'
                     id='marketplace'
-                    name='marketplace'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={validation.touched.marketplace && validation.errors.marketplace ? true : undefined}>
+                    aria-invalid={Boolean(validation.formState.errors.marketplace) || undefined}
+                    {...validation.register('marketplace')}>
                     <option value=''>Choose Marketplace..</option>
                     {amazonMarketplaces?.map(
                       (marketplace) =>
@@ -431,7 +428,7 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                         )
                     )}
                   </NativeSelect>
-                  {validation.touched.marketplace && validation.errors.marketplace ? <div className='text-sm text-destructive'>{validation.errors.marketplace}</div> : null}
+                  {validation.formState.errors.marketplace ? <div className='text-sm text-destructive'>{validation.formState.errors.marketplace.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -444,20 +441,19 @@ const CreateMastBoxesInboundPlanModal = ({ orderProducts, showCreateInboundPlanM
                   <NativeSelect
                     size='sm'
                     id='shipFrom'
-                    name='shipFrom'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={validation.touched.shipFrom && validation.errors.shipFrom ? true : undefined}>
+                    aria-invalid={Boolean(validation.formState.errors.shipFrom) || undefined}
+                    {...validation.register('shipFrom')}>
                     <option value=''>Ship From...</option>
                     <option value='shelfcloud'>Shelf Cloud Warehouse</option>
                   </NativeSelect>
-                  {validation.touched.shipFrom && validation.errors.shipFrom ? <div className='text-sm text-destructive'>{validation.errors.shipFrom}</div> : null}
+                  {validation.formState.errors.shipFrom ? <div className='text-sm text-destructive'>{validation.formState.errors.shipFrom.message}</div> : null}
                 </div>
               </div>
             </div>
             <div className='px-3 md:w-full'>
-              <p className='text-[16.25px] mb-0 p-0'>SKUs ready to send: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <input type='hidden' {...validation.register('hasProducts', { valueAsNumber: true })} />
+              <p className='text-[16.25px] mb-0 p-0'>SKUs ready to send: {validation.watch('hasProducts')}</p>
+              {validation.formState.errors.hasProducts ? <p className='text-danger'>{validation.formState.errors.hasProducts.message}</p> : null}
               <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 whitespace-nowrap text-[13px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_tr>*:nth-child(odd)]:bg-[color:var(--vz-light)]'>
                 <thead>

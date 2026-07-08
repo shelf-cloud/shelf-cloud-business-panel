@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
@@ -13,7 +15,6 @@ import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { Textarea } from '@shadcn/ui/textarea'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type EditPaymentModal = {
   show: boolean
@@ -30,6 +31,15 @@ type Props = {
   setEditPaymentModal: (editPaymentModal: EditPaymentModal) => void
 }
 
+const editPaymentSchema = z.object({
+  paymentDate: z.string().min(1, { message: 'Please select Date' }),
+  amount: z.coerce.number({ error: 'Please enter amount paid' }),
+  comment: z.string().optional(),
+})
+
+type EditPaymentInput = z.input<typeof editPaymentSchema>
+type EditPaymentValues = z.output<typeof editPaymentSchema>
+
 const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) => {
   const router = useRouter()
   const { status, organizeBy } = router.query
@@ -37,56 +47,47 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
   const { mutate } = useSWRConfig()
   const [loading, setloading] = useState(false)
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<EditPaymentInput, any, EditPaymentValues>({
+    resolver: zodResolver(editPaymentSchema),
+    defaultValues: {
       paymentDate: editPaymentModal.paymentDate,
       amount: editPaymentModal.amount,
       comment: editPaymentModal.comment,
     },
-    validationSchema: Yup.object({
-      paymentDate: Yup.string().required('Please select Date'),
-      amount: Yup.string().required('Please enter amount paid'),
-      comment: Yup.string(),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      setloading(true)
-
-      const response = await axios.post(`/api/purchaseOrders/editPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        poId: editPaymentModal.poId,
-        paymentIndex: editPaymentModal.paymentIndex,
-        ...values,
-      })
-
-      if (!response.data.error) {
-        resetForm()
-        toast.success(response.data.msg)
-        setEditPaymentModal({
-          show: false,
-          poId: 0,
-          orderNumber: '',
-          paymentDate: '',
-          amount: 0,
-          comment: '',
-          paymentIndex: 0,
-        })
-        if (organizeBy == 'suppliers') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'orders') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'sku') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        }
-      } else {
-        toast.error(response.data.msg)
-      }
-      setloading(false)
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onSubmit = async (values: EditPaymentValues) => {
+    setloading(true)
+
+    const response = await axios.post(`/api/purchaseOrders/editPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId: editPaymentModal.poId,
+      paymentIndex: editPaymentModal.paymentIndex,
+      ...values,
+    })
+
+    if (!response.data.error) {
+      validation.reset()
+      toast.success(response.data.msg)
+      setEditPaymentModal({
+        show: false,
+        poId: 0,
+        orderNumber: '',
+        paymentDate: '',
+        amount: 0,
+        comment: '',
+        paymentIndex: 0,
+      })
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      }
+    } else {
+      toast.error(response.data.msg)
+    }
+    setloading(false)
   }
 
   const handleDeletePayment = async () => {
@@ -121,6 +122,9 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
     setloading(false)
   }
 
+  const amountValue = Number(validation.watch('amount') ?? 0)
+  const { errors, touchedFields } = validation.formState
+
   return (
     <Dialog
       open={!!editPaymentModal.show}
@@ -140,7 +144,7 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
         Edit Payment
       </DialogHeader>
       <div>
-        <form onSubmit={handleAddProduct}>
+        <form onSubmit={validation.handleSubmit(onSubmit)}>
           <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] mb-4 font-semibold text-primary'>
               PO: <span className='font-semibold text-black'>{editPaymentModal.orderNumber}</span>
@@ -156,13 +160,10 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   type='date'
                   className='text-[13px]'
                   id='paymentDate'
-                  name='paymentDate'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.paymentDate}
-                  aria-invalid={(validation.touched.paymentDate && validation.errors.paymentDate ? true : false) || undefined}
+                  aria-invalid={(touchedFields.paymentDate && errors.paymentDate ? true : false) || undefined}
+                  {...validation.register('paymentDate')}
                 />
-                {validation.touched.paymentDate && validation.errors.paymentDate ? <div className='text-sm text-destructive'>{validation.errors.paymentDate}</div> : null}
+                {touchedFields.paymentDate && errors.paymentDate ? <div className='text-sm text-destructive'>{errors.paymentDate.message}</div> : null}
               </div>
             </div>
             <div className='px-3 md:w-6/12'>
@@ -175,15 +176,12 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                   onWheel={(e: any) => e.currentTarget.blur()}
                   className='text-[13px]'
                   id='amount'
-                  name='amount'
                   step='.01'
-                  value={validation.values.amount}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  aria-invalid={(validation.touched.amount && validation.errors.amount ? true : false) || undefined}
+                  aria-invalid={(touchedFields.amount && errors.amount ? true : false) || undefined}
+                  {...validation.register('amount')}
                 />
-                <small className='text-[11.2px] text-muted-foreground'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
-                {validation.touched.amount && validation.errors.amount ? <div className='text-sm text-destructive'>{validation.errors.amount}</div> : null}
+                <small className='text-[11.2px] text-muted-foreground'>{FormatCurrency(state.currentRegion, amountValue)}</small>
+                {touchedFields.amount && errors.amount ? <div className='text-sm text-destructive'>{errors.amount.message}</div> : null}
               </div>
             </div>
           </div>
@@ -196,13 +194,10 @@ const Edit_Payment_Modal = ({ editPaymentModal, setEditPaymentModal }: Props) =>
                 <Textarea
                   className='text-[13px]'
                   id='comment'
-                  name='comment'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.comment || ''}
-                  aria-invalid={(validation.touched.comment && validation.errors.comment ? true : false) || undefined}
+                  aria-invalid={(touchedFields.comment && errors.comment ? true : false) || undefined}
+                  {...validation.register('comment')}
                 />
-                {validation.touched.comment && validation.errors.comment ? <div className='text-sm text-destructive'>{validation.errors.comment}</div> : null}
+                {touchedFields.comment && errors.comment ? <div className='text-sm text-destructive'>{errors.comment.message}</div> : null}
               </div>
             </div>
           </div>

@@ -2,14 +2,15 @@ import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { Identifier } from '@typings'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { Field, FieldArray, Form, Formik } from 'formik'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { NativeSelect } from '@shadcn/ui/native-select'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   inventoryId?: number
@@ -29,10 +30,42 @@ const IDENTIFIERS_TYPES = {
   FBA: { value: 'FBA', label: 'FBA', options: { modified: false, delete: false } },
 }
 
+const identifierSchema = z.object({
+  type: z.string().min(1, 'Select Type'),
+  value: z
+    .string()
+    .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
+    .min(1, 'Insert Value'),
+})
+
 const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifiers }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
+
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    asin: z
+      .union([
+        z.literal(''),
+        z
+          .string()
+          .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
+          .max(50, 'Asin is to Long'),
+      ])
+      .optional(),
+    fnsku: z
+      .union([
+        z.literal(''),
+        z
+          .string()
+          .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
+          .max(50, 'FNSKU is to Long'),
+      ])
+      .optional(),
+    identifiers: z.array(identifierSchema),
+  })
 
   const initialValues = {
     inventoryId,
@@ -41,23 +74,15 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
     fnsku,
     identifiers: identifiers.length > 0 ? identifiers : [],
   }
-  const validationSchema = Yup.object({
-    asin: Yup.string()
-      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-      .max(50, 'Asin is to Long'),
-    fnsku: Yup.string()
-      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-      .max(50, 'FNSKU is to Long'),
-    identifiers: Yup.array().of(
-      Yup.object({
-        type: Yup.string().required('Select Type'),
-        value: Yup.string()
-          .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-          .required('Insert Value'),
-      })
-    ),
+
+  const validation = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: initialValues,
   })
-  const handleSubmit = async (values: any) => {
+
+  const { fields, remove, append } = useFieldArray({ control: validation.control, name: 'identifiers' })
+
+  const handleSubmit = async (values: z.infer<typeof schema>) => {
     const response = await axios.post(`/api/productDetails/identifiersProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
       productInfo: values,
     })
@@ -114,165 +139,146 @@ const Identifiers_Kit_Details = ({ inventoryId, sku, upc, asin, fnsku, identifie
           <div className='text-right'>{/* <i onClick={handleShowEditFields} className='ri-pencil-fill fs-5 m-0 p-0 text-primary' style={{ cursor: 'pointer' }}></i> */}</div>
         </div>
       ) : (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-          {({ values, errors, touched, handleChange, handleBlur }) => (
-            <Form>
-              <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
-                <thead>
-                  <tr className='text-center'>
-                    <th>Type</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody className='text-center'>
-                  <tr>
-                    <td className='align-middle'>UPC</td>
+        <form onSubmit={validation.handleSubmit(handleSubmit)}>
+          <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+            <thead>
+              <tr className='text-center'>
+                <th>Type</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody className='text-center'>
+              <tr>
+                <td className='align-middle'>UPC</td>
+                <td>
+                  <div className='createOrder_inputs'>
+                    <Input
+                      disabled
+                      type='text'
+                      className='text-[13px] h-8 text-xs'
+                      style={{ padding: '0.2rem 0.9rem' }}
+                      placeholder='Upc...'
+                      id='upc'
+                      name='upc'
+                      value={upc || ''}
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='text-muted-foreground align-middle text-nowrap'>Additional Identifiers</td>
+                <td></td>
+                <td className='align-middle'>
+                  <div className='flex flex-row flex-nowrap justify-center items-center mb-0 h-full'>
+                    <i className='text-[26px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => append({ type: '', value: '' })} />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='align-middle'>ASIN</td>
+                <td>
+                  <div className='createOrder_inputs'>
+                    <Input
+                      type='text'
+                      className='text-[13px] h-8 text-xs'
+                      style={{ padding: '0.2rem 0.9rem' }}
+                      placeholder='Asin...'
+                      id='asin'
+                      aria-invalid={(validation.formState.touchedFields.asin && validation.formState.errors.asin ? true : false) || undefined}
+                      {...validation.register('asin')}
+                    />
+                    {validation.formState.touchedFields.asin && validation.formState.errors.asin ? (
+                      <div className='text-sm text-destructive'>{validation.formState.errors.asin.message}</div>
+                    ) : null}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='align-middle'>FNSKU</td>
+                <td>
+                  <div className='createOrder_inputs'>
+                    <Input
+                      type='text'
+                      className='text-[13px] h-8 text-xs'
+                      style={{ padding: '0.2rem 0.9rem' }}
+                      placeholder='FNSKU...'
+                      id='fnsku'
+                      aria-invalid={(validation.formState.touchedFields.fnsku && validation.formState.errors.fnsku ? true : false) || undefined}
+                      {...validation.register('fnsku')}
+                    />
+                    {validation.formState.touchedFields.fnsku && validation.formState.errors.fnsku ? (
+                      <div className='text-sm text-destructive'>{validation.formState.errors.fnsku.message}</div>
+                    ) : null}
+                  </div>
+                </td>
+              </tr>
+              {fields.map((field, index) => {
+                const currentType = validation.watch(`identifiers.${index}.type`)
+                const typeMeta = validation.formState.errors.identifiers?.[index]?.type
+                const typeTouched = validation.formState.touchedFields.identifiers?.[index]?.type
+                const valueMeta = validation.formState.errors.identifiers?.[index]?.value
+                const valueTouched = validation.formState.touchedFields.identifiers?.[index]?.value
+                return (
+                  <tr key={field.id}>
+                    <td>
+                      <div className='createOrder_inputs'>
+                        <NativeSelect
+                          disabled={!IDENTIFIERS_TYPES[currentType as keyof typeof IDENTIFIERS_TYPES]?.options.modified}
+                          className='text-center align-middle text-[13px] h-8'
+                          style={{
+                            padding: '0.2rem 0.9rem',
+                          }}
+                          size='sm'
+                          aria-invalid={(typeTouched && typeMeta ? true : false) || undefined}
+                          {...validation.register(`identifiers.${index}.type`)}>
+                          {Object.entries(IDENTIFIERS_TYPES).map(([_type, option]) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </NativeSelect>
+                        {typeTouched && typeMeta ? <div className='text-sm text-destructive'>{typeMeta.message}</div> : null}
+                      </div>
+                    </td>
                     <td>
                       <div className='createOrder_inputs'>
                         <Input
-                          disabled
                           type='text'
-                          className='text-[13px] h-8 text-xs'
-                          style={{ padding: '0.2rem 0.9rem' }}
-                          placeholder='Upc...'
-                          id='upc'
-                          name='upc'
-                          value={upc || ''}
+                          className='align-middle text-[13px] h-8 text-xs'
+                          disabled={!IDENTIFIERS_TYPES[currentType as keyof typeof IDENTIFIERS_TYPES]?.options.modified}
+                          style={{
+                            padding: '0.2rem 0.9rem',
+                          }}
+                          placeholder='Value...'
+                          aria-invalid={(valueTouched && valueMeta ? true : false) || undefined}
+                          {...validation.register(`identifiers.${index}.value`)}
                         />
+                        {valueTouched && valueMeta ? <div className='text-sm text-destructive'>{valueMeta.message}</div> : null}
+                      </div>
+                    </td>
+                    <td className='align-middle'>
+                      <div className='flex flex-row flex-nowrap justify-center gap-2 items-center mb-0 h-full'>
+                        {IDENTIFIERS_TYPES[currentType as keyof typeof IDENTIFIERS_TYPES]?.options.delete && (
+                          <i className='align-middle text-danger text-[26px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
+                        )}
                       </div>
                     </td>
                   </tr>
-                  <FieldArray name='identifiers'>
-                    {({ remove, push }) => (
-                      <>
-                        <tr>
-                          <td className='text-muted-foreground align-middle text-nowrap'>Additional Identifiers</td>
-                          <td></td>
-                          <td className='align-middle'>
-                            <div className='flex flex-row flex-nowrap justify-center items-center mb-0 h-full'>
-                              <i className='text-[26px] text-success las la-plus-circle' style={{ cursor: 'pointer' }} onClick={() => push({ type: '', value: '' })} />
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className='align-middle'>ASIN</td>
-                          <td>
-                            <div className='createOrder_inputs'>
-                              <Input
-                                type='text'
-                                className='text-[13px] h-8 text-xs'
-                                style={{ padding: '0.2rem 0.9rem' }}
-                                placeholder='Asin...'
-                                id='asin'
-                                name='asin'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.asin || ''}
-                                aria-invalid={(touched.asin && errors.asin ? true : false) || undefined}
-                              />
-                              {touched.asin && errors.asin ? <div className='text-sm text-destructive'>{errors.asin}</div> : null}
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className='align-middle'>FNSKU</td>
-                          <td>
-                            <div className='createOrder_inputs'>
-                              <Input
-                                type='text'
-                                className='text-[13px] h-8 text-xs'
-                                style={{ padding: '0.2rem 0.9rem' }}
-                                placeholder='FNSKU...'
-                                id='fnsku'
-                                name='fnsku'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.fnsku || ''}
-                                aria-invalid={(touched.fnsku && errors.fnsku ? true : false) || undefined}
-                              />
-                              {touched.fnsku && errors.fnsku ? <div className='text-sm text-destructive'>{errors.fnsku}</div> : null}
-                            </div>
-                          </td>
-                        </tr>
-                        {values.identifiers.map((_identifiers, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Field name={`identifiers.${index}.type`}>
-                                {({ meta }: any) => (
-                                  <div className='createOrder_inputs'>
-                                    <NativeSelect
-                                      disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
-                                      className='text-center align-middle text-[13px] h-8'
-                                      style={{
-                                        padding: '0.2rem 0.9rem',
-                                      }}
-                                      name={`identifiers.${index}.type`}
-                                      size='sm'
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.identifiers[index].type || ''}
-                                      aria-invalid={(meta.touched && meta.error ? true : false) || undefined}>
-                                      {Object.entries(IDENTIFIERS_TYPES).map(([_type, option]) => (
-                                        <option key={option.value} value={option.value}>
-                                          {option.label}
-                                        </option>
-                                      ))}
-                                    </NativeSelect>
-                                    {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
-                                  </div>
-                                )}
-                              </Field>
-                            </td>
-                            <td>
-                              <Field name={`identifiers.${index}.value`}>
-                                {({ meta }: any) => (
-                                  <div className='createOrder_inputs'>
-                                    <Input
-                                      type='text'
-                                      className='align-middle text-[13px] h-8 text-xs'
-                                      disabled={!IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.modified}
-                                      style={{
-                                        padding: '0.2rem 0.9rem',
-                                      }}
-                                      name={`identifiers.${index}.value`}
-                                      placeholder='Value...'
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.identifiers[index].value || ''}
-                                      aria-invalid={(meta.touched && meta.error ? true : false) || undefined}
-                                    />
-                                    {meta.touched && meta.error ? <div className='text-sm text-destructive'>{meta.error}</div> : null}
-                                  </div>
-                                )}
-                              </Field>
-                            </td>
-                            <td className='align-middle'>
-                              <div className='flex flex-row flex-nowrap justify-center gap-2 items-center mb-0 h-full'>
-                                {IDENTIFIERS_TYPES[values.identifiers[index].type as keyof typeof IDENTIFIERS_TYPES].options.delete && (
-                                  <i className='align-middle text-danger text-[26px] las la-trash-alt' style={{ cursor: 'pointer' }} onClick={() => remove(index)} />
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </>
-                    )}
-                  </FieldArray>
-                </tbody>
-              </table>
-              <div className='px-3 w-full'>
-                <div className='flex flex-row justify-end items-center gap-3'>
-                  <Button type='button' variant='light' onClick={() => setShowEditFields(false)}>
-                    Cancel
-                  </Button>
-                  <Button type='submit'>
-                    Save Changes
-                  </Button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                )
+              })}
+            </tbody>
+          </table>
+          <div className='px-3 w-full'>
+            <div className='flex flex-row justify-end items-center gap-3'>
+              <Button type='button' variant='light' onClick={() => setShowEditFields(false)}>
+                Cancel
+              </Button>
+              <Button type='submit'>
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        </form>
       )}
     </div>
   )

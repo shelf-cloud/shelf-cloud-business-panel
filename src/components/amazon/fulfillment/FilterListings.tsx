@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 
 import { useClickOutside } from '@hooks/useClickOutside'
-import { Form, Formik } from 'formik'
+import { useForm } from 'react-hook-form'
 
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
@@ -16,18 +16,32 @@ type Props = {
   masterBoxVisibility?: string
 }
 
+type FilterFormValues = {
+  filters: string
+  showHidden: string
+  showNotEnough: string
+  ShowNoShipDate: string
+  masterBoxVisibility?: string
+}
+
 const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, masterBoxVisibility }: Props) => {
   const router = useRouter()
   const [OpenFilters, setOpenFilters] = useState(false)
   const filterByOthersContainer = useRef<HTMLDivElement | null>(null)
 
-  const initialValues = {
+  const initialValues: FilterFormValues = {
     filters: filters,
     showHidden: showHidden,
     showNotEnough: showNotEnough,
     ShowNoShipDate: ShowNoShipDate,
     masterBoxVisibility: masterBoxVisibility,
   }
+
+  const form = useForm<FilterFormValues>({
+    defaultValues: initialValues,
+  })
+  const { watch, setValue } = form
+  const values = watch()
 
   useClickOutside(filterByOthersContainer, () => setOpenFilters(false))
 
@@ -45,8 +59,9 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
     setOpenFilters(false)
   }
 
-  const handleClearFilters = (setValues: any) => {
-    setValues({
+  const handleClearFilters = () => {
+    form.reset({
+      filters: values.filters,
       showHidden: '',
       showNotEnough: '',
       ShowNoShipDate: '',
@@ -70,75 +85,71 @@ const FilterListings = ({ filters, showHidden, showNotEnough, ShowNoShipDate, ma
           Filters
         </Button>
         <div className={'absolute z-10 mt-1 px-6 py-4 bg-white border rounded-md shadow ' + (OpenFilters ? 'block' : 'hidden')}>
-          <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)}>
-            {({ values, handleBlur, setFieldValue, setValues }) => (
-              <Form>
-                <div className='flex flex-col justify-start gap-4'>
-                  <div className='flex flex-row justify-start items-end gap-2'>
-                    <Label className='font-normal text-[11.2px] w-3/4'>Show hidden products</Label>
-                    <Switch
-                      id='showHidden'
-                      name='showHidden'
-                      checked={values.showHidden === 'true' ? true : false}
-                      onChange={(e) => {
-                        setFieldValue('showHidden', `${e.target.checked}`)
-                      }}
-                      onBlur={handleBlur}
-                    />
-                  </div>
-                  {masterBoxVisibility && (
-                    <div className='flex flex-row justify-start items-end gap-2'>
-                      <Label className='font-normal text-[11.2px] w-3/4'>Show hidden visibility in Master Boxes</Label>
-                      <Switch
-                        id='masterBoxVisibility'
-                        name='masterBoxVisibility'
-                        checked={values.masterBoxVisibility === 'true' ? true : false}
-                        onChange={(e) => {
-                          setFieldValue('masterBoxVisibility', `${e.target.checked}`)
-                        }}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                  )}
-                  <div className='flex flex-row justify-start items-end gap-2'>
-                    <Label className='font-normal text-[11.2px] w-3/4'>Show With Not Enough Qty</Label>
-                    <Switch
-                      id='showNotEnough'
-                      name='showNotEnough'
-                      checked={values.showNotEnough === 'true' ? true : false}
-                      onChange={(e) => {
-                        setFieldValue('showNotEnough', `${e.target.checked}`)
-                      }}
-                      onBlur={handleBlur}
-                    />
-                  </div>
-                  <div className='flex flex-row justify-start items-end gap-2'>
-                    <Label className='font-normal text-[11.2px] w-3/4'>Show With No Recommended Ship Date</Label>
-                    <Switch
-                      id='ShowNoShipDate'
-                      name='ShowNoShipDate'
-                      checked={values.ShowNoShipDate === 'true' ? true : false}
-                      onChange={(e) => {
-                        setFieldValue('ShowNoShipDate', `${e.target.checked}`)
-                      }}
-                      onBlur={handleBlur}
-                    />
-                  </div>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <div className='flex flex-col justify-start gap-4'>
+              <div className='flex flex-row justify-start items-end gap-2'>
+                <Label className='font-normal text-[11.2px] w-3/4'>Show hidden products</Label>
+                <Switch
+                  id='showHidden'
+                  name='showHidden'
+                  checked={values.showHidden === 'true' ? true : false}
+                  onChange={(e) => {
+                    setValue('showHidden', `${e.target.checked}`)
+                  }}
+                  onBlur={() => {}}
+                />
+              </div>
+              {masterBoxVisibility && (
+                <div className='flex flex-row justify-start items-end gap-2'>
+                  <Label className='font-normal text-[11.2px] w-3/4'>Show hidden visibility in Master Boxes</Label>
+                  <Switch
+                    id='masterBoxVisibility'
+                    name='masterBoxVisibility'
+                    checked={values.masterBoxVisibility === 'true' ? true : false}
+                    onChange={(e) => {
+                      setValue('masterBoxVisibility', `${e.target.checked}`)
+                    }}
+                    onBlur={() => {}}
+                  />
                 </div>
-                <div className='w-full flex justify-between items-center mt-6'>
-                  <button
-                    type='button'
-                    onClick={() => handleClearFilters(setValues)}
-                    className='p-0 border-0 bg-transparent no-underline font-normal m-0 text-[11.2px] text-muted-foreground'>
-                    Clear All
-                  </button>
-                  <Button type='submit' size='sm'>
-                    Apply
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+              )}
+              <div className='flex flex-row justify-start items-end gap-2'>
+                <Label className='font-normal text-[11.2px] w-3/4'>Show With Not Enough Qty</Label>
+                <Switch
+                  id='showNotEnough'
+                  name='showNotEnough'
+                  checked={values.showNotEnough === 'true' ? true : false}
+                  onChange={(e) => {
+                    setValue('showNotEnough', `${e.target.checked}`)
+                  }}
+                  onBlur={() => {}}
+                />
+              </div>
+              <div className='flex flex-row justify-start items-end gap-2'>
+                <Label className='font-normal text-[11.2px] w-3/4'>Show With No Recommended Ship Date</Label>
+                <Switch
+                  id='ShowNoShipDate'
+                  name='ShowNoShipDate'
+                  checked={values.ShowNoShipDate === 'true' ? true : false}
+                  onChange={(e) => {
+                    setValue('ShowNoShipDate', `${e.target.checked}`)
+                  }}
+                  onBlur={() => {}}
+                />
+              </div>
+            </div>
+            <div className='w-full flex justify-between items-center mt-6'>
+              <button
+                type='button'
+                onClick={() => handleClearFilters()}
+                className='p-0 border-0 bg-transparent no-underline font-normal m-0 text-[11.2px] text-muted-foreground'>
+                Clear All
+              </button>
+              <Button type='submit' size='sm'>
+                Apply
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

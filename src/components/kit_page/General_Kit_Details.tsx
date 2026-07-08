@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Textarea } from '@shadcn/ui/textarea'
 import { Label } from '@shadcn/ui/label'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import Select_Condition_Kit_Details from './Select_Condition_Kit_Details'
 import Select_Kit_Details from './Select_Kit_Details'
@@ -36,71 +37,69 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      inventoryId,
-      sku,
-      image,
-      title,
-      description: description ?? '',
-      brand: brand ?? '',
-      category: category ?? '',
-      supplier: supplier ?? '',
-      itemCondition: itemCondition ?? 'New',
-      note,
-    },
-    validationSchema: Yup.object({
-      title: Yup.string().max(100, 'Title is to Long').required('Please enter product title'),
-      image: Yup.string().url(),
-      description: Yup.string().max(300, 'Title is to Long'),
-      brand: Yup.string().max(200, 'Title is to Long').required('Please enter product brand'),
-      category: Yup.string().max(100, 'Title is to Long'),
-      supplier: Yup.string().max(200, 'Title is to Long').required('Please enter product supplier'),
-      itemCondition: Yup.string().max(10, 'Title is to Long').required('Please select product condition'),
-      note: Yup.string().max(300, 'Title is to Long'),
-    }),
-    onSubmit: async (values) => {
-      const response = await axios.post(`/api/productDetails/generalProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
+
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    image: z.string().url().optional().or(z.literal('')),
+    title: z.string().max(100, 'Title is to Long').min(1, 'Please enter product title'),
+    description: z.string().max(300, 'Title is to Long').optional(),
+    brand: z.string().max(200, 'Title is to Long').min(1, 'Please enter product brand'),
+    category: z.string().max(100, 'Title is to Long').optional(),
+    supplier: z.string().max(200, 'Title is to Long').min(1, 'Please enter product supplier'),
+    itemCondition: z.string().max(10, 'Title is to Long').min(1, 'Please select product condition'),
+    note: z.string().max(300, 'Title is to Long').optional(),
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const defaultFormValues = {
+    inventoryId,
+    sku,
+    image,
+    title,
+    description: description ?? '',
+    brand: brand ?? '',
+    category: category ?? '',
+    supplier: supplier ?? '',
+    itemCondition: itemCondition ?? 'New',
+    note,
   }
 
+  const validation = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultFormValues,
+  })
+
+  useEffect(() => {
+    validation.reset(defaultFormValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inventoryId, sku, image, title, description, brand, category, supplier, itemCondition, note])
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    const response = await axios.post(`/api/productDetails/generalProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
   // const handleShowEditFields = () => {
-  //   validation.setValues({
-  //     inventoryId,
-  //     sku,
-  //     image,
-  //     title,
-  //     description: description ?? '',
-  //     brand: brand ?? '',
-  //     category: category ?? '',
-  //     supplier: supplier ?? '',
-  //     itemCondition: itemCondition ?? 'New',
-  //     note,
-  //   })
+  //   validation.reset(defaultFormValues)
   //   setShowEditFields(true)
   // }
 
   const handleSelection = (type: string, value: string) => {
-    validation.setFieldValue(type, value)
+    validation.setValue(type as any, value, { shouldValidate: true, shouldDirty: true })
   }
 
   const handleConditionSelection = (value: string) => {
-    validation.setFieldValue('itemCondition', value)
+    validation.setValue('itemCondition', value, { shouldValidate: true, shouldDirty: true })
   }
 
   return (
@@ -170,13 +169,12 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                   className='text-[13px] h-8 text-xs'
                   placeholder='Title...'
                   id='title'
-                  name='title'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.title || ''}
-                  aria-invalid={validation.touched.title && validation.errors.title ? true : undefined}
+                  aria-invalid={(validation.formState.touchedFields.title && validation.formState.errors.title ? true : undefined) || undefined}
+                  {...validation.register('title')}
                 />
-                {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                {validation.formState.touchedFields.title && validation.formState.errors.title ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.title.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-full'>
@@ -189,13 +187,12 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                   className='text-[13px] h-8 text-xs'
                   placeholder='Description...'
                   id='description'
-                  name='description'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.description ?? ''}
-                  aria-invalid={validation.touched.description && validation.errors.description ? true : undefined}
+                  aria-invalid={(validation.formState.touchedFields.description && validation.formState.errors.description ? true : undefined) || undefined}
+                  {...validation.register('description')}
                 />
-                {validation.touched.description && validation.errors.description ? <div className='text-sm text-destructive'>{validation.errors.description}</div> : null}
+                {validation.formState.touchedFields.description && validation.formState.errors.description ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.description.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-6/12'>
@@ -207,9 +204,9 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 type={'brand'}
                 addEndpoint={'addNewBrand'}
                 selectionInfo={brands}
-                selected={validation.values.brand ?? ''}
+                selected={validation.watch('brand') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.brand}
+                errorMessage={validation.formState.errors.brand?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -221,9 +218,9 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 type={'supplier'}
                 addEndpoint={'addNewSupplier'}
                 selectionInfo={suppliers}
-                selected={validation.values.supplier ?? ''}
+                selected={validation.watch('supplier') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.supplier}
+                errorMessage={validation.formState.errors.supplier?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -235,9 +232,9 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 type={'category'}
                 addEndpoint={'addNewCategory'}
                 selectionInfo={categories}
-                selected={validation.values.category ?? ''}
+                selected={validation.watch('category') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.category}
+                errorMessage={validation.formState.errors.category?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -245,9 +242,9 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                 *Condition
               </Label>
               <Select_Condition_Kit_Details
-                selected={validation.values.itemCondition ?? ''}
+                selected={validation.watch('itemCondition') ?? ''}
                 handleSelection={handleConditionSelection}
-                errorMessage={validation.errors.itemCondition}
+                errorMessage={validation.formState.errors.itemCondition?.message}
               />
             </div>
             <div className='px-3 md:w-full'>
@@ -260,13 +257,12 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                   className='text-[13px] h-8 text-xs'
                   placeholder='Image URL...'
                   id='image'
-                  name='image'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.image || ''}
-                  aria-invalid={validation.touched.image && validation.errors.image ? true : undefined}
+                  aria-invalid={(validation.formState.touchedFields.image && validation.formState.errors.image ? true : undefined) || undefined}
+                  {...validation.register('image')}
                 />
-                {validation.touched.image && validation.errors.image ? <div className='text-sm text-destructive'>{validation.errors.image}</div> : null}
+                {validation.formState.touchedFields.image && validation.formState.errors.image ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.image.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-full'>
@@ -278,13 +274,12 @@ const General_Kit_Details = ({ inventoryId, sku, image, title, description, bran
                   className='text-[13px] h-8 text-xs'
                   placeholder=''
                   id='note'
-                  name='note'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.note || ''}
-                  aria-invalid={validation.touched.note && validation.errors.note ? true : undefined}
+                  aria-invalid={(validation.formState.touchedFields.note && validation.formState.errors.note ? true : undefined) || undefined}
+                  {...validation.register('note')}
                 />
-                {validation.touched.note && validation.errors.note ? <div className='text-sm text-destructive'>{validation.errors.note}</div> : null}
+                {validation.formState.touchedFields.note && validation.formState.errors.note ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.note.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-full'>

@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 const RECEIVING_FILE_HEADERS = ['Sku', 'Receiving Quantity']
 
@@ -32,37 +32,39 @@ export const validateReceivingFile = async (resultValues: any, validSkuList: str
         switch (v) {
           // SKU
           case 0:
-            const skuSchema = Yup.object().shape({
-              sku: Yup.string()
-                .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: " ' @ ~ , ...`)
+            const skuSchema = z.object({
+              sku: z.string()
+                .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: " ' @ ~ , ...`)
                 .min(4)
                 .max(50)
-                .required('SKU is required'),
+                .min(1, 'SKU is required'),
             })
-            skuSchema.isValidSync({ sku: rowValues[v] })
+            skuSchema.safeParse({ sku: rowValues[v] }).success
               ? () => {}
               : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Required - No Spaces - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
-            const skuValidSchema = Yup.object().shape({
-              sku: Yup.string()
-                .test('is-valid-sku', 'SKU is not in the valid SKU list', (value) => validSkuList.includes(value!))
-                .required('SKU is required'),
+            const skuValidSchema = z.object({
+              sku: z
+                .string()
+                .min(1, 'SKU is required')
+                .refine((value) => validSkuList.includes(value), 'SKU is not in the valid SKU list'),
             })
-            skuValidSchema.isValidSync({ sku: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Not a valid SKU`, value: rowValues[v] })
-            const skuDuplicatedSchema = Yup.object().shape({
-              sku: Yup.string()
-                .test('is-duplicated-sku', 'SKU is duplicated', (value) => !skuInFile.includes(value!))
-                .required('SKU is required'),
+            skuValidSchema.safeParse({ sku: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Not a valid SKU`, value: rowValues[v] })
+            const skuDuplicatedSchema = z.object({
+              sku: z
+                .string()
+                .min(1, 'SKU is required')
+                .refine((value) => !skuInFile.includes(value), 'SKU is duplicated'),
             })
-            skuDuplicatedSchema.isValidSync({ sku: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Duplicated SKU`, value: rowValues[v] })
+            skuDuplicatedSchema.safeParse({ sku: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Duplicated SKU`, value: rowValues[v] })
             skuInFile.push(rowValues[v])
             break
           // title
           case 1:
             if (rowValues[v] != null && rowValues[v] !== '') {
-              const widthSchema = Yup.object().shape({
-                width: Yup.number().min(0.001).required('Qty is required'),
+              const widthSchema = z.object({
+                width: z.coerce.number().min(0.001),
               })
-              widthSchema.isValidSync({ width: rowValues[v] })
+              widthSchema.safeParse({ width: rowValues[v] }).success
                 ? () => {}
                 : errorsList.push({ errorLine: i + 1, errorMessage: 'Quantity: Required - Greater or Equal than 0', value: rowValues[v] })
             }

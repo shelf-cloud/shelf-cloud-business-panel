@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { Button as ShadcnButton } from '@shadcn/ui/button'
-import { Form, Formik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react'
-import * as Yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
@@ -21,35 +22,46 @@ type Props = {
   splits: { isSplitting: boolean; splitsQty: number }
 }
 
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
+}
+
+const settingsSchema = z
+  .object({
+    highAlertMax: z.preprocess(toNumber, z.number({ error: 'Required' }).min(0, 'Must be grater than 0')),
+    mediumAlertMax: z.preprocess(toNumber, z.number({ error: 'Required' })),
+    lowAlertMax: z.preprocess(toNumber, z.number({ error: 'Required' })),
+  })
+  .superRefine((values, ctx) => {
+    if (!(values.mediumAlertMax > values.highAlertMax + 1)) {
+      ctx.addIssue({ code: 'custom', message: 'Must be greater than Min Medium Alert', path: ['mediumAlertMax'] })
+    }
+    if (!(values.lowAlertMax > values.mediumAlertMax + 1)) {
+      ctx.addIssue({ code: 'custom', message: 'Must be greater than Min Low Alert', path: ['lowAlertMax'] })
+    }
+  })
+
+type SettingsInput = z.input<typeof settingsSchema>
+type SettingsValues = z.output<typeof settingsSchema>
+
 const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initialLowAlert, handleUrgencyRange, canSplit, setsplits, splits }: Props) => {
   const [openDatesMenu, setOpenDatesMenu] = useState(false)
   const rpSettings = useRef<HTMLDivElement | null>(null)
 
   useClickOutside(rpSettings, () => setOpenDatesMenu(false))
 
-  const initialValues = {
-    highAlertMax: initialHighAlert,
-    mediumAlertMax: initialMediumAlert,
-    lowAlertMax: initialLowAlert,
-  }
-
-  const validationSchema = Yup.object({
-    highAlertMax: Yup.number().min(0, 'Must be grater than 0').required('Required'),
-    mediumAlertMax: Yup.number()
-      .test('mediumAlertMax', 'Must be greater than Min Medium Alert', function (value) {
-        const { highAlertMax } = this.parent
-        return value! > highAlertMax + 1
-      })
-      .required('Required'),
-    lowAlertMax: Yup.number()
-      .test('lowAlertMax', 'Must be greater than Min Low Alert', function (value) {
-        const { mediumAlertMax } = this.parent
-        return value! > mediumAlertMax + 1
-      })
-      .required('Required'),
+  const validation = useForm<SettingsInput, any, SettingsValues>({
+    resolver: zodResolver(settingsSchema),
+    defaultValues: {
+      highAlertMax: initialHighAlert,
+      mediumAlertMax: initialMediumAlert,
+      lowAlertMax: initialLowAlert,
+    },
   })
 
-  const handleSubmit = async (values: any) => {
+  const onSubmit = async (values: SettingsValues) => {
     setOpenDatesMenu(false)
     handleUrgencyRange(values.highAlertMax, values.mediumAlertMax, values.lowAlertMax)
   }
@@ -74,6 +86,9 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
     }
     setsplits({ isSplitting: true, splitsQty: parseInt(e.target.value) })
   }
+
+  const values = validation.watch()
+  const { errors, touchedFields } = validation.formState
 
   return (
     <div ref={rpSettings} className='relative inline-block'>
@@ -123,170 +138,157 @@ const ReorderingPointsSettings = ({ initialHighAlert, initialMediumAlert, initia
             A product&apos;s urgency depends on how many days of stock remain after lead time. The remaining days to place an order to avoid being out of stock during lead time.
           </p>
           <p className='text-[11.2px] m-0 p-0 text-muted-foreground font-light'></p>
-          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-            {({ values, errors, touched, handleChange, handleBlur }) => (
-              <Form className='my-2'>
-                <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='highAlertMax' className='mb-2'>
-                    <i className={'mdi mdi-alert-octagon text-destructive text-[16.25px]'} /> High Alert
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        disabled
-                        className='text-xs m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='highAlertMin'
-                        name='highAlertMin'
-                        value={0}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                    <span>-</span>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        className='text-xs m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='highAlertMax'
-                        name='highAlertMax'
-                        min={0}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.highAlertMax}
-                        aria-invalid={Boolean(touched.highAlertMax && errors.highAlertMax) || undefined}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                  </div>
-                  {touched.highAlertMax && errors.highAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.highAlertMax}</p> : null}
-                </div>
-                <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='mediumAlertMin' className='mb-2'>
-                    <i className={'mdi mdi-alert-octagon text-warning text-[16.25px]'} /> Medium Alert
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        disabled
-                        className='text-[13px] m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='mediumAlertMin'
-                        name='mediumAlertMin'
-                        min={0}
-                        value={values.highAlertMax + 1 || ''}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                    <span>-</span>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        className='text-xs m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='mediumAlertMax'
-                        name='mediumAlertMax'
-                        min={0}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.mediumAlertMax}
-                        aria-invalid={Boolean(touched.mediumAlertMax && errors.mediumAlertMax) || undefined}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                  </div>
-                  {touched.mediumAlertMax && errors.mediumAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.mediumAlertMax}</p> : null}
-                </div>
-                <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='lowAlertMin' className='mb-2'>
-                    <i className={'mdi mdi-alert-octagon text-info text-[16.25px]'} /> Low Alert
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        disabled
-                        className='text-[13px] m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='lowAlertMin'
-                        name='lowAlertMin'
-                        min={0}
-                        value={values.mediumAlertMax + 1 || ''}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                    <span>-</span>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        className='text-xs m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='lowAlertMax'
-                        name='lowAlertMax'
-                        min={0}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.lowAlertMax}
-                        aria-invalid={Boolean(touched.lowAlertMax && errors.lowAlertMax) || undefined}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                  </div>
-                  {touched.lowAlertMax && errors.lowAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.lowAlertMax}</p> : null}
-                </div>
-                <div className='px-3 w-full mb-1'>
-                  <Label htmlFor='noAlertMin' className='mb-2'>
-                    <i className={'mdi mdi-alert-octagon text-success text-[16.25px]'} /> No Alert
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='number'
-                        disabled
-                        className='text-[13px] m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='noAlertMin'
-                        name='noAlertMin'
-                        min={0}
-                        value={values.lowAlertMax + 1 || ''}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                    <span>-</span>
-                    <InputGroup size='sm'>
-                      <Input
-                        type='text'
-                        disabled
-                        className='text-xs m-0'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='noAlertMax'
-                        name='noAlertMax'
-                        value={'∞'}
-                      />
-                      <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
-                    </InputGroup>
-                  </div>
-                </div>
-                <div className='px-3 w-full mt-4'>
-                  <div className='flex flex-row justify-end items-center gap-4'>
-                    <ShadcnButton type='submit' className='text-[11.2px]' size='sm'>
-                      Apply Urgency
-                    </ShadcnButton>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
+          <form className='my-2' onSubmit={validation.handleSubmit(onSubmit)}>
+            <div className='px-3 w-full mb-1'>
+              <Label htmlFor='highAlertMax' className='mb-2'>
+                <i className={'mdi mdi-alert-octagon text-destructive text-[16.25px]'} /> High Alert
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    disabled
+                    className='text-xs m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='highAlertMin'
+                    name='highAlertMin'
+                    value={0}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+                <span>-</span>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    className='text-xs m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='highAlertMax'
+                    min={0}
+                    aria-invalid={Boolean(touchedFields.highAlertMax && errors.highAlertMax) || undefined}
+                    {...validation.register('highAlertMax')}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+              </div>
+              {touchedFields.highAlertMax && errors.highAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.highAlertMax.message}</p> : null}
+            </div>
+            <div className='px-3 w-full mb-1'>
+              <Label htmlFor='mediumAlertMin' className='mb-2'>
+                <i className={'mdi mdi-alert-octagon text-warning text-[16.25px]'} /> Medium Alert
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    disabled
+                    className='text-[13px] m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='mediumAlertMin'
+                    name='mediumAlertMin'
+                    min={0}
+                    value={Number(values.highAlertMax ?? 0) + 1 || ''}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+                <span>-</span>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    className='text-xs m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='mediumAlertMax'
+                    min={0}
+                    aria-invalid={Boolean(touchedFields.mediumAlertMax && errors.mediumAlertMax) || undefined}
+                    {...validation.register('mediumAlertMax')}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+              </div>
+              {touchedFields.mediumAlertMax && errors.mediumAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.mediumAlertMax.message}</p> : null}
+            </div>
+            <div className='px-3 w-full mb-1'>
+              <Label htmlFor='lowAlertMin' className='mb-2'>
+                <i className={'mdi mdi-alert-octagon text-info text-[16.25px]'} /> Low Alert
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    disabled
+                    className='text-[13px] m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='lowAlertMin'
+                    name='lowAlertMin'
+                    min={0}
+                    value={Number(values.mediumAlertMax ?? 0) + 1 || ''}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+                <span>-</span>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    className='text-xs m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='lowAlertMax'
+                    min={0}
+                    aria-invalid={Boolean(touchedFields.lowAlertMax && errors.lowAlertMax) || undefined}
+                    {...validation.register('lowAlertMax')}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+              </div>
+              {touchedFields.lowAlertMax && errors.lowAlertMax ? <p className='m-0 p-0 text-right text-danger text-[11.2px]'>{errors.lowAlertMax.message}</p> : null}
+            </div>
+            <div className='px-3 w-full mb-1'>
+              <Label htmlFor='noAlertMin' className='mb-2'>
+                <i className={'mdi mdi-alert-octagon text-success text-[16.25px]'} /> No Alert
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <Input
+                    type='number'
+                    disabled
+                    className='text-[13px] m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='noAlertMin'
+                    name='noAlertMin'
+                    min={0}
+                    value={Number(values.lowAlertMax ?? 0) + 1 || ''}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+                <span>-</span>
+                <InputGroup size='sm'>
+                  <Input
+                    type='text'
+                    disabled
+                    className='text-xs m-0'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='noAlertMax'
+                    name='noAlertMax'
+                    value={'∞'}
+                  />
+                  <InputGroupText className='text-[11.2px] py-0'>Days</InputGroupText>
+                </InputGroup>
+              </div>
+            </div>
+            <div className='px-3 w-full mt-4'>
+              <div className='flex flex-row justify-end items-center gap-4'>
+                <ShadcnButton type='submit' className='text-[11.2px]' size='sm'>
+                  Apply Urgency
+                </ShadcnButton>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

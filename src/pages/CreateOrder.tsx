@@ -9,13 +9,14 @@ import SimpleSelect, { SelectOptionType } from '@components/Common/SimpleSelect'
 import ErrorInputLabel from '@components/ui/forms/ErrorInputLabel'
 import AppContext from '@context/AppContext'
 import { FormatCurrency, FormatIntNumber } from '@lib/FormatNumbers'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { Field, FieldArray, Form, Formik } from 'formik'
 import { Session } from 'next-auth'
 import { DebounceInput } from 'react-debounce-input'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import useSWR, { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { Button, buttonVariants } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
@@ -78,13 +79,6 @@ type StateListType = {
 
 type Props = {
   session: Session
-}
-
-declare module 'yup' {
-  // tslint:disable-next-line
-  interface ArraySchema<T> {
-    unique(mapper: (a: T) => T, message?: any): ArraySchema<T>
-  }
 }
 
 const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
@@ -169,50 +163,132 @@ const CreateOrder = ({ session }: Props) => {
     ],
   }
 
-  Yup.addMethod(Yup.array, 'unique', function (mapper: any, message: any) {
-    return this.test('unique', message, function (list: any) {
-      return list.length === new Set(list.map(mapper)).size
-    })
-  })
+  // NOTE: rebuilt on every render (same as the previous Yup schema) so that
+  // it always validates against the latest validSkus/inValidSkus/skuQuantities/validCountries
+  const validationSchema = z.object({
+    firstName: z.string().min(3, { message: 'First Name to short' }).max(100, { message: 'First Name is to Long' }),
+    lastName: z.string().min(3, { message: 'Last Name to short' }).max(100, { message: 'Last Name is to Long' }),
+    company: z.string().max(100, { message: 'Company text is to Long' }),
+    orderNumber: z.string().superRefine((val, ctx) => {
+      if (!/^[a-zA-Z0-9-]+$/.test(val)) {
+        ctx.addIssue({ code: 'custom', message: `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces` })
+      } else if (val.length > 50) {
+        ctx.addIssue({ code: 'custom', message: 'Order Number is to Long' })
+      } else if (val === '') {
+        ctx.addIssue({ code: 'custom', message: 'Required Order Number' })
+      }
+    }),
+    adress1: z.string().min(1, { message: 'Required Adress' }),
+    adress2: z.string(),
+    city: z.string().min(1, { message: 'Required City' }),
+    state: z.string().min(1, { message: 'Required State' }),
+    zipCode: z.string().min(1, { message: 'Required Zip Code' }),
+    country: z.string().superRefine((val, ctx) => {
+      if (!validCountries.includes(val)) {
+        ctx.addIssue({ code: 'custom', message: 'Must be a Valid Country Code' })
+      } else if (val === '') {
+        ctx.addIssue({ code: 'custom', message: 'Required Country' })
+      }
+    }),
+    phoneNumber: state.currentRegion === 'us' ? z.string() : z.string().min(1, { message: 'Required phone number' }),
+    email: z.string().superRefine((val, ctx) => {
+      if (val === '') {
+        ctx.addIssue({ code: 'custom', message: 'Required email' })
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+        ctx.addIssue({ code: 'custom', message: 'Invalid email' })
+      }
+    }),
+    amount: z.string().superRefine((val, ctx) => {
+      const num = Number(val)
+      if (val === '' || isNaN(num)) {
+        ctx.addIssue({ code: 'custom', message: 'Required Amount' })
+      } else if (num < 0) {
+        ctx.addIssue({ code: 'custom', message: 'Amount must be greater than or equal to 0' })
+      }
+    }),
+    shipping: z.string().superRefine((val, ctx) => {
+      const num = Number(val)
+      if (val === '' || isNaN(num)) {
+        ctx.addIssue({ code: 'custom', message: 'Required Shipping' })
+      } else if (num < 0) {
+        ctx.addIssue({ code: 'custom', message: 'Shipping must be greater than or equal to 0.1' })
+      }
+    }),
+    tax: z.string().superRefine((val, ctx) => {
+      const num = Number(val)
+      if (val === '' || isNaN(num)) {
+        ctx.addIssue({ code: 'custom', message: 'Required Tax' })
+      } else if (num < 0) {
+        ctx.addIssue({ code: 'custom', message: 'Tax must be greater than or equal to 0' })
+      }
+    }),
+    products: z
+      .array(
+        z
+          .object({
+            sku: z.string(),
+            title: z.string(),
+            // kept loose on purpose: the Qty <Input> is an uncontrolled text field so the
+            // live value is a string; numeric validity is enforced below in superRefine
+            qty: z.custom<number>(() => true),
+            price: z.string(),
+          })
+          .superRefine((product, ctx) => {
+            if (!validSkus.includes(product.sku)) {
+              ctx.addIssue({ code: 'custom', path: ['sku'], message: 'Invalid SKU or There`s No Stock Available' })
+            } else if (inValidSkus.includes(product.sku)) {
+              ctx.addIssue({ code: 'custom', path: ['sku'], message: 'There`s no Stock for this SKU' })
+            } else if (product.sku === '') {
+              ctx.addIssue({ code: 'custom', path: ['sku'], message: 'Required SKU' })
+            }
 
-  const validationSchema = Yup.object({
-    firstName: Yup.string().min(3, 'First Name to short').max(100, 'First Name is to Long').required('Please Enter First Name'),
-    lastName: Yup.string().min(3, 'Last Name to short').max(100, 'Last Name is to Long').required('Please Enter Last Name'),
-    company: Yup.string().max(100, 'Company text is to Long'),
-    orderNumber: Yup.string()
-      .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-      .max(50, 'Order Number is to Long')
-      .required('Required Order Number'),
-    adress1: Yup.string().required('Required Adress'),
-    adress2: Yup.string(),
-    city: Yup.string().required('Required City'),
-    state: Yup.string().required('Required State'),
-    zipCode: Yup.string().required('Required Zip Code'),
-    country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code').required('Required Country'),
-    phoneNumber: state.currentRegion === 'us' ? Yup.string() : Yup.string().required('Required phone number'),
-    email: Yup.string().email().required('Required email'),
-    amount: Yup.number().min(0, 'Amount must be greater than or equal to 0').required('Required Amount'),
-    shipping: Yup.number().min(0, 'Shipping must be greater than or equal to 0.1').required('Required Shipping'),
-    tax: Yup.number().min(0, 'Tax must be greater than or equal to 0').required('Required Tax'),
-    products: Yup.array()
-      .of(
-        Yup.object({
-          sku: Yup.string().oneOf(validSkus, 'Invalid SKU or There`s No Stock Available').notOneOf(inValidSkus, 'There`s no Stock for this SKU').required('Required SKU'),
-          title: Yup.string().max(150, 'Name is to Long').required('Required Name'),
-          qty: Yup.number()
-            .positive()
-            .integer('Qty must be an integer')
-            .min(1, 'Quantity must be greater than 0')
-            .when('sku', (sku, schema) => (sku != '' ? schema.max(skuQuantities[sku], `SKU Qty is ${skuQuantities[sku] ? skuQuantities[sku] : 'Unavailable'}`) : schema))
-            .required('Qty Required'),
-          price: Yup.number().min(0, 'Price must be greater than or equal to 0').required('Required Price'),
-        })
+            if (product.title.length > 150) {
+              ctx.addIssue({ code: 'custom', path: ['title'], message: 'Name is to Long' })
+            } else if (product.title === '') {
+              ctx.addIssue({ code: 'custom', path: ['title'], message: 'Required Name' })
+            }
+
+            if (product.price === '' || isNaN(Number(product.price))) {
+              ctx.addIssue({ code: 'custom', path: ['price'], message: 'Required Price' })
+            } else if (Number(product.price) < 0) {
+              ctx.addIssue({ code: 'custom', path: ['price'], message: 'Price must be greater than or equal to 0' })
+            }
+
+            const qtyNum = Number(product.qty)
+            if (String(product.qty ?? '') === '' || isNaN(qtyNum)) {
+              ctx.addIssue({ code: 'custom', path: ['qty'], message: 'Qty Required' })
+            } else if (!Number.isInteger(qtyNum)) {
+              ctx.addIssue({ code: 'custom', path: ['qty'], message: 'Qty must be an integer' })
+            } else if (qtyNum < 1) {
+              ctx.addIssue({ code: 'custom', path: ['qty'], message: 'Quantity must be greater than 0' })
+            } else if (product.sku !== '') {
+              const availableQty = skuQuantities[product.sku]
+              if (!(qtyNum <= availableQty)) {
+                ctx.addIssue({ code: 'custom', path: ['qty'], message: `SKU Qty is ${availableQty ? availableQty : 'Unavailable'}` })
+              }
+            }
+          })
       )
-      // .unique((values: any) => values.sku, 'Duplicate SKU')
-      .required('Must have products'),
+      .min(1, { message: 'Must have products' }),
   })
 
-  const handleSubmit = async (values: OrderType, { resetForm }: any) => {
+  const form = useForm<OrderType>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: initialValues,
+  })
+
+  const {
+    control,
+    register,
+    setValue,
+    formState: { errors, touchedFields },
+  } = form
+
+  const values = useWatch({ control, defaultValue: initialValues }) as OrderType
+
+  const { fields, append, remove } = useFieldArray({ control, name: 'products' })
+
+  const handleSubmit = async (values: OrderType) => {
     setCreatingOrder(true)
     setskuExceededAvailability({ sku: '', availableQty: 0, orderedQty: 0 })
 
@@ -254,7 +330,7 @@ const CreateOrder = ({ session }: Props) => {
     if (!response.data.error) {
       mutate('/api/getuser')
       toast.success(response.data.msg)
-      resetForm()
+      form.reset(initialValues)
       router.push('/Shipments')
       setCreatingOrder(false)
     } else {
@@ -263,23 +339,23 @@ const CreateOrder = ({ session }: Props) => {
     }
   }
 
-  const handlePickUpOrder = async (values: any, isPickUpOrder: boolean) => {
+  const handlePickUpOrder = async (isPickUpOrder: boolean) => {
     if (isPickUpOrder) {
-      values.adress1 = '9629 Premier Parkway'
-      values.adress2 = 'Pickup Order'
-      values.city = 'Miramar'
-      values.state = 'FL'
-      values.country = state.currentRegion == 'us' ? 'US' : 'ES'
-      values.zipCode = '33025'
-      values.phoneNumber = '9546134941'
+      setValue('adress1', '9629 Premier Parkway')
+      setValue('adress2', 'Pickup Order')
+      setValue('city', 'Miramar')
+      setValue('state', 'FL')
+      setValue('country', state.currentRegion == 'us' ? 'US' : 'ES')
+      setValue('zipCode', '33025')
+      setValue('phoneNumber', '9546134941')
     } else {
-      values.adress1 = ''
-      values.adress2 = ''
-      values.city = ''
-      values.state = ''
-      values.country = state.currentRegion == 'us' ? 'US' : 'ES'
-      values.zipCode = ''
-      values.phoneNumber = ''
+      setValue('adress1', '')
+      setValue('adress2', '')
+      setValue('city', '')
+      setValue('state', '')
+      setValue('country', state.currentRegion == 'us' ? 'US' : 'ES')
+      setValue('zipCode', '')
+      setValue('phoneNumber', '')
     }
     setIsPickUpOrder(isPickUpOrder)
   }
@@ -309,78 +385,69 @@ const CreateOrder = ({ session }: Props) => {
             <Card className='text-[13px]'>
               <CardContent>
                 {ready ? (
-                  <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
-                    {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
-                      <Form>
+                  <form onSubmit={form.handleSubmit(handleSubmit)}>
+                    <div className='flex flex-wrap -mx-3'>
+                      <div className='flex justify-end items-center'>
+                        <div className='inline-flex items-center gap-2 mb-2 md:mb-0'>
+                          <Label className='font-normal' htmlFor='SwitchCheck4'>
+                            Select for Local PickUp
+                          </Label>
+                          <Switch
+                            id='SwitchCheck4'
+                            onChange={async () => {
+                              await handlePickUpOrder(!isPickUpOrder)
+                            }}
+                            defaultChecked={isPickUpOrder}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className='flex flex-wrap -mx-3'>
+                      {/* NAME */}
+
+                      <div className='px-3 w-full md:w-8/12 flex flex-col gap-1'>
                         <div className='flex flex-wrap -mx-3'>
-                          <div className='flex justify-end items-center'>
-                            <div className='inline-flex items-center gap-2 mb-2 md:mb-0'>
-                              <Label className='font-normal' htmlFor='SwitchCheck4'>
-                                Select for Local PickUp
+                          <div className='px-3 w-full md:w-6/12'>
+                            <div className='mb-3 createOrder_inputs'>
+                              <Label htmlFor='firstNameinput' className='mb-1'>
+                                *First Name
                               </Label>
-                              <Switch
-                                id='SwitchCheck4'
-                                onChange={async (e) => {
-                                  await handlePickUpOrder(values, !isPickUpOrder)
-                                  handleChange(e)
-                                }}
-                                defaultChecked={isPickUpOrder}
+                              <Input
+                                type='text'
+                                className='h-8 text-xs'
+                                placeholder='First Name...'
+                                id='firstName'
+                                {...register('firstName')}
+                                aria-invalid={touchedFields.firstName && errors.firstName ? true : undefined}
                               />
+                              {touchedFields.firstName && errors.firstName ? (
+                                <div className='m-0 text-sm text-destructive'>
+                                  {errors.firstName.message}
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className='px-3 w-full md:w-6/12'>
+                            <div className='mb-3 createOrder_inputs'>
+                              <Label htmlFor='lastNameinput' className='mb-1'>
+                                *Last Name
+                              </Label>
+                              <Input
+                                type='text'
+                                className='h-8 text-xs'
+                                placeholder='Last Name...'
+                                id='lastName'
+                                {...register('lastName')}
+                                aria-invalid={touchedFields.lastName && errors.lastName ? true : undefined}
+                              />
+                              {touchedFields.lastName && errors.lastName ? (
+                                <div className='m-0 text-sm text-destructive'>
+                                  {errors.lastName.message}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         </div>
-                        <div className='flex flex-wrap -mx-3'>
-                          {/* NAME */}
-
-                          <div className='px-3 w-full md:w-8/12 flex flex-col gap-1'>
-                            <div className='flex flex-wrap -mx-3'>
-                              <div className='px-3 w-full md:w-6/12'>
-                                <div className='mb-3 createOrder_inputs'>
-                                  <Label htmlFor='firstNameinput' className='mb-1'>
-                                    *First Name
-                                  </Label>
-                                  <Input
-                                    type='text'
-                                    className='h-8 text-xs'
-                                    placeholder='First Name...'
-                                    id='firstName'
-                                    name='firstName'
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.firstName || ''}
-                                    aria-invalid={touched.firstName && errors.firstName ? true : undefined}
-                                  />
-                                  {touched.firstName && errors.firstName ? (
-                                    <div className='m-0 text-sm text-destructive'>
-                                      {errors.firstName}
-                                    </div>
-                                  ) : null}
-                                </div>
-                              </div>
-                              <div className='px-3 w-full md:w-6/12'>
-                                <div className='mb-3 createOrder_inputs'>
-                                  <Label htmlFor='lastNameinput' className='mb-1'>
-                                    *Last Name
-                                  </Label>
-                                  <Input
-                                    type='text'
-                                    className='h-8 text-xs'
-                                    placeholder='Last Name...'
-                                    id='lastName'
-                                    name='lastName'
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.lastName || ''}
-                                    aria-invalid={touched.lastName && errors.lastName ? true : undefined}
-                                  />
-                                  {touched.lastName && errors.lastName ? (
-                                    <div className='m-0 text-sm text-destructive'>
-                                      {errors.lastName}
-                                    </div>
-                                  ) : null}
-                                </div>
-                              </div>
-                            </div>
 
                             {/* COMPANY */}
 
@@ -394,15 +461,12 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Company...'
                                   id='company'
-                                  name='company'
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.company || ''}
-                                  aria-invalid={touched.company && errors.company ? true : undefined}
+                                  {...register('company')}
+                                  aria-invalid={touchedFields.company && errors.company ? true : undefined}
                                 />
-                                {touched.company && errors.company ? (
+                                {touchedFields.company && errors.company ? (
                                   <div className='m-0 text-sm text-destructive'>
-                                    {errors.company}
+                                    {errors.company.message}
                                   </div>
                                 ) : null}
                               </div>
@@ -422,16 +486,15 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Address...'
                                   id='adress1'
-                                  name='adress1'
                                   readOnly={isPickUpOrder}
+                                  {...register('adress1')}
                                   onChange={(e) => {
-                                    handleChange(e)
+                                    register('adress1').onChange(e)
                                     handleAddressAutoComplete(e.target.value)
                                   }}
-                                  onBlur={handleBlur}
                                   value={values.adress1 || ''}
                                 />
-                                {touched.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1} marginTop='mt-0' /> : null}
+                                {touchedFields.adress1 && errors.adress1 ? <ErrorInputLabel error={errors.adress1.message} marginTop='mt-0' /> : null}
                                 {!isPickUpOrder && autoCompleteAddress?.length > 0 && (
                                   <div className='absolute'>
                                     <Card>
@@ -450,9 +513,10 @@ const CreateOrder = ({ session }: Props) => {
                                                   variant='info'
                                                   size='sm'
                                                   onClick={() => {
-                                                    values.adress1 = address.properties.address_line1
-                                                    values.city = address.properties.city
-                                                    values.state =
+                                                    setValue('adress1', address.properties.address_line1)
+                                                    setValue('city', address.properties.city)
+                                                    setValue(
+                                                      'state',
                                                       state.currentRegion == 'us'
                                                         ? address.properties.state_code
                                                           ? String(address.properties.state_code).toUpperCase()
@@ -460,8 +524,9 @@ const CreateOrder = ({ session }: Props) => {
                                                         : address.properties.state
                                                           ? String(address.properties.state)
                                                           : address.properties.county
-                                                    values.country = String(address.properties.country_code).toUpperCase()
-                                                    values.zipCode = address.properties.postcode
+                                                    )
+                                                    setValue('country', String(address.properties.country_code).toUpperCase())
+                                                    setValue('zipCode', address.properties.postcode)
                                                     setAutoCompleteAddress([])
                                                   }}>
                                                   Select
@@ -496,15 +561,12 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Apartment, suite, etc...'
                                   id='adress2'
-                                  name='adress2'
                                   readOnly={isPickUpOrder}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.adress2 || ''}
+                                  {...register('adress2')}
                                 />
-                                {touched.adress2 && errors.adress2 ? (
+                                {touchedFields.adress2 && errors.adress2 ? (
                                   <div className='m-0 text-sm text-destructive'>
-                                    {errors.adress2}
+                                    {errors.adress2.message}
                                   </div>
                                 ) : null}
                               </div>
@@ -524,16 +586,13 @@ const CreateOrder = ({ session }: Props) => {
                                       className='h-8 text-xs'
                                       placeholder='City...'
                                       id='city'
-                                      name='city'
                                       readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.city || ''}
-                                      aria-invalid={touched.city && errors.city ? true : undefined}
+                                      {...register('city')}
+                                      aria-invalid={touchedFields.city && errors.city ? true : undefined}
                                     />
-                                    {touched.city && errors.city ? (
+                                    {touchedFields.city && errors.city ? (
                                       <div className='m-0 text-sm text-destructive'>
-                                        {errors.city}
+                                        {errors.city.message}
                                       </div>
                                     ) : null}
                                   </div>
@@ -548,16 +607,13 @@ const CreateOrder = ({ session }: Props) => {
                                       className='h-8 text-xs'
                                       placeholder='Zip Code...'
                                       id='zipCode'
-                                      name='zipCode'
                                       readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.zipCode || ''}
-                                      aria-invalid={touched.zipCode && errors.zipCode ? true : undefined}
+                                      {...register('zipCode')}
+                                      aria-invalid={touchedFields.zipCode && errors.zipCode ? true : undefined}
                                     />
-                                    {touched.zipCode && errors.zipCode ? (
+                                    {touchedFields.zipCode && errors.zipCode ? (
                                       <div className='m-0 text-sm text-destructive'>
-                                        {errors.zipCode}
+                                        {errors.zipCode.message}
                                       </div>
                                     ) : null}
                                   </div>
@@ -572,10 +628,10 @@ const CreateOrder = ({ session }: Props) => {
                                       options={countries || []}
                                       handleSelect={(option: any) => {
                                         if (!option) {
-                                          setFieldValue(`country`, '')
+                                          setValue(`country`, '', { shouldValidate: true })
                                           return
                                         }
-                                        setFieldValue(`country`, option.value)
+                                        setValue(`country`, option.value, { shouldValidate: true })
                                       }}
                                       isReadOnly={isPickUpOrder}
                                       isDisabled={isPickUpOrder}
@@ -585,7 +641,7 @@ const CreateOrder = ({ session }: Props) => {
                                       isClearable
                                       menuPortalTarget={document.body}
                                     />
-                                    {errors.country ? <ErrorInputLabel error={errors.country} marginTop='mt-0' /> : null}
+                                    {errors.country ? <ErrorInputLabel error={errors.country.message} marginTop='mt-0' /> : null}
                                   </div>
                                 </div>
                                 <div className='px-3 w-full md:w-3/12'>
@@ -600,10 +656,10 @@ const CreateOrder = ({ session }: Props) => {
                                           options={stateList[values.country] || []}
                                           handleSelect={(option: any) => {
                                             if (!option) {
-                                              setFieldValue(`state`, '')
+                                              setValue(`state`, '', { shouldValidate: true })
                                               return
                                             }
-                                            setFieldValue(`state`, option.value)
+                                            setValue(`state`, option.value, { shouldValidate: true })
                                           }}
                                           isReadOnly={isPickUpOrder}
                                           isDisabled={isPickUpOrder}
@@ -613,7 +669,7 @@ const CreateOrder = ({ session }: Props) => {
                                           isClearable
                                           menuPortalTarget={document.body}
                                         />
-                                        {errors.state ? <ErrorInputLabel error={errors.state} marginTop='mt-0' /> : null}
+                                        {errors.state ? <ErrorInputLabel error={errors.state.message} marginTop='mt-0' /> : null}
                                       </>
                                     ) : (
                                       <>
@@ -622,16 +678,13 @@ const CreateOrder = ({ session }: Props) => {
                                           className='h-8 text-xs'
                                           placeholder='State...'
                                           id='state'
-                                          name='state'
                                           readOnly={isPickUpOrder}
-                                          onChange={handleChange}
-                                          onBlur={handleBlur}
-                                          value={values.state || ''}
-                                          aria-invalid={touched.state && errors.state ? true : undefined}
+                                          {...register('state')}
+                                          aria-invalid={touchedFields.state && errors.state ? true : undefined}
                                         />
-                                        {touched.state && errors.state ? (
+                                        {touchedFields.state && errors.state ? (
                                           <div className='m-0 text-sm text-destructive'>
-                                            {errors.state}
+                                            {errors.state.message}
                                           </div>
                                         ) : null}
                                       </>
@@ -655,16 +708,13 @@ const CreateOrder = ({ session }: Props) => {
                                       className='h-8 text-xs'
                                       placeholder='Phone Number...'
                                       id='phoneNumber'
-                                      name='phoneNumber'
                                       readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.phoneNumber || ''}
-                                      aria-invalid={touched.phoneNumber && errors.phoneNumber ? true : undefined}
+                                      {...register('phoneNumber')}
+                                      aria-invalid={touchedFields.phoneNumber && errors.phoneNumber ? true : undefined}
                                     />
-                                    {touched.phoneNumber && errors.phoneNumber ? (
+                                    {touchedFields.phoneNumber && errors.phoneNumber ? (
                                       <div className='m-0 text-sm text-destructive'>
-                                        {errors.phoneNumber}
+                                        {errors.phoneNumber.message}
                                       </div>
                                     ) : null}
                                   </div>
@@ -679,16 +729,13 @@ const CreateOrder = ({ session }: Props) => {
                                       className='h-8 text-xs'
                                       placeholder='Email Address...'
                                       id='email'
-                                      name='email'
                                       readOnly={isPickUpOrder}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                      value={values.email || ''}
-                                      aria-invalid={touched.email && errors.email ? true : undefined}
+                                      {...register('email')}
+                                      aria-invalid={touchedFields.email && errors.email ? true : undefined}
                                     />
-                                    {touched.email && errors.email ? (
+                                    {touchedFields.email && errors.email ? (
                                       <div className='m-0 text-sm text-destructive'>
-                                        {errors.email}
+                                        {errors.email.message}
                                       </div>
                                     ) : null}
                                   </div>
@@ -715,16 +762,13 @@ const CreateOrder = ({ session }: Props) => {
                                     placeholder='Order Number...'
                                     aria-describedby='orderNumberid'
                                     id='orderNumber'
-                                    name='orderNumber'
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.orderNumber || ''}
-                                    aria-invalid={touched.orderNumber && errors.orderNumber ? true : undefined}
+                                    {...register('orderNumber')}
+                                    aria-invalid={touchedFields.orderNumber && errors.orderNumber ? true : undefined}
                                   />
                                 </InputGroup>
-                                {touched.orderNumber && errors.orderNumber ? (
+                                {touchedFields.orderNumber && errors.orderNumber ? (
                                   <div className='m-0 text-sm text-destructive'>
-                                    {errors.orderNumber}
+                                    {errors.orderNumber.message}
                                   </div>
                                 ) : null}
                               </div>
@@ -739,13 +783,10 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Amount...'
                                   id='amount'
-                                  name='amount'
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.amount || ''}
-                                  aria-invalid={touched.amount && errors.amount ? true : undefined}
+                                  {...register('amount')}
+                                  aria-invalid={touchedFields.amount && errors.amount ? true : undefined}
                                 />
-                                {touched.amount && errors.amount ? <div className='text-sm text-destructive'>{errors.amount}</div> : null}
+                                {touchedFields.amount && errors.amount ? <div className='text-sm text-destructive'>{errors.amount.message}</div> : null}
                               </div>
                               <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='mb-2'>
@@ -756,13 +797,10 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Shipping...'
                                   id='shipping'
-                                  name='shipping'
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.shipping || ''}
-                                  aria-invalid={touched.shipping && errors.shipping ? true : undefined}
+                                  {...register('shipping')}
+                                  aria-invalid={touchedFields.shipping && errors.shipping ? true : undefined}
                                 />
-                                {touched.shipping && errors.shipping ? <div className='text-sm text-destructive'>{errors.shipping}</div> : null}
+                                {touchedFields.shipping && errors.shipping ? <div className='text-sm text-destructive'>{errors.shipping.message}</div> : null}
                               </div>
                               <div className='mb-3 createOrder_inputs'>
                                 <Label htmlFor='lastNameinput' className='mb-2'>
@@ -773,13 +811,10 @@ const CreateOrder = ({ session }: Props) => {
                                   className='h-8 text-xs'
                                   placeholder='Tax...'
                                   id='tax'
-                                  name='tax'
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  value={values.tax || ''}
-                                  aria-invalid={touched.tax && errors.tax ? true : undefined}
+                                  {...register('tax')}
+                                  aria-invalid={touchedFields.tax && errors.tax ? true : undefined}
                                 />
-                                {touched.tax && errors.tax ? <div className='text-sm text-destructive'>{errors.tax}</div> : null}
+                                {touchedFields.tax && errors.tax ? <div className='text-sm text-destructive'>{errors.tax.message}</div> : null}
                               </div>
                             </div>
                           </div>
@@ -811,161 +846,132 @@ const CreateOrder = ({ session }: Props) => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <FieldArray name='products'>
-                                    {({ remove, push }) => (
-                                      <>
-                                        {values.products.map((_product, index) => (
-                                          <tr key={index}>
-                                            <td style={{ minWidth: '50px' }}>
-                                              {index > 0 ? (
-                                                <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
-                                                  <button
-                                                    type='button'
-                                                    aria-label='Add product row'
-                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
-                                                    onClick={() =>
-                                                      push({
-                                                        sku: '',
-                                                        title: '',
-                                                        qty: 1,
-                                                        price: '0',
-                                                      })
-                                                    }>
-                                                    <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
-                                                  </button>
-                                                  <button
-                                                    type='button'
-                                                    aria-label='Remove product row'
-                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-destructive m-0 p-0 w-auto')}
-                                                    onClick={() => remove(index)}>
-                                                    <i className='text-[22.75px] las la-minus-circle m-0 p-0' />
-                                                  </button>
-                                                </div>
-                                              ) : (
-                                                <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
-                                                  <button
-                                                    type='button'
-                                                    aria-label='Add product row'
-                                                    className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
-                                                    onClick={() =>
-                                                      push({
-                                                        sku: '',
-                                                        title: '',
-                                                        qty: 1,
-                                                        price: '0',
-                                                      })
-                                                    }>
-                                                    <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
-                                                  </button>
-                                                </div>
-                                              )}
-                                            </td>
-                                            <td style={{ minWidth: '200px' }}>
-                                              <Field name={`products.${index}.sku`}>
-                                                {({ meta }: any) => (
-                                                  <div className='mb-3 createOrder_inputs'>
-                                                    <SimpleSelect
-                                                      selected={{ label: values.products[index].sku, value: values.products[index].sku }}
-                                                      options={skus.map((sku: { sku: string; name: string }) => ({ label: sku.sku, value: sku.sku, description: sku.name }))}
-                                                      handleSelect={(option: any) => {
-                                                        if (!option) {
-                                                          setFieldValue(`products.${index}.sku`, '')
-                                                          setFieldValue(`products.${index}.title`, '')
-                                                          return
-                                                        }
-                                                        setFieldValue(`products.${index}.sku`, option.value)
-                                                        setFieldValue(`products.${index}.title`, skusTitles[option.value])
-                                                      }}
-                                                      placeholder='Select SKU...'
-                                                      customStyle='sm'
-                                                      hasError={meta.error ? true : false}
-                                                      isClearable
-                                                      menuPortalTarget={document.body}
-                                                    />
-                                                    {meta.error ? <ErrorInputLabel error={meta.error} marginTop='mt-0' /> : null}
-                                                  </div>
-                                                )}
-                                              </Field>
-                                            </td>
-                                            <td style={{ minWidth: '200px' }}>
-                                              <Field name={`products.${index}.title`}>
-                                                {({ meta }: any) => (
-                                                  <div className='mb-3 createOrder_inputs'>
-                                                    <Input
-                                                      type='text'
-                                                      className='h-8 text-xs'
-                                                      name={`products.${index}.title`}
-                                                      placeholder='Title...'
-                                                      list='skuNames'
-                                                      readOnly
-                                                      onBlur={handleBlur}
-                                                      value={values.products[index].title?.split(' -||- ')[0] || ''}
-                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
-                                                    />
-                                                    {meta.touched && meta.error ? (
-                                                      <div className='m-0 text-sm text-destructive'>
-                                                        {meta.error}
-                                                      </div>
-                                                    ) : null}
-                                                  </div>
-                                                )}
-                                              </Field>
-                                            </td>
-                                            <td style={{ minWidth: '80px' }}>
-                                              <Field name={`products.${index}.price`}>
-                                                {({ meta }: any) => (
-                                                  <div className='mb-3 createOrder_inputs'>
-                                                    <Input
-                                                      type='text'
-                                                      className='h-8 text-xs'
-                                                      name={`products.${index}.price`}
-                                                      placeholder='Price...'
-                                                      onChange={handleChange}
-                                                      onBlur={handleBlur}
-                                                      value={values.products[index].price || ''}
-                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
-                                                    />
-                                                    {meta.touched && meta.error ? (
-                                                      <div className='m-0 text-sm text-destructive'>
-                                                        {meta.error}
-                                                      </div>
-                                                    ) : null}
-                                                  </div>
-                                                )}
-                                              </Field>
-                                            </td>
-                                            <td style={{ minWidth: '80px' }}>
-                                              <Field name={`products.${index}.qty`}>
-                                                {({ meta }: any) => (
-                                                  <div className='mb-3 createOrder_inputs'>
-                                                    <Input
-                                                      type='text'
-                                                      className='h-8 text-xs text-center'
-                                                      name={`products.${index}.qty`}
-                                                      max={skuQuantities[values.products[index].sku]}
-                                                      placeholder='Qty...'
-                                                      onChange={handleChange}
-                                                      onBlur={handleBlur}
-                                                      value={values.products[index].qty || ''}
-                                                      aria-invalid={meta.touched && meta.error ? true : undefined}
-                                                    />
-                                                    {meta.touched && meta.error ? (
-                                                      <div className='m-0 text-sm text-destructive text-wrap'>
-                                                        {meta.error}
-                                                      </div>
-                                                    ) : null}
-                                                  </div>
-                                                )}
-                                              </Field>
-                                            </td>
-                                            <td className='text-right' style={{ minWidth: '80px' }}>
-                                              {FormatCurrency(state.currentRegion, values.products[index].qty * Number(values.products[index].price))}
-                                            </td>
-                                          </tr>
-                                        ))}
-                                      </>
-                                    )}
-                                  </FieldArray>
+                                  {fields.map((field, index) => (
+                                    <tr key={field.id}>
+                                      <td style={{ minWidth: '50px' }}>
+                                        {index > 0 ? (
+                                          <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-1 items-center mb-0'>
+                                            <button
+                                              type='button'
+                                              aria-label='Add product row'
+                                              className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
+                                              onClick={() =>
+                                                append({
+                                                  sku: '',
+                                                  title: '',
+                                                  qty: 1,
+                                                  price: '0',
+                                                })
+                                              }>
+                                              <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
+                                            </button>
+                                            <button
+                                              type='button'
+                                              aria-label='Remove product row'
+                                              className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-destructive m-0 p-0 w-auto')}
+                                              onClick={() => remove(index)}>
+                                              <i className='text-[22.75px] las la-minus-circle m-0 p-0' />
+                                            </button>
+                                          </div>
+                                        ) : (
+                                          <div className='flex flex-wrap -mx-3 w-full flex flex-row flex-nowrap justify-center gap-0 items-center mb-0'>
+                                            <button
+                                              type='button'
+                                              aria-label='Add product row'
+                                              className={cn(buttonVariants({ variant: 'link' }), 'border-0 bg-transparent text-success m-0 p-0 w-auto')}
+                                              onClick={() =>
+                                                append({
+                                                  sku: '',
+                                                  title: '',
+                                                  qty: 1,
+                                                  price: '0',
+                                                })
+                                              }>
+                                              <i className='text-[22.75px] las la-plus-circle m-0 p-0' />
+                                            </button>
+                                          </div>
+                                        )}
+                                      </td>
+                                      <td style={{ minWidth: '200px' }}>
+                                        <div className='mb-3 createOrder_inputs'>
+                                          <SimpleSelect
+                                            selected={{ label: values.products[index]?.sku, value: values.products[index]?.sku }}
+                                            options={skus.map((sku: { sku: string; name: string }) => ({ label: sku.sku, value: sku.sku, description: sku.name }))}
+                                            handleSelect={(option: any) => {
+                                              if (!option) {
+                                                setValue(`products.${index}.sku`, '', { shouldValidate: true })
+                                                setValue(`products.${index}.title`, '', { shouldValidate: true })
+                                                return
+                                              }
+                                              setValue(`products.${index}.sku`, option.value, { shouldValidate: true })
+                                              setValue(`products.${index}.title`, skusTitles[option.value], { shouldValidate: true })
+                                            }}
+                                            placeholder='Select SKU...'
+                                            customStyle='sm'
+                                            hasError={errors.products?.[index]?.sku ? true : false}
+                                            isClearable
+                                            menuPortalTarget={document.body}
+                                          />
+                                          {errors.products?.[index]?.sku ? <ErrorInputLabel error={errors.products[index].sku?.message} marginTop='mt-0' /> : null}
+                                        </div>
+                                      </td>
+                                      <td style={{ minWidth: '200px' }}>
+                                        <div className='mb-3 createOrder_inputs'>
+                                          <Input
+                                            type='text'
+                                            className='h-8 text-xs'
+                                            placeholder='Title...'
+                                            list='skuNames'
+                                            readOnly
+                                            {...register(`products.${index}.title`)}
+                                            value={values.products[index]?.title?.split(' -||- ')[0] || ''}
+                                            aria-invalid={touchedFields.products?.[index]?.title && errors.products?.[index]?.title ? true : undefined}
+                                          />
+                                          {touchedFields.products?.[index]?.title && errors.products?.[index]?.title ? (
+                                            <div className='m-0 text-sm text-destructive'>
+                                              {errors.products[index].title?.message}
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      </td>
+                                      <td style={{ minWidth: '80px' }}>
+                                        <div className='mb-3 createOrder_inputs'>
+                                          <Input
+                                            type='text'
+                                            className='h-8 text-xs'
+                                            placeholder='Price...'
+                                            {...register(`products.${index}.price`)}
+                                            aria-invalid={touchedFields.products?.[index]?.price && errors.products?.[index]?.price ? true : undefined}
+                                          />
+                                          {touchedFields.products?.[index]?.price && errors.products?.[index]?.price ? (
+                                            <div className='m-0 text-sm text-destructive'>
+                                              {errors.products[index].price?.message}
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      </td>
+                                      <td style={{ minWidth: '80px' }}>
+                                        <div className='mb-3 createOrder_inputs'>
+                                          <Input
+                                            type='text'
+                                            className='h-8 text-xs text-center'
+                                            max={skuQuantities[values.products[index]?.sku]}
+                                            placeholder='Qty...'
+                                            {...register(`products.${index}.qty`)}
+                                            aria-invalid={touchedFields.products?.[index]?.qty && errors.products?.[index]?.qty ? true : undefined}
+                                          />
+                                          {touchedFields.products?.[index]?.qty && errors.products?.[index]?.qty ? (
+                                            <div className='m-0 text-sm text-destructive text-wrap'>
+                                              {errors.products[index].qty?.message}
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      </td>
+                                      <td className='text-right' style={{ minWidth: '80px' }}>
+                                        {FormatCurrency(state.currentRegion, Number(values.products[index]?.qty) * Number(values.products[index]?.price))}
+                                      </td>
+                                    </tr>
+                                  ))}
                                 </tbody>
                                 <tfoot className='bg-light'>
                                   <tr>
@@ -981,7 +987,7 @@ const CreateOrder = ({ session }: Props) => {
                                     <td className='text-right font-semibold'>
                                       {FormatCurrency(
                                         state.currentRegion,
-                                        values.products.reduce((acc: number, product: any) => acc + product.qty * Number(product.price), 0)
+                                        values.products.reduce((acc: number, product: any) => acc + Number(product.qty) * Number(product.price), 0)
                                       )}
                                     </td>
                                   </tr>
@@ -1012,9 +1018,7 @@ const CreateOrder = ({ session }: Props) => {
                             </div>
                           </div>
                         </div>
-                      </Form>
-                    )}
-                  </Formik>
+                  </form>
                 ) : (
                   <div className='flex flex-wrap -mx-3'>
                     <h5>Loading Create Order Form...</h5>

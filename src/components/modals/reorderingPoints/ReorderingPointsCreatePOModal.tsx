@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import router from 'next/router'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import SimpleSelect from '@components/Common/SimpleSelect'
 import { RECEIVING_SHIPMENT_TYPES } from '@components/constants/receivings'
 import DownloadExcelReorderingPointsOrder from '@components/reorderingPoints/DownloadExcelReorderingPointsOrder'
@@ -15,7 +16,7 @@ import { FormatCurrency, FormatIntNumber, FormatIntPercentage } from '@lib/Forma
 import { NoImageAdress } from '@lib/assetsConstants'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { DebounceInput } from 'react-debounce-input'
 import { toast } from '@/lib/toast'
 import { useSWRConfig } from 'swr'
@@ -28,7 +29,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Spinner } from '@shadcn/ui/spinner'
 import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
 import { ChevronDownIcon } from 'lucide-react'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 export type Splits = {
   isSplitting: boolean
@@ -77,6 +78,54 @@ type Props = {
   splitNames: SplitNames
 }
 
+const optionSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+})
+
+const createPOSchema = (splits: Splits) =>
+  z
+    .object({
+      orderNumber: z
+        .string()
+        .regex(/^[a-zA-Z0-9-]+$/, { message: `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces` })
+        .max(50, { message: 'Order Number is to Long' })
+        .min(1, { message: 'Required Order Number' }),
+      destinationSC: optionSchema,
+      shipmentType: optionSchema,
+      splitDestinations: z.record(z.string(), optionSchema),
+      splitShipmentTypes: z.record(z.string(), optionSchema),
+    })
+    .superRefine((values, ctx) => {
+      if (!splits.isSplitting) {
+        if (!values.destinationSC.value) {
+          ctx.addIssue({ code: 'custom', message: 'Destination Required', path: ['destinationSC', 'value'] })
+        }
+        if (!values.shipmentType.value) {
+          ctx.addIssue({ code: 'custom', message: 'Shipment Type Required', path: ['shipmentType', 'value'] })
+        }
+      } else {
+        const destValues: string[] = []
+        for (let i = 0; i < splits.splitsQty; i++) {
+          const dest = values.splitDestinations[`${i}`]
+          if (!dest || dest.value === '' || !(Number(dest.value) >= 0)) {
+            ctx.addIssue({ code: 'custom', message: `Required Split #${i + 1} Destination`, path: ['splitDestinations', `${i}`, 'value'] })
+          } else {
+            destValues.push(dest.value)
+          }
+          const shipType = values.splitShipmentTypes[`${i}`]
+          if (!shipType || !shipType.value) {
+            ctx.addIssue({ code: 'custom', message: `Required Split #${i + 1} Shipment Type`, path: ['splitShipmentTypes', `${i}`, 'value'] })
+          }
+        }
+        if (new Set(destValues).size !== destValues.length) {
+          ctx.addIssue({ code: 'custom', message: 'Splits must have unique destinations', path: ['splitDestinations'] })
+        }
+      }
+    })
+
+type CreatePOValues = z.infer<ReturnType<typeof createPOSchema>>
+
 function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier, showPOModal, setshowPOModal, username, splits, splitNames }: Props) {
   const { state } = useContext(AppContext)
   const { warehouses, isLoading } = useWarehouses()
@@ -95,161 +144,113 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
 
   const orderNumberStart = `${username.substring(0, 3).toUpperCase()}-`
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      orderNumber: state.currentRegion == 'us' ? `00${state.user.orderNumber.us}` : `00${state.user.orderNumber.eu}`,
-      destinationSC: { value: '', label: 'Select ...' },
-      shipmentType: { value: '', label: 'Select ...' },
-      splitDestinations: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
-      splitShipmentTypes: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
-    },
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ... Nor White Spaces`)
-        .max(50, 'Order Number is to Long')
-        .required('Required Order Number'),
-      destinationSC: Yup.object().shape({
-        value: Yup.number().when([], {
-          is: () => !splits.isSplitting,
-          then: Yup.number().required('Destination Required'),
-        }),
-      }),
-      shipmentType: Yup.object().shape({
-        value: Yup.string().when([], {
-          is: () => !splits.isSplitting,
-          then: Yup.string().required('Shipment Type Required'),
-        }),
-      }),
-      splitDestinations: Yup.object().when([], {
-        is: () => splits.isSplitting,
-        then: Yup.object()
-          .shape(
-            Object.fromEntries(
-              Array.from({ length: splits.splitsQty }, (_, index) => [
-                index,
-                Yup.object().shape({
-                  value: Yup.number()
-                    .min(0, `Required Split #${index + 1} Destination`)
-                    .required(`Required Split #${index + 1} Destination`),
-                }),
-              ])
-            )
-          )
-          .test('unique', 'Splits must have unique destinations', function (value) {
-            const values = Object.values(value || {}).map((v: any) => v.value)
-            return new Set(values).size === values.length
-          }),
-      }),
-      splitShipmentTypes: Yup.object().when([], {
-        is: () => splits.isSplitting,
-        then: Yup.object().shape(
-          Object.fromEntries(
-            Array.from({ length: splits.splitsQty }, (_, index) => [
-              index,
-              Yup.object().shape({
-                value: Yup.string().required(`Required Split #${index + 1} Shipment Type`),
-              }),
-            ])
-          )
-        ),
-      }),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-
-      const createNewPurchaseOrder = toast.loading('Creating Purchase Order...')
-
-      const poItems: poItem[] = []
-      for await (const product of Object.values(reorderingPointsOrder.products)) {
-        poItems.push({
-          sku: product.sku,
-          name: product.title,
-          boxQty: product.boxQty,
-          orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
-          inboundQty: 0,
-          sellerCost: product.sellerCost,
-          inventoryId: product.inventoryId,
-          receivedQty: 0,
-          arrivalHistory: [],
-        })
-      }
-
-      const hasSplitting = splits.isSplitting
-
-      const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { id: number; label: string }; items: poItem[]; name3PL: string | null } }
-      if (splits.isSplitting) {
-        for await (const product of Object.values(reorderingPointsOrder.products)) {
-          for (let i = 0; i < splits.splitsQty; i++) {
-            if (!splitsInfo[i])
-              splitsInfo[i] = {
-                splitId: i,
-                splitName: splitNames[`${i}`],
-                destination: { id: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
-                items: [],
-                name3PL: warehouses.find((w) => w.warehouseId === parseInt(values.splitDestinations[i].value))?.name3PL || null,
-              }
-            splitsInfo[i].items.push({
-              sku: product.sku,
-              name: product.title,
-              boxQty: product.boxQty,
-              orderQty: product.useOrderAdjusted ? product.orderSplits[`${i}`].orderAdjusted : product.orderSplits[`${i}`].order,
-              inboundQty: 0,
-              sellerCost: product.sellerCost,
-              inventoryId: product.inventoryId,
-              receivedQty: 0,
-              arrivalHistory: [],
-            })
-          }
-        }
-      }
-
-      const selectedWarehouse = warehouses.find((w) => w.warehouseId === parseInt(values.destinationSC.value))
-
-      const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        orderNumber: values.orderNumber,
-        destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
-        warehouseId: hasSplitting ? 0 : parseInt(values.destinationSC.value),
-        poItems,
-        hasSplitting,
-        splits: splitsInfo,
-        selectedSupplier: selectedSupplier,
-        name3PL: hasSplitting ? null : selectedWarehouse?.name3PL,
-      })
-
-      if (!response.data.error) {
-        setshowPOModal(false)
-        toast.update(createNewPurchaseOrder, {
-          render: response.data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-
-        generate_new_forecast_products({
-          skus: poItems.map((item) => item.sku),
-          productIds: poItems.map((item) => item.inventoryId),
-        })
-
-        await mutate('/api/getuser').then(() => {
-          router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
-        })
-      } else {
-        toast.update(createNewPurchaseOrder, {
-          render: response.data.message ?? 'Error creating Purchase Order',
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-
-      setLoading(false)
-    },
+  const getDefaultValues = (): CreatePOValues => ({
+    orderNumber: state.currentRegion == 'us' ? `00${state.user.orderNumber.us}` : `00${state.user.orderNumber.eu}`,
+    destinationSC: { value: '', label: 'Select ...' },
+    shipmentType: { value: '', label: 'Select ...' },
+    splitDestinations: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
+    splitShipmentTypes: splits.isSplitting ? Object.fromEntries(Array.from({ length: splits.splitsQty }, (_, index) => [index, { value: '', label: 'Select ...' }])) : {},
   })
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const validation = useForm<CreatePOValues>({
+    resolver: zodResolver(createPOSchema(splits)),
+    defaultValues: getDefaultValues(),
+  })
+
+  useEffect(() => {
+    validation.reset(getDefaultValues())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [splits.isSplitting, splits.splitsQty, state.currentRegion])
+
+  const onSubmit = async (values: CreatePOValues) => {
+    setLoading(true)
+
+    const createNewPurchaseOrder = toast.loading('Creating Purchase Order...')
+
+    const poItems: poItem[] = []
+    for await (const product of Object.values(reorderingPointsOrder.products)) {
+      poItems.push({
+        sku: product.sku,
+        name: product.title,
+        boxQty: product.boxQty,
+        orderQty: product.useOrderAdjusted ? product.orderAdjusted : product.order,
+        inboundQty: 0,
+        sellerCost: product.sellerCost,
+        inventoryId: product.inventoryId,
+        receivedQty: 0,
+        arrivalHistory: [],
+      })
+    }
+
+    const hasSplitting = splits.isSplitting
+
+    const splitsInfo = {} as { [split: string]: { splitId: number; splitName: string; destination: { id: number; label: string }; items: poItem[]; name3PL: string | null } }
+    if (splits.isSplitting) {
+      for await (const product of Object.values(reorderingPointsOrder.products)) {
+        for (let i = 0; i < splits.splitsQty; i++) {
+          if (!splitsInfo[i])
+            splitsInfo[i] = {
+              splitId: i,
+              splitName: splitNames[`${i}`],
+              destination: { id: parseInt(values.splitDestinations[i].value), label: values.splitDestinations[i].label },
+              items: [],
+              name3PL: warehouses.find((w) => w.warehouseId === parseInt(values.splitDestinations[i].value))?.name3PL || null,
+            }
+          splitsInfo[i].items.push({
+            sku: product.sku,
+            name: product.title,
+            boxQty: product.boxQty,
+            orderQty: product.useOrderAdjusted ? product.orderSplits[`${i}`].orderAdjusted : product.orderSplits[`${i}`].order,
+            inboundQty: 0,
+            sellerCost: product.sellerCost,
+            inventoryId: product.inventoryId,
+            receivedQty: 0,
+            arrivalHistory: [],
+          })
+        }
+      }
+    }
+
+    const selectedWarehouse = warehouses.find((w) => w.warehouseId === parseInt(values.destinationSC.value))
+
+    const response = await axios.post(`/api/reorderingPoints/createNewPurchaseOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      orderNumber: values.orderNumber,
+      destinationSC: hasSplitting ? 0 : warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+      warehouseId: hasSplitting ? 0 : parseInt(values.destinationSC.value),
+      poItems,
+      hasSplitting,
+      splits: splitsInfo,
+      selectedSupplier: selectedSupplier,
+      name3PL: hasSplitting ? null : selectedWarehouse?.name3PL,
+    })
+
+    if (!response.data.error) {
+      setshowPOModal(false)
+      toast.update(createNewPurchaseOrder, {
+        render: response.data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+
+      generate_new_forecast_products({
+        skus: poItems.map((item) => item.sku),
+        productIds: poItems.map((item) => item.inventoryId),
+      })
+
+      await mutate('/api/getuser').then(() => {
+        router.push('/purchaseOrders?status=pending&organizeBy=suppliers')
+      })
+    } else {
+      toast.update(createNewPurchaseOrder, {
+        render: response.data.message ?? 'Error creating Purchase Order',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+
+    setLoading(false)
   }
 
   const handleAddComment = async (comment: string, sku: string, inventoryId: number) => {
@@ -267,7 +268,10 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
       })
   }
 
-  const { filteredWarehouses, splitFilteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, validation.values.shipmentType.value)
+  const values = validation.watch()
+  const { errors, touchedFields } = validation.formState
+
+  const { filteredWarehouses, splitFilteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, values.shipmentType.value)
 
   return (
     <Dialog
@@ -276,7 +280,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
         if (!open) setshowPOModal(false)
       }}>
       <DialogContent aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-5xl' id='unitsSoldDetailsModal'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={validation.handleSubmit(onSubmit)}>
         <DialogHeader className='pr-6'>
           <DialogTitle asChild>
             <div>
@@ -303,13 +307,10 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     placeholder='Order Number...'
                     aria-describedby='basic-addon1'
                     id='orderNumber'
-                    name='orderNumber'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.orderNumber || ''}
-                    aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
+                    aria-invalid={touchedFields.orderNumber && errors.orderNumber ? true : undefined}
+                    {...validation.register('orderNumber')}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
+                  {touchedFields.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber.message}</div> : null}
                 </InputGroup>
               </div>
             </div>
@@ -321,16 +322,16 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </Label>
                   <SimpleSelect
                     options={RECEIVING_SHIPMENT_TYPES}
-                    selected={validation.values.shipmentType}
+                    selected={values.shipmentType}
                     handleSelect={(selected) => {
-                      validation.setFieldValue('shipmentType', selected)
-                      validation.setFieldValue('destinationSC', { value: '', label: 'Select ...' })
+                      validation.setValue('shipmentType', selected as any, { shouldValidate: true, shouldTouch: true })
+                      validation.setValue('destinationSC', { value: '', label: 'Select ...' }, { shouldValidate: true, shouldTouch: true })
                     }}
                     placeholder={'Select ...'}
                     customStyle='sm'
                   />
-                  {validation.errors.shipmentType && validation.touched.shipmentType ? (
-                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{validation.errors.shipmentType.value}</div>
+                  {errors.shipmentType && touchedFields.shipmentType ? (
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.shipmentType.value?.message}</div>
                   ) : null}
                 </div>
                 <div className='px-3 w-full md:w-4/12'>
@@ -339,15 +340,15 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                   </Label>
                   <SimpleSelect
                     options={filteredWarehouses}
-                    selected={validation.values.destinationSC}
+                    selected={values.destinationSC}
                     handleSelect={(selected) => {
-                      validation.setFieldValue('destinationSC', selected)
+                      validation.setValue('destinationSC', selected as any, { shouldValidate: true, shouldTouch: true })
                     }}
                     placeholder={isLoading ? 'Loading...' : 'Select ...'}
                     customStyle='sm'
                   />
-                  {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
+                  {errors.destinationSC && touchedFields.destinationSC ? (
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>*{errors.destinationSC.value?.message}</div>
                   ) : null}
                 </div>
               </>
@@ -356,9 +357,9 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
           {splits.isSplitting && (
             <div className='flex flex-wrap -mx-3 mb-4'>
               <Label className='mb-1 text-[13px] font-semibold'>*Select Split Destination</Label>
-              {Object.entries(validation.values.splitShipmentTypes).map(([key, split]) => (
+              {Object.entries(values.splitShipmentTypes).map(([key, split]) => (
                 <div
-                  className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(validation.values.splitShipmentTypes).length)]} mb-2`}
+                  className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(values.splitShipmentTypes).length)]} mb-2`}
                   key={`splitShipmentType-${key}`}>
                   <Label htmlFor={`splitShipmentType-${key}`} className='mb-1 text-[11.2px]'>
                     <span className='font-normal'>Shipment Type To: </span>
@@ -368,45 +369,39 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
                     options={RECEIVING_SHIPMENT_TYPES}
                     selected={split}
                     handleSelect={(selected) => {
-                      validation.setFieldValue(`splitShipmentTypes.${key}`, selected)
-                      validation.setFieldValue(`splitDestinations.${key}`, { value: '', label: 'Select ...' })
+                      validation.setValue(`splitShipmentTypes.${key}` as any, selected as any, { shouldValidate: true, shouldTouch: true })
+                      validation.setValue(`splitDestinations.${key}` as any, { value: '', label: 'Select ...' } as any, { shouldValidate: true, shouldTouch: true })
                     }}
                     placeholder={'Select ...'}
                     customStyle='sm'
                   />
-                  {validation.errors.splitShipmentTypes &&
-                  typeof validation.errors.splitShipmentTypes !== 'string' &&
-                  validation.errors.splitShipmentTypes[key]?.value &&
-                  validation.touched.splitShipmentTypes ? (
-                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${validation.errors.splitShipmentTypes[key]?.value}`}</div>
+                  {(errors.splitShipmentTypes as any)?.[key]?.value && touchedFields.splitShipmentTypes ? (
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${(errors.splitShipmentTypes as any)[key]?.value?.message}`}</div>
                   ) : null}
                 </div>
               ))}
-              {Object.entries(validation.values.splitDestinations).map(([key, split]) => (
-                <div className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(validation.values.splitDestinations).length)]}`} key={`splitDestination-${key}`}>
+              {Object.entries(values.splitDestinations).map(([key, split]) => (
+                <div className={`px-3 w-full ${MD_WIDTH_12THS[Math.round(12 / Object.entries(values.splitDestinations).length)]}`} key={`splitDestination-${key}`}>
                   <Label htmlFor={`splitDestination-${key}`} className='mb-1 text-[11.2px]'>
                     <span className='font-normal'>Split:: </span>
                     <span className='font-semibold'>{splitNames[`${key}`]}</span>
                   </Label>
                   <SimpleSelect
-                    options={splitFilteredWarehouses(validation.values.splitShipmentTypes[`${key}`]?.value)}
+                    options={splitFilteredWarehouses(values.splitShipmentTypes[`${key}`]?.value)}
                     selected={split}
                     handleSelect={(selected) => {
-                      validation.setFieldValue(`splitDestinations.${key}`, selected)
+                      validation.setValue(`splitDestinations.${key}` as any, selected as any, { shouldValidate: true, shouldTouch: true })
                     }}
                     placeholder={isLoading ? 'Loading...' : 'Select ...'}
                     customStyle='sm'
                   />
-                  {validation.errors.splitDestinations &&
-                  typeof validation.errors.splitDestinations !== 'string' &&
-                  validation.errors.splitDestinations[key]?.value &&
-                  validation.touched.splitDestinations ? (
-                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${validation.errors.splitDestinations[key]?.value}`}</div>
+                  {(errors.splitDestinations as any)?.[key]?.value && touchedFields.splitDestinations ? (
+                    <div className='m-0 p-0 text-danger text-[11.2px]'>{`*${(errors.splitDestinations as any)[key]?.value?.message}`}</div>
                   ) : null}
                 </div>
               ))}
-              {validation.errors.splitDestinations && typeof validation.errors.splitDestinations === 'string' && validation.touched.splitDestinations ? (
-                <p className='mb-0 mt-1 text-danger text-[11.2px]'>{`*${validation.errors.splitDestinations}`}</p>
+              {errors.splitDestinations?.root && touchedFields.splitDestinations ? (
+                <p className='mb-0 mt-1 text-danger text-[11.2px]'>{`*${errors.splitDestinations.root.message}`}</p>
               ) : null}
             </div>
           )}
@@ -611,7 +606,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
             <DropdownMenuContent>
               <PrintReorderingPointsOrder
                 reorderingPointsOrder={reorderingPointsOrder}
-                orderDetails={validation.values}
+                orderDetails={values}
                 selectedSupplier={selectedSupplier}
                 username={username}
                 orderComment={orderComment}
@@ -621,7 +616,7 @@ function ReorderingPointsCreatePOModal({ reorderingPointsOrder, selectedSupplier
               />
               <DownloadExcelReorderingPointsOrder
                 reorderingPointsOrder={reorderingPointsOrder}
-                orderDetails={validation.values}
+                orderDetails={values}
                 selectedSupplier={selectedSupplier}
                 username={username}
                 orderComment={orderComment}

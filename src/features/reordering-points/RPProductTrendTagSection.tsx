@@ -1,60 +1,81 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Badge } from '@components/shadcn/ui/badge'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@components/shadcn/ui/select'
 import { Separator } from '@components/shadcn/ui/separator'
 import { Switch } from '@components/shadcn/ui/switch'
 import { RPProductTrendTagUpdate } from '@hooks/reorderingPoints/useRPProductsInfo'
 import { ReorderingPointsProduct } from '@typesTs/reorderingPoints/reorderingPoints'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { TrendingUpDownIcon } from 'lucide-react'
+import { z } from 'zod'
 
 import { Button } from '@/components/shadcn/ui/button'
 import { Card, CardContent } from '@/components/shadcn/ui/card'
 
-import { PRODUCT_TREND_OPTIONS, ProductTrendOption, productTrendFormSchema } from './productTrendTagForm'
+import { PRODUCT_TREND_OPTIONS, ProductTrendOption } from './productTrendTagForm'
 
 type Props = {
   product: ReorderingPointsProduct
   onSave: (data: RPProductTrendTagUpdate) => void
 }
 
+const productTrendFormSchema = z.object({
+  bsnssTrend: z.enum(PRODUCT_TREND_OPTIONS, { message: 'Invalid trend' }),
+  useAITrend: z.boolean(),
+})
+
+type ProductTrendFormValues = z.infer<typeof productTrendFormSchema>
+
 const RPProductTrendTagSection = ({ product, onSave }: Props) => {
   const [saving, setSaving] = useState(false)
   const trendTag = product.productTrendTag
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<ProductTrendFormValues>({
+    resolver: zodResolver(productTrendFormSchema),
+    defaultValues: {
       bsnssTrend: (trendTag?.bsnssTrend || 'Normal') as ProductTrendOption,
       useAITrend: trendTag?.useAITrend ?? true,
     },
-    validationSchema: productTrendFormSchema,
-    onSubmit: async (values) => {
-      setSaving(true)
-      try {
-        await onSave({
-          inventoryId: product.inventoryId,
-          sku: product.sku,
-          productTrendTag: {
-            aiTrend: trendTag?.aiTrend ?? 'Normal',
-            analysis: trendTag?.analysis ?? '',
-            bsnssTrend: values.bsnssTrend,
-            useAITrend: values.useAITrend,
-          },
-        })
-      } finally {
-        setSaving(false)
-      }
-    },
   })
 
-  const activeTrend = formik.values.useAITrend ? trendTag?.aiTrend : formik.values.bsnssTrend
-  const hasChanges = formik.values.bsnssTrend !== (trendTag?.bsnssTrend || 'Normal') || formik.values.useAITrend !== (trendTag?.useAITrend ?? true)
+  useEffect(() => {
+    validation.reset({
+      bsnssTrend: (trendTag?.bsnssTrend || 'Normal') as ProductTrendOption,
+      useAITrend: trendTag?.useAITrend ?? true,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trendTag?.bsnssTrend, trendTag?.useAITrend])
+
+  const onSubmit = async (values: ProductTrendFormValues) => {
+    setSaving(true)
+    try {
+      await onSave({
+        inventoryId: product.inventoryId,
+        sku: product.sku,
+        productTrendTag: {
+          aiTrend: trendTag?.aiTrend ?? 'Normal',
+          analysis: trendTag?.analysis ?? '',
+          bsnssTrend: values.bsnssTrend,
+          useAITrend: values.useAITrend,
+        },
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const bsnssTrend = validation.watch('bsnssTrend')
+  const useAITrend = validation.watch('useAITrend')
+  const { errors, touchedFields } = validation.formState
+
+  const activeTrend = useAITrend ? trendTag?.aiTrend : bsnssTrend
+  const hasChanges = bsnssTrend !== (trendTag?.bsnssTrend || 'Normal') || useAITrend !== (trendTag?.useAITrend ?? true)
 
   const handleSwitchChange = useCallback(
     (checked: boolean) => {
-      formik.setFieldValue('useAITrend', checked)
+      validation.setValue('useAITrend', checked, { shouldValidate: true, shouldTouch: true })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -62,7 +83,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
 
   const handleSelectChange = useCallback(
     (value: string) => {
-      formik.setFieldValue('bsnssTrend', value)
+      validation.setValue('bsnssTrend', value as ProductTrendOption, { shouldValidate: true, shouldTouch: true })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -106,11 +127,11 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
           <Separator className='my-3' />
 
           {/* Editable form */}
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={validation.handleSubmit(onSubmit)}>
             {/* Business Trend Select */}
             <div className='flex flex-col gap-1.5 mb-3'>
               <label className='text-xs font-medium text-muted-foreground'>Business Trend</label>
-              <Select value={formik.values.bsnssTrend} onValueChange={handleSelectChange}>
+              <Select value={bsnssTrend} onValueChange={handleSelectChange}>
                 <SelectTrigger size='sm' className='w-full border border-border bg-transparent rounded-md'>
                   <SelectValue placeholder='Select trend' />
                 </SelectTrigger>
@@ -124,7 +145,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {formik.touched.bsnssTrend && formik.errors.bsnssTrend && <span className='text-xs text-destructive'>{formik.errors.bsnssTrend}</span>}
+              {touchedFields.bsnssTrend && errors.bsnssTrend && <span className='text-xs text-destructive'>{errors.bsnssTrend.message}</span>}
             </div>
 
             {/* Use AI Trend Switch */}
@@ -133,7 +154,7 @@ const RPProductTrendTagSection = ({ product, onSave }: Props) => {
                 <span className='text-xs font-medium text-foreground'>Use AI Trend</span>
                 <span className='text-xs text-muted-foreground'>When enabled, AI trend overrides business trend</span>
               </div>
-              <Switch checked={formik.values.useAITrend} onCheckedChange={handleSwitchChange} />
+              <Switch checked={useAITrend} onCheckedChange={handleSwitchChange} />
             </div>
 
             {/* Save button */}

@@ -1,8 +1,10 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import DataTable from '@components/Common/DataTableSC'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
@@ -10,7 +12,6 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import useSWR from 'swr'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type Props = {}
 
@@ -23,6 +24,12 @@ type Supplier = {
   address: string
   country: string
 }
+
+const nameSchema = z
+  .string()
+  .regex(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+  .max(200, 'Name is to Long')
+  .min(1, 'Enter Supplier Name')
 
 const Suppliers = ({}: Props) => {
   const { mutate } = useSWRConfig()
@@ -50,43 +57,56 @@ const Suppliers = ({}: Props) => {
     }
   }, [data])
 
+  const addSupplierSchema = useMemo(
+    () =>
+      z.object({
+        name: nameSchema,
+        email: z.string().email().or(z.literal('')),
+        phone: z.string(),
+        address: z.string(),
+        country: z.string().refine((value) => validCountries.includes(value), 'Must be a Valid Country Code'),
+      }),
+    [validCountries]
+  )
+  const editSupplierSchema = useMemo(
+    () =>
+      z.object({
+        suppliersId: z.number(),
+        name: nameSchema,
+        email: z.string().email().or(z.literal('')),
+        phone: z.string(),
+        address: z.string(),
+        country: z.string().refine((value) => validCountries.includes(value), 'Must be a Valid Country Code'),
+      }),
+    [validCountries]
+  )
+  type AddSupplierForm = z.infer<typeof addSupplierSchema>
+  type EditSupplierForm = z.infer<typeof editSupplierSchema>
+
   // ADD NEW SUPPLIER
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<AddSupplierForm>({
+    resolver: zodResolver(addSupplierSchema),
+    defaultValues: {
       name: '',
       email: '',
       phone: '',
       address: '',
       country: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(200, 'Name is to Long')
-        .required('Enter Supplier Name'),
-      email: Yup.string().email(),
-      phone: Yup.string(),
-      address: Yup.string(),
-      country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`/api/settings/addNewSupplier?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.message)
-        resetForm()
-        mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else {
-        toast.error(response.data.message)
-      }
-    },
   })
-  const handleAddSupplier = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onAddSubmit = async (values: AddSupplierForm) => {
+    const response = await axios.post(`/api/settings/addNewSupplier?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.message)
+      validation.reset()
+      mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.message)
+    }
   }
+  const handleAddSupplier = validation.handleSubmit(onAddSubmit)
   const handleShowAddSupplier = () => {
     setShowAddNewFields(true)
     setShowEditFields(false)
@@ -97,9 +117,9 @@ const Suppliers = ({}: Props) => {
   }
 
   // EDIT CURRENT SUPPLIER
-  const validationEdit = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validationEdit = useForm<EditSupplierForm>({
+    resolver: zodResolver(editSupplierSchema),
+    defaultValues: {
       suppliersId: 0,
       name: '',
       email: '',
@@ -107,41 +127,28 @@ const Suppliers = ({}: Props) => {
       address: '',
       country: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-Z0-9-\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
-        .max(200, 'Name is to Long')
-        .required('Enter Supplier Name'),
-      email: Yup.string().email(),
-      phone: Yup.string(),
-      address: Yup.string(),
-      country: Yup.string().oneOf(validCountries, 'Must be a Valid Country Code'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      const response = await axios.post(`/api/settings/updateSupplier?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        resetForm()
-        setShowEditFields(false)
-        mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
-  const handleEditSupplier = (event: any) => {
-    event.preventDefault()
-    validationEdit.handleSubmit()
+  const onEditSubmit = async (values: EditSupplierForm) => {
+    const response = await axios.post(`/api/settings/updateSupplier?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      validationEdit.reset()
+      setShowEditFields(false)
+      mutate(`/api/settings/getSuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+    } else {
+      toast.error(response.data.msg)
+    }
   }
+  const handleEditSupplier = validationEdit.handleSubmit(onEditSubmit)
   const handleShowEditFields = (supplier: Supplier) => {
-    validationEdit.setValues(supplier)
+    validationEdit.reset(supplier)
     setShowAddNewFields(false)
     setShowEditFields(true)
   }
   const handleCancelEdit = () => {
-    validationEdit.setValues({
+    validationEdit.reset({
       suppliersId: 0,
       name: '',
       email: '',
@@ -221,7 +228,7 @@ const Suppliers = ({}: Props) => {
         <div>
           <form onSubmit={handleAddSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='name' className='mb-2'>
                 *Supplier Name
               </Label>
               <Input
@@ -229,16 +236,13 @@ const Suppliers = ({}: Props) => {
                 className='text-[13px] h-8 text-xs'
                 placeholder='Name...'
                 id='name'
-                name='name'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.name || ''}
-                aria-invalid={(validation.touched.name && validation.errors.name ? true : false) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.name) || undefined}
+                {...validation.register('name')}
               />
-              {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+              {validation.formState.errors.name ? <div className='text-sm text-destructive'>{validation.formState.errors.name.message}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='email' className='mb-2'>
                 *Email
               </Label>
               <Input
@@ -246,16 +250,13 @@ const Suppliers = ({}: Props) => {
                 className='text-[13px] h-8 text-xs'
                 placeholder='Email...'
                 id='email'
-                name='email'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.email || ''}
-                aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.email) || undefined}
+                {...validation.register('email')}
               />
-              {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+              {validation.formState.errors.email ? <div className='text-sm text-destructive'>{validation.formState.errors.email.message}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='phone' className='mb-2'>
                 *Phone
               </Label>
               <Input
@@ -263,16 +264,13 @@ const Suppliers = ({}: Props) => {
                 className='text-[13px] h-8 text-xs'
                 placeholder='Phone...'
                 id='phone'
-                name='phone'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.phone || ''}
-                aria-invalid={(validation.touched.phone && validation.errors.phone ? true : false) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.phone) || undefined}
+                {...validation.register('phone')}
               />
-              {validation.touched.phone && validation.errors.phone ? <div className='text-sm text-destructive'>{validation.errors.phone}</div> : null}
+              {validation.formState.errors.phone ? <div className='text-sm text-destructive'>{validation.formState.errors.phone.message}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='address' className='mb-2'>
                 *Address
               </Label>
               <Input
@@ -280,16 +278,13 @@ const Suppliers = ({}: Props) => {
                 className='text-[13px] h-8 text-xs'
                 placeholder='Address...'
                 id='address'
-                name='address'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.address || ''}
-                aria-invalid={(validation.touched.address && validation.errors.address ? true : false) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.address) || undefined}
+                {...validation.register('address')}
               />
-              {validation.touched.address && validation.errors.address ? <div className='text-sm text-destructive'>{validation.errors.address}</div> : null}
+              {validation.formState.errors.address ? <div className='text-sm text-destructive'>{validation.formState.errors.address.message}</div> : null}
             </div>
             <div className='mb-3'>
-              <Label htmlFor='title' className='mb-2'>
+              <Label htmlFor='country' className='mb-2'>
                 *Country
               </Label>
               <Input
@@ -297,14 +292,11 @@ const Suppliers = ({}: Props) => {
                 className='text-[13px] h-8 text-xs'
                 placeholder='Address...'
                 id='country'
-                name='country'
                 list='countries'
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.country || ''}
-                aria-invalid={(validation.touched.country && validation.errors.country ? true : false) || undefined}
+                aria-invalid={Boolean(validation.formState.errors.country) || undefined}
+                {...validation.register('country')}
               />
-              {validation.touched.country && validation.errors.country ? <div className='text-sm text-destructive'>{validation.errors.country}</div> : null}
+              {validation.formState.errors.country ? <div className='text-sm text-destructive'>{validation.formState.errors.country.message}</div> : null}
               <datalist id='countries'>
                 {countries.map(
                   (
@@ -336,7 +328,7 @@ const Suppliers = ({}: Props) => {
       {showEditFields && (
         <form onSubmit={handleEditSupplier} className='flex flex-row justify-start items-center gap-4 w-full'>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='name' className='mb-2'>
               *Supplier Name
             </Label>
             <Input
@@ -344,16 +336,13 @@ const Suppliers = ({}: Props) => {
               className='text-[13px] h-8 text-xs'
               placeholder='Name...'
               id='name'
-              name='name'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.name || ''}
-              aria-invalid={(validationEdit.touched.name && validationEdit.errors.name ? true : false) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.name) || undefined}
+              {...validationEdit.register('name')}
             />
-            {validationEdit.touched.name && validationEdit.errors.name ? <div className='text-sm text-destructive'>{validationEdit.errors.name}</div> : null}
+            {validationEdit.formState.errors.name ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.name.message}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='email' className='mb-2'>
               *Email
             </Label>
             <Input
@@ -361,16 +350,13 @@ const Suppliers = ({}: Props) => {
               className='text-[13px] h-8 text-xs'
               placeholder='Email...'
               id='email'
-              name='email'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.email || ''}
-              aria-invalid={(validationEdit.touched.email && validationEdit.errors.email ? true : false) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.email) || undefined}
+              {...validationEdit.register('email')}
             />
-            {validationEdit.touched.email && validationEdit.errors.email ? <div className='text-sm text-destructive'>{validationEdit.errors.email}</div> : null}
+            {validationEdit.formState.errors.email ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.email.message}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='phone' className='mb-2'>
               *Phone
             </Label>
             <Input
@@ -378,16 +364,13 @@ const Suppliers = ({}: Props) => {
               className='text-[13px] h-8 text-xs'
               placeholder='Phone...'
               id='phone'
-              name='phone'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.phone || ''}
-              aria-invalid={(validationEdit.touched.phone && validationEdit.errors.phone ? true : false) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.phone) || undefined}
+              {...validationEdit.register('phone')}
             />
-            {validationEdit.touched.phone && validationEdit.errors.phone ? <div className='text-sm text-destructive'>{validationEdit.errors.phone}</div> : null}
+            {validationEdit.formState.errors.phone ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.phone.message}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='address' className='mb-2'>
               *Address
             </Label>
             <Input
@@ -395,16 +378,13 @@ const Suppliers = ({}: Props) => {
               className='text-[13px] h-8 text-xs'
               placeholder='Address...'
               id='address'
-              name='address'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.address || ''}
-              aria-invalid={(validationEdit.touched.address && validationEdit.errors.address ? true : false) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.address) || undefined}
+              {...validationEdit.register('address')}
             />
-            {validationEdit.touched.address && validationEdit.errors.address ? <div className='text-sm text-destructive'>{validationEdit.errors.address}</div> : null}
+            {validationEdit.formState.errors.address ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.address.message}</div> : null}
           </div>
           <div className='mb-3'>
-            <Label htmlFor='title' className='mb-2'>
+            <Label htmlFor='country' className='mb-2'>
               *Country
             </Label>
             <Input
@@ -412,14 +392,11 @@ const Suppliers = ({}: Props) => {
               className='text-[13px] h-8 text-xs'
               placeholder='Address...'
               id='country'
-              name='country'
               list='countries'
-              onChange={validationEdit.handleChange}
-              onBlur={validationEdit.handleBlur}
-              value={validationEdit.values.country || ''}
-              aria-invalid={(validationEdit.touched.country && validationEdit.errors.country ? true : false) || undefined}
+              aria-invalid={Boolean(validationEdit.formState.errors.country) || undefined}
+              {...validationEdit.register('country')}
             />
-            {validationEdit.touched.country && validationEdit.errors.country ? <div className='text-sm text-destructive'>{validationEdit.errors.country}</div> : null}
+            {validationEdit.formState.errors.country ? <div className='text-sm text-destructive'>{validationEdit.formState.errors.country.message}</div> : null}
             <datalist id='countries'>
               {countries.map(
                 (

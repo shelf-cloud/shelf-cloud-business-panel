@@ -1,16 +1,17 @@
- 
+
 import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Label } from '@shadcn/ui/label'
 import { NativeSelect } from '@shadcn/ui/native-select'
 import { Spinner } from '@shadcn/ui/spinner'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   showDeleteModal: {
@@ -23,49 +24,54 @@ type Props = {
   mutateShipments?: () => void
 }
 
+const cancelOrderSchema = z.object({
+  notify: z.boolean(),
+  reason: z.string().min(1, 'You must select a valid reason'),
+})
+
+type CancelOrderForm = z.infer<typeof cancelOrderSchema>
+
 const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModal, mutateShipments }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setLoading] = useState(false)
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<CancelOrderForm>({
+    resolver: zodResolver(cancelOrderSchema),
+    defaultValues: {
       notify: true,
       reason: '',
     },
-    validationSchema: Yup.object({
-      notify: Yup.boolean().required(),
-      reason: Yup.string().required('You must select a valid reason'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-      const response = await axios.post(`/api/shipments/cancelManualOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        orderId: showDeleteModal.orderId,
-        orderNumber: showDeleteModal.orderNumber,
-        goFlowOrderId: showDeleteModal.goFlowOrderId,
-        notify: values.notify,
-        reason: values.reason,
-      })
-      if (!response.data.error) {
-        setshowDeleteModal({
-          show: false,
-          orderId: 0,
-          orderNumber: '',
-          goFlowOrderId: 0,
-        })
-        mutateShipments && mutateShipments()
-        toast.success(response.data.msg)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setLoading(false)
-    },
   })
+  const {
+    register,
+    formState: { errors },
+  } = validation
 
-  const handleCancelOrder = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onSubmit = async (values: CancelOrderForm) => {
+    setLoading(true)
+    const response = await axios.post(`/api/shipments/cancelManualOrder?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      orderId: showDeleteModal.orderId,
+      orderNumber: showDeleteModal.orderNumber,
+      goFlowOrderId: showDeleteModal.goFlowOrderId,
+      notify: values.notify,
+      reason: values.reason,
+    })
+    if (!response.data.error) {
+      setshowDeleteModal({
+        show: false,
+        orderId: 0,
+        orderNumber: '',
+        goFlowOrderId: 0,
+      })
+      mutateShipments && mutateShipments()
+      toast.success(response.data.msg)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setLoading(false)
   }
+
+  const handleCancelOrder = validation.handleSubmit(onSubmit)
 
   return (
     <Dialog
@@ -101,12 +107,10 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                     className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'
                     type='checkbox'
                     id='notify'
-                    defaultChecked
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={(validation.touched.notify && validation.errors.notify ? true : false) || undefined}
+                    aria-invalid={(errors.notify ? true : false) || undefined}
+                    {...register('notify')}
                   />
-                  {validation.touched.notify && validation.errors.notify ? <div className='text-sm text-destructive'>{validation.errors.notify}</div> : null}
+                  {errors.notify ? <div className='text-sm text-destructive'>{errors.notify.message}</div> : null}
                 </div>
                 <div>
                   <div className='mb-4'>
@@ -116,12 +120,9 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                     <NativeSelect
                       className='text-[13px]'
                       id='reason'
-                      name='reason'
                       size='sm'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.reason ?? ''}
-                      aria-invalid={(validation.touched.reason && validation.errors.reason ? true : false) || undefined}>
+                      aria-invalid={(errors.reason ? true : false) || undefined}
+                      {...register('reason')}>
                       <option value=''>Select Reason</option>
                       <option value='customer_requested'>Customer Requested</option>
                       <option value='no_stock'>No Stock</option>
@@ -129,7 +130,7 @@ const CancelManualOrderConfirmationModal = ({ showDeleteModal, setshowDeleteModa
                       <option value='payment_declined'>Payment Declined</option>
                       <option value='other'>Other</option>
                     </NativeSelect>
-                    {validation.touched.reason && validation.errors.reason ? <div className='text-sm text-destructive'>{validation.errors.reason}</div> : null}
+                    {errors.reason ? <div className='text-sm text-destructive'>{errors.reason.message}</div> : null}
                   </div>
                 </div>
               </div>

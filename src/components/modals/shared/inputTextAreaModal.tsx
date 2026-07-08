@@ -1,12 +1,19 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
-import { useFormik } from 'formik'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
 import { DebounceInput } from 'react-debounce-input'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
+
+const inputTextAreaModalSchema = z.object({
+  inputValue: z.string(),
+})
+
+type InputTextAreaModalForm = z.infer<typeof inputTextAreaModalSchema>
 
 type InputModalProps = {
   isOpen: boolean
@@ -40,33 +47,33 @@ const InputTextAreaModal = ({
   handleSubmitClearValue,
 }: InputModalProps) => {
   const [isLoading, setisLoading] = useState(false)
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<InputTextAreaModalForm>({
+    resolver: zodResolver(inputTextAreaModalSchema),
+    defaultValues: {
       inputValue: initialValue || '',
-    },
-    validationSchema: Yup.object({
-      inputValue: Yup.string(),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      setisLoading(true)
-      await handleSubmit(values.inputValue).then(() => {
-        resetForm()
-        handleClose()
-        setisLoading(false)
-      })
     },
   })
 
-  const handleSubmitForm = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  useEffect(() => {
+    validation.reset({ inputValue: initialValue || '' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValue])
+
+  const onSubmit = async (values: InputTextAreaModalForm) => {
+    setisLoading(true)
+    await handleSubmit(values.inputValue).then(() => {
+      validation.reset()
+      handleClose()
+      setisLoading(false)
+    })
   }
+
+  const handleSubmitForm = validation.handleSubmit(onSubmit)
 
   const handleClearValue = async () => {
     setisLoading(true)
     await handleSubmitClearValue?.('').then(() => {
-      validation.resetForm()
+      validation.reset()
       handleClose()
       setisLoading(false)
     })
@@ -87,26 +94,32 @@ const InputTextAreaModal = ({
             {descriptionText && <p className='text-[11.2px] text-muted-foreground'>{descriptionText}</p>}
             <div className='px-3 sm:w-full flex flex-col justify-end items-end'>
               <div className='px-3 w-full text-right'>
-                <DebounceInput
-                  element='textarea'
-                  minLength={minLength}
-                  debounceTimeout={600}
-                  className={`h-8 text-xs w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${validation.errors.inputValue ? 'border-destructive' : ''}`}
-                  placeholder={placeholder}
-                  id='inputValue'
+                <Controller
+                  control={validation.control}
                   name='inputValue'
-                  rows={3}
-                  value={validation.values.inputValue || ''}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  aria-invalid={(validation.touched.inputValue && validation.errors.inputValue ? true : false) || undefined}
-                  inputRef={(input) => {
-                    if (isOpen && input) {
-                      input.focus()
-                    }
-                  }}
+                  render={({ field }) => (
+                    <DebounceInput
+                      element='textarea'
+                      minLength={minLength}
+                      debounceTimeout={600}
+                      className={`h-8 text-xs w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${validation.formState.errors.inputValue ? 'border-destructive' : ''}`}
+                      placeholder={placeholder}
+                      id='inputValue'
+                      name='inputValue'
+                      rows={3}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      aria-invalid={Boolean(validation.formState.errors.inputValue) || undefined}
+                      inputRef={(input) => {
+                        if (isOpen && input) {
+                          input.focus()
+                        }
+                      }}
+                    />
+                  )}
                 />
-                {validation.touched.inputValue && validation.errors.inputValue ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputValue}</p> : null}
+                {validation.formState.errors.inputValue ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.formState.errors.inputValue.message}</p> : null}
               </div>
             </div>
           </div>

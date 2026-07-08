@@ -1,13 +1,20 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 
 import { SimpleInputModal } from '@hooks/ui/useInputModal'
-import { useFormik } from 'formik'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
 import { DebounceInput } from 'react-debounce-input'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
+
+const inputModalSchema = z.object({
+  inputText: z.string().min(1, 'This field is required').min(3, `Minimum ${3} characters required`),
+})
+
+type InputModalForm = z.infer<typeof inputModalSchema>
 
 type InputModalProps = {
   isOpen: boolean
@@ -39,23 +46,23 @@ const InputModal = ({
   handleSubmit,
   onClose,
 }: InputModalProps) => {
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<InputModalForm>({
+    resolver: zodResolver(inputModalSchema),
+    defaultValues: {
       inputText: value.text,
-    },
-    validationSchema: Yup.object({
-      inputText: Yup.string().required('This field is required').min(3, `Minimum ${3} characters required`),
-    }),
-    onSubmit: async (values) => {
-      handleSubmit({ id: value.id, text: values.inputText })
     },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  useEffect(() => {
+    validation.reset({ inputText: value.text })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value.text])
+
+  const onSubmit = async (values: InputModalForm) => {
+    handleSubmit({ id: value.id, text: values.inputText })
   }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
   return (
     <Dialog open={!!isOpen} onOpenChange={(open) => { if (!open) onClose() }}>
       <DialogContent id='InputModal' aria-describedby={undefined} className='max-h-[90vh] overflow-y-auto sm:!max-w-lg'>
@@ -67,20 +74,26 @@ const InputModal = ({
           <div className='flex flex-wrap -mx-3'>
             <h5 className='text-[16.25px] mb-0 font-semibold text-primary'>{primaryText}</h5>
             <div className='px-3 w-full mt-2'>
-              <DebounceInput
-                type='text'
-                minLength={minLength}
-                debounceTimeout={300}
-                className={`h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${error ? 'border-destructive' : ''}`}
-                placeholder={placeholder}
-                id='inputText'
+              <Controller
+                control={validation.control}
                 name='inputText'
-                value={validation.values.inputText || ''}
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                aria-invalid={(validation.touched.inputText && validation.errors.inputText ? true : false) || undefined}
+                render={({ field }) => (
+                  <DebounceInput
+                    type='text'
+                    minLength={minLength}
+                    debounceTimeout={300}
+                    className={`h-9 w-full min-w-0 rounded-md border border-input bg-input px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${error ? 'border-destructive' : ''}`}
+                    placeholder={placeholder}
+                    id='inputText'
+                    name='inputText'
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    aria-invalid={Boolean(validation.formState.errors.inputText) || undefined}
+                  />
+                )}
               />
-              {validation.touched.inputText && validation.errors.inputText ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.errors.inputText}</p> : null}
+              {validation.formState.errors.inputText ? <p className='m-0 p-0 text-[11.2px] text-danger'>{validation.formState.errors.inputText.message}</p> : null}
             </div>
           </div>
         </div>

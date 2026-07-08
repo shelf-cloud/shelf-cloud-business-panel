@@ -5,9 +5,10 @@ import { useContext, useState } from 'react'
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
 import AppContext from '@context/AppContext'
 import { CommerceHubStore } from '@typesTs/commercehub/invoices'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import Papa from 'papaparse'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
@@ -15,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
 import { Label } from '@shadcn/ui/label'
 import { NativeSelect } from '@shadcn/ui/native-select'
 import { Spinner } from '@shadcn/ui/spinner'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { validateCitiBankLowesFile, validateHomeDepotFile, validateLowesFile } from './validateFileTypesInfo'
 
@@ -39,124 +40,128 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
 
-  const validation = useFormik({
-    initialValues: {
+  const validationSchema = z.object({
+    storeId: z.string().min(1, 'Select a Store'),
+    fileType: z.string().min(1, 'Select a file Type'),
+  })
+
+  type UpdateInvoicesFormValues = z.infer<typeof validationSchema>
+
+  const form = useForm<UpdateInvoicesFormValues>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: {
       storeId: '',
       fileType: '',
     },
-    validationSchema: Yup.object({
-      storeId: Yup.string().required('Select a Store'),
-      fileType: Yup.string().required('Select a file Type'),
-    }),
+  })
 
-    onSubmit: async (values, { resetForm }) => {
-      setLoading(true)
-      setErrorLines([])
-      setShowErrorLines(false)
-      setShowErrorResponse(false)
-      setErrorResponse([])
-      if (selectedFiles.length == 0) {
-        setErrorFile(true)
-        return
-      }
+  const onSubmit = async (values: UpdateInvoicesFormValues) => {
+    setLoading(true)
+    setErrorLines([])
+    setShowErrorLines(false)
+    setShowErrorResponse(false)
+    setErrorResponse([])
+    if (selectedFiles.length == 0) {
+      setErrorFile(true)
+      return
+    }
 
-      let validateResponse = []
-      let fileLineStart = 1
+    let validateResponse = []
+    let fileLineStart = 1
 
-      Papa.parse(selectedFiles[0], {
-        complete: async function (results, _file) {
-          const resultValues = results.data as any
-          switch (values.fileType) {
-            case 'homedepot':
-              validateResponse = await validateHomeDepotFile(resultValues)
-              break
-            case 'lowes':
-              validateResponse = await validateLowesFile(resultValues)
-              break
-            case 'citibanklowes':
-              validateResponse = await validateCitiBankLowesFile(resultValues)
-              break
-            default:
-              validateResponse = []
-              break
-          }
+    Papa.parse(selectedFiles[0], {
+      complete: async function (results, _file) {
+        const resultValues = results.data as any
+        switch (values.fileType) {
+          case 'homedepot':
+            validateResponse = await validateHomeDepotFile(resultValues)
+            break
+          case 'lowes':
+            validateResponse = await validateLowesFile(resultValues)
+            break
+          case 'citibanklowes':
+            validateResponse = await validateCitiBankLowesFile(resultValues)
+            break
+          default:
+            validateResponse = []
+            break
+        }
 
-          if (validateResponse.length > 0) {
-            setErrorLines(validateResponse)
-            setShowErrorLines(true)
-            setLoading(false)
-            return
-          }
+        if (validateResponse.length > 0) {
+          setErrorLines(validateResponse)
+          setShowErrorLines(true)
+          setLoading(false)
+          return
+        }
 
-          let hasError = false
-          const uploadingFile = toast.loading('Uploading file...')
-          const chunkSize = 110
-          const totalChunks = Math.ceil(results.data.length / chunkSize)
+        let hasError = false
+        const uploadingFile = toast.loading('Uploading file...')
+        const chunkSize = 110
+        const totalChunks = Math.ceil(results.data.length / chunkSize)
 
-          for (let i = fileLineStart; i < results.data.length; i += chunkSize) {
-            const chunk = results.data.slice(i, i + chunkSize)
+        for (let i = fileLineStart; i < results.data.length; i += chunkSize) {
+          const chunk = results.data.slice(i, i + chunkSize)
 
-            try {
-              const response = await axios.post(`/api/commerceHub/uploadInvoicesFile?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-                fileType: values.fileType,
-                storeId: values.storeId,
-                invoiceData: chunk,
-              })
-              if (response.data.error) {
-                // Handle error response for that batch
-                setErrorResponse(response.data.msg || [])
-                setShowErrorResponse(true)
-                toast.update(uploadingFile, {
-                  render: 'Error uploading file.',
-                  type: 'error',
-                  isLoading: false,
-                  autoClose: 3000,
-                })
-                hasError = true
-                break // Optionally stop further uploads if one fails
-              }
-
-              // Calculate progress percentage
-              const currentChunkIndex = i / chunkSize + 1 // Current chunk (1-indexed)
-              const progressPercentage = Math.round((currentChunkIndex / totalChunks) * 100)
-
-              // Update the toast message with the current progress
+          try {
+            const response = await axios.post(`/api/commerceHub/uploadInvoicesFile?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+              fileType: values.fileType,
+              storeId: values.storeId,
+              invoiceData: chunk,
+            })
+            if (response.data.error) {
+              // Handle error response for that batch
+              setErrorResponse(response.data.msg || [])
+              setShowErrorResponse(true)
               toast.update(uploadingFile, {
-                render: `Uploading file... (${progressPercentage}%)`,
-                type: 'info',
-                isLoading: true,
-                autoClose: false,
-              })
-            } catch (error) {
-              // Handle any unexpected errors
-              toast.update(uploadingFile, {
-                render: 'An error occurred during upload.',
+                render: 'Error uploading file.',
                 type: 'error',
                 isLoading: false,
                 autoClose: 3000,
               })
-              break
+              hasError = true
+              break // Optionally stop further uploads if one fails
             }
-          }
-          if (!hasError) {
-            setShowErrorResponse(false)
-            setErrorResponse([])
+
+            // Calculate progress percentage
+            const currentChunkIndex = i / chunkSize + 1 // Current chunk (1-indexed)
+            const progressPercentage = Math.round((currentChunkIndex / totalChunks) * 100)
+
+            // Update the toast message with the current progress
             toast.update(uploadingFile, {
-              render: 'File uploaded successfully.',
-              type: 'success',
+              render: `Uploading file... (${progressPercentage}%)`,
+              type: 'info',
+              isLoading: true,
+              autoClose: false,
+            })
+          } catch (error) {
+            // Handle any unexpected errors
+            toast.update(uploadingFile, {
+              render: 'An error occurred during upload.',
+              type: 'error',
               isLoading: false,
               autoClose: 3000,
             })
-            resetForm()
-            setshowUpdateInvoices({ show: false })
-            clearFilters && clearFilters()
-            mutate()
+            break
           }
-          setLoading(false)
-        },
-      })
-    },
-  })
+        }
+        if (!hasError) {
+          setShowErrorResponse(false)
+          setErrorResponse([])
+          toast.update(uploadingFile, {
+            render: 'File uploaded successfully.',
+            type: 'success',
+            isLoading: false,
+            autoClose: 3000,
+          })
+          form.reset()
+          setshowUpdateInvoices({ show: false })
+          clearFilters && clearFilters()
+          mutate()
+        }
+        setLoading(false)
+      },
+    })
+  }
 
   function handleAcceptedFiles(files: any) {
     files.map((file: any) =>
@@ -183,10 +188,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
   }
 
-  const handleUploadFile = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
-  }
+  const handleUploadFile = form.handleSubmit(onSubmit)
 
   return (
     <Dialog
@@ -221,11 +223,10 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                   id='storeId'
                   name='storeId'
                   onChange={(e) => {
-                    validation.handleChange(e)
-                    validation.setFieldValue('fileType', stores.find((store) => store.value === e.target.value)?.fileType)
+                    form.setValue('storeId', e.target.value)
+                    form.setValue('fileType', stores.find((store) => store.value === e.target.value)?.fileType ?? '')
                   }}
-                  onBlur={validation.handleBlur}
-                  aria-invalid={(validation.touched.storeId && validation.errors.storeId ? true : false) || undefined}>
+                  aria-invalid={(form.formState.errors.storeId ? true : false) || undefined}>
                   <option value=''>Choose Store..</option>
                   {stores?.map((store) => (
                     <option key={store.value} value={store.value}>
@@ -233,7 +234,7 @@ const UpdateInvoicesModal = ({ showUpdateInvoices, setshowUpdateInvoices, clearF
                     </option>
                   ))}
                 </NativeSelect>
-                {validation.touched.storeId && validation.errors.storeId ? <div className='text-sm text-destructive'>{validation.errors.storeId}</div> : null}
+                {form.formState.errors.storeId ? <div className='text-sm text-destructive'>{form.formState.errors.storeId.message}</div> : null}
               </div>
               <p className='text-[11.2px] text-muted-foreground font-light m-0'>
                 {`You might need to configure in marketplace manager if you don't see a store.`}{' '}

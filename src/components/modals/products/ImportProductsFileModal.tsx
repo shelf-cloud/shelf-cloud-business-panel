@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
 import { Label } from '@shadcn/ui/label'
 import { NativeSelect } from '@shadcn/ui/native-select'
 import { Spinner } from '@shadcn/ui/spinner'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import {
   PRODUCT_FEED_DEFINITIONS,
@@ -84,27 +84,27 @@ const ImportProductsFileModal = ({
           switch (v) {
             // SKU
             case 0:
-              const skuSchema = Yup.object().shape({
-                sku: Yup.string()
-                  .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: " ' @ ~ , ...`)
+              const skuSchema = z.object({
+                sku: z.string()
+                  .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: " ' @ ~ , ...`)
                   .min(4)
                   .max(50)
-                  .required('SKU is required'),
+                  .min(1, 'SKU is required'),
               })
-              skuSchema.isValidSync({ sku: rowValues[v] })
+              skuSchema.safeParse({ sku: rowValues[v] }).success
                 ? () => {}
                 : errorsList.push({ errorLine: i + 1, errorMessage: `SKU: Required - No Spaces - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
               break
             // title
             case 1:
-              const titleSchema = Yup.object().shape({
-                title: Yup.string()
-                  .matches(/^[a-zA-Z0-9-–Á-öø-ÿ_/.()&*:\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
+              const titleSchema = z.object({
+                title: z.string()
+                  .regex(/^[a-zA-Z0-9-–Á-öø-ÿ_/.()&*:\s]+$/, `Invalid special characters: " ' @ ~ , ...`)
                   .min(5)
                   .max(100)
-                  .required('Title is required'),
+                  .min(1, 'Title is required'),
               })
-              titleSchema.isValidSync({ title: rowValues[v] })
+              titleSchema.safeParse({ title: rowValues[v] }).success
                 ? () => {}
                 : errorsList.push({ errorLine: i + 1, errorMessage: `Title: Required - Invalid Special characters: " ' @ ~ , ...`, value: rowValues[v] })
               break
@@ -114,32 +114,32 @@ const ImportProductsFileModal = ({
               break
             // asin
             case 3:
-              const asinSchema = Yup.object().shape({
-                asin: Yup.string(),
+              const asinSchema = z.object({
+                asin: z.string(),
               })
-              asinSchema.isValidSync({ asin: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'ASIN', value: rowValues[v] })
+              asinSchema.safeParse({ asin: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'ASIN', value: rowValues[v] })
               break
             // fnsku
             case 4:
-              const fnskuSchema = Yup.object().shape({
-                fnsku: Yup.string(),
+              const fnskuSchema = z.object({
+                fnsku: z.string(),
               })
-              fnskuSchema.isValidSync({ fnsku: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'FNSKU', value: rowValues[v] })
+              fnskuSchema.safeParse({ fnsku: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'FNSKU', value: rowValues[v] })
               break
             // barcode
             case 5:
-              const barcodeSchema = Yup.object().shape({
-                barcode: Yup.string().required('Barcode is required'),
+              const barcodeSchema = z.object({
+                barcode: z.string().min(1, 'Barcode is required'),
               })
-              barcodeSchema.isValidSync({ barcode: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Barcode: Required', value: rowValues[v] })
+              barcodeSchema.safeParse({ barcode: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Barcode: Required', value: rowValues[v] })
               break
             // supplier
             case 6:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const supplierSchema = Yup.object().shape({
-                  supplier: Yup.string().oneOf(suppliers, 'Invalid Supplier'),
+                const supplierSchema = z.object({
+                  supplier: z.string().refine((value) => suppliers.includes(value), 'Invalid Supplier'),
                 })
-                supplierSchema.isValidSync({ supplier: rowValues[v] })
+                supplierSchema.safeParse({ supplier: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Supplier: Value not match business suppliers', value: rowValues[v] })
               }
@@ -147,10 +147,10 @@ const ImportProductsFileModal = ({
             // brand
             case 7:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const brandSchema = Yup.object().shape({
-                  brand: Yup.string().oneOf(brands, 'Invalid Brand'),
+                const brandSchema = z.object({
+                  brand: z.string().refine((value) => brands.includes(value), 'Invalid Brand'),
                 })
-                brandSchema.isValidSync({ brand: rowValues[v] })
+                brandSchema.safeParse({ brand: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Brand: Value not match business brands', value: rowValues[v] })
               }
@@ -158,10 +158,10 @@ const ImportProductsFileModal = ({
             // category
             case 8:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const categorySchema = Yup.object().shape({
-                  category: Yup.string().oneOf(categories, 'Invalid Category'),
+                const categorySchema = z.object({
+                  category: z.string().refine((value) => categories.includes(value), 'Invalid Category'),
                 })
-                categorySchema.isValidSync({ category: rowValues[v] })
+                categorySchema.safeParse({ category: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Category: Value not match business categories', value: rowValues[v] })
               }
@@ -169,10 +169,10 @@ const ImportProductsFileModal = ({
             //weight
             case 9:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const weightSchema = Yup.object().shape({
-                  weight: Yup.number(),
+                const weightSchema = z.object({
+                  weight: z.coerce.number(),
                 })
-                weightSchema.isValidSync({ weight: rowValues[v] })
+                weightSchema.safeParse({ weight: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Weight: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -180,10 +180,10 @@ const ImportProductsFileModal = ({
             // length
             case 10:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const lengthSchema = Yup.object().shape({
-                  length: Yup.number(),
+                const lengthSchema = z.object({
+                  length: z.coerce.number(),
                 })
-                lengthSchema.isValidSync({ length: rowValues[v] })
+                lengthSchema.safeParse({ length: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Length: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -191,10 +191,10 @@ const ImportProductsFileModal = ({
             // width
             case 11:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const widthSchema = Yup.object().shape({
-                  width: Yup.number(),
+                const widthSchema = z.object({
+                  width: z.coerce.number(),
                 })
-                widthSchema.isValidSync({ width: rowValues[v] })
+                widthSchema.safeParse({ width: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Width: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -202,10 +202,10 @@ const ImportProductsFileModal = ({
             // height
             case 12:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const heightSchema = Yup.object().shape({
-                  height: Yup.number(),
+                const heightSchema = z.object({
+                  height: z.coerce.number(),
                 })
-                heightSchema.isValidSync({ height: rowValues[v] })
+                heightSchema.safeParse({ height: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Height: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -213,10 +213,10 @@ const ImportProductsFileModal = ({
             // boxQuantity
             case 13:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const boxQuantitySchema = Yup.object().shape({
-                  boxQuantity: Yup.number().integer(),
+                const boxQuantitySchema = z.object({
+                  boxQuantity: z.coerce.number().int(),
                 })
-                boxQuantitySchema.isValidSync({ boxQuantity: rowValues[v] })
+                boxQuantitySchema.safeParse({ boxQuantity: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Quantity: Required - Integer - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -224,10 +224,10 @@ const ImportProductsFileModal = ({
             // box weight
             case 14:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const boxWeightSchema = Yup.object().shape({
-                  boxWeight: Yup.number(),
+                const boxWeightSchema = z.object({
+                  boxWeight: z.coerce.number(),
                 })
-                boxWeightSchema.isValidSync({ boxWeight: rowValues[v] })
+                boxWeightSchema.safeParse({ boxWeight: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Weight: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -235,10 +235,10 @@ const ImportProductsFileModal = ({
             // box length
             case 15:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const boxLengthSchema = Yup.object().shape({
-                  boxLength: Yup.number(),
+                const boxLengthSchema = z.object({
+                  boxLength: z.coerce.number(),
                 })
-                boxLengthSchema.isValidSync({ boxLength: rowValues[v] })
+                boxLengthSchema.safeParse({ boxLength: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Length: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -246,10 +246,10 @@ const ImportProductsFileModal = ({
             // box width
             case 16:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const boxWidthSchema = Yup.object().shape({
-                  boxWidth: Yup.number(),
+                const boxWidthSchema = z.object({
+                  boxWidth: z.coerce.number(),
                 })
-                boxWidthSchema.isValidSync({ boxWidth: rowValues[v] })
+                boxWidthSchema.safeParse({ boxWidth: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Width: Required - Greater or Equal than 0', value: rowValues[v] })
               }
@@ -257,46 +257,46 @@ const ImportProductsFileModal = ({
             // box height
             case 17:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const boxHeightSchema = Yup.object().shape({
-                  boxHeight: Yup.number(),
+                const boxHeightSchema = z.object({
+                  boxHeight: z.coerce.number(),
                 })
-                boxHeightSchema.isValidSync({ boxHeight: rowValues[v] })
+                boxHeightSchema.safeParse({ boxHeight: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Box Height: Required - Greater or Equal than 0', value: rowValues[v] })
               }
               break
             // activestate
             // case 18:
-            //   const activestateSchema = Yup.object().shape({
-            //     activestate: Yup.string().oneOf(['TRUE', 'FALSE'], 'Invalid Active State'),
+            //   const activestateSchema = z.object({
+            //     activestate: z.string().oneOf(['TRUE', 'FALSE'], 'Invalid Active State'),
             //   })
-            //   activestateSchema.isValidSync({ activestate: rowValues[v].toUpperCase() })
+            //   activestateSchema.safeParse({ activestate: rowValues[v].toUpperCase() }).success
             //     ? () => {}
             //     : errorsList.push({ errorLine: i + 1, errorMessage: 'Active State: Valid values: TRUE or FALSE', value: rowValues[v] })
             //   break
             // note
             case 18:
-              const noteSchema = Yup.object().shape({
-                note: Yup.string(),
+              const noteSchema = z.object({
+                note: z.string(),
               })
-              noteSchema.isValidSync({ note: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Note', value: rowValues[v] })
+              noteSchema.safeParse({ note: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Note', value: rowValues[v] })
               break
             // htsCode
             case 19:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const htsCodeSchema = Yup.object().shape({
-                  htsCode: Yup.string(),
+                const htsCodeSchema = z.object({
+                  htsCode: z.string(),
                 })
-                htsCodeSchema.isValidSync({ htsCode: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'HTS Code', value: rowValues[v] })
+                htsCodeSchema.safeParse({ htsCode: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'HTS Code', value: rowValues[v] })
               }
               break
             // defaultPrice
             case 20:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const defaultPriceSchema = Yup.object().shape({
-                  defaultPrice: Yup.number().min(0),
+                const defaultPriceSchema = z.object({
+                  defaultPrice: z.coerce.number().min(0),
                 })
-                defaultPriceSchema.isValidSync({ defaultPrice: rowValues[v] })
+                defaultPriceSchema.safeParse({ defaultPrice: rowValues[v] }).success
                   ? () => {}
                   : errorsList.push({
                       errorLine: i + 1,
@@ -308,46 +308,46 @@ const ImportProductsFileModal = ({
             // msrp
             case 21:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const msrpSchema = Yup.object().shape({
-                  msrp: Yup.number().min(0),
+                const msrpSchema = z.object({
+                  msrp: z.coerce.number().min(0),
                 })
-                msrpSchema.isValidSync({ msrp: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'MSRP', value: rowValues[v] })
+                msrpSchema.safeParse({ msrp: parseFloat(rowValues[v]) }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'MSRP', value: rowValues[v] })
               }
               break
             //map
             case 22:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const mapSchema = Yup.object().shape({
-                  map: Yup.number().min(0),
+                const mapSchema = z.object({
+                  map: z.coerce.number().min(0),
                 })
-                mapSchema.isValidSync({ map: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'MAP', value: rowValues[v] })
+                mapSchema.safeParse({ map: parseFloat(rowValues[v]) }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'MAP', value: rowValues[v] })
               }
               break
             // floor
             case 23:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const floorSchema = Yup.object().shape({
-                  floor: Yup.number().min(0),
+                const floorSchema = z.object({
+                  floor: z.coerce.number().min(0),
                 })
-                floorSchema.isValidSync({ floor: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Floor', value: rowValues[v] })
+                floorSchema.safeParse({ floor: parseFloat(rowValues[v]) }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Floor', value: rowValues[v] })
               }
               break
             // ceiling
             case 24:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const ceilingSchema = Yup.object().shape({
-                  ceiling: Yup.number().min(0),
+                const ceilingSchema = z.object({
+                  ceiling: z.coerce.number().min(0),
                 })
-                ceilingSchema.isValidSync({ ceiling: parseFloat(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Ceiling', value: rowValues[v] })
+                ceilingSchema.safeParse({ ceiling: parseFloat(rowValues[v]) }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Ceiling', value: rowValues[v] })
               }
               break
             // sellerCost
             case 25:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const sellerCostSchema = Yup.object().shape({
-                  sellerCost: Yup.number().min(0),
+                const sellerCostSchema = z.object({
+                  sellerCost: z.coerce.number().min(0),
                 })
-                sellerCostSchema.isValidSync({ sellerCost: parseFloat(rowValues[v]) })
+                sellerCostSchema.safeParse({ sellerCost: parseFloat(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Seller Cost', value: rowValues[v] })
               }
@@ -355,10 +355,10 @@ const ImportProductsFileModal = ({
             // inboundShippingCost
             case 26:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const inboundShippingCostSchema = Yup.object().shape({
-                  inboundShippingCost: Yup.number().min(0),
+                const inboundShippingCostSchema = z.object({
+                  inboundShippingCost: z.coerce.number().min(0),
                 })
-                inboundShippingCostSchema.isValidSync({ inboundShippingCost: parseFloat(rowValues[v]) })
+                inboundShippingCostSchema.safeParse({ inboundShippingCost: parseFloat(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Inbound Shipping Cost', value: rowValues[v] })
               }
@@ -366,10 +366,10 @@ const ImportProductsFileModal = ({
             // otherCosts
             case 27:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const otherCostsSchema = Yup.object().shape({
-                  otherCosts: Yup.number().min(0),
+                const otherCostsSchema = z.object({
+                  otherCosts: z.coerce.number().min(0),
                 })
-                otherCostsSchema.isValidSync({ otherCosts: parseFloat(rowValues[v]) })
+                otherCostsSchema.safeParse({ otherCosts: parseFloat(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Other Costs', value: rowValues[v] })
               }
@@ -377,10 +377,10 @@ const ImportProductsFileModal = ({
             // productionTime
             case 28:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const productionTimeSchema = Yup.object().shape({
-                  productionTime: Yup.number().min(0).integer(),
+                const productionTimeSchema = z.object({
+                  productionTime: z.coerce.number().min(0).int(),
                 })
-                productionTimeSchema.isValidSync({ productionTime: parseInt(rowValues[v]) })
+                productionTimeSchema.safeParse({ productionTime: parseInt(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Production Time', value: rowValues[v] })
               }
@@ -388,10 +388,10 @@ const ImportProductsFileModal = ({
             // transitTime
             case 29:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const transitTimeSchema = Yup.object().shape({
-                  transitTime: Yup.number().min(0).integer(),
+                const transitTimeSchema = z.object({
+                  transitTime: z.coerce.number().min(0).int(),
                 })
-                transitTimeSchema.isValidSync({ transitTime: parseInt(rowValues[v]) })
+                transitTimeSchema.safeParse({ transitTime: parseInt(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Transit Time', value: rowValues[v] })
               }
@@ -399,10 +399,10 @@ const ImportProductsFileModal = ({
             // shippingToFBACost
             case 30:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const shippingToFBACostSchema = Yup.object().shape({
-                  shippingToFBACost: Yup.number().min(0),
+                const shippingToFBACostSchema = z.object({
+                  shippingToFBACost: z.coerce.number().min(0),
                 })
-                shippingToFBACostSchema.isValidSync({ shippingToFBACost: parseFloat(rowValues[v]) })
+                shippingToFBACostSchema.safeParse({ shippingToFBACost: parseFloat(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Shipping To FBA Cost', value: rowValues[v] })
               }
@@ -410,37 +410,37 @@ const ImportProductsFileModal = ({
             // buffer
             case 31:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const bufferSchema = Yup.object().shape({
-                  buffer: Yup.number().min(0),
+                const bufferSchema = z.object({
+                  buffer: z.coerce.number().min(0),
                 })
-                bufferSchema.isValidSync({ buffer: parseInt(rowValues[v]) }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Buffer', value: rowValues[v] })
+                bufferSchema.safeParse({ buffer: parseInt(rowValues[v]) }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Buffer', value: rowValues[v] })
               }
               break
             // itemcondition
             case 32:
-              const itemconditionSchema = Yup.object().shape({
-                itemcondition: Yup.string().oneOf(['New', 'Used'], 'Invalid Item Condition').default('New'),
+              const itemconditionSchema = z.object({
+                itemcondition: z.string().refine((value) => ['New', 'Used'].includes(value), 'Invalid Item Condition'),
               })
-              itemconditionSchema.isValidSync({ itemcondition: rowValues[v] })
+              itemconditionSchema.safeParse({ itemcondition: rowValues[v] }).success
                 ? () => {}
                 : errorsList.push({ errorLine: i + 1, errorMessage: 'Item Condition Valid values: New or Used', value: rowValues[v] })
               break
             // image
             case 33:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const imageSchema = Yup.object().shape({
-                  image: Yup.string().url(),
+                const imageSchema = z.object({
+                  image: z.string().url(),
                 })
-                imageSchema.isValidSync({ image: rowValues[v] }) ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Image: invalid URL', value: rowValues[v] })
+                imageSchema.safeParse({ image: rowValues[v] }).success ? () => {} : errorsList.push({ errorLine: i + 1, errorMessage: 'Image: invalid URL', value: rowValues[v] })
               }
               break
             // recommendedDaysOfStock
             case 34:
               if (rowValues[v] != null && rowValues[v] !== '') {
-                const recommendedDaysOfStockSchema = Yup.object().shape({
-                  recommendedDaysOfStock: Yup.number().min(0).integer(),
+                const recommendedDaysOfStockSchema = z.object({
+                  recommendedDaysOfStock: z.coerce.number().min(0).int(),
                 })
-                recommendedDaysOfStockSchema.isValidSync({ recommendedDaysOfStock: parseInt(rowValues[v]) })
+                recommendedDaysOfStockSchema.safeParse({ recommendedDaysOfStock: parseInt(rowValues[v]) }).success
                   ? () => {}
                   : errorsList.push({ errorLine: i + 1, errorMessage: 'Days of Stock', value: rowValues[v] })
               }

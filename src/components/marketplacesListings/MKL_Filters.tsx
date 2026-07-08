@@ -3,12 +3,13 @@ import { memo } from 'react'
 
 import SimpleSelect, { SelectSingleValueType } from '@components/Common/SimpleSelect'
 import InputCheckFilter from '@components/ui/filters/InputCheckFilter'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMarketplaceListingsQueries } from '@hooks/products/useMarketplaceListingsQuery'
-import { Form, Formik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { Button } from '@shadcn/ui/button'
 import { Card, CardContent } from '@shadcn/ui/card'
 import { Label } from '@shadcn/ui/label'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   supplierOptions: string[]
@@ -16,6 +17,17 @@ type Props = {
   categoryOptions: string[]
   setFilterOpen: (value: boolean) => void
 }
+
+const filtersSchema = z.object({
+  showMKHidden: z.boolean().optional(),
+  showMapped: z.boolean().optional(),
+  showDiscontinued: z.boolean().optional(),
+  supplier: z.any(),
+  brand: z.any(),
+  category: z.any(),
+})
+
+type FiltersForm = z.infer<typeof filtersSchema>
 
 const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilterOpen }: Props) => {
   const { listingsFilter, setListingsFilter } = useMarketplaceListingsQueries()
@@ -35,11 +47,12 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
     category: category,
   }
 
-  const validationSchema = Yup.object({
-    showMKHidden: Yup.boolean(),
-    showMapped: Yup.boolean(),
-    showDiscontinued: Yup.boolean(),
+  const form = useForm<FiltersForm>({
+    resolver: zodResolver(filtersSchema),
+    defaultValues: initialValues,
   })
+  const { watch, setValue } = form
+  const values = watch()
 
   const handleSubmit = async (values: any) => {
     setListingsFilter({
@@ -55,7 +68,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
     setFilterOpen(false)
   }
 
-  const handleClearFilters = (setValues: any) => {
+  const handleClearFilters = () => {
     setListingsFilter({
       marketplace: router.query.marketplace ? (router.query.marketplace as string) : '',
       filters: 'false',
@@ -66,7 +79,7 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
       brand: 'All',
       category: 'All',
     })
-    setValues({
+    form.reset({
       showMKHidden: false,
       showMapped: false,
       showDiscontinued: false,
@@ -79,104 +92,100 @@ const MKL_Filters = ({ supplierOptions, brandOptions, categoryOptions, setFilter
   return (
     <Card className='mb-0' style={{ zIndex: '999' }}>
       <CardContent className='w-full'>
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-          {({ values, errors, touched, handleBlur, setFieldValue, setValues }) => (
-            <Form>
-              <div className='flex flex-wrap -mx-3 mt-2'>
-                <div className='px-3 md:w-3/12'>
-                  <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='mb-2'>
-                      Suppliers
-                    </Label>
-                    <SimpleSelect
-                      customStyle='sm'
-                      selected={supplierOptionsList.find((option) => option.value === values.supplier) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectSingleValueType) => {
-                        setFieldValue('supplier', option!.value)
-                      }}
-                      options={supplierOptionsList}
-                    />
-                  </div>
-                </div>
-                <div className='px-3 md:w-3/12'>
-                  <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='mb-2'>
-                      Brands
-                    </Label>
-                    <SimpleSelect
-                      customStyle='sm'
-                      selected={brandOptionsList.find((option) => option.value === values.brand) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectSingleValueType) => {
-                        setFieldValue('brand', option!.value)
-                      }}
-                      options={brandOptionsList}
-                    />
-                  </div>
-                </div>
-                <div className='px-3 md:w-3/12'>
-                  <div className='mb-3 createOrder_inputs'>
-                    <Label htmlFor='lastNameinput' className='mb-2'>
-                      Categories
-                    </Label>
-                    <SimpleSelect
-                      customStyle='sm'
-                      selected={categoryOptionsList.find((option) => option.value === values.category) || { value: '', label: 'Select...' }}
-                      handleSelect={(option: SelectSingleValueType) => {
-                        setFieldValue('category', option!.value)
-                      }}
-                      options={categoryOptionsList}
-                    />
-                  </div>
-                </div>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <div className='flex flex-wrap -mx-3 mt-2'>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-3 createOrder_inputs'>
+                <Label htmlFor='lastNameinput' className='mb-2'>
+                  Suppliers
+                </Label>
+                <SimpleSelect
+                  customStyle='sm'
+                  selected={supplierOptionsList.find((option) => option.value === values.supplier) || { value: '', label: 'Select...' }}
+                  handleSelect={(option: SelectSingleValueType) => {
+                    setValue('supplier', option!.value)
+                  }}
+                  options={supplierOptionsList}
+                />
               </div>
-              <div className='px-3 w-full flex flex-row flex-wrap justify-between items-center gap-4'>
-                <div className='px-3 w-full md:w-7/12 flex flex-row flex-wrap justify-start items-center gap-6'>
-                  <InputCheckFilter
-                    inputLabel='Show Mapped'
-                    inputName='showMapped'
-                    value={values.showMapped || false}
-                    isInvalid={touched.showMapped && errors.showMapped ? true : false}
-                    handleChange={(checked: boolean) => {
-                      setFieldValue('showMapped', checked)
-                    }}
-                    handleBlur={handleBlur}
-                  />
-                  <InputCheckFilter
-                    inputLabel='Show Marketplace Hidden'
-                    inputName='showMKHidden'
-                    value={values.showMKHidden || false}
-                    isInvalid={touched.showMKHidden && errors.showMKHidden ? true : false}
-                    handleChange={(checked: boolean) => {
-                      setFieldValue('showMKHidden', checked)
-                    }}
-                    handleBlur={handleBlur}
-                  />
-                  <InputCheckFilter
-                    inputLabel='Show Discontinued'
-                    inputName='showDiscontinued'
-                    value={values.showDiscontinued || false}
-                    isInvalid={touched.showDiscontinued && errors.showDiscontinued ? true : false}
-                    handleChange={(checked: boolean) => {
-                      setFieldValue('showDiscontinued', checked)
-                    }}
-                    handleBlur={handleBlur}
-                  />
-                </div>
+            </div>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-3 createOrder_inputs'>
+                <Label htmlFor='lastNameinput' className='mb-2'>
+                  Brands
+                </Label>
+                <SimpleSelect
+                  customStyle='sm'
+                  selected={brandOptionsList.find((option) => option.value === values.brand) || { value: '', label: 'Select...' }}
+                  handleSelect={(option: SelectSingleValueType) => {
+                    setValue('brand', option!.value)
+                  }}
+                  options={brandOptionsList}
+                />
+              </div>
+            </div>
+            <div className='px-3 md:w-3/12'>
+              <div className='mb-3 createOrder_inputs'>
+                <Label htmlFor='lastNameinput' className='mb-2'>
+                  Categories
+                </Label>
+                <SimpleSelect
+                  customStyle='sm'
+                  selected={categoryOptionsList.find((option) => option.value === values.category) || { value: '', label: 'Select...' }}
+                  handleSelect={(option: SelectSingleValueType) => {
+                    setValue('category', option!.value)
+                  }}
+                  options={categoryOptionsList}
+                />
+              </div>
+            </div>
+          </div>
+          <div className='px-3 w-full flex flex-row flex-wrap justify-between items-center gap-4'>
+            <div className='px-3 w-full md:w-7/12 flex flex-row flex-wrap justify-start items-center gap-6'>
+              <InputCheckFilter
+                inputLabel='Show Mapped'
+                inputName='showMapped'
+                value={values.showMapped || false}
+                isInvalid={form.formState.errors.showMapped ? true : false}
+                handleChange={(checked: boolean) => {
+                  setValue('showMapped', checked)
+                }}
+                handleBlur={() => {}}
+              />
+              <InputCheckFilter
+                inputLabel='Show Marketplace Hidden'
+                inputName='showMKHidden'
+                value={values.showMKHidden || false}
+                isInvalid={form.formState.errors.showMKHidden ? true : false}
+                handleChange={(checked: boolean) => {
+                  setValue('showMKHidden', checked)
+                }}
+                handleBlur={() => {}}
+              />
+              <InputCheckFilter
+                inputLabel='Show Discontinued'
+                inputName='showDiscontinued'
+                value={values.showDiscontinued || false}
+                isInvalid={form.formState.errors.showDiscontinued ? true : false}
+                handleChange={(checked: boolean) => {
+                  setValue('showDiscontinued', checked)
+                }}
+                handleBlur={() => {}}
+              />
+            </div>
 
-                <div className='px-3 w-full md:w-4/12'>
-                  <div className='flex flex-row justify-end items-center gap-4'>
-                    <Button type='button' variant='light' className='text-[11.2px]' onClick={() => handleClearFilters(setValues)}>
-                      Clear
-                    </Button>
-                    <Button type='submit' className='text-[11.2px]'>
-                      Apply Filters
-                    </Button>
-                  </div>
-                </div>
+            <div className='px-3 w-full md:w-4/12'>
+              <div className='flex flex-row justify-end items-center gap-4'>
+                <Button type='button' variant='light' className='text-[11.2px]' onClick={() => handleClearFilters()}>
+                  Clear
+                </Button>
+                <Button type='submit' className='text-[11.2px]'>
+                  Apply Filters
+                </Button>
               </div>
-            </Form>
-          )}
-        </Formik>
+            </div>
+          </div>
+        </form>
       </CardContent>
     </Card>
   )

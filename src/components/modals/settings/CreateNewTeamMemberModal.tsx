@@ -3,8 +3,10 @@ import { useContext, useState } from 'react'
 import CategoryTeamMembersHeader from '@components/settings/team_members/CategoryTeamMembersHeader'
 import AppContext from '@context/AppContext'
 import { NewTeamMember } from '@typesTs/settings/team_members'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@shadcn/ui/dialog'
@@ -12,7 +14,13 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+
+const newTeamMemberSchema = z.object({
+  name: z.string().max(80, 'Name is to Long').min(1, 'Please enter member name'),
+  email: z.string().min(1, 'Please enter email address').email(),
+})
+
+type NewTeamMemberForm = z.infer<typeof newTeamMemberSchema>
 
 type Props = {
   showModal: boolean
@@ -48,42 +56,39 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
     revalidateOnFocus: false,
   })
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<NewTeamMemberForm>({
+    resolver: zodResolver(newTeamMemberSchema),
+    defaultValues: {
       name: '',
       email: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string().max(80, 'Name is to Long').required('Please enter member name'),
-      email: Yup.string().email().required('Please enter email address'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-      const hasError = Object.values(manageUser.permissions).every((module) => {
-        if (module.view) return false
-        if (Object.values(module.modules).every((subModule) => !subModule.view)) return true
-      })
-      if (hasError) {
-        setformError('*Must select at least one module access permission for the user')
-        setLoading(false)
-        return
-      }
-
-      const response = await axios.post(`/api/settings/teamMembers/createNewTeamMember?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        newTeamMember: { ...values, permissions: manageUser.permissions },
-      })
-
-      if (!response.data.error) {
-        toast.success(response.data.message)
-        mutate(`/api/settings/teamMembers/getTeamMembers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
-        setShowModal(false)
-      } else {
-        toast.error(response.data.message)
-      }
-      setLoading(false)
-    },
   })
+
+  const onSubmit = async (values: NewTeamMemberForm) => {
+    setLoading(true)
+    const hasError = Object.values(manageUser.permissions).every((module) => {
+      if (module.view) return false
+      if (Object.values(module.modules).every((subModule) => !subModule.view)) return true
+    })
+    if (hasError) {
+      setformError('*Must select at least one module access permission for the user')
+      setLoading(false)
+      return
+    }
+
+    const response = await axios.post(`/api/settings/teamMembers/createNewTeamMember?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      newTeamMember: { ...values, permissions: manageUser.permissions },
+    })
+
+    if (!response.data.error) {
+      toast.success(response.data.message)
+      mutate(`/api/settings/teamMembers/getTeamMembers?region=${state.currentRegion}&businessId=${state.user.businessId}`)
+      setShowModal(false)
+    } else {
+      toast.error(response.data.message)
+    }
+    setLoading(false)
+  }
 
   const handleChangePermissions = (module: string, subModule: string) => {
     const newPermissions = { ...manageUser.permissions }
@@ -99,10 +104,7 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
     }
   }
 
-  const handleCreateNewTeamMember = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
-  }
+  const handleCreateNewTeamMember = validation.handleSubmit(onSubmit)
 
   return (
     <Dialog open={!!showModal} onOpenChange={(open) => { if (!open) setShowModal(false) }}>
@@ -124,14 +126,11 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                       type='text'
                       placeholder='Name'
                       id='name'
-                      name='name'
                       className='h-8 text-xs'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.name || ''}
-                      aria-invalid={(validation.touched.name && validation.errors.name ? true : false) || undefined}
+                      aria-invalid={Boolean(validation.formState.errors.name) || undefined}
+                      {...validation.register('name')}
                     />
-                    {validation.touched.name && validation.errors.name ? <div className='text-sm text-destructive'>{validation.errors.name}</div> : null}
+                    {validation.formState.errors.name ? <div className='text-sm text-destructive'>{validation.formState.errors.name.message}</div> : null}
                   </div>
                 </div>
                 <div className='px-3 lg:w-6/12'>
@@ -143,14 +142,11 @@ const CreateNewTeamMemberModal = ({ showModal, setShowModal }: Props) => {
                       type='text'
                       placeholder='Email Address'
                       id='email'
-                      name='email'
                       className='h-8 text-xs'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.email || ''}
-                      aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
+                      aria-invalid={Boolean(validation.formState.errors.email) || undefined}
+                      {...validation.register('email')}
                     />
-                    {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                    {validation.formState.errors.email ? <div className='text-sm text-destructive'>{validation.formState.errors.email.message}</div> : null}
                   </div>
                 </div>
               </div>

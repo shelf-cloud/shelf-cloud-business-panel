@@ -1,12 +1,11 @@
-import dynamic from 'next/dynamic'
 import { useContext } from 'react'
+import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts'
+
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/shadcn/ui/chart'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
-import { ApexOptions } from 'apexcharts'
 import moment from 'moment'
-
-const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const TIMELINE = [
   '12 AM',
@@ -37,6 +36,11 @@ const TIMELINE = [
 
 const CUURENTHOUR = moment().format('h A')
 
+const chartConfig = {
+  Today: { label: 'Today', color: '#3577f1' },
+  Yesterday: { label: 'Yesterday', color: '#999d9c' },
+} satisfies ChartConfig
+
 type Props = {
   salesOverTime?: { [key: string]: { [key: string]: number } }
 }
@@ -45,167 +49,63 @@ const SalesOverTimeTimeline = ({ salesOverTime }: Props) => {
   const currentHourIndex = TIMELINE.indexOf(CUURENTHOUR)
   const YESTERDAY = moment.utc().local().subtract(1, 'days').format('YYYY-MM-DD')
   const TODAY = moment.utc().local().format('YYYY-MM-DD')
-  const series = [
-    {
-      name: 'Today',
-      type: 'line',
-      data: salesOverTime?.[TODAY] ? Object?.values(salesOverTime?.[TODAY]).slice(0, currentHourIndex + 1) : [],
-    },
-    {
-      name: 'Yesterday',
-      type: 'area',
-      data: salesOverTime?.[YESTERDAY] ? Object?.values(salesOverTime?.[YESTERDAY]) : [],
-    },
-  ]
 
-  const options = {
-    chart: {
-      zoom: {
-        enabled: false,
-      },
-      toolbar: {
-        show: false,
-      },
-    },
-    stroke: {
-      width: [2, 1],
-      curve: 'smooth',
-      lineCap: 'round',
-      dashArray: [0, 5],
-    },
-    fill: {
-      type: 'solid',
-      opacity: [1, 0.05],
-    },
-    markers: {
-      size: 3,
-      colors: ['#3577f1', '#999d9c'],
-    },
-    legend: {
-      onItemClick: {
-        toggleDataSeries: false,
-      },
-    },
-    // plotOptions: {
-    //   bar: {
-    //     horizontal: true,
-    //     borderRadius: 2,
-    //     dataLabels: {
-    //       position: '',
-    //     },
-    //   },
-    // },
-    // dataLabels: {
-    //   enabled: true,
-    //   formatter: function (val) {
-    //     if (val > 0) {
-    //       return FormatCurrency.format(val)
-    //     }
-    //   },
-    //   textAnchor: 'start',
-    //   style: {
-    //     fontSize: '14px',
-    //     fontWeight: 'bold',
-    //     colors: ['#000'],
-    //   },
-    // },
-    colors: ['#3577f1', '#999d9c'],
-    // grid: {
-    //   show: true,
-    //   borderColor: '#000',
-    //   position: 'back',
-    //   xaxis: {
-    //     lines: {
-    //       show: true,
-    //     },
-    //   },
-    //   yaxis: {
-    //     lines: {
-    //       show: false,
-    //     },
-    //   },
-    // },
-    tooltip: {
-      intersect: false,
-      x: {
-        show: true,
-      },
-      y: {
-        // formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
-        //   return FormatCurrency(state.currentRegion, value)
-        // },
-      },
-    },
-    xaxis: {
-      type: 'category',
-      // tickAmount: Object.keys(timeLineSorted).length / 8,
-      categories: TIMELINE,
-      labels: {
-        show: true,
-      },
-    },
-    yaxis: [
-      {
-        seriesName: 'Today',
-        show: true,
-        showAlways: true,
-        labels: {
-          show: true,
-          align: 'left',
-          trim: false,
-          formatter: function (val: number) {
-            return FormatCurrency(state.currentRegion, val)
-          },
-          style: {
-            fontSize: '12px',
-            fontWeight: 300,
-            cssClass: 'chargesTitles',
-          },
-        },
-      },
-      {
-        seriesName: 'Today',
-        show: true,
-        showAlways: true,
-        labels: {
-          show: false,
-          align: 'left',
-          trim: false,
-          formatter: function (val: number) {
-            return FormatCurrency(state.currentRegion, val)
-          },
-          // style: {
-          //   fontSize: '14px',
-          //   fontWeight: 400,
-          //   cssClass: 'chargesTitles',
-          // },
-        },
-      },
-      // {
-      //   opposite: true,
-      //   seriesName: 'Units',
-      //   show: true,
-      //   showAlways: true,
-      //   labels: {
-      //     show: true,
-      //     align: 'left',
-      //     trim: false,
-      //     formatter: function (val) {
-      //       return FormatIntNumber(state.currentRegion, val)
-      //     },
-      //     style: {
-      //       fontSize: '12px',
-      //       fontWeight: 300,
-      //       cssClass: 'chargesTitles',
-      //     },
-      //   },
-      // },
-    ],
-  } as ApexOptions
+  const todayValues = salesOverTime?.[TODAY] ? Object.values(salesOverTime[TODAY]) : []
+  const yesterdayValues = salesOverTime?.[YESTERDAY] ? Object.values(salesOverTime[YESTERDAY]) : []
+
+  const chartData = TIMELINE.map((hour, index) => ({
+    hour,
+    Today: index <= currentHourIndex ? Number(todayValues[index]) || 0 : null,
+    Yesterday: yesterdayValues[index] !== undefined ? Number(yesterdayValues[index]) || 0 : null,
+  }))
 
   return (
     <div style={{ width: '100%', height: '315px' }}>
-      <ApexCharts options={options} series={series} type='line' height={300} />
+      <ChartContainer config={chartConfig} className='h-[300px] w-full aspect-auto'>
+        <ComposedChart accessibilityLayer data={chartData} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+          <CartesianGrid vertical={false} strokeDasharray='3 3' />
+          <XAxis dataKey='hour' tickLine={false} axisLine={false} tickMargin={8} />
+          <YAxis
+            tickLine={false}
+            axisLine={false}
+            width={70}
+            tickFormatter={(value) => FormatCurrency(state?.currentRegion, Number(value) || 0)}
+          />
+          <ChartTooltip
+            cursor={{ stroke: 'var(--muted-foreground)', strokeDasharray: '4 4' }}
+            content={
+              <ChartTooltipContent
+                formatter={(value, name) => (
+                  <>
+                    <span className='text-muted-foreground'>{chartConfig[name as keyof typeof chartConfig]?.label || name}</span>
+                    <span className='ml-auto font-mono font-medium text-foreground tabular-nums'>{FormatCurrency(state?.currentRegion, Number(value) || 0)}</span>
+                  </>
+                )}
+              />
+            }
+          />
+          <ChartLegend content={<ChartLegendContent />} />
+          <defs>
+            <linearGradient id='yesterdayFill' x1='0' y1='0' x2='0' y2='1'>
+              <stop offset='5%' stopColor='var(--color-Yesterday)' stopOpacity={0.05} />
+              <stop offset='95%' stopColor='var(--color-Yesterday)' stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
+          <Area
+            dataKey='Yesterday'
+            type='monotone'
+            stroke='var(--color-Yesterday)'
+            strokeWidth={1}
+            strokeDasharray='5 5'
+            fill='url(#yesterdayFill)'
+            dot={{ r: 3 }}
+            connectNulls
+            name='Yesterday'
+            isAnimationActive={false}
+          />
+          <Line dataKey='Today' type='monotone' stroke='var(--color-Today)' strokeWidth={2} dot={{ r: 3 }} connectNulls name='Today' isAnimationActive={false} />
+        </ComposedChart>
+      </ChartContainer>
     </div>
   )
 }

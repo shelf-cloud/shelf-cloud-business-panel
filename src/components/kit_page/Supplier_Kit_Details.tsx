@@ -1,15 +1,16 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   inventoryId?: number
@@ -22,6 +23,12 @@ type Props = {
   shippingToFBA?: number
 }
 
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
+}
+
 const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCost, otherCosts, productionTime, transitTime, shippingToFBA }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
@@ -29,58 +36,63 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
   const landedCost = sellerCost + inboundShippingCost + otherCosts || 0
   const totalLeadTime = productionTime + transitTime
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      inventoryId,
-      sku,
-      sellerCost,
-      inboundShippingCost,
-      otherCosts,
-      productionTime,
-      transitTime,
-      shippingToFBA,
-    },
-    validationSchema: Yup.object({
-      sellerCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      inboundShippingCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      otherCosts: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
-      productionTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-      transitTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-      shippingToFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
-    }),
-    onSubmit: async (values) => {
-      const response = await axios.post(`/api/productDetails/supplierProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    sellerCost: z.preprocess(toNumber, z.number({ error: 'Enter Cost' }).min(0, 'Minimum of 0')),
+    inboundShippingCost: z.preprocess(toNumber, z.number({ error: 'Enter Cost' }).min(0, 'Minimum of 0')),
+    otherCosts: z.preprocess(toNumber, z.number({ error: 'Enter Cost' }).min(0, 'Minimum of 0')),
+    productionTime: z.preprocess(toNumber, z.number({ error: 'Enter Time' }).min(0, 'Minimum of 0')),
+    transitTime: z.preprocess(toNumber, z.number({ error: 'Enter Time' }).min(0, 'Minimum of 0')),
+    shippingToFBA: z.preprocess(toNumber, z.number({ error: 'Enter Time' }).min(0, 'Minimum of 0')),
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const defaultFormValues = {
+    inventoryId,
+    sku,
+    sellerCost,
+    inboundShippingCost,
+    otherCosts,
+    productionTime,
+    transitTime,
+    shippingToFBA,
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      sellerCost,
-      inboundShippingCost,
-      otherCosts,
-      productionTime,
-      transitTime,
-      shippingToFBA,
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultFormValues,
+  })
+
+  useEffect(() => {
+    validation.reset(defaultFormValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inventoryId, sku, sellerCost, inboundShippingCost, otherCosts, productionTime, transitTime, shippingToFBA])
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    const response = await axios.post(`/api/productDetails/supplierProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
     })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+  }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
+  const handleShowEditFields = () => {
+    validation.reset(defaultFormValues)
     setShowEditFields(true)
   }
+
+  const sellerCostValue = Number(validation.watch('sellerCost')) || 0
+  const inboundShippingCostValue = Number(validation.watch('inboundShippingCost')) || 0
+  const otherCostsValue = Number(validation.watch('otherCosts')) || 0
+  const productionTimeValue = Number(validation.watch('productionTime')) || 0
+  const transitTimeValue = Number(validation.watch('transitTime')) || 0
 
   return (
     <div className='py-1 w-full'>
@@ -160,14 +172,13 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='Seller Cost...'
                         id='sellerCost'
-                        name='sellerCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.sellerCost || 0}
-                        aria-invalid={validation.touched.sellerCost && validation.errors.sellerCost ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.sellerCost && validation.formState.errors.sellerCost ? true : undefined}
+                        {...validation.register('sellerCost')}
                       />
-                      {validation.touched.sellerCost && validation.errors.sellerCost ? <div className='text-sm text-destructive'>{validation.errors.sellerCost}</div> : null}
+                      {validation.formState.touchedFields.sellerCost && validation.formState.errors.sellerCost ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.sellerCost.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -177,15 +188,12 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='Shipping Cost...'
                         id='inboundShippingCost'
-                        name='inboundShippingCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.inboundShippingCost || 0}
-                        aria-invalid={validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.inboundShippingCost && validation.formState.errors.inboundShippingCost ? true : undefined}
+                        {...validation.register('inboundShippingCost')}
                       />
-                      {validation.touched.inboundShippingCost && validation.errors.inboundShippingCost ? (
-                        <div className='text-sm text-destructive'>{validation.errors.inboundShippingCost}</div>
+                      {validation.formState.touchedFields.inboundShippingCost && validation.formState.errors.inboundShippingCost ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.inboundShippingCost.message}</div>
                       ) : null}
                     </div>
                   </td>
@@ -196,14 +204,13 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='Other Cost...'
                         id='otherCosts'
-                        name='otherCosts'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.otherCosts || 0}
-                        aria-invalid={validation.touched.otherCosts && validation.errors.otherCosts ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.otherCosts && validation.formState.errors.otherCosts ? true : undefined}
+                        {...validation.register('otherCosts')}
                       />
-                      {validation.touched.otherCosts && validation.errors.otherCosts ? <div className='text-sm text-destructive'>{validation.errors.otherCosts}</div> : null}
+                      {validation.formState.touchedFields.otherCosts && validation.formState.errors.otherCosts ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.otherCosts.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -216,9 +223,8 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         id='landedCost'
                         name='landedCost'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={Number(validation.values.sellerCost + validation.values.inboundShippingCost + validation.values.otherCosts).toFixed(2) || 0}
+                        value={Number((sellerCostValue || 0) + (inboundShippingCostValue || 0) + (otherCostsValue || 0)).toFixed(2) || 0}
+                        readOnly
                       />
                     </div>
                   </td>
@@ -229,14 +235,11 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='Production...'
                         id='productionTime'
-                        name='productionTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.productionTime || 0}
-                        aria-invalid={validation.touched.productionTime && validation.errors.productionTime ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.productionTime && validation.formState.errors.productionTime ? true : undefined}
+                        {...validation.register('productionTime')}
                       />
-                      {validation.touched.productionTime && validation.errors.productionTime ? (
-                        <div className='text-sm text-destructive'>{validation.errors.productionTime}</div>
+                      {validation.formState.touchedFields.productionTime && validation.formState.errors.productionTime ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.productionTime.message}</div>
                       ) : null}
                     </div>
                   </td>
@@ -247,13 +250,12 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='Transit...'
                         id='transitTime'
-                        name='transitTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.transitTime || 0}
-                        aria-invalid={validation.touched.transitTime && validation.errors.transitTime ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.transitTime && validation.formState.errors.transitTime ? true : undefined}
+                        {...validation.register('transitTime')}
                       />
-                      {validation.touched.transitTime && validation.errors.transitTime ? <div className='text-sm text-destructive'>{validation.errors.transitTime}</div> : null}
+                      {validation.formState.touchedFields.transitTime && validation.formState.errors.transitTime ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.transitTime.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -265,9 +267,8 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         placeholder='Transit...'
                         id='totalTime'
                         name='totalTime'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={Number(validation.values.productionTime + validation.values.transitTime) || 0}
+                        value={Number((productionTimeValue || 0) + (transitTimeValue || 0)) || 0}
+                        readOnly
                       />
                     </div>
                   </td>
@@ -278,14 +279,13 @@ const Supplier_Kit_Details = ({ inventoryId, sku, sellerCost, inboundShippingCos
                         className='text-[13px] h-8 text-xs'
                         placeholder='FBA Cost...'
                         id='shippingToFBA'
-                        name='shippingToFBA'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.shippingToFBA || 0}
-                        aria-invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : false || undefined}
+                        aria-invalid={validation.formState.touchedFields.shippingToFBA && validation.formState.errors.shippingToFBA ? true : undefined}
+                        {...validation.register('shippingToFBA')}
                       />
-                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <div className='text-sm text-destructive'>{validation.errors.shippingToFBA}</div> : null}
+                      {validation.formState.touchedFields.shippingToFBA && validation.formState.errors.shippingToFBA ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.shippingToFBA.message}</div>
+                      ) : null}
                     </div>
                   </td>
                 </tr>

@@ -1,6 +1,7 @@
 import router from 'next/router'
 import { useContext, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
 import PrintReceivingLabel from '@components/receiving/labels/PrintReceivingLabel'
 import SelectSingleFilter from '@components/ui/filters/SelectSingleFilter'
@@ -9,7 +10,8 @@ import { useGenerateLabels } from '@hooks/pdfRender/useGenerateLabels'
 import { useReceivingsBoxes } from '@hooks/receivings/useReceivingsBoxes'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 
 import { Alert } from '@/components/ui/Alert'
@@ -21,7 +23,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dia
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import { Spinner } from '@shadcn/ui/spinner'
 import useSWR, { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 import Create_Receiving_Packages_Tab from '../receivings/createReceiving/Create_Receiving_Packages_Tab'
 import Create_Receiving_Summary_Tab from '../receivings/createReceiving/Create_Receiving_Summary_Tab'
@@ -45,6 +46,25 @@ const EXIST_RECEIVING_TYPE: SelectOptionType[] = [{ value: 'false', label: 'Add 
 
 const fetcher = (endPoint: string) => axios(endPoint).then((res) => res.data)
 
+const createReceivingSchema = z
+  .object({
+    orderNumber: z
+      .string()
+      .regex(/^[a-zA-Z0-9-]+$/, { message: `Invalid special characters: % & # " ' @ ~ , ...` })
+      .max(100, { message: 'Title is to Long' })
+      .min(1, { message: 'Please enter Order Number' }),
+    packingConfiguration: z.string(),
+    isNewReceiving: z.string().min(1, { message: 'Select a Receiving Type' }),
+    receivingIdToAdd: z.string(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.isNewReceiving === 'false' && !values.receivingIdToAdd) {
+      ctx.addIssue({ code: 'custom', message: 'Must select a Receiving', path: ['receivingIdToAdd'] })
+    }
+  })
+
+type CreateReceivingValues = z.infer<typeof createReceivingSchema>
+
 const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
   const { state, setShowCreateReceivingFromPo } = useContext(AppContext)
   const { mutate } = useSWRConfig()
@@ -63,149 +83,137 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     }
   )
 
-  const validation = useFormik({
-    enableReinitialize: false,
-    initialValues: {
+  const validation = useForm<CreateReceivingValues>({
+    resolver: zodResolver(createReceivingSchema),
+    defaultValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       packingConfiguration: 'single',
       isNewReceiving: '',
       receivingIdToAdd: '',
     },
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
-      isNewReceiving: Yup.string().required('Select a Receiving Type'),
-      receivingIdToAdd: Yup.string().when('isNewReceiving', {
-        is: 'false',
-        then: Yup.string().required('Must select a Receiving'),
-      }),
-    }),
-    onSubmit: async (values) => {
-      setloading(true)
-
-      const createReceiving = toast.loading('Creating Receiving...')
-
-      // SHIPPING PRODUCTS
-      let shippingProducts = [] as any
-      Object.entries(state.receivingFromPo.items).forEach(([_poId, inventoryId]: any) =>
-        Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
-          shippingProducts.push({
-            poId: item.poId,
-            hasSplitting: item.hasSplitting,
-            splitId: item.splitId,
-            sku: item.sku,
-            name: item.title,
-            boxQty: item.boxQty,
-            inventoryId: item.inventoryId,
-            qty: Number(item.receivingQty),
-            storeId: item.businessId,
-            qtyPicked: 0,
-            pickedHistory: [],
-          })
-        })
-      )
-
-      // ORDER PRODUCTS
-      let orderProducts = [] as any
-      Object.entries(state.receivingFromPo.items).map(([_poId, inventoryId]: any) =>
-        Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
-          orderProducts.push({
-            poId: item.poId,
-            poNumber: item.orderNumber,
-            orderNumber:
-              validation.values.isNewReceiving === 'true'
-                ? `${orderNumberStart}${validation.values.orderNumber}`
-                : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!,
-            hasSplitting: item.hasSplitting,
-            splitId: item.splitId,
-            sku: item.sku,
-            inventoryId: item.inventoryId,
-            name: item.title,
-            image: item.image,
-            boxQty: item.boxQty,
-            quantity: Number(item.receivingQty),
-            businessId: item.businessId,
-            qtyReceived: 0,
-            suppliersName: item.suppliersName,
-          })
-        })
-      )
-
-      const isNewReceiving = values.isNewReceiving == 'true' ? true : false
-
-      const { data } = await axios.post(`/api/purchaseOrders/createReceivingFromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        shippingProducts,
-        orderInfo: {
-          orderNumber: values.orderNumber,
-          orderProducts,
-        },
-        receivingItems: state.receivingFromPo.items,
-        isNewReceiving: isNewReceiving,
-        receivingIdToAdd: isNewReceiving ? null : parseInt(values.receivingIdToAdd),
-        warehouseId: state.receivingFromPo.warehouse.id,
-        finalBoxesConfiguration,
-      })
-
-      if (!data.error) {
-        setShowCreateReceivingFromPo(false)
-        toast.update(createReceiving, {
-          render: data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-
-        if (data.is3PL) {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={data.orderid3PL}
-            />,
-            validation.values.isNewReceiving === 'true'
-              ? `${orderNumberStart}${validation.values.orderNumber}`
-              : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
-          )
-        } else {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={
-                validation.values.isNewReceiving === 'true'
-                  ? `${orderNumberStart}${validation.values.orderNumber}`
-                  : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
-              }
-            />,
-            validation.values.isNewReceiving === 'true'
-              ? `${orderNumberStart}${validation.values.orderNumber}`
-              : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
-          )
-        }
-
-        await mutate('/api/getuser')
-        router.push('/receivings')
-      } else {
-        toast.update(createReceiving, {
-          render: data.message ?? 'Error creating Receiving',
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-      setloading(false)
-    },
   })
 
-  const handleCreateReceiving = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const values = validation.watch()
+  const { errors, touchedFields } = validation.formState
+
+  const onSubmit = async (values: CreateReceivingValues) => {
+    setloading(true)
+
+    const createReceiving = toast.loading('Creating Receiving...')
+
+    // SHIPPING PRODUCTS
+    let shippingProducts = [] as any
+    Object.entries(state.receivingFromPo.items).forEach(([_poId, inventoryId]: any) =>
+      Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
+        shippingProducts.push({
+          poId: item.poId,
+          hasSplitting: item.hasSplitting,
+          splitId: item.splitId,
+          sku: item.sku,
+          name: item.title,
+          boxQty: item.boxQty,
+          inventoryId: item.inventoryId,
+          qty: Number(item.receivingQty),
+          storeId: item.businessId,
+          qtyPicked: 0,
+          pickedHistory: [],
+        })
+      })
+    )
+
+    // ORDER PRODUCTS
+    let orderProducts = [] as any
+    Object.entries(state.receivingFromPo.items).map(([_poId, inventoryId]: any) =>
+      Object.entries(inventoryId).map(([_inventoryId, item]: any) => {
+        orderProducts.push({
+          poId: item.poId,
+          poNumber: item.orderNumber,
+          orderNumber:
+            values.isNewReceiving === 'true'
+              ? `${orderNumberStart}${values.orderNumber}`
+              : openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber!,
+          hasSplitting: item.hasSplitting,
+          splitId: item.splitId,
+          sku: item.sku,
+          inventoryId: item.inventoryId,
+          name: item.title,
+          image: item.image,
+          boxQty: item.boxQty,
+          quantity: Number(item.receivingQty),
+          businessId: item.businessId,
+          qtyReceived: 0,
+          suppliersName: item.suppliersName,
+        })
+      })
+    )
+
+    const isNewReceiving = values.isNewReceiving == 'true' ? true : false
+
+    const { data } = await axios.post(`/api/purchaseOrders/createReceivingFromPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      shippingProducts,
+      orderInfo: {
+        orderNumber: values.orderNumber,
+        orderProducts,
+      },
+      receivingItems: state.receivingFromPo.items,
+      isNewReceiving: isNewReceiving,
+      receivingIdToAdd: isNewReceiving ? null : parseInt(values.receivingIdToAdd),
+      warehouseId: state.receivingFromPo.warehouse.id,
+      finalBoxesConfiguration,
+    })
+
+    if (!data.error) {
+      setShowCreateReceivingFromPo(false)
+      toast.update(createReceiving, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+
+      if (data.is3PL) {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={data.orderid3PL}
+          />,
+          values.isNewReceiving === 'true'
+            ? `${orderNumberStart}${values.orderNumber}`
+            : openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber!
+        )
+      } else {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === state.receivingFromPo.warehouse.id)!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={
+              values.isNewReceiving === 'true'
+                ? `${orderNumberStart}${values.orderNumber}`
+                : openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber!
+            }
+          />,
+          values.isNewReceiving === 'true'
+            ? `${orderNumberStart}${values.orderNumber}`
+            : openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber!
+        )
+      }
+
+      await mutate('/api/getuser')
+      router.push('/receivings')
+    } else {
+      toast.update(createReceiving, {
+        render: data.message ?? 'Error creating Receiving',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+    setloading(false)
   }
 
   const {
@@ -224,10 +232,10 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
     finalBoxesConfiguration,
     hasBoxedErrors,
   } = useReceivingsBoxes(
-    validation.values.packingConfiguration,
-    validation.values.isNewReceiving === 'true'
-      ? `${orderNumberStart}${validation.values.orderNumber}`
-      : openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber!
+    values.packingConfiguration,
+    values.isNewReceiving === 'true'
+      ? `${orderNumberStart}${values.orderNumber}`
+      : openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber!
   )
 
   const { downloadPDF } = useGenerateLabels()
@@ -247,7 +255,7 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             Destination: <span className='text-primary'>{state.receivingFromPo.warehouse.name}</span>
           </p>
         </div>
-        <form onSubmit={handleCreateReceiving}>
+        <form onSubmit={validation.handleSubmit(onSubmit)}>
           <div className='flex flex-wrap -mx-3'>
             <div className='px-3 w-full md:w-5/12'>
               <div className='mb-3'>
@@ -259,17 +267,14 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                     {orderNumberStart}
                   </InputGroupText>
                   <Input
-                    disabled={validation.values.isNewReceiving === 'false'}
+                    disabled={values.isNewReceiving === 'false'}
                     type='text'
                     className='text-[13px] h-8 text-xs'
                     id='orderNumber'
-                    name='orderNumber'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.orderNumber || ''}
-                    aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
+                    aria-invalid={touchedFields.orderNumber && errors.orderNumber ? true : undefined}
+                    {...validation.register('orderNumber')}
                   />
-                  {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
+                  {touchedFields.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber.message}</div> : null}
                 </InputGroup>
               </div>
             </div>
@@ -279,29 +284,29 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
                 inputName='isNewReceiving'
                 placeholder='Choose a Type...'
                 selected={
-                  [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE].find((option) => option.value === validation.values.isNewReceiving) || { value: '', label: 'Choose a Type...' }
+                  [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE].find((option) => option.value === values.isNewReceiving) || { value: '', label: 'Choose a Type...' }
                 }
                 options={openReceivings && openReceivings.length > 0 ? [...RECEIVING_TYPES, ...EXIST_RECEIVING_TYPE] : RECEIVING_TYPES}
                 handleSelect={(option: SelectSingleValueType) => {
-                  validation.handleChange({ target: { name: 'isNewReceiving', value: option!.value } })
+                  validation.setValue('isNewReceiving', String(option!.value), { shouldValidate: true, shouldTouch: true })
                 }}
-                error={validation.errors.isNewReceiving}
+                error={errors.isNewReceiving?.message}
               />
               {openReceivings && openReceivings.length <= 0 && <p className='text-muted-foreground text-[11.2px]'>{`No open receiving to ${state.receivingFromPo.warehouse.name}`}</p>}
-              {validation.values.isNewReceiving === 'false' && (
+              {values.isNewReceiving === 'false' && (
                 <SelectSingleFilter
                   inputLabel='*Select Existing Receiving'
                   inputName='receivingIdToAdd'
                   placeholder='Choose a Type...'
                   selected={{
-                    value: validation.values.receivingIdToAdd,
-                    label: openReceivings?.find((receiving) => receiving.id == parseInt(validation.values.receivingIdToAdd))?.orderNumber || 'Choose a Receiving...',
+                    value: values.receivingIdToAdd,
+                    label: openReceivings?.find((receiving) => receiving.id == parseInt(values.receivingIdToAdd))?.orderNumber || 'Choose a Receiving...',
                   }}
                   options={openReceivings?.map((receiving) => ({ value: receiving.id, label: receiving.orderNumber })) || [{ value: '', label: '' }]}
                   handleSelect={(option: SelectSingleValueType) => {
-                    validation.handleChange({ target: { name: 'receivingIdToAdd', value: option!.value } })
+                    validation.setValue('receivingIdToAdd', String(option!.value), { shouldValidate: true, shouldTouch: true })
                   }}
-                  error={validation.errors.receivingIdToAdd}
+                  error={errors.receivingIdToAdd?.message}
                 />
               )}
             </div>
@@ -335,8 +340,8 @@ const Create_Receiving_From_Po = ({ orderNumberStart }: Props) => {
             <TabPane tabId='packages'>
               {activeTab == 'packages' && (
                 <Create_Receiving_Packages_Tab
-                  packingConfiguration={validation.values.packingConfiguration}
-                  setPackingConfiguration={(field: string, value: string) => validation.setFieldValue(field, value)}
+                  packingConfiguration={values.packingConfiguration}
+                  setPackingConfiguration={(field: string, value: string) => validation.setValue(field as any, value as any)}
                   singleSkuPackages={singleSkuPackages}
                   addNewSingleSkuBoxConfiguration={addNewSingleSkuBoxConfiguration}
                   removeSingleSkuBoxConfiguration={removeSingleSkuBoxConfiguration}

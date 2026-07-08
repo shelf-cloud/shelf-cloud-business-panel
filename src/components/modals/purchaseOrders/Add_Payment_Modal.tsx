@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
@@ -13,9 +15,17 @@ import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type Props = {}
+
+const paymentSchema = z.object({
+  paymentDate: z.string().min(1, { message: 'Please select Date' }),
+  amount: z.coerce.number({ error: 'Please enter amount paid' }).min(0.1, { message: 'Please enter amount paid' }),
+  comment: z.string().optional(),
+})
+
+type PaymentFormInput = z.input<typeof paymentSchema>
+type PaymentFormValues = z.output<typeof paymentSchema>
 
 const Add_Payment_Modal = ({}: Props) => {
   const router = useRouter()
@@ -24,48 +34,42 @@ const Add_Payment_Modal = ({}: Props) => {
   const { mutate } = useSWRConfig()
   const [loading, setloading] = useState(false)
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const validation = useForm<PaymentFormInput, any, PaymentFormValues>({
+    resolver: zodResolver(paymentSchema),
+    defaultValues: {
       paymentDate: '',
       amount: 0,
       comment: '',
     },
-    validationSchema: Yup.object({
-      paymentDate: Yup.string().required('Please select Date'),
-      amount: Yup.number().min(0.1, 'Please enter amount paid').required('Please enter amount paid'),
-      comment: Yup.string(),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      setloading(true)
-
-      const response = await axios.post(`/api/purchaseOrders/addPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        poId: state.modalAddPaymentToPoDetails?.poId,
-        ...values,
-      })
-
-      if (!response.data.error) {
-        resetForm()
-        if (organizeBy == 'suppliers') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'orders') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        } else if (organizeBy == 'sku') {
-          mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
-        }
-        toast.success(response.data.msg)
-        setShowAddPaymentToPo(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setloading(false)
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const onSubmit = async (values: PaymentFormValues) => {
+    setloading(true)
+
+    const response = await axios.post(`/api/purchaseOrders/addPaymentToPo?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      poId: state.modalAddPaymentToPoDetails?.poId,
+      ...values,
+    })
+
+    if (!response.data.error) {
+      validation.reset()
+      if (organizeBy == 'suppliers') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySuppliers?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'orders') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersByOrders?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      } else if (organizeBy == 'sku') {
+        mutate(`/api/purchaseOrders/getpurchaseOrdersBySku?region=${state.currentRegion}&businessId=${state.user.businessId}&status=${status}`)
+      }
+      toast.success(response.data.msg)
+      setShowAddPaymentToPo(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setloading(false)
   }
+
+  const amountValue = Number(validation.watch('amount') ?? 0)
+
   return (
     <Dialog
       open={!!state.showAddPaymentToPo}
@@ -77,7 +81,7 @@ const Add_Payment_Modal = ({}: Props) => {
           <DialogTitle>Add Payment</DialogTitle>
         </DialogHeader>
         <div>
-          <form onSubmit={handleAddProduct}>
+          <form onSubmit={validation.handleSubmit(onSubmit)}>
             <div className='flex flex-wrap -mx-3'>
               <h5 className='text-[16.25px] mb-4 font-semibold'>
                 PO: <span className='font-semibold text-primary'>{state.modalAddPaymentToPoDetails?.orderNumber}</span>
@@ -93,13 +97,12 @@ const Add_Payment_Modal = ({}: Props) => {
                     type='date'
                     className='h-8 text-xs'
                     id='paymentDate'
-                    name='paymentDate'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.paymentDate || ''}
-                    aria-invalid={Boolean(validation.touched.paymentDate && validation.errors.paymentDate) || undefined}
+                    aria-invalid={Boolean(validation.formState.touchedFields.paymentDate && validation.formState.errors.paymentDate) || undefined}
+                    {...validation.register('paymentDate')}
                   />
-                  {validation.touched.paymentDate && validation.errors.paymentDate ? <div className='text-sm text-destructive'>{validation.errors.paymentDate}</div> : null}
+                  {validation.formState.touchedFields.paymentDate && validation.formState.errors.paymentDate ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.paymentDate.message}</div>
+                  ) : null}
                 </div>
               </div>
               <div className='px-3 w-full md:w-6/12'>
@@ -112,14 +115,14 @@ const Add_Payment_Modal = ({}: Props) => {
                     onWheel={(e: any) => e.currentTarget.blur()}
                     className='h-8 text-xs'
                     id='amount'
-                    name='amount'
                     step='.01'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={Boolean(validation.touched.amount && validation.errors.amount) || undefined}
+                    aria-invalid={Boolean(validation.formState.touchedFields.amount && validation.formState.errors.amount) || undefined}
+                    {...validation.register('amount')}
                   />
-                  <small className='text-[11.2px] text-muted-foreground'>{FormatCurrency(state.currentRegion, validation.values.amount)}</small>
-                  {validation.touched.amount && validation.errors.amount ? <div className='text-sm text-destructive'>{validation.errors.amount}</div> : null}
+                  <small className='text-[11.2px] text-muted-foreground'>{FormatCurrency(state.currentRegion, amountValue)}</small>
+                  {validation.formState.touchedFields.amount && validation.formState.errors.amount ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.amount.message}</div>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -132,13 +135,12 @@ const Add_Payment_Modal = ({}: Props) => {
                   <Textarea
                     className='text-xs'
                     id='comment'
-                    name='comment'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.comment || ''}
-                    aria-invalid={Boolean(validation.touched.comment && validation.errors.comment) || undefined}
+                    aria-invalid={Boolean(validation.formState.touchedFields.comment && validation.formState.errors.comment) || undefined}
+                    {...validation.register('comment')}
                   />
-                  {validation.touched.comment && validation.errors.comment ? <div className='text-sm text-destructive'>{validation.errors.comment}</div> : null}
+                  {validation.formState.touchedFields.comment && validation.formState.errors.comment ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.comment.message}</div>
+                  ) : null}
                 </div>
               </div>
             </div>

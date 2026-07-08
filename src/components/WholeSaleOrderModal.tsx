@@ -3,12 +3,14 @@
 import router from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import AppContext from '@context/AppContext'
 import { wholesaleProductRow } from '@typings'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import moment from 'moment'
 import { useSession } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
@@ -18,7 +20,6 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { Textarea } from '@shadcn/ui/textarea'
-import * as Yup from 'yup'
 
 import { FormatBytes } from '@/lib/FormatNumbers'
 import { NoImageAdress } from '@/lib/assetsConstants'
@@ -177,40 +178,60 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
   const TotalMasterBoxes = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.orderQty), 0)
 
   const totalQuantityToShip = orderProducts.reduce((total: number, item: wholesaleProductRow) => total + Number(item.totalToShip), 0)
+
+  const validationSchema = z
+    .object({
+      orderNumber: z
+        .string()
+        .regex(/^[a-zA-Z0-9-]+$/, { message: `Invalid special characters: % & # " ' @ ~ , ...` })
+        .max(100, { message: 'Title is to Long' })
+        .min(1, { message: 'Please enter Order Number' }),
+      type: z.enum(['LTL', 'Parcel Boxes'], { message: 'Please Choose a Type' }),
+      numberOfPallets: z.number(),
+      isThird: z.string().min(1, { message: 'Select a Shipment Payment Type' }),
+      thirdInfo: z.string(),
+      hasProducts: z.number().min(1, { message: 'To create an order, you must add at least one product' }),
+    })
+    .superRefine((values, ctx) => {
+      if (values.type === 'LTL' && !(values.numberOfPallets >= 1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Must be greater than or equal to 1',
+          path: ['numberOfPallets'],
+        })
+      }
+      if (values.isThird === 'true' && !values.thirdInfo) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Must enter Third Party Information',
+          path: ['thirdInfo'],
+        })
+      }
+    })
+
+  type ValidationValues = z.infer<typeof validationSchema>
+
+  const getDefaultValues = (): ValidationValues => ({
+    orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
+    type: 'Parcel Boxes',
+    numberOfPallets: 1,
+    isThird: '',
+    thirdInfo: '',
+    hasProducts: orderProducts.length,
+  })
+
+  const validation = useForm<ValidationValues>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: getDefaultValues(),
+  })
+
   useEffect(() => {
     return () => {
-      validation.resetForm()
+      validation.reset(getDefaultValues())
     }
   }, [state.wholesaleOrderProducts])
 
-  const validation = useFormik({
-    enableReinitialize: false,
-    initialValues: {
-      orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
-      type: 'Parcel Boxes',
-      numberOfPallets: 1,
-      isThird: '',
-      thirdInfo: '',
-      hasProducts: orderProducts.length,
-    },
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
-      type: Yup.string().oneOf(['LTL', 'Parcel Boxes'], 'Please Choose a Type').required('Please Choose a Type'),
-      numberOfPallets: Yup.number().when('type', {
-        is: 'LTL',
-        then: Yup.number().min(1, 'Must be greater than or equal to 1').required('Must enter Third Party Information'),
-      }),
-      isThird: Yup.string().required('Select a Shipment Payment Type'),
-      thirdInfo: Yup.string().when('isThird', {
-        is: 'true',
-        then: Yup.string().required('Must enter Third Party Information'),
-      }),
-      hasProducts: Yup.number().min(1, 'To create an order, you must add at least one product'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
+  const onSubmit = async (values: ValidationValues) => {
       setloading(true)
 
       const loadingToast = toast.loading('Creating Order...')
@@ -341,7 +362,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
           isLoading: false,
           autoClose: 3000,
         })
-        resetForm()
+        validation.reset(getDefaultValues())
         router.push('/Shipments')
       } else {
         toast.update(loadingToast, {
@@ -352,13 +373,12 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
         })
       }
       setloading(false)
-    },
-  })
-
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
   }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
+  const formValues = validation.watch()
+  const { errors, touchedFields } = validation.formState
 
   return (
     <Dialog open={!!state.showWholeSaleOrderModal} onOpenChange={(open) => { if (!open) setWholeSaleOrderModal(!state.showWholeSaleOrderModal) }}>
@@ -387,13 +407,10 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       className='text-[13px] h-8 text-xs'
                       style={{ padding: '0.2rem 0.9rem' }}
                       id='orderNumber'
-                      name='orderNumber'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.orderNumber || ''}
-                      aria-invalid={(validation.touched.orderNumber && validation.errors.orderNumber ? true : false) || undefined}
+                      {...validation.register('orderNumber')}
+                      aria-invalid={(touchedFields.orderNumber && errors.orderNumber ? true : false) || undefined}
                     />
-                    {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
+                    {touchedFields.orderNumber && errors.orderNumber ? <div className='text-sm text-destructive'>{errors.orderNumber.message}</div> : null}
                   </InputGroup>
                 </div>
               </div>
@@ -404,21 +421,21 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                 <div className='flex flex-row justify-start items-center pb-4 gap-4'>
                   <Button
                     type='button'
-                    className={validation.values.type == 'Parcel Boxes' ? '' : 'text-muted-foreground'}
-                    variant={validation.values.type == 'Parcel Boxes' ? undefined : 'light'}
-                    onClick={() => validation.setFieldValue('type', 'Parcel Boxes')}>
+                    className={formValues.type == 'Parcel Boxes' ? '' : 'text-muted-foreground'}
+                    variant={formValues.type == 'Parcel Boxes' ? undefined : 'light'}
+                    onClick={() => validation.setValue('type', 'Parcel Boxes', { shouldValidate: true, shouldDirty: true })}>
                     Parcel Boxes
                   </Button>
                   <Button
                     type='button'
-                    className={validation.values.type == 'LTL' ? '' : 'text-muted-foreground'}
-                    variant={validation.values.type == 'LTL' ? undefined : 'light'}
-                    onClick={() => validation.setFieldValue('type', 'LTL')}>
+                    className={formValues.type == 'LTL' ? '' : 'text-muted-foreground'}
+                    variant={formValues.type == 'LTL' ? undefined : 'light'}
+                    onClick={() => validation.setValue('type', 'LTL', { shouldValidate: true, shouldDirty: true })}>
                     Pallets
                   </Button>
                 </div>
               </div>
-              {validation.values.type == 'LTL' && (
+              {formValues.type == 'LTL' && (
                 <div className='px-3 md:w-1/2'>
                   <div className='mb-4'>
                     <Label htmlFor='numberOfPallets' className='mb-2 text-[11.2px]'>
@@ -428,14 +445,11 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                       type='number'
                       className='text-[13px]'
                       id='numberOfPallets'
-                      name='numberOfPallets'
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.numberOfPallets || ''}
-                      aria-invalid={(validation.touched.numberOfPallets && validation.errors.numberOfPallets ? true : false) || undefined}
+                      {...validation.register('numberOfPallets', { valueAsNumber: true })}
+                      aria-invalid={(touchedFields.numberOfPallets && errors.numberOfPallets ? true : false) || undefined}
                     />
-                    {validation.touched.numberOfPallets && validation.errors.numberOfPallets ? (
-                      <div className='text-sm text-destructive'>{validation.errors.numberOfPallets}</div>
+                    {touchedFields.numberOfPallets && errors.numberOfPallets ? (
+                      <div className='text-sm text-destructive'>{errors.numberOfPallets.message}</div>
                     ) : null}
                   </div>
                 </div>
@@ -445,12 +459,12 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   inputLabel={'*Select Shipment Type'}
                   inputName={'isThird'}
                   placeholder={'Select ...'}
-                  selected={{ value: validation.values.isThird, label: LABELS_SHIPMENT_TYPES.find((type) => type.value === validation.values.isThird)?.label || 'Select...' }}
+                  selected={{ value: formValues.isThird, label: LABELS_SHIPMENT_TYPES.find((type) => type.value === formValues.isThird)?.label || 'Select...' }}
                   options={LABELS_SHIPMENT_TYPES || [{ value: '', label: '' }]}
                   handleSelect={(option: SelectSingleValueType) => {
-                    validation.handleChange({ target: { name: 'isThird', value: option!.value } })
+                    validation.setValue('isThird', String(option!.value), { shouldValidate: true, shouldDirty: true })
                   }}
-                  error={validation.errors.isThird}
+                  error={errors.isThird?.message}
                 />
               </div>
             </div>
@@ -526,7 +540,7 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
                   {errorFile && <p className='text-danger m-0'>You must Upload the FBA Labels to create order.</p>}
                 </div>
                 <div className='px-3 flex-1 basis-0'>
-                  {validation.values.type == 'LTL' && (
+                  {formValues.type == 'LTL' && (
                     <UploadFileDropzone
                       accptedFiles={orderPalletLabel.acceptedFiles}
                       handleAcceptedFiles={orderPalletLabel.handleAcceptedFiles}
@@ -599,25 +613,22 @@ const WholeSaleOrderModal = ({ orderNumberStart, orderProducts }: Props) => {
               </div>
             </div>
             <div className='px-3 w-full'>
-              {validation.values.isThird == 'true' && (
+              {formValues.isThird == 'true' && (
                 <>
                   <Textarea
                     id='thirdInfo'
-                    name='thirdInfo'
                     placeholder='Please enter the Third Party Shipping Information: Recepient, Company, Address, City, State, Zipcode, Country.'
-                    value={validation.values.thirdInfo}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    aria-invalid={(validation.touched.thirdInfo && validation.errors.thirdInfo ? true : false) || undefined}
+                    {...validation.register('thirdInfo')}
+                    aria-invalid={(touchedFields.thirdInfo && errors.thirdInfo ? true : false) || undefined}
                   />
-                  {validation.touched.thirdInfo && validation.errors.thirdInfo ? <div className='text-sm text-destructive'>{validation.errors.thirdInfo}</div> : null}
+                  {touchedFields.thirdInfo && errors.thirdInfo ? <div className='text-sm text-destructive'>{errors.thirdInfo.message}</div> : null}
                   <h5 className='text-[11.2px] mb-4 text-muted-foreground'>*Additional shipping costs apply to this type of shipping.</h5>
                 </>
               )}
             </div>
             <div className='px-3 w-full'>
-              <p className='text-[13px] m-0'>Total SKUs in Order: {validation.values.hasProducts}</p>
-              {validation.touched.hasProducts && validation.errors.hasProducts ? <p className='text-danger'>{validation.errors.hasProducts}</p> : null}
+              <p className='text-[13px] m-0'>Total SKUs in Order: {formValues.hasProducts}</p>
+              {touchedFields.hasProducts && errors.hasProducts ? <p className='text-danger'>{errors.hasProducts.message}</p> : null}
               <div className='overflow-x-auto'>
               <table className='w-full align-middle mb-0 [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
                 <thead>

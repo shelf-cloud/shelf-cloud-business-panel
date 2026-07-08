@@ -1,12 +1,14 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import BreadCrumb from '@components/Common/BreadCrumb'
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { getSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
@@ -14,10 +16,18 @@ import { Card, CardContent } from '@shadcn/ui/card'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Textarea } from '@shadcn/ui/textarea'
-import * as Yup from 'yup'
 
 import PlaneImage from '../assets/images/contactus-plane.png'
 import SquareImage from '../assets/images/contactus-square.png'
+
+const contactUsSchema = z.object({
+  companyName: z.string().max(80, 'Name is to Long').min(1, 'Please Enter Your Company Name'),
+  email: z.string().min(1).email(),
+  subject: z.string().min(1),
+  message: z.string().min(1),
+})
+
+type ContactUsForm = z.infer<typeof contactUsSchema>
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const session = await getSession(context)
@@ -38,37 +48,38 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
 function ContactUs() {
   const { state }: any = useContext(AppContext)
 
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
+  const validation = useForm<ContactUsForm>({
+    resolver: zodResolver(contactUsSchema),
+    defaultValues: {
       companyName: String(state.currentRegion == 'us' ? state?.user?.us?.name : state?.user?.eu?.name),
       email: String(state.currentRegion == 'us' ? state?.user?.us?.email : state?.user?.eu?.email),
       subject: '',
       message: '',
     },
-    validationSchema: Yup.object({
-      companyName: Yup.string().max(80, 'Name is to Long').required('Please Enter Your Company Name'),
-      email: Yup.string().email().required(),
-      subject: Yup.string().required(),
-      message: Yup.string().required(),
-    }),
-    onSubmit: async (values, {}) => {
-      const response = await axios.post(`api/sendMail?region=${state.currentRegion}`, {
-        message: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.message)
-      } else {
-        toast.error(response.data.message)
-      }
-    },
   })
-  const handleContactForm = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+
+  useEffect(() => {
+    validation.reset({
+      companyName: String(state.currentRegion == 'us' ? state?.user?.us?.name : state?.user?.eu?.name),
+      email: String(state.currentRegion == 'us' ? state?.user?.us?.email : state?.user?.eu?.email),
+      subject: '',
+      message: '',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.currentRegion, state?.user?.us?.name, state?.user?.us?.email, state?.user?.eu?.name, state?.user?.eu?.email])
+
+  const onSubmit = async (values: ContactUsForm) => {
+    const response = await axios.post(`api/sendMail?region=${state.currentRegion}`, {
+      message: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.message)
+    } else {
+      toast.error(response.data.message)
+    }
   }
+
+  const handleContactForm = validation.handleSubmit(onSubmit)
 
   return (
     <div>
@@ -120,13 +131,10 @@ function ContactUs() {
                                 type='text'
                                 placeholder='Company Name...'
                                 id='companyName'
-                                name='companyName'
-                                onChange={validation.handleChange}
-                                onBlur={validation.handleBlur}
-                                value={validation.values.companyName || ''}
-                                aria-invalid={(validation.touched.companyName && validation.errors.companyName ? true : false) || undefined}
+                                aria-invalid={Boolean(validation.formState.errors.companyName) || undefined}
+                                {...validation.register('companyName')}
                               />
-                              {validation.touched.companyName && validation.errors.companyName ? <div className='text-sm text-destructive'>{validation.errors.companyName}</div> : null}
+                              {validation.formState.errors.companyName ? <div className='text-sm text-destructive'>{validation.formState.errors.companyName.message}</div> : null}
                             </div>
                             <div className='mb-6'>
                               <Label htmlFor='firstNameinput' className='mb-2'>
@@ -136,13 +144,10 @@ function ContactUs() {
                                 type='text'
                                 placeholder='Email Address...'
                                 id='email'
-                                name='email'
-                                onChange={validation.handleChange}
-                                onBlur={validation.handleBlur}
-                                value={validation.values.email || ''}
-                                aria-invalid={(validation.touched.email && validation.errors.email ? true : false) || undefined}
+                                aria-invalid={Boolean(validation.formState.errors.email) || undefined}
+                                {...validation.register('email')}
                               />
-                              {validation.touched.email && validation.errors.email ? <div className='text-sm text-destructive'>{validation.errors.email}</div> : null}
+                              {validation.formState.errors.email ? <div className='text-sm text-destructive'>{validation.formState.errors.email.message}</div> : null}
                             </div>
                             <div className='mb-6'>
                               <Label htmlFor='firstNameinput' className='mb-2'>
@@ -152,13 +157,10 @@ function ContactUs() {
                                 type='text'
                                 placeholder='Subject...'
                                 id='subject'
-                                name='subject'
-                                onChange={validation.handleChange}
-                                onBlur={validation.handleBlur}
-                                value={validation.values.subject || ''}
-                                aria-invalid={(validation.touched.subject && validation.errors.subject ? true : false) || undefined}
+                                aria-invalid={Boolean(validation.formState.errors.subject) || undefined}
+                                {...validation.register('subject')}
                               />
-                              {validation.touched.subject && validation.errors.subject ? <div className='text-sm text-destructive'>{validation.errors.subject}</div> : null}
+                              {validation.formState.errors.subject ? <div className='text-sm text-destructive'>{validation.formState.errors.subject.message}</div> : null}
                             </div>
                           </div>
                           <div className='px-3 w-full lg:w-6/12 h-auto flex flex-col justify-between pb-6'>
@@ -170,13 +172,10 @@ function ContactUs() {
                                 className='grow text-[16.25px]'
                                 placeholder='Enter your message here'
                                 id='message'
-                                name='message'
-                                onChange={validation.handleChange}
-                                onBlur={validation.handleBlur}
-                                value={validation.values.message || ''}
-                                aria-invalid={(validation.touched.message && validation.errors.message ? true : false) || undefined}
+                                aria-invalid={Boolean(validation.formState.errors.message) || undefined}
+                                {...validation.register('message')}
                               />
-                              {validation.touched.message && validation.errors.message ? <div className='text-sm text-destructive'>{validation.errors.message}</div> : null}
+                              {validation.formState.errors.message ? <div className='text-sm text-destructive'>{validation.formState.errors.message.message}</div> : null}
                             </div>
                             <Button type='submit' className='text-[16.25px] w-full'>
                               Submit

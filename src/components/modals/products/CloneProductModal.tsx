@@ -1,18 +1,19 @@
- 
- 
+
+
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
 import { Spinner } from '@shadcn/ui/spinner'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type CloneProductModal = {
   isOpen: boolean
@@ -30,65 +31,73 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
   const { state }: any = useContext(AppContext)
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
-  const validation = useFormik({
-    initialValues: {
+
+  const schema = z.object({
+    title: z.string().max(100, 'Title is to Long.').min(1, 'Please Enter Your Title'),
+    sku: z
+      .string()
+      .max(50, 'SKU is to Long.')
+      .min(1, 'Please Enter Sku')
+      .refine((value) => value !== cloneProductModal.originalSku, { message: 'SKU cannot be the same as the original SKU' }),
+    upc: z.string().max(50, 'UPC is to Long.').min(1, 'Please Enter UPC'),
+  })
+
+  const validation = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       title: cloneProductModal.originalName,
       sku: '',
       upc: '',
     },
-    validationSchema: Yup.object({
-      title: Yup.string().max(100, 'Title is to Long.').required('Please Enter Your Title'),
-      sku: Yup.string().max(50, 'SKU is to Long.').notOneOf([cloneProductModal.originalSku], 'SKU cannot be the same as the original SKU').required('Please Enter Sku'),
-      upc: Yup.string().max(50, 'UPC is to Long.').required('Please Enter UPC'),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-      const cloneProduct = toast.loading('Cloning Product...')
+  })
 
-      try {
-        const response = await axios
-          .post(`/api/products/cloneProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-            title: values.title,
-            sku: values.sku,
-            upc: values.upc,
-            originalId: cloneProductModal.originalId,
-            originalSku: cloneProductModal.originalSku,
-          })
-          .then((res) => res.data)
+  const skuField = validation.register('sku')
+  const upcField = validation.register('upc')
 
-        if (!response.error) {
-          toast.update(cloneProduct, {
-            render: response.message,
-            type: 'success',
-            isLoading: false,
-            autoClose: 3000,
-          })
-          setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
-          router.push(`/product/${response.newInventoryId}/${response.newSku}`)
-        } else {
-          toast.update(cloneProduct, {
-            render: response.message,
-            type: 'error',
-            isLoading: false,
-            autoClose: 3000,
-          })
-        }
-      } catch (error) {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    setLoading(true)
+    const cloneProduct = toast.loading('Cloning Product...')
+
+    try {
+      const response = await axios
+        .post(`/api/products/cloneProduct?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+          title: values.title,
+          sku: values.sku,
+          upc: values.upc,
+          originalId: cloneProductModal.originalId,
+          originalSku: cloneProductModal.originalSku,
+        })
+        .then((res) => res.data)
+
+      if (!response.error) {
         toast.update(cloneProduct, {
-          render: 'Error cloning product',
+          render: response.message,
+          type: 'success',
+          isLoading: false,
+          autoClose: 3000,
+        })
+        setcloneProductModal({ isOpen: false, originalId: 0, originalName: '', originalSku: '' })
+        router.push(`/product/${response.newInventoryId}/${response.newSku}`)
+      } else {
+        toast.update(cloneProduct, {
+          render: response.message,
           type: 'error',
           isLoading: false,
           autoClose: 3000,
         })
       }
-      setLoading(false)
-    },
-  })
-
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+    } catch (error) {
+      toast.update(cloneProduct, {
+        render: 'Error cloning product',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+    setLoading(false)
   }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
 
   return (
     <Dialog
@@ -119,13 +128,12 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                     className='text-[11.2px]'
                     placeholder='Title...'
                     id='title'
-                    name='title'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.title || ''}
-                    aria-invalid={Boolean(validation.touched.title && validation.errors.title) || undefined}
+                    aria-invalid={Boolean(validation.formState.touchedFields.title && validation.formState.errors.title) || undefined}
+                    {...validation.register('title')}
                   />
-                  {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                  {validation.formState.touchedFields.title && validation.formState.errors.title ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.title.message}</div>
+                  ) : null}
                 </div>
               </div>
               <div className='px-3 w-full md:w-6/12'>
@@ -138,16 +146,16 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                     className='text-[11.2px] uppercase'
                     placeholder='Sku...'
                     id='sku'
-                    name='sku'
+                    aria-invalid={Boolean(validation.formState.touchedFields.sku && validation.formState.errors.sku) || undefined}
+                    {...skuField}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase()
-                      validation.handleChange(e)
+                      skuField.onChange(e)
                     }}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.sku || ''}
-                    aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
                   />
-                  {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                  {validation.formState.touchedFields.sku && validation.formState.errors.sku ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.sku.message}</div>
+                  ) : null}
                 </div>
               </div>
               <div className='px-3 w-full md:w-6/12'>
@@ -160,16 +168,16 @@ const CloneProductModal = ({ cloneProductModal, setcloneProductModal }: Props) =
                     className='text-[11.2px] uppercase'
                     placeholder='UPC...'
                     id='upc'
-                    name='upc'
+                    aria-invalid={Boolean(validation.formState.touchedFields.upc && validation.formState.errors.upc) || undefined}
+                    {...upcField}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase()
-                      validation.handleChange(e)
+                      upcField.onChange(e)
                     }}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.upc || ''}
-                    aria-invalid={Boolean(validation.touched.upc && validation.errors.upc) || undefined}
                   />
-                  {validation.touched.upc && validation.errors.upc ? <div className='text-sm text-destructive'>{validation.errors.upc}</div> : null}
+                  {validation.formState.touchedFields.upc && validation.formState.errors.upc ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.upc.message}</div>
+                  ) : null}
                 </div>
               </div>
               <div className='px-3 w-full'>

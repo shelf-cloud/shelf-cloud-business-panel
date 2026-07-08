@@ -1,15 +1,16 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
@@ -25,6 +26,12 @@ type Props = {
   ceilling: number
 }
 
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
+}
+
 const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msrp, map, floor, ceilling }: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
@@ -33,9 +40,21 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
 
   const { generate_new_forecast_products } = useRPNewForecast()
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    upc: z.string().optional(),
+    htsCode: z.string().optional(),
+    defaultPrice: z.preprocess(toNumber, z.number({ error: 'Enter Price' }).min(0, 'Minimum of 0')),
+    msrp: z.preprocess(toNumber, z.number({ error: 'Enter MSRP' }).min(0, 'Minimum of 0')),
+    map: z.preprocess(toNumber, z.number({ error: 'Enter MAP' }).min(0, 'Minimum of 0')),
+    floor: z.preprocess(toNumber, z.number({ error: 'Enter Floor' }).min(0, 'Minimum of 0')),
+    ceilling: z.preprocess(toNumber, z.number({ error: 'Enter Ceilling' }).min(0, 'Minimum of 0')),
+  })
+
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       inventoryId,
       sku,
       upc,
@@ -46,41 +65,35 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
       floor,
       ceilling,
     },
-    validationSchema: Yup.object({
-      htsCode: Yup.string(),
-      defaultPrice: Yup.number().min(0, 'Minimum of 0').required('Enter Price'),
-      msrp: Yup.number().min(0, 'Minimum of 0').required('Enter MSRP'),
-      map: Yup.number().min(0, 'Minimum of 0').required('Enter MAP'),
-      floor: Yup.number().min(0, 'Minimum of 0').required('Enter Floor'),
-      ceilling: Yup.number().min(0, 'Minimum of 0').required('Enter Ceilling'),
-    }),
-    onSubmit: async (values) => {
-      setisLoading(true)
-      const response = await axios.post(`/api/productDetails/skuProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        generate_new_forecast_products({
-          skus: [sku || ''],
-          productIds: [inventoryId || 0],
-        })
-        toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setisLoading(false)
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  useEffect(() => {
+    validation.reset({ inventoryId, sku, upc, htsCode, defaultPrice, msrp, map, floor, ceilling })
+  }, [inventoryId, sku, upc, htsCode, defaultPrice, msrp, map, floor, ceilling])
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    setisLoading(true)
+    const response = await axios.post(`/api/productDetails/skuProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      generate_new_forecast_products({
+        skus: [sku || ''],
+        productIds: [inventoryId || 0],
+      })
+      toast.success(response.data.msg)
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setisLoading(false)
   }
 
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
   const handleShowEditFields = () => {
-    validation.setValues({
+    validation.reset({
       inventoryId,
       sku,
       upc,
@@ -183,13 +196,12 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         style={{ minWidth: '80px' }}
                         placeholder='sku...'
                         id='sku'
-                        name='sku'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.sku || ''}
-                        aria-invalid={Boolean(validation.touched.sku && validation.errors.sku) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.sku && validation.formState.errors.sku) || undefined}
+                        {...validation.register('sku')}
                       />
-                      {validation.touched.sku && validation.errors.sku ? <div className='text-sm text-destructive'>{validation.errors.sku}</div> : null}
+                      {validation.formState.touchedFields.sku && validation.formState.errors.sku ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.sku.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -201,13 +213,12 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         style={{ minWidth: '80px' }}
                         placeholder='upc...'
                         id='upc'
-                        name='upc'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.upc || ''}
-                        aria-invalid={Boolean(validation.touched.upc && validation.errors.upc) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.upc && validation.formState.errors.upc) || undefined}
+                        {...validation.register('upc')}
                       />
-                      {validation.touched.upc && validation.errors.upc ? <div className='text-sm text-destructive'>{validation.errors.upc}</div> : null}
+                      {validation.formState.touchedFields.upc && validation.formState.errors.upc ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.upc.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -218,13 +229,12 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         style={{ minWidth: '80px' }}
                         placeholder='HTS Code...'
                         id='htsCode'
-                        name='htsCode'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.htsCode || ''}
-                        aria-invalid={Boolean(validation.touched.htsCode && validation.errors.htsCode) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.htsCode && validation.formState.errors.htsCode) || undefined}
+                        {...validation.register('htsCode')}
                       />
-                      {validation.touched.htsCode && validation.errors.htsCode ? <div className='text-sm text-destructive'>{validation.errors.htsCode}</div> : null}
+                      {validation.formState.touchedFields.htsCode && validation.formState.errors.htsCode ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.htsCode.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -234,14 +244,13 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         className='h-8 text-xs'
                         placeholder='defaultPrice...'
                         id='defaultPrice'
-                        name='defaultPrice'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.defaultPrice || 0}
-                        aria-invalid={Boolean(validation.touched.defaultPrice && validation.errors.defaultPrice) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.defaultPrice && validation.formState.errors.defaultPrice) || undefined}
+                        {...validation.register('defaultPrice')}
                       />
-                      {validation.touched.defaultPrice && validation.errors.defaultPrice ? <div className='text-sm text-destructive'>{validation.errors.defaultPrice}</div> : null}
+                      {validation.formState.touchedFields.defaultPrice && validation.formState.errors.defaultPrice ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.defaultPrice.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -251,14 +260,13 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         className='h-8 text-xs'
                         placeholder='msrp...'
                         id='msrp'
-                        name='msrp'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.msrp || 0}
-                        aria-invalid={Boolean(validation.touched.msrp && validation.errors.msrp) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.msrp && validation.formState.errors.msrp) || undefined}
+                        {...validation.register('msrp')}
                       />
-                      {validation.touched.msrp && validation.errors.msrp ? <div className='text-sm text-destructive'>{validation.errors.msrp}</div> : null}
+                      {validation.formState.touchedFields.msrp && validation.formState.errors.msrp ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.msrp.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -268,14 +276,13 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         className='h-8 text-xs'
                         placeholder='map...'
                         id='map'
-                        name='map'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.map || 0}
-                        aria-invalid={Boolean(validation.touched.map && validation.errors.map) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.map && validation.formState.errors.map) || undefined}
+                        {...validation.register('map')}
                       />
-                      {validation.touched.map && validation.errors.map ? <div className='text-sm text-destructive'>{validation.errors.map}</div> : null}
+                      {validation.formState.touchedFields.map && validation.formState.errors.map ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.map.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -285,14 +292,13 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         className='h-8 text-xs'
                         placeholder='floor...'
                         id='floor'
-                        name='floor'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.floor || 0}
-                        aria-invalid={Boolean(validation.touched.floor && validation.errors.floor) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.floor && validation.formState.errors.floor) || undefined}
+                        {...validation.register('floor')}
                       />
-                      {validation.touched.floor && validation.errors.floor ? <div className='text-sm text-destructive'>{validation.errors.floor}</div> : null}
+                      {validation.formState.touchedFields.floor && validation.formState.errors.floor ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.floor.message}</div>
+                      ) : null}
                     </div>
                   </td>
                   <td>
@@ -302,14 +308,13 @@ const SKU_product_details = ({ inventoryId, sku, upc, htsCode, defaultPrice, msr
                         className='h-8 text-xs'
                         placeholder='ceilling...'
                         id='ceilling'
-                        name='ceilling'
                         step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.ceilling || 0}
-                        aria-invalid={Boolean(validation.touched.ceilling && validation.errors.ceilling) || undefined}
+                        aria-invalid={Boolean(validation.formState.touchedFields.ceilling && validation.formState.errors.ceilling) || undefined}
+                        {...validation.register('ceilling')}
                       />
-                      {validation.touched.ceilling && validation.errors.ceilling ? <div className='text-sm text-destructive'>{validation.errors.ceilling}</div> : null}
+                      {validation.formState.touchedFields.ceilling && validation.formState.errors.ceilling ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.ceilling.message}</div>
+                      ) : null}
                     </div>
                   </td>
                 </tr>

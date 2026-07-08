@@ -3,15 +3,28 @@ import { useRouter } from 'next/router'
 import { FormEventHandler, useState } from 'react'
 
 import ShelfCloudLogo from '@images/shelfcloud-blue-h.png'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
-import * as Yup from 'yup'
 
 type Props = {}
+
+const resetPasswordSchema = z
+  .object({
+    newPassword: z.string().min(8, 'Password must be at least 8 characters').min(1, 'Please Enter Your New Password'),
+    confirmPassword: z.string().min(8, 'Password must be at least 8 characters').min(1, 'Please Enter Your Confirmation Password'),
+  })
+  .refine((data) => data.confirmPassword === data.newPassword, {
+    message: "Passwords don't match!",
+    path: ['confirmPassword'],
+  })
+
+type ResetPasswordForm = z.infer<typeof resetPasswordSchema>
 
 const ResetPasswordPage = ({}: Props) => {
   const router = useRouter()
@@ -20,44 +33,33 @@ const ResetPasswordPage = ({}: Props) => {
   const [show, setShow] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
 
-  const validationChangePassword = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
+  const validationChangePassword = useForm<ResetPasswordForm>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
       newPassword: '',
       confirmPassword: '',
     },
-    validationSchema: Yup.object({
-      newPassword: Yup.string().min(8, 'Password must be at least 8 characters').required('Please Enter Your New Password'),
-      confirmPassword: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .oneOf([Yup.ref('newPassword'), null], "Passwords don't match!")
-        .required('Please Enter Your Confirmation Password'),
-    }),
-    onSubmit: async (values) => {
-      setloading(true)
-      const response = await axios.post(`/api/resetPassword`, {
-        resetPasswordInfo: {
-          newPassword: values.newPassword,
-          confirmPassword: values.confirmPassword,
-          resetToken: resetcode,
-        },
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        router.push('/')
-      } else {
-        toast.error(response.data.msg)
-      }
-      setloading(false)
-    },
   })
 
-  const handleResetPasswordSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
-    validationChangePassword.handleSubmit()
+  const onSubmit = async (values: ResetPasswordForm) => {
+    setloading(true)
+    const response = await axios.post(`/api/resetPassword`, {
+      resetPasswordInfo: {
+        newPassword: values.newPassword,
+        confirmPassword: values.confirmPassword,
+        resetToken: resetcode,
+      },
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      router.push('/')
+    } else {
+      toast.error(response.data.msg)
+    }
+    setloading(false)
   }
+
+  const handleResetPasswordSubmit: FormEventHandler<HTMLFormElement> = validationChangePassword.handleSubmit(onSubmit)
 
   return (
     <div className='w-screen h-screen flex flex-col relative'>
@@ -88,17 +90,14 @@ const ResetPasswordPage = ({}: Props) => {
                   className='h-9 w-full px-3 py-1 text-sm rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 pe-12'
                   placeholder='Enter new password'
                   id='newPassword'
-                  name='newPassword'
-                  onChange={validationChangePassword.handleChange}
-                  onBlur={validationChangePassword.handleBlur}
-                  value={validationChangePassword.values.newPassword || ''}
+                  {...validationChangePassword.register('newPassword')}
                 />
                 <button className='inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border-0 bg-transparent text-sm font-medium absolute right-0 top-0 no-underline text-muted-foreground' type='button' onClick={() => setShow(!show)}>
                   <i className='ri-eye-fill align-middle text-[16.25px]'></i>
                 </button>
               </div>
-              {validationChangePassword.touched.newPassword && validationChangePassword.errors.newPassword ? (
-                <p className='text-danger'>{validationChangePassword.errors.newPassword}</p>
+              {validationChangePassword.formState.errors.newPassword ? (
+                <p className='text-danger'>{validationChangePassword.formState.errors.newPassword.message}</p>
               ) : null}
             </div>
             <div className='mb-1 w-full'>
@@ -111,17 +110,14 @@ const ResetPasswordPage = ({}: Props) => {
                   className='h-9 w-full px-3 py-1 text-sm rounded-md border border-input bg-input shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 pe-12'
                   placeholder='Confirm your password'
                   id='confirmPassword'
-                  name='confirmPassword'
-                  onChange={validationChangePassword.handleChange}
-                  onBlur={validationChangePassword.handleBlur}
-                  value={validationChangePassword.values.confirmPassword || ''}
+                  {...validationChangePassword.register('confirmPassword')}
                 />
                 <button className='inline-flex appearance-none items-center justify-center gap-2 whitespace-nowrap rounded-md border-0 bg-transparent text-sm font-medium absolute right-0 top-0 no-underline text-muted-foreground' type='button' onClick={() => setShowConfirm(!showConfirm)}>
                   <i className='ri-eye-fill align-middle text-[16.25px]'></i>
                 </button>
               </div>
-              {validationChangePassword.touched.confirmPassword && validationChangePassword.errors.confirmPassword ? (
-                <p className='text-danger'>{validationChangePassword.errors.confirmPassword}</p>
+              {validationChangePassword.formState.errors.confirmPassword ? (
+                <p className='text-danger'>{validationChangePassword.formState.errors.confirmPassword.message}</p>
               ) : null}
             </div>
             <div className='mt-6 w-full'>

@@ -1,8 +1,9 @@
 import dynamic from 'next/dynamic'
 
 import { SelectOptionType, SelectSingleValueType } from '@components/Common/SimpleSelect'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
 
 import { Label } from '@shadcn/ui/label'
 
@@ -21,24 +22,17 @@ type Props = {
   options: SelectOptionType[]
   handleSelect: (option: SelectSingleValueType) => void
   error?: string | undefined
-  validationSchema: Yup.ObjectSchema<any>
+  validationSchema: z.ZodType<{ name: string }, { name: string }>
   submitAddNewOption: (values: { name: string }) => Promise<{ error: boolean }>
 }
 
 const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, options, selected, handleSelect, error, validationSchema, submitAddNewOption }: Props) => {
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      name: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      const response = await submitAddNewOption(values)
-      if (!response?.error) {
-        resetForm()
-      }
-    },
+  const validation = useForm<{ name: string }>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: { name: '' },
   })
+
+  const nameError = validation.formState.errors.name?.message
 
   return (
     <div id={`select-container-${inputName}`} className='mb-2'>
@@ -50,16 +44,20 @@ const SelectSingleFilterWithCreation = ({ inputLabel, inputName, placeholder, op
         options={options}
         handleSelect={handleSelect}
         handleCreate={(newValue: string) => {
-          validation.setFieldValue('name', newValue).then(() => {
-            validation.handleSubmit()
-          })
+          validation.setValue('name', newValue)
+          validation.handleSubmit(async (values) => {
+            const response = await submitAddNewOption(values)
+            if (!response?.error) {
+              validation.reset({ name: '' })
+            }
+          })()
         }}
         customStyle='sm'
         placeholder={placeholder}
         hasError={Boolean(error)}
       />
       <ErrorInputLabel error={error} />
-      {validation.touched.name && validation.errors.name ? <span className='text-destructive m-0 p-0 text-sm'>{validation.errors.name}</span> : null}
+      {nameError ? <span className='text-destructive m-0 p-0 text-sm'>{nameError}</span> : null}
     </div>
   )
 }

@@ -1,10 +1,12 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatIntPercentage } from '@lib/FormatNumbers'
 import { AmzDimensions, Dimensions } from '@typesTs/amazon/fulfillments'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dialog'
@@ -12,7 +14,6 @@ import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Spinner } from '@shadcn/ui/spinner'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
 
 type Props = {
   dimensionsModal: {
@@ -29,6 +30,13 @@ type Props = {
   setdimensionsModal: (dimensionsModal: any) => void
 }
 
+const numberField = (label: string, min: number, max: number, requiredMessage: string) =>
+  z.preprocess((val: string | number | undefined | null) => {
+    if (val === '' || val === null || val === undefined) return undefined
+    const num = typeof val === 'number' ? val : parseFloat(val)
+    return Number.isNaN(num) ? undefined : num
+  }, z.number(requiredMessage).min(min, `${label} must be greater than or equal to ${min}`).max(max, `${label} must be less than or equal to ${max}`))
+
 const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Props) => {
   const { state }: any = useContext(AppContext)
   const [loading, setloading] = useState(false)
@@ -37,89 +45,100 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
   const amzBoxVolume = amzItemVolume * dimensionsModal.boxQty
   const amzBoxTenPercent = amzBoxVolume * 0.1
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      boxWeight: dimensionsModal.shelfCloudDimensions.boxWeight,
-      boxLength: dimensionsModal.shelfCloudDimensions.boxLength,
-      boxWidth: dimensionsModal.shelfCloudDimensions.boxWidth,
-      boxHeight: dimensionsModal.shelfCloudDimensions.boxHeight,
-    },
-    validationSchema: Yup.object({
-      boxWeight: Yup.number()
-        .min(0.01)
-        .max(dimensionsModal.boxQty > 1 ? 50 : 100)
-        .required('Please enter Box Weight'),
-      boxLength: Yup.number()
-        .min(0.01)
-        .max(
-          dimensionsModal.amazonDimensions.length.value > 25 ||
-            dimensionsModal.amazonDimensions.width.value > 25 ||
-            dimensionsModal.amazonDimensions.height.value > 25 ||
-            dimensionsModal.boxQty === 1
-            ? 150
-            : 25
-        )
-        .required('Please enter Box Length'),
-      boxWidth: Yup.number()
-        .min(0.01)
-        .max(dimensionsModal.boxQty > 1 ? 25 : 150)
-        .required('Please enter Box Width'),
-      boxHeight: Yup.number()
-        .min(0.01)
-        .max(dimensionsModal.boxQty > 1 ? 25 : 150)
-        .required('Please enter Box Height'),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      setloading(true)
-      const updatingBoxDimensions = toast.loading('Saving new Box Dimensions...')
+  const boxWeightMax = dimensionsModal.boxQty > 1 ? 50 : 100
+  const boxLengthMax =
+    dimensionsModal.amazonDimensions.length.value > 25 ||
+    dimensionsModal.amazonDimensions.width.value > 25 ||
+    dimensionsModal.amazonDimensions.height.value > 25 ||
+    dimensionsModal.boxQty === 1
+      ? 150
+      : 25
+  const boxWidthMax = dimensionsModal.boxQty > 1 ? 25 : 150
+  const boxHeightMax = dimensionsModal.boxQty > 1 ? 25 : 150
 
-      const response = await axios.post(`/api/amazon/fullfilments/masterBoxes/saveAmazonBoxDimensions?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        inventoryId: dimensionsModal.inventoryId,
-        isKit: dimensionsModal.isKit,
-        amzDimensions: {
-          boxLength: values.boxLength,
-          boxWidth: values.boxWidth,
-          boxHeight: values.boxHeight,
-          boxWeight: values.boxWeight,
-        },
-      })
-      if (!response.data.error) {
-        toast.update(updatingBoxDimensions, {
-          render: response.data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-        setdimensionsModal({
-          show: false,
-          inventoryId: 0,
-          isKit: false,
-          msku: '',
-          asin: '',
-          scSKU: '',
-          boxQty: 0,
-          shelfCloudDimensions: {},
-          amazonDimensions: {},
-        })
-        mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}`)
-        resetForm()
-      } else {
-        toast.update(updatingBoxDimensions, {
-          render: response.data.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-
-      setloading(false)
-    },
+  const schema = z.object({
+    boxWeight: numberField('boxWeight', 0.01, boxWeightMax, 'Please enter Box Weight'),
+    boxLength: numberField('boxLength', 0.01, boxLengthMax, 'Please enter Box Length'),
+    boxWidth: numberField('boxWidth', 0.01, boxWidthMax, 'Please enter Box Width'),
+    boxHeight: numberField('boxHeight', 0.01, boxHeightMax, 'Please enter Box Height'),
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  type FormValues = z.input<typeof schema>
+  type FormOutput = z.output<typeof schema>
+
+  const getDefaultValues = (): FormValues => ({
+    boxWeight: dimensionsModal.shelfCloudDimensions.boxWeight,
+    boxLength: dimensionsModal.shelfCloudDimensions.boxLength,
+    boxWidth: dimensionsModal.shelfCloudDimensions.boxWidth,
+    boxHeight: dimensionsModal.shelfCloudDimensions.boxHeight,
+  })
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, touchedFields, isSubmitted },
+  } = useForm<FormValues, any, FormOutput>({
+    resolver: zodResolver(schema),
+    defaultValues: getDefaultValues(),
+  })
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    reset(getDefaultValues())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dimensionsModal.shelfCloudDimensions])
+
+  const watchedValues = watch()
+  const boxLengthValue = Number(watchedValues.boxLength) || 0
+  const boxWidthValue = Number(watchedValues.boxWidth) || 0
+  const boxHeightValue = Number(watchedValues.boxHeight) || 0
+
+  const onSubmit = async (values: FormOutput) => {
+    setloading(true)
+    const updatingBoxDimensions = toast.loading('Saving new Box Dimensions...')
+
+    const response = await axios.post(`/api/amazon/fullfilments/masterBoxes/saveAmazonBoxDimensions?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      inventoryId: dimensionsModal.inventoryId,
+      isKit: dimensionsModal.isKit,
+      amzDimensions: {
+        boxLength: values.boxLength,
+        boxWidth: values.boxWidth,
+        boxHeight: values.boxHeight,
+        boxWeight: values.boxWeight,
+      },
+    })
+    if (!response.data.error) {
+      toast.update(updatingBoxDimensions, {
+        render: response.data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      setdimensionsModal({
+        show: false,
+        inventoryId: 0,
+        isKit: false,
+        msku: '',
+        asin: '',
+        scSKU: '',
+        boxQty: 0,
+        shelfCloudDimensions: {},
+        amazonDimensions: {},
+      })
+      mutate(`${process.env.NEXT_PUBLIC_SHELFCLOUD_SERVER_URL}/api/amz_workflow/getAmazonFbaSkus/${state.currentRegion}/${state.user.businessId}`)
+      reset()
+    } else {
+      toast.update(updatingBoxDimensions, {
+        render: response.data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+
+    setloading(false)
   }
 
   const closeModal = () => {
@@ -157,7 +176,7 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
           ShelfCloud SKU: <span className='text-black font-semibold'>{dimensionsModal.scSKU}</span>
         </p>
 
-        <form onSubmit={handleAddProduct}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-wrap -mx-3 my-4'>
             <div className='px-3 md:w-3/12'>
               <div className='mb-4'>
@@ -169,13 +188,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                     type='number'
                     className='h-8 text-xs'
                     id='boxLength'
-                    name='boxLength'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.boxLength || ''}
-                    aria-invalid={(validation.touched.boxLength && validation.errors.boxLength ? true : false) || undefined}
+                    aria-invalid={(((touchedFields.boxLength || isSubmitted) && errors.boxLength ? true : false)) || undefined}
+                    {...register('boxLength')}
                   />
-                  {validation.touched.boxLength && validation.errors.boxLength ? <div className='text-sm text-destructive'>{validation.errors.boxLength}</div> : null}
+                  {(touchedFields.boxLength || isSubmitted) && errors.boxLength ? <div className='text-sm text-destructive'>{errors.boxLength.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -189,13 +205,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                     type='number'
                     className='h-8 text-xs'
                     id='boxWidth'
-                    name='boxWidth'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.boxWidth || ''}
-                    aria-invalid={(validation.touched.boxWidth && validation.errors.boxWidth ? true : false) || undefined}
+                    aria-invalid={(((touchedFields.boxWidth || isSubmitted) && errors.boxWidth ? true : false)) || undefined}
+                    {...register('boxWidth')}
                   />
-                  {validation.touched.boxWidth && validation.errors.boxWidth ? <div className='text-sm text-destructive'>{validation.errors.boxWidth}</div> : null}
+                  {(touchedFields.boxWidth || isSubmitted) && errors.boxWidth ? <div className='text-sm text-destructive'>{errors.boxWidth.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -209,13 +222,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                     type='number'
                     className='h-8 text-xs'
                     id='boxHeight'
-                    name='boxHeight'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.boxHeight || ''}
-                    aria-invalid={(validation.touched.boxHeight && validation.errors.boxHeight ? true : false) || undefined}
+                    aria-invalid={(((touchedFields.boxHeight || isSubmitted) && errors.boxHeight ? true : false)) || undefined}
+                    {...register('boxHeight')}
                   />
-                  {validation.touched.boxHeight && validation.errors.boxHeight ? <div className='text-sm text-destructive'>{validation.errors.boxHeight}</div> : null}
+                  {(touchedFields.boxHeight || isSubmitted) && errors.boxHeight ? <div className='text-sm text-destructive'>{errors.boxHeight.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -229,13 +239,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
                     type='number'
                     className='h-8 text-xs'
                     id='boxWeight'
-                    name='boxWeight'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.boxWeight || ''}
-                    aria-invalid={(validation.touched.boxWeight && validation.errors.boxWeight ? true : false) || undefined}
+                    aria-invalid={(((touchedFields.boxWeight || isSubmitted) && errors.boxWeight ? true : false)) || undefined}
+                    {...register('boxWeight')}
                   />
-                  {validation.touched.boxWeight && validation.errors.boxWeight ? <div className='text-sm text-destructive'>{validation.errors.boxWeight}</div> : null}
+                  {(touchedFields.boxWeight || isSubmitted) && errors.boxWeight ? <div className='text-sm text-destructive'>{errors.boxWeight.message}</div> : null}
                 </div>
               </div>
             </div>
@@ -248,10 +255,10 @@ const AmazonFulfillmentDimensions = ({ dimensionsModal, setdimensionsModal }: Pr
             <p className='m-0 text-muted-foreground text-nowrap'>
               ShelfCloud Box Volume:{' '}
               <span className='text-black font-semibold'>
-                {FormatIntPercentage(state.currentRegion, validation.values.boxLength * validation.values.boxWidth * validation.values.boxHeight)} inch3
+                {FormatIntPercentage(state.currentRegion, boxLengthValue * boxWidthValue * boxHeightValue)} inch3
               </span>
             </p>
-            {amzBoxVolume - amzBoxTenPercent > validation.values.boxLength * validation.values.boxWidth * validation.values.boxHeight && (
+            {amzBoxVolume - amzBoxTenPercent > boxLengthValue * boxWidthValue * boxHeightValue && (
               <span className='m-0 mt-1 text-danger'>
                 ShelfCloud Box dimensions do not meet the expected minimum volume for Amazon. Please adjust the Box Dimensions to meet the minimum volume requirements.
               </span>

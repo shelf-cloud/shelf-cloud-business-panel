@@ -2,8 +2,9 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 
 import AppContext from '@context/AppContext'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
@@ -43,6 +44,23 @@ type Props = {
   destination: string
 }
 
+const numberMinSchema = z.string().refine((value) => value === '' || Number(value) >= 0, 'Must be greater than 0')
+
+const filterProfitsSchema = z.object({
+  grossRevenueMin: numberMinSchema,
+  grossRevenueMax: numberMinSchema,
+  netProfitMin: z.string(),
+  netProfitMax: z.string(),
+  unitsSoldMin: z.string(),
+  unitsSoldMax: z.string(),
+  supplier: z.string(),
+  brand: z.string(),
+  category: z.string(),
+  showWithSales: z.string(),
+})
+
+type FilterProfitsForm = z.infer<typeof filterProfitsSchema>
+
 const FilterProfits = ({
   grossmin,
   grossmax,
@@ -64,25 +82,25 @@ const FilterProfits = ({
   const { state }: any = useContext(AppContext)
   const router = useRouter()
 
-  const initialValues = {
-    grossRevenueMin: grossmin,
-    grossRevenueMax: grossmax,
-    netProfitMin: profitmin,
-    netProfitMax: profitmax,
-    unitsSoldMin: unitsmin,
-    unitsSoldMax: unitsmax,
-    supplier: supplier,
-    brand: brand,
-    category: category,
-    showWithSales: showWithSales,
-  }
-
-  const validationSchema = Yup.object({
-    grossRevenueMin: Yup.number().min(0, 'Must be greater than 0'),
-    grossRevenueMax: Yup.number().min(0, 'Must be greater than 0'),
+  const validation = useForm<FilterProfitsForm>({
+    resolver: zodResolver(filterProfitsSchema),
+    defaultValues: {
+      grossRevenueMin: grossmin,
+      grossRevenueMax: grossmax,
+      netProfitMin: profitmin,
+      netProfitMax: profitmax,
+      unitsSoldMin: unitsmin,
+      unitsSoldMax: unitsmax,
+      supplier: supplier,
+      brand: brand,
+      category: category,
+      showWithSales: showWithSales,
+    },
   })
 
-  const handleSubmit = async (values: any) => {
+  const values = validation.watch()
+
+  const onSubmit = async (values: FilterProfitsForm) => {
     handleApplyFilters(
       values.grossRevenueMin,
       values.grossRevenueMax,
@@ -97,8 +115,8 @@ const FilterProfits = ({
     )
   }
 
-  const handleClearFilters = (setValues: any) => {
-    setValues({
+  const handleClearFilters = () => {
+    validation.reset({
       grossRevenueMin: '',
       grossRevenueMax: '',
       netProfitMin: '',
@@ -116,181 +134,159 @@ const FilterProfits = ({
 
   return (
     <div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-        {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setValues }) => (
-          <Form>
-            <div className='flex flex-wrap -mx-3'>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Gross Revenue
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
-                      <Input
-                        type='number'
-                        className='text-[13px] m-0 h-8 text-xs'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='grossRevenueMin'
-                        name='grossRevenueMin'
-                        min={0}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.grossRevenueMin || ''}
-                        aria-invalid={(touched.grossRevenueMin && errors.grossRevenueMin ? true : false) || undefined}
-                      />
-                    </InputGroup>
-                    <InputGroup size='sm'>
-                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
-                      <Input
-                        type='number'
-                        className='text-[13px] m-0 h-8 text-xs'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='grossRevenueMax'
-                        name='grossRevenueMax'
-                        min={values.grossRevenueMin}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.grossRevenueMax || ''}
-                        aria-invalid={(touched.grossRevenueMax && errors.grossRevenueMax ? true : false) || undefined}
-                      />
-                    </InputGroup>
-                  </div>
-                </div>
-              </div>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Net Profit
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <InputGroup size='sm'>
-                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
-                      <Input
-                        type='number'
-                        className='text-[13px] m-0 h-8 text-xs'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Min'
-                        id='netProfitMin'
-                        name='netProfitMin'
-                        min={0}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.netProfitMin || ''}
-                        aria-invalid={(touched.netProfitMin && errors.netProfitMin ? true : false) || undefined}
-                      />
-                    </InputGroup>
-                    <InputGroup size='sm'>
-                      <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
-                      <Input
-                        type='number'
-                        className='text-[13px] m-0 h-8 text-xs'
-                        style={{ padding: '0.2rem 0.9rem' }}
-                        placeholder='Max'
-                        id='netProfitMax'
-                        name='netProfitMax'
-                        min={values.grossRevenueMin}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.netProfitMax || ''}
-                        aria-invalid={(touched.netProfitMax && errors.netProfitMax ? true : false) || undefined}
-                      />
-                    </InputGroup>
-                  </div>
-                </div>
-              </div>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Units Sold
-                  </Label>
-                  <div className='flex flex-row justify-between items-center gap-2'>
-                    <Input
-                      type='number'
-                      className='text-[13px] m-0 h-8 text-xs'
-                      style={{ padding: '0.2rem 0.9rem' }}
-                      placeholder='Min'
-                      id='unitsSoldMin'
-                      name='unitsSoldMin'
-                      min={0}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.unitsSoldMin || ''}
-                      aria-invalid={(touched.unitsSoldMin && errors.unitsSoldMin ? true : false) || undefined}
-                    />
-                    <Input
-                      type='number'
-                      className='text-[13px] m-0 h-8 text-xs'
-                      style={{ padding: '0.2rem 0.9rem' }}
-                      placeholder='Max'
-                      id='unitsSoldMax'
-                      name='unitsSoldMax'
-                      min={values.grossRevenueMin}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.unitsSoldMax || ''}
-                      aria-invalid={(touched.unitsSoldMax && errors.unitsSoldMax ? true : false) || undefined}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='flex flex-wrap -mx-3 mt-2'>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Suppliers
-                  </Label>
-                  <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={setFieldValue} />
-                </div>
-              </div>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Brands
-                  </Label>
-                  <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={setFieldValue} />
-                </div>
-              </div>
-              <div className='px-3 md:w-3/12'>
-                <div className='mb-3 createOrder_inputs'>
-                  <Label htmlFor='lastNameinput'>
-                    Categories
-                  </Label>
-                  <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={setFieldValue} />
-                </div>
-              </div>
-            </div>
-            <div className='px-3 md:w-full flex flex-row justify-between items-center'>
-              <div className='px-3 md:w-3/12'>
-                <div className='flex flex-row justify-start items-center'>
-                  <Label>Show products with NO Sales</Label>
-                  <Switch
-                    id='showWithSales'
-                    name='showWithSales'
-                    checked={values.showWithSales === 'true' ? true : false}
-                    onChange={(e) => {
-                      setFieldValue('showWithSales', `${e.target.checked}`)
-                    }}
-                    onBlur={handleBlur}
+      <form onSubmit={validation.handleSubmit(onSubmit)}>
+        <div className='flex flex-wrap -mx-3'>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Gross Revenue
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                  <Input
+                    type='number'
+                    className='text-[13px] m-0 h-8 text-xs'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='grossRevenueMin'
+                    min={0}
+                    aria-invalid={Boolean(validation.formState.errors.grossRevenueMin) || undefined}
+                    {...validation.register('grossRevenueMin')}
                   />
-                </div>
-              </div>
-              <div className='flex flex-row justify-end items-center gap-3'>
-                <Button type='button' variant='light' className='text-[13px]' onClick={() => handleClearFilters(setValues)}>
-                  Clear
-                </Button>
-                <Button type='submit' className='text-[13px]'>
-                  Apply Filters
-                </Button>
+                </InputGroup>
+                <InputGroup size='sm'>
+                  <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                  <Input
+                    type='number'
+                    className='text-[13px] m-0 h-8 text-xs'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='grossRevenueMax'
+                    min={values.grossRevenueMin}
+                    aria-invalid={Boolean(validation.formState.errors.grossRevenueMax) || undefined}
+                    {...validation.register('grossRevenueMax')}
+                  />
+                </InputGroup>
               </div>
             </div>
-          </Form>
-        )}
-      </Formik>
+          </div>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Net Profit
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <InputGroup size='sm'>
+                  <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                  <Input
+                    type='number'
+                    className='text-[13px] m-0 h-8 text-xs'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Min'
+                    id='netProfitMin'
+                    min={0}
+                    aria-invalid={Boolean(validation.formState.errors.netProfitMin) || undefined}
+                    {...validation.register('netProfitMin')}
+                  />
+                </InputGroup>
+                <InputGroup size='sm'>
+                  <InputGroupText className='text-[16.25px] py-0'>{state.currentRegion === 'us' ? '$' : '€'}</InputGroupText>
+                  <Input
+                    type='number'
+                    className='text-[13px] m-0 h-8 text-xs'
+                    style={{ padding: '0.2rem 0.9rem' }}
+                    placeholder='Max'
+                    id='netProfitMax'
+                    min={values.grossRevenueMin}
+                    aria-invalid={Boolean(validation.formState.errors.netProfitMax) || undefined}
+                    {...validation.register('netProfitMax')}
+                  />
+                </InputGroup>
+              </div>
+            </div>
+          </div>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Units Sold
+              </Label>
+              <div className='flex flex-row justify-between items-center gap-2'>
+                <Input
+                  type='number'
+                  className='text-[13px] m-0 h-8 text-xs'
+                  style={{ padding: '0.2rem 0.9rem' }}
+                  placeholder='Min'
+                  id='unitsSoldMin'
+                  min={0}
+                  aria-invalid={Boolean(validation.formState.errors.unitsSoldMin) || undefined}
+                  {...validation.register('unitsSoldMin')}
+                />
+                <Input
+                  type='number'
+                  className='text-[13px] m-0 h-8 text-xs'
+                  style={{ padding: '0.2rem 0.9rem' }}
+                  placeholder='Max'
+                  id='unitsSoldMax'
+                  min={values.grossRevenueMin}
+                  aria-invalid={Boolean(validation.formState.errors.unitsSoldMax) || undefined}
+                  {...validation.register('unitsSoldMax')}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='flex flex-wrap -mx-3 mt-2'>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Suppliers
+              </Label>
+              <SelectDropDown formValue={'supplier'} selectionInfo={supplierOptions} selected={values.supplier} handleSelection={(field, value) => validation.setValue(field as any, value)} />
+            </div>
+          </div>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Brands
+              </Label>
+              <SelectDropDown formValue={'brand'} selectionInfo={brandOptions} selected={values.brand} handleSelection={(field, value) => validation.setValue(field as any, value)} />
+            </div>
+          </div>
+          <div className='px-3 md:w-3/12'>
+            <div className='mb-3 createOrder_inputs'>
+              <Label htmlFor='lastNameinput'>
+                Categories
+              </Label>
+              <SelectDropDown formValue={'category'} selectionInfo={categoryOptions} selected={values.category} handleSelection={(field, value) => validation.setValue(field as any, value)} />
+            </div>
+          </div>
+        </div>
+        <div className='px-3 md:w-full flex flex-row justify-between items-center'>
+          <div className='px-3 md:w-3/12'>
+            <div className='flex flex-row justify-start items-center'>
+              <Label>Show products with NO Sales</Label>
+              <Switch
+                id='showWithSales'
+                name='showWithSales'
+                checked={values.showWithSales === 'true' ? true : false}
+                onChange={(e) => {
+                  validation.setValue('showWithSales', `${e.target.checked}`)
+                }}
+                onBlur={() => validation.trigger('showWithSales')}
+              />
+            </div>
+          </div>
+          <div className='flex flex-row justify-end items-center gap-3'>
+            <Button type='button' variant='light' className='text-[13px]' onClick={() => handleClearFilters()}>
+              Clear
+            </Button>
+            <Button type='submit' className='text-[13px]'>
+              Apply Filters
+            </Button>
+          </div>
+        </div>
+      </form>
     </div>
   )
 }

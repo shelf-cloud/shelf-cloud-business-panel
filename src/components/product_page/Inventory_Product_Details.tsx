@@ -1,16 +1,17 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import ProductOrderedModals from '@components/modals/productPage/ProductOrderedModals'
 import AppContext from '@context/AppContext'
 import { FormatIntNumber } from '@lib/FormatNumbers'
 import { AmazonFBA } from '@typings'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 type Props = {
   inventoryId?: number
@@ -24,6 +25,12 @@ type Props = {
   amazonFBA: AmazonFBA[]
 }
 
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
+}
+
 const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available, reserved, receiving, ordered, amazonFBA }: Props) => {
   const { state } = useContext(AppContext)
   const { mutate } = useSWRConfig()
@@ -34,37 +41,42 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
     sku: '',
   })
 
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
+  const schema = z.object({
+    inventoryId: z.number().optional(),
+    sku: z.string().optional(),
+    buffer: z.preprocess(toNumber, z.number({ error: 'Enter Buffer' }).min(0, 'Minimum of 0')),
+  })
+
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       inventoryId,
       sku,
       buffer,
     },
-    validationSchema: Yup.object({
-      buffer: Yup.number().min(0, 'Minimum of 0').required('Enter Buffer'),
-    }),
-    onSubmit: async (values) => {
-      const response = await axios.post(`/api/productDetails/inventoryProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  useEffect(() => {
+    validation.reset({ inventoryId, sku, buffer })
+  }, [inventoryId, sku, buffer])
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    const response = await axios.post(`/api/productDetails/inventoryProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
+    })
+    if (!response.data.error) {
+      toast.success(response.data.msg)
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
   }
 
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
   const handleShowEditFields = () => {
-    validation.setValues({
+    validation.reset({
       inventoryId,
       sku,
       buffer,
@@ -113,13 +125,12 @@ const Inventory_Product_Details = ({ inventoryId, sku, onhand, buffer, available
                         style={{ maxWidth: '60px' }}
                         placeholder='Buffer...'
                         id='buffer'
-                        name='buffer'
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.buffer || 0}
-                        aria-invalid={(validation.touched.buffer && validation.errors.buffer ? true : false) || undefined}
+                        aria-invalid={(validation.formState.touchedFields.buffer && validation.formState.errors.buffer ? true : false) || undefined}
+                        {...validation.register('buffer')}
                       />
-                      {validation.touched.buffer && validation.errors.buffer ? <div className='text-sm text-destructive'>{validation.errors.buffer}</div> : null}
+                      {validation.formState.touchedFields.buffer && validation.formState.errors.buffer ? (
+                        <div className='text-sm text-destructive'>{validation.formState.errors.buffer.message}</div>
+                      ) : null}
                     </div>
                     <button type='button' aria-label='Cancel editing buffer inventory' className='m-0 p-0 border-0 bg-transparent text-muted-foreground' onClick={() => setShowEditFields(false)}>
                       <i className='text-[22.75px] mdi mdi-close-circle' />

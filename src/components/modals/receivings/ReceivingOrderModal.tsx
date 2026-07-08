@@ -10,8 +10,10 @@ import { useCreateManualReceivingsBoxes } from '@hooks/receivings/useCreateManua
 import { ReceivingInventory } from '@hooks/receivings/useReceivingInventory'
 import { useFilterWarehousesByShipmentType } from '@hooks/warehouses/useFilterWarehousesByShipmentType'
 import { useWarehouses } from '@hooks/warehouses/useWarehouse'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { toast } from '@/lib/toast'
 
 import { Alert } from '@/components/ui/Alert'
@@ -22,7 +24,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@shadcn/ui/dia
 import { Nav, NavItem, NavLink, TabContent, TabPane } from '@/components/ui/nav-tabs'
 import { Spinner } from '@shadcn/ui/spinner'
 import { InputGroup, InputGroupText } from '@/components/ui/InputGroup'
-import * as Yup from 'yup'
 
 import Create_Manual_Receiving_Packages_Tab from './createReceiving/Create_Manual_Receiving_Packages_Tab'
 import Create_Manual_Receiving_Summary_Tab from './createReceiving/Create_Manual_Receiving_Summary_Tab'
@@ -32,6 +33,25 @@ type Props = {
   receivingProducts: ReceivingInventory[]
 }
 
+const receivingOrderSchema = z.object({
+  orderNumber: z
+    .string()
+    .regex(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
+    .max(100, 'Title is to Long')
+    .min(1, 'Please enter Order Number'),
+  packingConfiguration: z.string(),
+  shipmentType: z.object({
+    value: z.string().min(1, 'Shipment Type Required'),
+    label: z.string(),
+  }),
+  destinationSC: z.object({
+    value: z.string().min(1, 'Destination Required'),
+    label: z.string(),
+  }),
+})
+
+type ReceivingOrderForm = z.infer<typeof receivingOrderSchema>
+
 const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => {
   const { state, setWholeSaleOrderModal }: any = useContext(AppContext)
   const { warehouses, isLoading } = useWarehouses()
@@ -39,142 +59,124 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
   const [loading, setLoading] = useState(false)
   const [activeTab, setactiveTab] = useState('summary')
 
-  const validation = useFormik({
-    enableReinitialize: false,
-    initialValues: {
+  const validation = useForm<ReceivingOrderForm>({
+    resolver: zodResolver(receivingOrderSchema),
+    defaultValues: {
       orderNumber: state.currentRegion == 'us' ? `00${state?.user?.orderNumber?.us}` : `00${state?.user?.orderNumber?.eu}`,
       packingConfiguration: 'single',
       shipmentType: { value: '', label: 'Select ...' },
       destinationSC: { value: '', label: 'Select ...' },
     },
-    validationSchema: Yup.object({
-      orderNumber: Yup.string()
-        .matches(/^[a-zA-Z0-9-]+$/, `Invalid special characters: % & # " ' @ ~ , ...`)
-        .max(100, 'Title is to Long')
-        .required('Please enter Order Number'),
-      destinationSC: Yup.object().shape({
-        value: Yup.number().when([], {
-          is: () => true,
-          then: Yup.number().required('Destination Required'),
-        }),
-      }),
-      shipmentType: Yup.object().shape({
-        value: Yup.string().when([], {
-          is: () => true,
-          then: Yup.string().required('Shipment Type Required'),
-        }),
-      }),
-    }),
-    onSubmit: async (values) => {
-      setLoading(true)
-
-      const creatingUploadedReceiving = toast.loading('Creating Receiving...')
-
-      // SHIPPING PRODUCTS
-      let shippingProducts = [] as any
-      receivingProducts.map((item) => {
-        shippingProducts.push({
-          poId: null,
-          hasSplitting: false,
-          splitId: null,
-          sku: item.sku,
-          name: item.title,
-          boxQty: item.boxQty,
-          inventoryId: item.inventoryId,
-          qty: item.quantity,
-          storeId: item.businessId,
-          qtyPicked: 0,
-          pickedHistory: [],
-        })
-      })
-
-      // ORDER PRODUCTS
-      let orderProducts = [] as any
-      receivingProducts.map((item) => {
-        orderProducts.push({
-          poId: null,
-          poNumber: null,
-          orderNumber: `${orderNumberStart}${validation.values.orderNumber}`,
-          hasSplitting: false,
-          splitId: null,
-          sku: item.sku,
-          inventoryId: item.inventoryId,
-          name: item.title,
-          image: item.image,
-          boxQty: item.boxQty,
-          quantity: item.quantity,
-          businessId: item.businessId,
-          qtyReceived: 0,
-          suppliersName: item.suppliersName,
-        })
-      })
-
-      const { data } = await axios.post(`/api/receivings/createManualReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        shippingProducts,
-        orderInfo: {
-          orderNumber: values.orderNumber,
-          orderProducts,
-        },
-        receivingItems: receivingProducts,
-        isNewReceiving: true,
-        receivingIdToAdd: null,
-        // destinationSC: warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
-        warehouseId: parseInt(values.destinationSC.value),
-        finalBoxesConfiguration,
-      })
-
-      if (!data.error) {
-        toast.update(creatingUploadedReceiving, {
-          render: data.message,
-          type: 'success',
-          isLoading: false,
-          autoClose: 3000,
-        })
-
-        if (data.is3PL) {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === parseInt(validation.values.destinationSC.value))!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={data.orderid3PL}
-              isManualReceiving={true}
-            />,
-            `${orderNumberStart}${validation.values.orderNumber}`
-          )
-        } else {
-          downloadPDF(
-            <PrintReceivingLabel
-              companyName={state.user.name}
-              prefix3PL={state.user.prefix3PL}
-              warehouse={warehouses?.find((w) => w.warehouseId === parseInt(validation.values.destinationSC.value))!}
-              boxes={finalBoxesConfiguration}
-              orderBarcode={`${orderNumberStart}${validation.values.orderNumber}`}
-              isManualReceiving={true}
-            />,
-            `${orderNumberStart}${validation.values.orderNumber}`
-          )
-        }
-
-        setWholeSaleOrderModal(false)
-        router.push('/receivings')
-      } else {
-        toast.update(creatingUploadedReceiving, {
-          render: data.message,
-          type: 'error',
-          isLoading: false,
-          autoClose: 3000,
-        })
-      }
-      setLoading(false)
-    },
   })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const formValues = validation.watch()
+
+  const onSubmit = async (values: ReceivingOrderForm) => {
+    setLoading(true)
+
+    const creatingUploadedReceiving = toast.loading('Creating Receiving...')
+
+    // SHIPPING PRODUCTS
+    let shippingProducts = [] as any
+    receivingProducts.map((item) => {
+      shippingProducts.push({
+        poId: null,
+        hasSplitting: false,
+        splitId: null,
+        sku: item.sku,
+        name: item.title,
+        boxQty: item.boxQty,
+        inventoryId: item.inventoryId,
+        qty: item.quantity,
+        storeId: item.businessId,
+        qtyPicked: 0,
+        pickedHistory: [],
+      })
+    })
+
+    // ORDER PRODUCTS
+    let orderProducts = [] as any
+    receivingProducts.map((item) => {
+      orderProducts.push({
+        poId: null,
+        poNumber: null,
+        orderNumber: `${orderNumberStart}${values.orderNumber}`,
+        hasSplitting: false,
+        splitId: null,
+        sku: item.sku,
+        inventoryId: item.inventoryId,
+        name: item.title,
+        image: item.image,
+        boxQty: item.boxQty,
+        quantity: item.quantity,
+        businessId: item.businessId,
+        qtyReceived: 0,
+        suppliersName: item.suppliersName,
+      })
+    })
+
+    const { data } = await axios.post(`/api/receivings/createManualReceiving?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      shippingProducts,
+      orderInfo: {
+        orderNumber: values.orderNumber,
+        orderProducts,
+      },
+      receivingItems: receivingProducts,
+      isNewReceiving: true,
+      receivingIdToAdd: null,
+      // destinationSC: warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))?.isSCDestination ? 1 : 0,
+      warehouseId: parseInt(values.destinationSC.value),
+      finalBoxesConfiguration,
+    })
+
+    if (!data.error) {
+      toast.update(creatingUploadedReceiving, {
+        render: data.message,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+
+      if (data.is3PL) {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={data.orderid3PL}
+            isManualReceiving={true}
+          />,
+          `${orderNumberStart}${values.orderNumber}`
+        )
+      } else {
+        downloadPDF(
+          <PrintReceivingLabel
+            companyName={state.user.name}
+            prefix3PL={state.user.prefix3PL}
+            warehouse={warehouses?.find((w) => w.warehouseId === parseInt(values.destinationSC.value))!}
+            boxes={finalBoxesConfiguration}
+            orderBarcode={`${orderNumberStart}${values.orderNumber}`}
+            isManualReceiving={true}
+          />,
+          `${orderNumberStart}${values.orderNumber}`
+        )
+      }
+
+      setWholeSaleOrderModal(false)
+      router.push('/receivings')
+    } else {
+      toast.update(creatingUploadedReceiving, {
+        render: data.message,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
+    }
+    setLoading(false)
   }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
 
   const {
     singleSkuPackages,
@@ -191,9 +193,9 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
     clearMultiSkuBoxes,
     finalBoxesConfiguration,
     hasBoxedErrors,
-  } = useCreateManualReceivingsBoxes(receivingProducts, validation.values.packingConfiguration, `${orderNumberStart}${validation.values.orderNumber}`)
+  } = useCreateManualReceivingsBoxes(receivingProducts, formValues.packingConfiguration, `${orderNumberStart}${formValues.orderNumber}`)
 
-  const { filteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, validation.values.shipmentType.value)
+  const { filteredWarehouses } = useFilterWarehousesByShipmentType(warehouses, formValues.shipmentType.value)
 
   return (
     <Dialog
@@ -221,43 +223,40 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
                     type='text'
                     className='text-[13px] h-8 text-xs'
                     id='orderNumber'
-                    name='orderNumber'
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.orderNumber || ''}
-                    aria-invalid={validation.touched.orderNumber && validation.errors.orderNumber ? true : undefined}
+                    aria-invalid={validation.formState.errors.orderNumber ? true : undefined}
+                    {...validation.register('orderNumber')}
                   />
                 </InputGroup>
-                {validation.touched.orderNumber && validation.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.errors.orderNumber}</div> : null}
+                {validation.formState.errors.orderNumber ? <div className='text-sm text-destructive'>{validation.formState.errors.orderNumber.message}</div> : null}
               </div>
             </div>
             <div className='px-3 w-full md:w-4/12'>
               <Label className='mb-2 inline-block text-[11.2px]'>*Shipment Type</Label>
               <SimpleSelect
                 options={RECEIVING_SHIPMENT_TYPES}
-                selected={validation.values.shipmentType}
+                selected={formValues.shipmentType}
                 handleSelect={(selected) => {
-                  validation.setFieldValue('shipmentType', selected)
-                  validation.setFieldValue('destinationSC', { value: '', label: 'Select ...' })
+                  validation.setValue('shipmentType', selected as any, { shouldValidate: true })
+                  validation.setValue('destinationSC', { value: '', label: 'Select ...' }, { shouldValidate: true })
                 }}
                 placeholder={'Select ...'}
                 customStyle='sm'
               />
-              {validation.errors.shipmentType && validation.touched.shipmentType ? <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.shipmentType.value}</div> : null}
+              {validation.formState.errors.shipmentType ? <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.formState.errors.shipmentType.value?.message}</div> : null}
             </div>
             <div className='px-3 w-full md:w-4/12'>
               <Label className='mb-2 inline-block text-[11.2px]'>*Select Destination</Label>
               <SimpleSelect
                 options={filteredWarehouses}
-                selected={validation.values.destinationSC}
+                selected={formValues.destinationSC}
                 handleSelect={(selected) => {
-                  validation.setFieldValue('destinationSC', selected)
+                  validation.setValue('destinationSC', selected as any, { shouldValidate: true })
                 }}
                 placeholder={isLoading ? 'Loading...' : 'Select ...'}
                 customStyle='sm'
               />
-              {validation.errors.destinationSC && validation.touched.destinationSC ? (
-                <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.errors.destinationSC.value}</div>
+              {validation.formState.errors.destinationSC ? (
+                <div className='m-0 p-0 text-destructive text-[11.2px]'>*{validation.formState.errors.destinationSC.value?.message}</div>
               ) : null}
             </div>
           </div>
@@ -291,8 +290,8 @@ const ReceivingOrderModal = ({ orderNumberStart, receivingProducts }: Props) => 
               {activeTab == 'packages' && (
                 <Create_Manual_Receiving_Packages_Tab
                   orderProducts={receivingProducts}
-                  packingConfiguration={validation.values.packingConfiguration}
-                  setPackingConfiguration={(field: string, value: string) => validation.setFieldValue(field, value)}
+                  packingConfiguration={formValues.packingConfiguration}
+                  setPackingConfiguration={(field: string, value: string) => validation.setValue(field as any, value)}
                   singleSkuPackages={singleSkuPackages}
                   addNewSingleSkuBoxConfiguration={addNewSingleSkuBoxConfiguration}
                   removeSingleSkuBoxConfiguration={removeSingleSkuBoxConfiguration}

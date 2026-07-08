@@ -1,19 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import UploadFileModal, { HandleSubmitParams } from '@components/modals/shared/UploadFileModal'
 import AppContext from '@context/AppContext'
 import { FormatBytes } from '@lib/FormatNumbers'
 import { NoImageAdress } from '@lib/assetsConstants'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { Label } from '@shadcn/ui/label'
 import { Textarea } from '@shadcn/ui/textarea'
 import { useSWRConfig } from 'swr'
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { useRPNewForecast } from '@/hooks/reorderingPoints/useRPNewForcast'
 
@@ -37,6 +38,12 @@ type Props = {
   useEntryDate: boolean
   useExpireDate: boolean
   expirationTime: number | null
+}
+
+const toNumber = (v: unknown) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  return Number.isNaN(n) ? undefined : n
 }
 
 const General_Product_Details = ({
@@ -138,87 +145,92 @@ const General_Product_Details = ({
   })
 
   const { generate_new_forecast_products } = useRPNewForecast()
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      inventoryId,
-      sku,
-      title,
-      description: description ?? '',
-      brand: brand ?? '',
-      category: category ?? '',
-      supplier: supplier ?? '',
-      itemCondition: itemCondition ?? 'New',
-      useEntryDate,
-      useExpireDate,
-      expirationTime,
-      note,
-    },
-    validationSchema: Yup.object({
-      title: Yup.string().max(100, 'Title is to Long').required('Please enter product title'),
-      description: Yup.string().max(300, 'Title is to Long'),
-      brand: Yup.string().max(200, 'Title is to Long').required('Please enter product brand'),
-      category: Yup.string().max(100, 'Title is to Long'),
-      supplier: Yup.string().max(200, 'Title is to Long').required('Please enter product supplier'),
-      itemCondition: Yup.string().max(10, 'Title is to Long').required('Please select product condition'),
-      expirationTime: Yup.number()
-        .min(0, 'Minimum of 0')
-        .when('useExpireDate', {
-          is: true,
-          then: Yup.number().min(1, 'Minimum of 1').required('Enter Expiration Time'),
-        }),
-      note: Yup.string().max(300, 'Title is to Long'),
-    }),
-    onSubmit: async (values) => {
-      setisLoading(true)
-      const response = await axios.post(`/api/productDetails/generalProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-        productInfo: values,
-      })
-      if (!response.data.error) {
-        generate_new_forecast_products({
-          skus: [sku || ''],
-          productIds: [inventoryId || 0],
-        })
-        toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
-        setShowEditFields(false)
-      } else {
-        toast.error(response.data.msg)
-      }
-      setisLoading(false)
-    },
-  })
 
-  const handleAddProduct = (event: any) => {
-    event.preventDefault()
-    validation.handleSubmit()
+  const schema = z
+    .object({
+      inventoryId: z.number().optional(),
+      sku: z.string().optional(),
+      title: z.string().max(100, 'Title is to Long').min(1, 'Please enter product title'),
+      description: z.string().max(300, 'Title is to Long').optional(),
+      brand: z.string().max(200, 'Title is to Long').min(1, 'Please enter product brand'),
+      category: z.string().max(100, 'Title is to Long').optional(),
+      supplier: z.string().max(200, 'Title is to Long').min(1, 'Please enter product supplier'),
+      itemCondition: z.string().max(10, 'Title is to Long').min(1, 'Please select product condition'),
+      useEntryDate: z.boolean(),
+      useExpireDate: z.boolean(),
+      expirationTime: z.preprocess(toNumber, z.number().min(0, 'Minimum of 0').nullable().optional()),
+      note: z.string().max(300, 'Title is to Long').optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (data.useExpireDate) {
+        if (data.expirationTime === undefined || data.expirationTime === null) {
+          ctx.addIssue({ path: ['expirationTime'], code: 'custom', message: 'Enter Expiration Time' })
+        } else if (data.expirationTime < 1) {
+          ctx.addIssue({ path: ['expirationTime'], code: 'custom', message: 'Minimum of 1' })
+        }
+      }
+    })
+
+  const defaultFormValues = {
+    inventoryId,
+    sku,
+    title,
+    description: description ?? '',
+    brand: brand ?? '',
+    category: category ?? '',
+    supplier: supplier ?? '',
+    itemCondition: itemCondition ?? 'New',
+    useEntryDate,
+    useExpireDate,
+    expirationTime,
+    note,
   }
 
-  const handleShowEditFields = () => {
-    validation.setValues({
-      inventoryId,
-      sku,
-      title,
-      description: description ?? '',
-      brand: brand ?? '',
-      category: category ?? '',
-      supplier: supplier ?? '',
-      itemCondition: itemCondition ?? 'New',
-      useEntryDate,
-      useExpireDate,
-      expirationTime,
-      note,
+  const validation = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultFormValues,
+  })
+
+  useEffect(() => {
+    validation.reset(defaultFormValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inventoryId, sku, title, description, brand, category, supplier, itemCondition, useEntryDate, useExpireDate, expirationTime, note])
+
+  const onSubmit = async (values: z.output<typeof schema>) => {
+    setisLoading(true)
+    const response = await axios.post(`/api/productDetails/generalProductDetails?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
+      productInfo: values,
     })
+    if (!response.data.error) {
+      generate_new_forecast_products({
+        skus: [sku || ''],
+        productIds: [inventoryId || 0],
+      })
+      toast.success(response.data.msg)
+      mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+      setShowEditFields(false)
+    } else {
+      toast.error(response.data.msg)
+    }
+    setisLoading(false)
+  }
+
+  const handleAddProduct = validation.handleSubmit(onSubmit)
+
+  const handleShowEditFields = () => {
+    validation.reset(defaultFormValues)
     setShowEditFields(true)
   }
 
   const handleSelection = (type: string, value: string) => {
-    validation.setFieldValue(type, value)
+    validation.setValue(type as any, value, { shouldValidate: true, shouldDirty: true })
   }
 
   const handleConditionSelection = (value: string) => {
-    validation.setFieldValue('itemCondition', value)
+    validation.setValue('itemCondition', value, { shouldValidate: true, shouldDirty: true })
   }
+
+  const useExpireDateValue = validation.watch('useExpireDate')
 
   return (
     <div className='px-4 pt-2 pb-4 border-b border-[color:var(--border)]'>
@@ -313,13 +325,12 @@ const General_Product_Details = ({
                   className='text-[13px] h-8 text-xs'
                   placeholder='Title...'
                   id='title'
-                  name='title'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.title || ''}
-                  aria-invalid={(validation.touched.title && validation.errors.title ? true : false) || undefined}
+                  aria-invalid={(validation.formState.touchedFields.title && validation.formState.errors.title ? true : false) || undefined}
+                  {...validation.register('title')}
                 />
-                {validation.touched.title && validation.errors.title ? <div className='text-sm text-destructive'>{validation.errors.title}</div> : null}
+                {validation.formState.touchedFields.title && validation.formState.errors.title ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.title.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-full'>
@@ -332,13 +343,12 @@ const General_Product_Details = ({
                   className='text-[13px] h-8 text-xs'
                   placeholder='Description...'
                   id='description'
-                  name='description'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.description ?? ''}
-                  aria-invalid={(validation.touched.description && validation.errors.description ? true : false) || undefined}
+                  aria-invalid={(validation.formState.touchedFields.description && validation.formState.errors.description ? true : false) || undefined}
+                  {...validation.register('description')}
                 />
-                {validation.touched.description && validation.errors.description ? <div className='text-sm text-destructive'>{validation.errors.description}</div> : null}
+                {validation.formState.touchedFields.description && validation.formState.errors.description ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.description.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-6/12'>
@@ -350,9 +360,9 @@ const General_Product_Details = ({
                 type={'brand'}
                 addEndpoint={'addNewBrand'}
                 selectionInfo={brands}
-                selected={validation.values.brand ?? ''}
+                selected={validation.watch('brand') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.brand}
+                errorMessage={validation.formState.errors.brand?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -364,9 +374,9 @@ const General_Product_Details = ({
                 type={'supplier'}
                 addEndpoint={'addNewSupplier'}
                 selectionInfo={suppliers}
-                selected={validation.values.supplier ?? ''}
+                selected={validation.watch('supplier') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.supplier}
+                errorMessage={validation.formState.errors.supplier?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -378,9 +388,9 @@ const General_Product_Details = ({
                 type={'category'}
                 addEndpoint={'addNewCategory'}
                 selectionInfo={categories}
-                selected={validation.values.category ?? ''}
+                selected={validation.watch('category') ?? ''}
                 handleSelection={handleSelection}
-                errorMessage={validation.errors.category}
+                errorMessage={validation.formState.errors.category?.message}
               />
             </div>
             <div className='px-3 md:w-6/12'>
@@ -388,9 +398,9 @@ const General_Product_Details = ({
                 *Condition
               </Label>
               <Select_Condition_Product_Details
-                selected={validation.values.itemCondition ?? ''}
+                selected={validation.watch('itemCondition') ?? ''}
                 handleSelection={handleConditionSelection}
-                errorMessage={validation.errors.itemCondition}
+                errorMessage={validation.formState.errors.itemCondition?.message}
               />
             </div>
             <div className='px-3 md:w-full px-3'>
@@ -402,13 +412,12 @@ const General_Product_Details = ({
                   type='checkbox'
                   className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'
                   id='useEntryDate'
-                  name='useEntryDate'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  checked={validation.values.useEntryDate || false}
-                  aria-invalid={(validation.touched.useEntryDate && validation.errors.useEntryDate ? true : false) || undefined}
+                  aria-invalid={(validation.formState.touchedFields.useEntryDate && validation.formState.errors.useEntryDate ? true : false) || undefined}
+                  {...validation.register('useEntryDate')}
                 />
-                {validation.touched.useEntryDate && validation.errors.useEntryDate ? <div className='text-sm text-destructive'>{(validation.errors.useEntryDate as string)}</div> : null}
+                {validation.formState.touchedFields.useEntryDate && validation.formState.errors.useEntryDate ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.useEntryDate.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='w-full px-3 flex flex-row justify-start items-center gap-3'>
@@ -420,15 +429,14 @@ const General_Product_Details = ({
                   type='checkbox'
                   className='size-4 shrink-0 border border-input-border accent-primary rounded-sm'
                   id='useExpireDate'
-                  name='useExpireDate'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  checked={validation.values.useExpireDate || false}
-                  aria-invalid={(validation.touched.useExpireDate && validation.errors.useExpireDate ? true : false) || undefined}
+                  aria-invalid={(validation.formState.touchedFields.useExpireDate && validation.formState.errors.useExpireDate ? true : false) || undefined}
+                  {...validation.register('useExpireDate')}
                 />
-                {validation.touched.useExpireDate && validation.errors.useExpireDate ? <div className='text-sm text-destructive'>{(validation.errors.useExpireDate as string)}</div> : null}
+                {validation.formState.touchedFields.useExpireDate && validation.formState.errors.useExpireDate ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.useExpireDate.message}</div>
+                ) : null}
               </div>
-              {validation.values.useExpireDate && (
+              {useExpireDateValue && (
                 <div className='mb-3 flex flex-row justify-start items-center gap-3'>
                   <Label htmlFor='expirationTime' className='text-nowrap font-normal'>
                     *Expiration Time (Days)
@@ -438,14 +446,13 @@ const General_Product_Details = ({
                     className='text-[13px] h-8 text-xs'
                     placeholder='Expires in Days'
                     id='expirationTime'
-                    name='expirationTime'
                     min={0}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.expirationTime ?? ''}
-                    aria-invalid={(validation.touched.expirationTime && validation.errors.expirationTime ? true : false) || undefined}
+                    aria-invalid={(validation.formState.touchedFields.expirationTime && validation.formState.errors.expirationTime ? true : false) || undefined}
+                    {...validation.register('expirationTime')}
                   />
-                  {validation.touched.expirationTime && validation.errors.expirationTime ? <div className='text-sm text-destructive'>{validation.errors.expirationTime}</div> : null}
+                  {validation.formState.touchedFields.expirationTime && validation.formState.errors.expirationTime ? (
+                    <div className='text-sm text-destructive'>{validation.formState.errors.expirationTime.message}</div>
+                  ) : null}
                 </div>
               )}
             </div>
@@ -458,13 +465,12 @@ const General_Product_Details = ({
                   className='text-[13px] h-8 text-xs'
                   placeholder=''
                   id='note'
-                  name='note'
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.note || ''}
-                  aria-invalid={(validation.touched.note && validation.errors.note ? true : false) || undefined}
+                  aria-invalid={(validation.formState.touchedFields.note && validation.formState.errors.note ? true : false) || undefined}
+                  {...validation.register('note')}
                 />
-                {validation.touched.note && validation.errors.note ? <div className='text-sm text-destructive'>{validation.errors.note}</div> : null}
+                {validation.formState.touchedFields.note && validation.formState.errors.note ? (
+                  <div className='text-sm text-destructive'>{validation.formState.errors.note.message}</div>
+                ) : null}
               </div>
             </div>
             <div className='px-3 md:w-full'>
