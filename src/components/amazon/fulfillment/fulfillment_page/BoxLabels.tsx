@@ -1,4 +1,5 @@
 import { InboundPlan, WaitingReponses } from '@typesTs/amazon/fulfillments/fulfillment'
+import moment from 'moment'
 import { Spinner } from 'reactstrap'
 
 import BoxLabelsCard from './BoxLabelsCard'
@@ -10,6 +11,8 @@ type Props = {
 }
 
 const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
+  const firstPlacementTransportationOptions = Object.values(inboundPlan.transportationOptions || {})[0]
+  const shipDate = Object.values(firstPlacementTransportationOptions || {})[0]?.[0]?.carrierAppointment?.startTime || ''
   return (
     <>
       {!watingRepsonse.boxLabels && inboundPlan.confirmedShipments && Object.values(inboundPlan.confirmedShipments)?.length > 0 ? (
@@ -17,12 +20,16 @@ const BoxLabels = ({ inboundPlan, handleNextStep, watingRepsonse }: Props) => {
           <p className='my-1 p-0 fs-6'>
             From:{' '}
             <span className='fw-semibold'>
-              {inboundPlan.sourceAddress.companyName}, {inboundPlan.sourceAddress.addressLine1}, {inboundPlan.sourceAddress.addressLine2}, {inboundPlan.sourceAddress.city},{' '}
-              {inboundPlan.sourceAddress.stateOrProvinceCode}, {inboundPlan.sourceAddress.postalCode}, {inboundPlan.sourceAddress.countryCode}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.name},{' '}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.addressLine1},{' '}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.city},{' '}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.stateOrProvinceCode},{' '}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.postalCode},{' '}
+              {Object.values(inboundPlan.confirmedShipments)[0].shipment.source.address.countryCode}
             </span>
           </p>
           <p className='p-0 fs-6'>
-            Ship Date: <span className='fw-semibold'>09/15/2024</span>
+            Ship Date: <span className='fw-semibold'>{moment(shipDate).format('MMMM Do YYYY')}</span>
           </p>
           <div className='d-flex flex-row flex-wrap justify-content-start align-items-start gap-3'>
             {Object.values(inboundPlan.confirmedShipments).map((shipment, shipmentIndex) => (

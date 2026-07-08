@@ -246,6 +246,11 @@ export interface ProductDetails {
   productionTime: number
   transitTime: number
   shippingToFBA: number
+  hideReorderingPoints: boolean
+  orderFrequency: number
+  daysOfStockSC: number
+  manualLeadTime: boolean
+  leadTimeSC: number
   // summary
   currentStorageBalance: number
   binsUsed: number
