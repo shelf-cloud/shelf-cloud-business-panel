@@ -241,6 +241,11 @@ const Product_Page_Layout = ({}: Props) => {
                               productionTime={productDetails?.productionTime ?? 0}
                               transitTime={productDetails?.transitTime ?? 0}
                               shippingToFBA={productDetails?.shippingToFBA}
+                              hideReorderingPoints={productDetails?.hideReorderingPoints}
+                              orderFrequency={productDetails?.orderFrequency}
+                              daysOfStockSC={productDetails?.daysOfStockSC}
+                              manualLeadTime={productDetails?.manualLeadTime}
+                              leadTimeSC={productDetails?.leadTimeSC}
                             />
                           </TabPane>
                           <TabPane tabId='4'>

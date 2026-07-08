@@ -67,10 +67,8 @@ type Props = {
 
 const Products = ({ session }: Props) => {
   const { state }: any = useContext(AppContext)
-  const [
-    { brand: brandFilter, supplier: supplierFilter, category: categoryFilter, condition: conditionFilter, status: statusFilter },
-    setProductFilters,
-  ] = useQueryStates(productFilterParsers)
+  const [{ brand: brandFilter, supplier: supplierFilter, category: categoryFilter, condition: conditionFilter, status: statusFilter }, setProductFilters] =
+    useQueryStates(productFilterParsers)
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [selectedRows, setSelectedRows] = useState<Product[]>([])
@@ -214,6 +212,37 @@ const Products = ({ session }: Props) => {
                             brands={brands}
                             suppliers={suppliers}
                             categories={categories}
+                            feedType='general'
+                          />
+                        )}
+                        {products.length > 0 && (
+                          <ExportProductsTemplate
+                            products={selectedRows.length == 0 ? products : selectedRows}
+                            selected={selectedRows.length > 0 ? true : false}
+                            brands={brands}
+                            suppliers={suppliers}
+                            categories={categories}
+                            feedType='identifiers'
+                          />
+                        )}
+                        {products.length > 0 && state.user[state.currentRegion]?.showReorderingPoints && (
+                          <ExportProductsTemplate
+                            products={selectedRows.length == 0 ? products : selectedRows}
+                            selected={selectedRows.length > 0 ? true : false}
+                            brands={brands}
+                            suppliers={suppliers}
+                            categories={categories}
+                            feedType='reorderingPoint'
+                          />
+                        )}
+                        {products.length > 0 && state.user[state.currentRegion]?.editProductsDimensions && (
+                          <ExportProductsTemplate
+                            products={selectedRows.length == 0 ? products : selectedRows}
+                            selected={selectedRows.length > 0 ? true : false}
+                            brands={brands}
+                            suppliers={suppliers}
+                            categories={categories}
+                            feedType='dimensions'
                           />
                         )}
                         <ExportBlankTemplate brands={brands || []} suppliers={suppliers || []} categories={categories || []} />
@@ -288,6 +317,8 @@ const Products = ({ session }: Props) => {
           suppliers={suppliers}
           categories={categories}
           mutateProducts={mutateProducts}
+          canUseReorderingPointFeed={Boolean(state.user[state.currentRegion]?.showReorderingPoints)}
+          canUseDimensionsFeed={Boolean(state.user[state.currentRegion]?.editProductsDimensions)}
         />
       )}
       {cloneProductModal.isOpen && <CloneProductModal cloneProductModal={cloneProductModal} setcloneProductModal={setcloneProductModal} />}

@@ -2,17 +2,268 @@ import { CONDITIONS, columns, columnsInfo, columnsInfoData, columnsReferenceData
 import { Product } from '@typings'
 import ExcelJS from 'exceljs'
 
+import { IDENTIFIER_TYPE_LABELS, PRODUCT_FEED_DEFINITIONS, ProductFeedType } from './productFeedDefinitions'
+
 type ExportProductsTemplateMessage = {
   products: Product[]
   brands: string[]
   suppliers: string[]
   categories: string[]
+  feedType?: ProductFeedType
+}
+
+const protectWorksheet = (worksheet: ExcelJS.Worksheet, options: Partial<ExcelJS.WorksheetProtection> = {}) =>
+  worksheet.protect('xmQC!zpH-3ZX', {
+    selectLockedCells: true,
+    formatCells: false,
+    formatColumns: true,
+    formatRows: false,
+    insertColumns: false,
+    insertRows: false,
+    insertHyperlinks: true,
+    deleteColumns: false,
+    deleteRows: true,
+    sort: true,
+    autoFilter: true,
+    pivotTables: true,
+    ...options,
+  })
+
+const IDENTIFIER_TEMPLATE_MAX_ROWS = 1000
+
+const getIdentifierTypeLabel = (type: string) => (type === 'WalmartCode' ? 'Walmart Code' : type)
+
+const getBooleanLabel = (value: unknown) => {
+  if (typeof value === 'string') return value.trim().toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE'
+  return value ? 'TRUE' : 'FALSE'
+}
+
+const buildIdentifiersWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.identifiers.worksheetName)
+  const worksheetInfo = workbook.addWorksheet('ReferenceData')
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'identifierType', header: 'Identifier Type' },
+    { key: 'identifierValue', header: 'Identifier Value' },
+  ]
+  worksheetInfo.columns = [{ key: 'identifierTypes', header: 'Identifier Types' }]
+  worksheetInfo.getColumn('identifierTypes').values = ['Identifier Types', ...IDENTIFIER_TYPE_LABELS]
+
+  for (const product of products) {
+    for (const identifier of product.identifiers || []) {
+      worksheet.addRow({
+        sku: product.sku,
+        identifierType: getIdentifierTypeLabel(identifier.type),
+        identifierValue: identifier.value,
+      })
+    }
+  }
+
+  worksheet.getRow(1).eachCell((cell) => {
+    cell.protection = { locked: true }
+  })
+
+  for (let rowNumber = 2; rowNumber <= IDENTIFIER_TEMPLATE_MAX_ROWS; rowNumber++) {
+    const skuCell = worksheet.getCell(rowNumber, 1)
+    skuCell.dataValidation = {
+      type: 'textLength',
+      operator: 'greaterThan',
+      showErrorMessage: true,
+      allowBlank: false,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'SKU is required',
+    }
+    skuCell.protection = { locked: false }
+
+    const identifierTypeCell = worksheet.getCell(rowNumber, 2)
+    identifierTypeCell.dataValidation = {
+      type: 'list',
+      allowBlank: false,
+      formulae: ['=ReferenceData!$A$2:$A$999'],
+      error: 'Please use the DropDown to select a valid value',
+      errorTitle: 'Invalid input',
+    }
+    identifierTypeCell.protection = { locked: false }
+
+    const identifierValueCell = worksheet.getCell(rowNumber, 3)
+    identifierValueCell.dataValidation = {
+      type: 'textLength',
+      operator: 'greaterThan',
+      showErrorMessage: true,
+      allowBlank: false,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'Identifier Value is required',
+    }
+    identifierValueCell.protection = { locked: false }
+  }
+
+  await protectWorksheet(worksheet, { insertRows: true })
+  await protectWorksheet(worksheetInfo)
+
+  return workbook.xlsx.writeBuffer()
+}
+
+const buildReorderingPointWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.reorderingPoint.worksheetName)
+  const worksheetInfo = workbook.addWorksheet('ReferenceData')
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'isActive', header: 'Is Active in Reordering Points' },
+    { key: 'orderFrequency', header: 'Order Frequency (Weeks)' },
+    { key: 'leadTimeSC', header: 'Lead Time (Days)' },
+    { key: 'daysOfStockSC', header: 'Days Of Stock After Lead Time (Days)' },
+    { key: 'manualLeadTime', header: 'Manual Lead Time' },
+  ]
+  worksheetInfo.columns = [{ key: 'booleanValues', header: 'Boolean Values' }]
+  worksheetInfo.getColumn('booleanValues').values = ['Boolean Values', 'TRUE', 'FALSE']
+
+  for (const product of products) {
+    worksheet.addRow({
+      sku: product.sku,
+      isActive: product.hideReorderingPoints ? 'FALSE' : 'TRUE',
+      orderFrequency: product.orderFrequency ?? 0,
+      leadTimeSC: product.leadTimeSC ?? 0,
+      daysOfStockSC: product.daysOfStockSC ?? product.recommendedDaysOfStock ?? 0,
+      manualLeadTime: getBooleanLabel(product.manualLeadTime),
+    })
+  }
+
+  worksheet.getColumn('sku').eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+    cell.protection = { locked: true }
+  })
+  for (const columnKey of ['isActive', 'manualLeadTime']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'list',
+        allowBlank: false,
+        formulae: ['=ReferenceData!$A$2:$A$3'],
+        error: 'Please use TRUE or FALSE',
+        errorTitle: 'Invalid input',
+      }
+      cell.protection = { locked: false }
+    })
+  }
+
+  for (const columnKey of ['orderFrequency', 'leadTimeSC', 'daysOfStockSC']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'decimal',
+        operator: 'greaterThanOrEqual',
+        allowBlank: false,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: `${columnKey} must be greater than or equal to 0`,
+      }
+      cell.protection = { locked: false }
+    })
+  }
+
+  await protectWorksheet(worksheet)
+  await protectWorksheet(worksheetInfo)
+
+  return workbook.xlsx.writeBuffer()
+}
+
+const buildDimensionsWorkbook = async (products: Product[]) => {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(PRODUCT_FEED_DEFINITIONS.dimensions.worksheetName)
+
+  worksheet.columns = [
+    { key: 'sku', header: 'Sku' },
+    { key: 'weight', header: 'Unit Weight' },
+    { key: 'length', header: 'Unit Length' },
+    { key: 'width', header: 'Unit Width' },
+    { key: 'height', header: 'Unit Height' },
+    { key: 'boxQty', header: 'Carton Box Quantity' },
+    { key: 'boxWeight', header: 'Carton Box Weight' },
+    { key: 'boxLength', header: 'Carton Box Length' },
+    { key: 'boxWidth', header: 'Carton Box Width' },
+    { key: 'boxHeight', header: 'Carton Box Height' },
+  ]
+
+  for (const product of products) {
+    worksheet.addRow({
+      sku: product.sku,
+      weight: product.weight,
+      length: product.length,
+      width: product.width,
+      height: product.height,
+      boxQty: product.boxQty,
+      boxWeight: product.boxWeight,
+      boxLength: product.boxLength,
+      boxWidth: product.boxWidth,
+      boxHeight: product.boxHeight,
+    })
+  }
+
+  worksheet.getColumn('sku').eachCell((cell) => {
+    cell.fill = { type: 'pattern', pattern: 'lightGray' }
+    cell.protection = { locked: true }
+  })
+
+  worksheet.getColumn('boxQty').eachCell((cell) => {
+    cell.dataValidation = {
+      type: 'whole',
+      operator: 'greaterThan',
+      allowBlank: false,
+      showErrorMessage: true,
+      formulae: [0],
+      errorTitle: 'Invalid input',
+      error: 'boxQty must be integer and greater than 0',
+    }
+    cell.protection = { locked: false }
+  })
+
+  for (const columnKey of ['weight', 'length', 'width', 'height', 'boxWeight', 'boxLength', 'boxWidth', 'boxHeight']) {
+    worksheet.getColumn(columnKey).eachCell((cell) => {
+      cell.dataValidation = {
+        type: 'decimal',
+        operator: 'greaterThan',
+        allowBlank: false,
+        showErrorMessage: true,
+        formulae: [0],
+        errorTitle: 'Invalid input',
+        error: `${columnKey} must be greater than 0`,
+      }
+      cell.protection = { locked: false }
+    })
+  }
+
+  await protectWorksheet(worksheet)
+
+  return workbook.xlsx.writeBuffer()
 }
 
 self.onmessage = async (event: MessageEvent<ExportProductsTemplateMessage>) => {
-  const { products, brands, suppliers, categories } = event.data
+  const { products, brands, suppliers, categories, feedType = 'general' } = event.data
 
   try {
+    if (feedType === 'identifiers') {
+      const buffer = await buildIdentifiersWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
+    if (feedType === 'reorderingPoint') {
+      const buffer = await buildReorderingPointWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
+    if (feedType === 'dimensions') {
+      const buffer = await buildDimensionsWorkbook(products)
+      self.postMessage({ buffer, error: null })
+      return
+    }
+
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Product Details Template')
     const worksheetInfo = workbook.addWorksheet('ReferenceData')

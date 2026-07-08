@@ -165,6 +165,11 @@ export interface Product {
   buffer: number
   itemCondition: string
   identifiers: Identifier[] | null
+  hideReorderingPoints?: boolean
+  orderFrequency?: number
+  leadTimeSC?: number
+  daysOfStockSC?: number
+  manualLeadTime?: number
 }
 
 // PRODUCT DETAILS PAGE
@@ -241,6 +246,11 @@ export interface ProductDetails {
   productionTime: number
   transitTime: number
   shippingToFBA: number
+  hideReorderingPoints: boolean
+  orderFrequency: number
+  daysOfStockSC: number
+  manualLeadTime: boolean
+  leadTimeSC: number
   // summary
   currentStorageBalance: number
   binsUsed: number

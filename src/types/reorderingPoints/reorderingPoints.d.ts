@@ -42,6 +42,7 @@ export interface ReorderingPointsProduct {
   sellerCost: number
   leadTime: number
   leadTimeSC: number
+  manualLeadTime?: number
   leadTimeFBA: number
   leadTimeAWD: number
   note: string

@@ -1,5 +1,3 @@
- 
- 
 import { useContext, useState } from 'react'
 
 import UploadFileDropzone from '@components/ui/UploadFileDropzone'
@@ -10,8 +8,34 @@ import { toast } from '@/lib/toast'
 import { Button } from '@shadcn/ui/button'
 import { Card } from '@shadcn/ui/card'
 import { Dialog, DialogContent, DialogHeader } from '@shadcn/ui/dialog'
+import { Label } from '@shadcn/ui/label'
+import { NativeSelect } from '@shadcn/ui/native-select'
 import { Spinner } from '@shadcn/ui/spinner'
 import * as Yup from 'yup'
+
+import {
+  PRODUCT_FEED_DEFINITIONS,
+  ProductFeedType,
+  parseProductFeedRows,
+  validateProductFeedHeaders,
+  validateProductFeedRows,
+} from '@/features/products/add-products/productFeedDefinitions'
+
+const FEED_UPLOAD_ENDPOINTS: Record<ProductFeedType, { endpoint: string; successMessage: string }> = {
+  general: { endpoint: 'api/productDetails/uploadProductsTemplate', successMessage: 'All products were added!' },
+  identifiers: { endpoint: 'api/productDetails/uploadProductIdentifiersFeed', successMessage: 'Products identifiers feed uploaded!' },
+  reorderingPoint: { endpoint: 'api/productDetails/uploadProductsReorderingPointFeed', successMessage: 'Products reordering point feed uploaded!' },
+  dimensions: { endpoint: 'api/productDetails/uploadProductsDimensionsFeed', successMessage: 'Products dimensions feed uploaded!' },
+}
+
+const getUploadConfig = (feedType: ProductFeedType, resultValues: unknown[][], region: string, businessId: string) => {
+  const { endpoint, successMessage } = FEED_UPLOAD_ENDPOINTS[feedType]
+  return {
+    url: `${endpoint}?region=${region}&businessId=${businessId}`,
+    productsInfo: feedType === 'general' ? resultValues : parseProductFeedRows(feedType as Exclude<ProductFeedType, 'general'>, resultValues),
+    successMessage,
+  }
+}
 
 type Props = {
   brands: string[]
@@ -22,17 +46,30 @@ type Props = {
   }
   setimportModalDetails: (prev: any) => void
   mutateProducts: () => void
+  canUseReorderingPointFeed: boolean
+  canUseDimensionsFeed: boolean
 }
 
-const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, brands, suppliers, categories, mutateProducts }: Props) => {
+const ImportProductsFileModal = ({
+  importModalDetails,
+  setimportModalDetails,
+  brands,
+  suppliers,
+  categories,
+  mutateProducts,
+  canUseReorderingPointFeed,
+  canUseDimensionsFeed,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const [selectedFiles, setselectedFiles] = useState([])
+  const [selectedFeedType, setSelectedFeedType] = useState<ProductFeedType>('general')
   const [errorFile, setErrorFile] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showErrorLines, setShowErrorLines] = useState(false)
   const [errorLines, setErrorLines] = useState([]) as any
   const [showerrorResponse, setShowErrorResponse] = useState(false)
   const [errorResponse, setErrorResponse] = useState([]) as any
+  const selectedFeedDefinition = PRODUCT_FEED_DEFINITIONS[selectedFeedType]
 
   const validateProductsInfo = async (resultValues: any) => {
     let errorsList = []
@@ -425,31 +462,49 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
     setErrorResponse([])
     if (selectedFiles.length == 0) {
       setErrorFile(true)
+      setLoading(false)
       return
     }
     Papa.parse(selectedFiles[0], {
       complete: async function (results, _file) {
-        const resultValues = results.data as any
-        await validateProductsInfo(resultValues).then(async (res) => {
+        const resultValues = results.data as unknown[][]
+        const headerErrors = validateProductFeedHeaders(selectedFeedType, resultValues[0] || [])
+
+        if (headerErrors.length > 0) {
+          setErrorLines(headerErrors)
+          setShowErrorLines(true)
+          setLoading(false)
+          toast.error(headerErrors[0].errorMessage)
+          return
+        }
+
+        const validationErrors = selectedFeedType === 'general' ? await validateProductsInfo(resultValues) : validateProductFeedRows(selectedFeedType, resultValues)
+
+        await Promise.resolve(validationErrors).then(async (res) => {
           if (res.length > 0) {
             setErrorLines(res)
             setShowErrorLines(true)
             setLoading(false)
+            if (res[0].errorLine === 1) toast.error(res[0].errorMessage)
             return
           }
-          const response = await axios.post(`api/productDetails/uploadProductsTemplate?region=${state.currentRegion}&businessId=${state.user.businessId}`, {
-            productsInfo: results.data,
+
+          const uploadConfig = getUploadConfig(selectedFeedType, resultValues, state.currentRegion, state.user.businessId)
+
+          const response = await axios.post(uploadConfig.url, {
+            productsInfo: uploadConfig.productsInfo,
           })
           if (!response.data.error) {
             mutateProducts()
             setShowErrorResponse(false)
             setErrorResponse([])
-            toast.success('All products where added!')
+            toast.success(uploadConfig.successMessage)
             setimportModalDetails((prev: any) => {
               return { ...prev, show: false }
             })
           } else {
-            setErrorResponse(response.data.msg || [])
+            const uploadErrors = response.data.msg || response.data.message
+            setErrorResponse(Array.isArray(uploadErrors) ? uploadErrors : [uploadErrors || 'Unknown upload error'])
             setShowErrorResponse(true)
             toast.error('There were some errors when uploading products.')
           }
@@ -499,11 +554,44 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
       <div>
         <div className='flex flex-wrap -mx-3'>
           <p className='text-[13px] font-normal m-0 mb-1'>
-            You can <span className='font-bold'>Update</span> existing products in bulk by uploading a CSV file using the <span className='font-bold'>Products Template</span> file.
+            You can <span className='font-bold'>Update</span> existing products in bulk by uploading a CSV file using the selected <span className='font-bold'>Products Feed</span>{' '}
+            file.
           </p>
           <p className='text-[13px] font-normal m-0 mb-4'>
             You can <span className='font-bold'>Add</span> new products in bulk by uploading a CSV file using the <span className='font-bold'>Empty Template</span> file.
           </p>
+          <div className='px-3 w-full mb-2'>
+            <Label htmlFor='productFeedType' className='mb-2 text-[11.2px]'>
+              Products Feed
+            </Label>
+            <NativeSelect
+              id='productFeedType'
+              name='productFeedType'
+              value={selectedFeedType}
+              onChange={(event) => {
+                setSelectedFeedType(event.target.value as ProductFeedType)
+                setShowErrorResponse(false)
+                setErrorResponse([])
+                setErrorLines([])
+                setShowErrorLines(false)
+              }}>
+              <option value='general'>{PRODUCT_FEED_DEFINITIONS.general.label}</option>
+              <option value='identifiers'>{PRODUCT_FEED_DEFINITIONS.identifiers.label}</option>
+              {canUseReorderingPointFeed && <option value='reorderingPoint'>{PRODUCT_FEED_DEFINITIONS.reorderingPoint.label}</option>}
+              {canUseDimensionsFeed && <option value='dimensions'>{PRODUCT_FEED_DEFINITIONS.dimensions.label}</option>}
+            </NativeSelect>
+          </div>
+          <div className='px-3 w-full mb-4'>
+            <div className='border rounded-md p-4 bg-[color:var(--vz-light)]'>
+              <p className='text-[13px] font-semibold m-0 mb-2'>{selectedFeedDefinition.label}</p>
+              <p className='text-[11.2px] m-0 mb-2'>{selectedFeedDefinition.description}</p>
+              <ul className='text-[11.2px] m-0 pl-4'>
+                {selectedFeedDefinition.instructions.map((instruction) => (
+                  <li key={instruction}>{instruction}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <div className='px-3 md:w-6/12'>
             {/* <Dropzone
               accept={{ 'text/csv': ['.csv'] }}
@@ -529,7 +617,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             <UploadFileDropzone
               accptedFiles={{ 'text/csv': ['.csv'] }}
               handleAcceptedFiles={handleAcceptedFiles}
-              description={`Upload Products Details. Drop Only CSV files here or click to upload.`}
+              description={`Upload ${PRODUCT_FEED_DEFINITIONS[selectedFeedType].label}. Drop Only CSV files here or click to upload.`}
             />
           </div>
           <div className='px-3 md:w-6/12'>
@@ -537,6 +625,7 @@ const ImportProductsFileModal = ({ importModalDetails, setimportModalDetails, br
             <ul>
               <li>Review file before uploading!</li>
               <li>Do not change the order of the columns.</li>
+              <li>Select the feed type that matches the CSV file.</li>
               <li>If you want to assign Brand, Supplier or Category to products, add them before exporting any template in the account settings tab.</li>
             </ul>
             <div className='list-unstyled mb-0' id='file-previews'>

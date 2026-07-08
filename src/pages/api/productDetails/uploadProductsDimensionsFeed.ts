@@ -4,20 +4,19 @@ import { authOptions } from '@pages/api/auth/[...nextauth]'
 import axios from 'axios'
 import { getServerSession } from 'next-auth'
 
-const supplierProductDetails: NextApiHandler = async (request, response) => {
+const uploadProductsDimensionsFeed: NextApiHandler = async (request, response) => {
   const session = await getServerSession(request, response, authOptions)
 
   if (session == null) {
     response.status(401).end()
-
     return
   }
 
   axios
     .post(
-      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/supplierProductDetails.php?businessId=${request.query.businessId}`,
+      `${process.env.API_DOMAIN_SERVICES}/${request.query.region}/api/productDetails/uploadProductsDimensionsFeed.php?businessId=${request.query.businessId}`,
       {
-        productInfo: request.body.productInfo,
+        productsInfo: request.body.productsInfo,
       },
       {
         headers: {
@@ -33,7 +32,7 @@ const supplierProductDetails: NextApiHandler = async (request, response) => {
         response.json({
           error: true,
           errorMessage: error,
-          message: `Error saving changes, please try again later.`,
+          message: `Error with file uploading, please try again later.`,
         })
       } else if (error.request) {
         response.json({
@@ -49,4 +48,4 @@ const supplierProductDetails: NextApiHandler = async (request, response) => {
     })
 }
 
-export default supplierProductDetails
+export default uploadProductsDimensionsFeed

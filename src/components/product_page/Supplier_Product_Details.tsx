@@ -2,9 +2,11 @@ import { useContext, useState } from 'react'
 
 import AppContext from '@context/AppContext'
 import { FormatCurrency } from '@lib/FormatNumbers'
+import { Switch } from '@shadcn/ui/switch'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { toast } from '@/lib/toast'
+import { Badge } from '@shadcn/ui/badge'
 import { Button } from '@shadcn/ui/button'
 import { Input } from '@shadcn/ui/input'
 import { UncontrolledTooltip } from '@/components/ui/UncontrolledTooltip'
@@ -22,9 +24,28 @@ type Props = {
   productionTime: number
   transitTime: number
   shippingToFBA?: number
+  hideReorderingPoints?: boolean
+  orderFrequency?: number
+  daysOfStockSC?: number
+  manualLeadTime?: boolean
+  leadTimeSC?: number
 }
 
-const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippingCost, otherCosts, productionTime, transitTime, shippingToFBA }: Props) => {
+const Supplier_Product_Details = ({
+  inventoryId,
+  sku,
+  sellerCost,
+  inboundShippingCost,
+  otherCosts,
+  productionTime,
+  transitTime,
+  shippingToFBA,
+  hideReorderingPoints,
+  orderFrequency,
+  daysOfStockSC,
+  manualLeadTime,
+  leadTimeSC,
+}: Props) => {
   const { state }: any = useContext(AppContext)
   const { mutate } = useSWRConfig()
   const [showEditFields, setShowEditFields] = useState(false)
@@ -32,8 +53,10 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
 
   const { generate_new_forecast_products } = useRPNewForecast()
 
+  const showReorderingPoints = Boolean(state.user[state.currentRegion]?.showReorderingPoints)
   const landedCost = sellerCost + inboundShippingCost + otherCosts || 0
   const totalLeadTime = productionTime + transitTime
+  const productPageDetailsKey = `/api/products/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -46,6 +69,11 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
       productionTime,
       transitTime,
       shippingToFBA,
+      hideReorderingPoints: Boolean(hideReorderingPoints),
+      orderFrequency: orderFrequency ?? 0,
+      daysOfStockSC: daysOfStockSC ?? 0,
+      manualLeadTime: Boolean(manualLeadTime),
+      leadTimeSC: leadTimeSC ?? 0,
     },
     validationSchema: Yup.object({
       sellerCost: Yup.number().min(0, 'Minimum of 0').required('Enter Cost'),
@@ -54,6 +82,10 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
       productionTime: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
       transitTime: Yup.number().min(0, 'Minimum of 0'),
       shippingToFBA: Yup.number().min(0, 'Minimum of 0').required('Enter Time'),
+      orderFrequency: Yup.number().min(0, 'Minimum of 0').required('Enter Order Frequency'),
+      daysOfStockSC: Yup.number().min(0, 'Minimum of 0').required('Enter Days of Stock'),
+      leadTimeSC: Yup.number().min(0, 'Minimum of 0'),
+      manualLeadTime: Yup.boolean(),
     }),
     onSubmit: async (values) => {
       setisLoading(true)
@@ -66,7 +98,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
           productIds: [inventoryId || 0],
         })
         toast.success(response.data.msg)
-        mutate(`/api/getProductPageDetails?region=${state.currentRegion}&inventoryId=${inventoryId}&businessId=${state.user.businessId}`)
+        mutate(productPageDetailsKey)
         setShowEditFields(false)
       } else {
         toast.error(response.data.msg)
@@ -90,6 +122,11 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
       productionTime,
       transitTime,
       shippingToFBA,
+      hideReorderingPoints: Boolean(hideReorderingPoints),
+      orderFrequency: orderFrequency ?? 0,
+      daysOfStockSC: daysOfStockSC ?? 0,
+      manualLeadTime: Boolean(manualLeadTime),
+      leadTimeSC: leadTimeSC ?? 0,
     })
     setShowEditFields(true)
   }
@@ -108,14 +145,7 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                 <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='bg-white text-primary shadow'>
                   {`Total of Seller, Inbound and Other Costs`}
                 </UncontrolledTooltip>
-                <th>{`Production Time (Days)`}</th>
-                <th>{`Transit Time (Days)`}</th>
-                <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
-                <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
-                  {`Total Days from Production and Transit`}
-                </UncontrolledTooltip>
                 <th>Shipping To FBA Cost</th>
-                <th scope='col' aria-label='Supplier row actions'></th>
               </tr>
             </thead>
             <tbody>
@@ -126,20 +156,54 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                 </td>
                 <td className={otherCosts ? '' : 'text-muted-foreground font-light italic'}>{otherCosts ? FormatCurrency(state.currentRegion, otherCosts) : 'No Cost'}</td>
                 <td className={landedCost ? '' : 'text-muted-foreground font-light italic'}>{landedCost ? FormatCurrency(state.currentRegion, landedCost) : 'No Cost'}</td>
-                <td className={productionTime ? '' : 'text-muted-foreground font-light italic'}>{`${productionTime ?? 'No'} Days`}</td>
-                <td className={transitTime ? '' : 'text-muted-foreground font-light italic'}>{`${transitTime ?? 'No'} Days`}</td>
-                <td className={totalLeadTime ? '' : 'text-muted-foreground font-light italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
                 <td className={shippingToFBA ? '' : 'text-muted-foreground font-light italic'}>{shippingToFBA ? FormatCurrency(state.currentRegion, shippingToFBA) : 'No Cost'}</td>
-                <td>
-                  <div className='text-right'>
-                    <button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} className='p-0 border-0 bg-transparent'>
-                      <i className='ri-pencil-fill text-[16.25px] m-0 p-0 text-primary'></i>
-                    </button>
-                  </div>
-                </td>
               </tr>
             </tbody>
           </table>
+          <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+            <thead>
+              <tr className='text-center'>
+                <th>{`Production Time (Days)`}</th>
+                <th>{`Transit Time (Days)`}</th>
+                <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
+                <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
+                  {`Total Days from Production and Transit`}
+                </UncontrolledTooltip>
+                {showReorderingPoints && (
+                  <>
+                    <th>RP Visibility</th>
+                    <th>Order Frequency</th>
+                    <th>Days Of Stock After Lead Time</th>
+                    <th>Manual Lead Time</th>
+                    <th>Lead Time</th>
+                  </>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              <tr className='text-center'>
+                <td className={productionTime ? '' : 'text-muted-foreground font-light italic'}>{`${productionTime ?? 'No'} Days`}</td>
+                <td className={transitTime ? '' : 'text-muted-foreground font-light italic'}>{`${transitTime ?? 'No'} Days`}</td>
+                <td className={totalLeadTime ? '' : 'text-muted-foreground font-light italic'}>{`${totalLeadTime ?? 'No'} Days`}</td>
+                {showReorderingPoints && (
+                  <>
+                    <td>
+                      <Badge variant={hideReorderingPoints ? 'warning' : 'success'}>{hideReorderingPoints ? 'Hidden' : 'Visible'}</Badge>
+                    </td>
+                    <td>{`${orderFrequency ?? 0} Weeks`}</td>
+                    <td>{`${daysOfStockSC ?? 0} Days`}</td>
+                    <td>{manualLeadTime ? 'On' : 'Off'}</td>
+                    <td>{`${leadTimeSC ?? 0} Days`}</td>
+                  </>
+                )}
+              </tr>
+            </tbody>
+          </table>
+          <div className='flex flex-row justify-end items-center gap-3'>
+            <Button type='button' aria-label='Edit supplier details' onClick={handleShowEditFields} size='sm'>
+              <i className='ri-pencil-fill text-[16.25px] m-0 p-0' />
+            </Button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleAddProduct}>
@@ -153,12 +217,6 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                   <th id='landedCostHead'>Landed Cost</th>
                   <UncontrolledTooltip placement='top' target='landedCostHead' innerClassName='bg-white text-primary shadow'>
                     {`Total of Seller, Inbound and Other Costs`}
-                  </UncontrolledTooltip>
-                  <th>{`Production Time (Days)`}</th>
-                  <th>{`Transit Time (Days)`}</th>
-                  <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
-                  <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
-                    {`Total Days from Production and Transit`}
                   </UncontrolledTooltip>
                   <th>Shipping To FBA Cost</th>
                 </tr>
@@ -241,6 +299,48 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                       <Input
                         type='number'
                         className='text-[13px]'
+                        placeholder='FBA Cost...'
+                        id='shippingToFBA'
+                        name='shippingToFBA'
+                        step={0.01}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.shippingToFBA || 0}
+                        aria-invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : undefined}
+                      />
+                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <div className='text-sm text-destructive'>{validation.errors.shippingToFBA}</div> : null}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table className='w-full text-[11.2px] [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1'>
+              <thead>
+                <tr className='text-center'>
+                  <th>{`Production Time (Days)`}</th>
+                  <th>{`Transit Time (Days)`}</th>
+                  <th id='leadTimeHead'>{`Total Lead Time (Days)`}</th>
+                  <UncontrolledTooltip placement='top' target='leadTimeHead' innerClassName='bg-white text-primary shadow'>
+                    {`Total Days from Production and Transit`}
+                  </UncontrolledTooltip>
+                  {showReorderingPoints && (
+                    <>
+                      <th>RP Visibility</th>
+                      <th>Order Frequency</th>
+                      <th>Days Of Stock After Lead Time</th>
+                      <th>Manual Lead Time</th>
+                      <th>Lead Time</th>
+                    </>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className='text-center'>
+                  <td>
+                    <div className='mb-3'>
+                      <Input
+                        type='number'
+                        className='text-[13px]'
                         placeholder='Production...'
                         id='productionTime'
                         name='productionTime'
@@ -285,23 +385,77 @@ const Supplier_Product_Details = ({ inventoryId, sku, sellerCost, inboundShippin
                       />
                     </div>
                   </td>
-                  <td>
-                    <div className='mb-3'>
-                      <Input
-                        type='number'
-                        className='text-[13px]'
-                        placeholder='FBA Cost...'
-                        id='shippingToFBA'
-                        name='shippingToFBA'
-                        step={0.01}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.shippingToFBA || 0}
-                        aria-invalid={validation.touched.shippingToFBA && validation.errors.shippingToFBA ? true : undefined}
-                      />
-                      {validation.touched.shippingToFBA && validation.errors.shippingToFBA ? <div className='text-sm text-destructive'>{validation.errors.shippingToFBA}</div> : null}
-                    </div>
-                  </td>
+                  {showReorderingPoints && (
+                    <>
+                      <td>
+                        <div className='mb-3 flex justify-center items-center pt-1'>
+                          <Switch
+                            checked={!validation.values.hideReorderingPoints}
+                            onCheckedChange={(checked) => validation.setFieldValue('hideReorderingPoints', !checked)}
+                            aria-label='Reordering points visibility'
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div className='mb-3'>
+                          <Input
+                            type='number'
+                            className='text-[13px]'
+                            placeholder='Frequency...'
+                            id='orderFrequency'
+                            name='orderFrequency'
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values.orderFrequency || 0}
+                            aria-invalid={validation.touched.orderFrequency && validation.errors.orderFrequency ? true : undefined}
+                          />
+                          {validation.touched.orderFrequency && validation.errors.orderFrequency ? (
+                            <div className='text-sm text-destructive'>{validation.errors.orderFrequency}</div>
+                          ) : null}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='mb-3'>
+                          <Input
+                            type='number'
+                            className='text-[13px]'
+                            placeholder='Days...'
+                            id='daysOfStockSC'
+                            name='daysOfStockSC'
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values.daysOfStockSC || 0}
+                            aria-invalid={validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? true : undefined}
+                          />
+                          {validation.touched.daysOfStockSC && validation.errors.daysOfStockSC ? (
+                            <div className='text-sm text-destructive'>{validation.errors.daysOfStockSC}</div>
+                          ) : null}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='mb-3 flex justify-center items-center pt-1'>
+                          <Switch
+                            checked={validation.values.manualLeadTime}
+                            onCheckedChange={(checked) => validation.setFieldValue('manualLeadTime', checked)}
+                            aria-label='Manual lead time'
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div className='mb-3'>
+                          <Input
+                            disabled
+                            type='number'
+                            className='text-[13px]'
+                            placeholder='Lead Time...'
+                            id='leadTimeSC'
+                            name='leadTimeSC'
+                            value={validation.values.leadTimeSC || 0}
+                          />
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               </tbody>
             </table>
